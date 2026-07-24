@@ -20,7 +20,7 @@ const shots = [
   },
   {
     img: spell,
-    alt: 'Casting a spell from a monster stat block, with the full spell card and remaining uses.',
+    alt: 'Casting a spell from a creature\u2019s stat block, with the full spell card and its remaining uses.',
   },
   {
     img: compendium,
@@ -31,46 +31,45 @@ const shots = [
 const features = [
   {
     title: 'The state others forget',
-    body: "Who has advantage on whom, who's debuffed, who's concentrating — the between-creature state other trackers drop on the floor.",
+    body: 'Who has advantage on whom, who is frightened by whom, who is concentrating on what. Other trackers lose that between one creature and the next; OpenFray keeps it.',
   },
   {
-    title: 'Monster resources, handled',
-    body: 'Recharge abilities, legendary actions, legendary resistances, concentration, and reactions — all tracked as you play.',
+    title: 'Creature resources, tracked',
+    body: 'Recharge abilities, legendary actions, legendary resistances, spell slots, concentration, and reactions all count down as you play.',
   },
   {
-    title: 'One-tap group saves',
-    body: "Roll a whole pack's save against a single effect at once, with resistances, immunities, and other modifiers applied for you.",
+    title: 'Group saves in one click',
+    body: 'Roll a whole group\u2019s saving throw against one spell at once. Resistances, immunities, and each creature\u2019s own bonuses are worked in for you.',
   },
   {
-    title: 'Honest, transparent dice',
-    body: 'Cryptographically random rolls with a clear, effect-aware log. No fudging, no “feels-fair” tampering — ever.',
+    title: 'Honest dice you can check',
+    body: 'Every number is equally likely, every roll is written into the log with the dice that made it, and advantage and bonuses are shown. No fudging, ever.',
   },
   {
-    title: 'Build your own content',
-    body: 'Custom creatures, spells with a full stat-block editor, a reusable characters roster, and campaigns with house rules.',
+    title: 'Build your own',
+    body: 'Creatures and spells the books leave out, in a full editor. Save your players once and reuse them. Set your table\u2019s house rules per campaign.',
   },
   {
-    title: 'Free, open-source and yours',
-    body: 'Runs fully in your browser with no account. Sign in for free with Discord or Google to save and sync across devices.',
+    title: 'Free, open source, and yours',
+    body: 'Runs in your browser with no account at all. Sign in free with Discord or Google to save your game and pick it up on another device.',
   },
 ];
 ---
 
 <Layout
   title="OpenFray — a DnD 5e combat console for GMs"
-  description="OpenFray is a free, open-source, browser-based combat console for running DnD 5e encounters — initiative, monster resources, conditions, group saves, and honest dice."
+  description="OpenFray is a free, open-source combat console for running DnD 5e fights in your browser: initiative, creature resources, conditions, group saves, and honest dice."
 >
   <main class="hero">
-    <span class="badge">Alpha Testing</span>
+    <span class="badge">Alpha</span>
 
     <h1><span class="o">Open</span>Fray</h1>
 
     <p class="tagline">
-      OpenFray is a free, open-source, browser-based <strong
-        >combat console for running DnD&nbsp;5e</strong
-      > encounters. It tracks initiative, monster resources, conditions, concentration, group saves, and
-      cryptographically random dice rolls in one fast, glanceable place — built for Game Masters who need
-      to keep hold of what's happening in a fight without losing the thread.
+      OpenFray is a free, open-source <strong>combat console for running DnD&nbsp;5e</strong> fights,
+      in your browser. It keeps the initiative order, everyone's hit points, the conditions and effects
+      on each creature, what a creature has left to spend, and the dice — so you can run the fight instead
+      of remembering it.
     </p>
 
     <div class="cta-row">
@@ -135,7 +134,7 @@ const features = [
     </div>
 
     <p class="cta-note">
-      The importer is a free Chrome extension that turns a D&amp;D&nbsp;Beyond monster page into an
+      The importer is a free Chrome extension that turns a D&amp;D&nbsp;Beyond creature page into an
       OpenFray creature, so you never retype a stat block. A Firefox version is on the way.
     </p>
   </main>

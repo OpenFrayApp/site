@@ -8,7 +8,7 @@ interface Props {
 
 const {
   title,
-  description = 'OpenFray is a free, browser-based combat console for running DnD 5e encounters.',
+  description = 'OpenFray is a free combat console for running DnD 5e fights in your browser.',
 } = Astro.props;
 
 const github = 'https://github.com/SirDarcanos/openfray';
@@ -85,7 +85,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
       <button
         class="nav-toggle"
         type="button"
-        aria-label="Menu"
+        aria-label="Open the menu"
         aria-expanded="false"
         aria-controls="topnav"
       >
@@ -104,13 +104,13 @@ const ogImage = new URL('/og-image.png', Astro.site);
       </button>
       <nav class="topnav" id="topnav" aria-label="Primary">
         <a href="/console/">Console</a>
-        <a href="/docs/">Help &amp; Documentation</a>
+        <a href="/docs/">Docs</a>
       </nav>
       <button
         class="theme-toggle"
         type="button"
-        aria-label="Toggle light or dark mode"
-        title="Toggle theme"
+        aria-label="Switch between light and dark"
+        title="Switch between light and dark"
       >
         <svg
           class="sun"
