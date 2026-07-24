@@ -1,5 +1,5 @@
 # Cloudflare Pages response headers. Applies to the whole deploy (marketing site
-# at / and the app at /console). See https://developers.cloudflare.com/pages/configuration/headers/
+# at /, the app at /console, and the handbook at /docs). See https://developers.cloudflare.com/pages/configuration/headers/
 #
 # The CSP below is Report-Only: it logs violations to the browser console but blocks
 # nothing. Once the deployed app shows no CSP violations (sign in, load the compendium,
@@ -16,6 +16,8 @@
 
 # Content-hashed build assets never change under a given URL — cache forever.
 /_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+/docs/_astro/*
   Cache-Control: public, max-age=31536000, immutable
 /console/assets/*
   Cache-Control: public, max-age=31536000, immutable
