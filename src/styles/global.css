@@ -78,6 +78,7 @@ a {
 
 /* Shared top bar: brand left, theme toggle right. */
 .topbar {
+  position: relative;
   width: 100%;
   max-width: 64rem;
   margin: 0 auto;
@@ -105,6 +106,29 @@ a {
 h1 .o {
   color: var(--accent);
 }
+/* The hamburger only exists on narrow screens; the nav below is inline above them. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+}
+.nav-toggle:hover {
+  color: var(--text);
+}
+.nav-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
 /* Primary nav sits with the theme toggle on the right of the top bar. */
 .topnav {
   display: flex;
@@ -468,6 +492,41 @@ h1 {
     top: auto;
     bottom: 1rem;
     transform: none;
+  }
+
+  /* "Help & Documentation" alone eats most of a phone's top bar, so the links
+     collapse behind the hamburger and drop below the bar when opened. */
+  .nav-toggle {
+    display: inline-flex;
+  }
+  .topnav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 1rem;
+    z-index: 20;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 0.35rem;
+    min-width: 13rem;
+    border: 1px solid var(--border);
+    border-radius: 0.7rem;
+    background: var(--panel);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
+  }
+  .topnav[data-open] {
+    display: flex;
+  }
+  .topnav a {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.45rem;
+  }
+  .topnav a:hover {
+    background: var(--bg);
   }
 }
 
