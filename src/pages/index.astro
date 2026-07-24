@@ -1,0 +1,215 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Picture } from 'astro:assets';
+import combat from '../assets/screenshots/combat.png';
+import compendium from '../assets/screenshots/compendium.png';
+import groupSave from '../assets/screenshots/group-save.png';
+import spell from '../assets/screenshots/spell.png';
+
+const importer =
+  'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
+
+const shots = [
+  {
+    img: combat,
+    alt: "A fight in progress — initiative order with a party and its foes, an ogre's stat block with the conditions on it, and the dice log.",
+  },
+  {
+    img: groupSave,
+    alt: "Rolling a whole group's saving throw against a single effect at once, with allies and foes listed separately.",
+  },
+  {
+    img: spell,
+    alt: 'Casting a spell from a monster stat block, with the full spell card and remaining uses.',
+  },
+  {
+    img: compendium,
+    alt: 'The built-in SRD compendium, showing an Aboleth stat block next to the searchable creature list.',
+  },
+];
+
+const features = [
+  {
+    title: 'The state others forget',
+    body: "Who has advantage on whom, who's debuffed, who's concentrating — the between-creature state other trackers drop on the floor.",
+  },
+  {
+    title: 'Monster resources, handled',
+    body: 'Recharge abilities, legendary actions, legendary resistances, concentration, and reactions — all tracked as you play.',
+  },
+  {
+    title: 'One-tap group saves',
+    body: "Roll a whole pack's save against a single effect at once, with resistances, immunities, and other modifiers applied for you.",
+  },
+  {
+    title: 'Honest, transparent dice',
+    body: 'Cryptographically random rolls with a clear, effect-aware log. No fudging, no “feels-fair” tampering — ever.',
+  },
+  {
+    title: 'Build your own content',
+    body: 'Custom creatures, spells with a full stat-block editor, a reusable characters roster, and campaigns with house rules.',
+  },
+  {
+    title: 'Free, open-source and yours',
+    body: 'Runs fully in your browser with no account. Sign in for free with Discord or Google to save and sync across devices.',
+  },
+];
+---
+
+<Layout
+  title="OpenFray — a DnD 5e combat console for GMs"
+  description="OpenFray is a free, open-source, browser-based combat console for running DnD 5e encounters — initiative, monster resources, conditions, group saves, and honest dice."
+>
+  <main class="hero">
+    <span class="badge">Alpha Testing</span>
+
+    <h1><span class="o">Open</span>Fray</h1>
+
+    <p class="tagline">
+      OpenFray is a free, open-source, browser-based <strong
+        >combat console for running DnD&nbsp;5e</strong
+      > encounters. It tracks initiative, monster resources, conditions, concentration, group saves, and
+      cryptographically random dice rolls in one fast, glanceable place — built for Game Masters who need
+      to keep hold of what's happening in a fight without losing the thread.
+    </p>
+
+    <div class="cta-row">
+      <a class="cta" href="/console/">Open the console →</a>
+    </div>
+
+    <section class="shots" aria-labelledby="shots-title">
+      <h2 id="shots-title" class="shots-title">See it in action</h2>
+      <div class="shot-grid">
+        {
+          shots.map((s, i) => (
+            <button
+              type="button"
+              class="shot-thumb"
+              data-index={i}
+              aria-label={`Enlarge screenshot: ${s.alt}`}
+            >
+              <Picture
+                src={s.img}
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                widths={[440, 880]}
+                sizes="(max-width: 640px) 92vw, (max-width: 940px) 44vw, 20rem"
+                alt={s.alt}
+                loading="lazy"
+              />
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="features">
+      {
+        features.map((f) => (
+          <div class="feature">
+            <h2>{f.title}</h2>
+            <p>{f.body}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <div class="importer-row">
+      <a
+        class="cta cta-ghost"
+        href={importer}
+        target="_blank"
+        rel="noreferrer"
+        title="OpenFray Importer on the Chrome Web Store"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="chrome-icon">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"
+          ></circle>
+          <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
+          <line x1="12" y1="8" x2="21.5" y2="8" stroke="currentColor" stroke-width="2"></line>
+          <line x1="8.5" y1="14" x2="3.7" y2="5.7" stroke="currentColor" stroke-width="2"></line>
+          <line x1="15.5" y1="14" x2="10.7" y2="22.3" stroke="currentColor" stroke-width="2"></line>
+        </svg>
+        Get the importer for Chrome
+      </a>
+    </div>
+
+    <p class="cta-note">
+      The importer is a free Chrome extension that turns a D&amp;D&nbsp;Beyond monster page into an
+      OpenFray creature, so you never retype a stat block. A Firefox version is on the way.
+    </p>
+  </main>
+
+  {
+    /* One lightbox for the whole gallery; the active slide is swapped in place so the
+      arrows can step through without reopening. */
+  }
+  <dialog class="lightbox" aria-label="Screenshot viewer">
+    <button type="button" class="lightbox-close" aria-label="Close">×</button>
+    <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous screenshot"
+      >‹</button
+    >
+    <button type="button" class="lightbox-nav lightbox-next" aria-label="Next screenshot">›</button>
+    <div class="lightbox-track">
+      {
+        shots.map((s, i) => (
+          <figure class="lightbox-slide" data-index={i}>
+            <Picture
+              src={s.img}
+              formats={['avif', 'webp']}
+              fallbackFormat="jpg"
+              widths={[900, 1440, 2000]}
+              sizes="(max-width: 1100px) 92vw, 1040px"
+              alt={s.alt}
+            />
+          </figure>
+        ))
+      }
+    </div>
+  </dialog>
+
+  <script>
+    const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+    const slides = Array.from(document.querySelectorAll<HTMLElement>('.lightbox-slide'));
+    if (dialog && slides.length) {
+      const show = (i: number) => {
+        const index = (i + slides.length) % slides.length;
+        slides.forEach((s, n) => s.toggleAttribute('data-active', n === index));
+        dialog.dataset.index = String(index);
+      };
+      const open = (i: number) => {
+        show(i);
+        // Lock the page behind the modal so it can't scroll under the overlay.
+        document.documentElement.style.overflow = 'hidden';
+        dialog.showModal();
+      };
+      // Every close path runs through here so the scroll lock is always lifted (the
+      // dialog `close` event proved unreliable across browsers).
+      const close = () => {
+        document.documentElement.style.overflow = '';
+        dialog.close();
+      };
+      const step = (delta: number) => show(Number(dialog.dataset.index ?? 0) + delta);
+
+      document.querySelectorAll<HTMLButtonElement>('.shot-thumb').forEach((btn) => {
+        btn.addEventListener('click', () => open(Number(btn.dataset.index)));
+      });
+      dialog.querySelector('.lightbox-prev')?.addEventListener('click', () => step(-1));
+      dialog.querySelector('.lightbox-next')?.addEventListener('click', () => step(1));
+      dialog.querySelector('.lightbox-close')?.addEventListener('click', close);
+      // A click on the dialog itself (its padding / backdrop) closes it.
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) close();
+      });
+      // Escape fires `cancel` first; take it over so it routes through close() too.
+      dialog.addEventListener('cancel', (e) => {
+        e.preventDefault();
+        close();
+      });
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') step(-1);
+        if (e.key === 'ArrowRight') step(1);
+      });
+    }
+  </script>
+</Layout>

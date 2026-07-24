@@ -1,0 +1,550 @@
+/* OpenFray marketing-site styles. Shared by every page via Layout.astro.
+   Dark is the default; the toggle adds .light to <html>. */
+:root {
+  --bg: #020617;
+  --panel: #0b1222;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --faint: #64748b;
+  --accent: #818cf8;
+  --accent-strong: #6366f1;
+  --border: #1e293b;
+}
+:root.light {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --faint: #94a3b8;
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+/* Only html is full-height; body uses min-height so it grows with the content.
+   (A fixed height:100% on body would pin it to the viewport, which made the
+   absolutely-positioned bottom glow anchor to the viewport instead of the page.) */
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  line-height: 1.6;
+}
+/* A glow behind the header (top) and a softer mirror behind the footer (bottom),
+   with the middle left plain dark. Absolutely positioned so they anchor to the
+   document's top and bottom — not the viewport — and don't become flex items. */
+body::before,
+body::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+body::before {
+  top: 0;
+  height: 480px;
+  background: radial-gradient(1000px 480px at 50% 0%, rgba(99, 102, 241, 0.18), transparent 70%);
+}
+body::after {
+  bottom: 0;
+  height: 460px;
+  background: radial-gradient(900px 460px at 50% 100%, rgba(99, 102, 241, 0.13), transparent 70%);
+}
+a {
+  color: var(--accent);
+}
+
+/* Shared top bar: brand left, theme toggle right. */
+.topbar {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+.brand svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--accent);
+}
+.brand .o,
+h1 .o {
+  color: var(--accent);
+}
+/* Primary nav sits with the theme toggle on the right of the top bar. */
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-left: auto;
+  margin-right: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.topnav a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.topnav a:hover {
+  color: var(--text);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.theme-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.theme-toggle .moon {
+  display: none;
+}
+:root.light .theme-toggle .sun {
+  display: none;
+}
+:root.light .theme-toggle .moon {
+  display: inline;
+}
+
+footer {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+}
+footer a {
+  color: var(--muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+footer a:hover {
+  color: var(--text);
+}
+footer .gh svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+}
+footer .sep {
+  margin: 0 0.55rem;
+  opacity: 0.5;
+}
+/* The trademark/attribution notice sits below the footer links — full-basis so it
+   wraps onto its own line rather than joining the row. */
+footer .disclaimer {
+  flex-basis: 100%;
+  margin: 1.1rem auto 0;
+  max-width: 44rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+footer .disclaimer a {
+  display: inline;
+  text-decoration: underline;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+/* Hero (homepage, 404). */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.5rem 4rem;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  margin-bottom: 1.5rem;
+}
+h1 {
+  font-size: clamp(2.6rem, 8vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+  font-weight: 800;
+}
+.tagline {
+  max-width: 41rem;
+  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 1.75rem;
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent-strong);
+  border-radius: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.cta:hover {
+  background: var(--accent);
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+/* The importer sits below the feature grid, after the pitch — it's a companion tool,
+   not the way in. A second (Firefox) button will sit beside it later. */
+.importer-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 3.5rem;
+}
+.chrome-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.cta-ghost {
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.cta-ghost:hover {
+  background: var(--panel);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cta-ghost svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.cta-note {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+.features {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  max-width: 56rem;
+  width: 100%;
+  text-align: left;
+}
+.feature {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  padding: 1.1rem 1.2rem;
+}
+.feature h2 {
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+  color: var(--text);
+}
+.feature p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Screenshot gallery: small thumbnails that open a lightbox. */
+.shots {
+  margin-top: 3.5rem;
+  width: 100%;
+  max-width: 56rem;
+}
+.shots-title {
+  margin: 0 0 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.shot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+@media (min-width: 940px) {
+  .shot-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.shot-thumb {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  overflow: hidden;
+  background: var(--panel);
+  cursor: zoom-in;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.shot-thumb:hover,
+.shot-thumb:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px -12px rgba(99, 102, 241, 0.55);
+  outline: none;
+}
+.shot-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top left;
+}
+
+.lightbox {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+.lightbox::backdrop {
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(2px);
+}
+/* The dialog fills the viewport; the active slide is centered inside it, so a click
+   anywhere off the image lands on the dialog and closes it. */
+.lightbox-track {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 3.5rem 1rem;
+  pointer-events: none;
+}
+.lightbox-slide {
+  display: none;
+  margin: 0;
+}
+.lightbox-slide[data-active] {
+  display: block;
+}
+.lightbox-slide img {
+  display: block;
+  max-width: min(92vw, 1040px);
+  max-height: min(84vh, 84dvh);
+  width: auto;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+}
+.lightbox-close,
+.lightbox-nav {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text);
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover,
+.lightbox-nav:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.lightbox-close {
+  top: 1rem;
+  right: 1rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.4rem;
+}
+.lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: 1.8rem;
+  padding-bottom: 0.15rem;
+}
+.lightbox-prev {
+  left: 1rem;
+}
+.lightbox-next {
+  right: 1rem;
+}
+@media (max-width: 640px) {
+  .lightbox-nav {
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+  }
+}
+
+/* Document pages (privacy, terms): contained but wider than the old layout. */
+.doc {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+}
+.doc h1 {
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4rem;
+  font-weight: 800;
+}
+.doc .updated {
+  color: var(--faint);
+  font-size: 0.85rem;
+  margin: 0 0 2rem;
+}
+.doc h2 {
+  font-size: 1.2rem;
+  margin: 2.2rem 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+.doc h3 {
+  font-size: 1rem;
+  margin: 1.4rem 0 0.3rem;
+  color: var(--text);
+}
+.doc p,
+.doc li {
+  color: var(--muted);
+}
+.doc .lead {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+.doc ul {
+  padding-left: 1.2rem;
+}
+.doc li {
+  margin: 0.3rem 0;
+}
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8rem 0;
+  font-size: 0.92rem;
+}
+.doc th,
+.doc td {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.doc th {
+  color: var(--text);
+  font-weight: 600;
+}
+.doc td {
+  color: var(--muted);
+}
+.doc .note {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.9rem 1.1rem;
+  margin: 1.2rem 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.doc code {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.85em;
+}
