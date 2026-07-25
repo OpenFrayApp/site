@@ -47,8 +47,15 @@ const ogImage = new URL('/og-image.png', Astro.site);
         }
       } catch (e) {}
     </script>
-    {/* Fathom Analytics — privacy-friendly, cookieless (same site as the console). */}
-    <script src="https://cdn.usefathom.com/script.js" data-site="CZDKZIAS" defer is:inline></script>
+    {
+      /* Fathom Analytics — privacy-friendly, cookieless. Production builds only, never on
+        the dev server (localhost). */
+    }
+    {
+      import.meta.env.PROD && (
+        <script src="https://cdn.usefathom.com/script.js" data-site="CZDKZIAS" defer is:inline />
+      )
+    }
   </head>
   <body>
     <header class="topbar">
