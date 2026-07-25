@@ -205,6 +205,25 @@ const ogImage = new URL('/og-image.png', Astro.site);
           if (e.key === 'Escape') setOpen(false);
         });
       })();
+
+      // Fathom event tracking for the marketing site. Names are prefixed "Site:" so they
+      // read apart from the console's own events (all three surfaces share one Fathom id).
+      (function () {
+        var send = function (name) {
+          return function () {
+            if (window.fathom) window.fathom.trackEvent(name);
+          };
+        };
+        document.querySelectorAll('a[href="/console/"]').forEach(function (a) {
+          a.addEventListener('click', send('Site: open console'));
+        });
+        document.querySelectorAll('a[href="/docs/"]').forEach(function (a) {
+          a.addEventListener('click', send('Site: open docs'));
+        });
+        document.querySelectorAll('a[href*="chromewebstore"]').forEach(function (a) {
+          a.addEventListener('click', send('Site: get importer'));
+        });
+      })();
     </script>
   </body>
 </html>
