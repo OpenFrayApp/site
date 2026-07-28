@@ -150,9 +150,9 @@
   font-size: 1rem;
   line-height: 1.65;
 }
-.book-body > p,
-.book-body > ul,
-.book-body > ol {
+:where(.book-body) > :where(p),
+:where(.book-body) > :where(ul),
+:where(.book-body) > :where(ol) {
   color: var(--muted);
 }
 .book-body .lead {
@@ -181,7 +181,7 @@
 :where(.book-body) :where(ul, ol) {
   padding-left: 1.2rem;
 }
-.book-body li {
+:where(.book-body) :where(li) {
   margin: 0.35rem 0;
 }
 :where(.book-body) :where(strong) {
@@ -194,21 +194,21 @@
   color: var(--accent);
 }
 
-.book-body table {
+:where(.book-body) :where(table) {
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0 1.5rem;
   font-size: 0.92rem;
 }
-.book-body th,
-.book-body td {
+:where(.book-body) :where(th),
+:where(.book-body) :where(td) {
   text-align: left;
   padding: 0.5rem 0.6rem;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
   color: var(--muted);
 }
-.book-body thead th {
+:where(.book-body) :where(thead) :where(th) {
   color: var(--text);
   font-weight: 600;
   border-bottom-color: var(--accent);
@@ -222,7 +222,7 @@
   max-width: 100%;
   margin: 1rem 0 1.5rem;
 }
-.book-body .table-scroll table {
+:where(.book-body) :where(.table-scroll) :where(table) {
   margin: 0;
 }
 

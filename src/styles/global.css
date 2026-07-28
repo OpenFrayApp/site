@@ -119,9 +119,10 @@ a code {
   color: var(--accent);
 }
 .brand .o,
-h1 .o {
+.hero h1 .o {
   color: var(--accent);
 }
+
 /* The hamburger only exists on narrow screens; the nav below is inline above them. */
 .nav-toggle {
   display: none;
@@ -378,7 +379,10 @@ main {
   padding: 0.35rem 0.85rem;
   margin-bottom: 1.5rem;
 }
-h1 {
+/* Scoped to the hero rather than left as a bare `h1`. The prose defaults carry no
+   specificity by design, so an unscoped element rule would beat `.doc h1` and set the
+   privacy page's heading at hero size. */
+:where(.hero) :where(h1) {
   font-size: clamp(2.6rem, 8vw, 4.5rem);
   line-height: 1.02;
   letter-spacing: -0.03em;
@@ -694,8 +698,9 @@ h1 {
   margin: 0 auto;
   padding: 1rem 1.5rem 3rem;
 }
-.doc h1 {
+:where(.doc) :where(h1) {
   font-size: clamp(1.9rem, 5vw, 2.6rem);
+  line-height: 1.02;
   letter-spacing: -0.02em;
   margin: 0 0 0.4rem;
   font-weight: 800;
@@ -705,18 +710,18 @@ h1 {
   font-size: 0.85rem;
   margin: 0 0 2rem;
 }
-.doc h2 {
+:where(.doc) :where(h2) {
   font-size: 1.2rem;
   margin: 2.2rem 0 0.6rem;
   letter-spacing: -0.01em;
 }
-.doc h3 {
+:where(.doc) :where(h3) {
   font-size: 1rem;
   margin: 1.4rem 0 0.3rem;
   color: var(--text);
 }
-.doc p,
-.doc li {
+:where(.doc) :where(p),
+:where(.doc) :where(li) {
   color: var(--muted);
 }
 .doc .lead {
@@ -728,27 +733,27 @@ h1 {
 :where(.doc) :where(ul, ol) {
   padding-left: 1.2rem;
 }
-.doc li {
+:where(.doc) :where(li) {
   margin: 0.3rem 0;
 }
-.doc table {
+:where(.doc) :where(table) {
   width: 100%;
   border-collapse: collapse;
   margin: 0.8rem 0;
   font-size: 0.92rem;
 }
-.doc th,
-.doc td {
+:where(.doc) :where(th),
+:where(.doc) :where(td) {
   text-align: left;
   padding: 0.55rem 0.6rem;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
-.doc th {
+:where(.doc) :where(th) {
   color: var(--text);
   font-weight: 600;
 }
-.doc td {
+:where(.doc) :where(td) {
   color: var(--muted);
 }
 .doc .note {
@@ -760,7 +765,7 @@ h1 {
   font-size: 0.92rem;
   color: var(--muted);
 }
-.doc code {
+:where(.doc) :where(code) {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 0.3rem;
