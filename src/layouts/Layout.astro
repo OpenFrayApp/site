@@ -26,6 +26,30 @@ const ogImage = new URL('/og-image.png', Astro.site);
 
 const keywordList = [...new Set([...keywords, ...baseKeywords])].join(', ');
 const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, ...schema] };
+
+// The two icon buttons in the top bar. It carries no `display`: the hamburger is hidden
+// above 640px and this one is not, and two display utilities in one class list resolve
+// by Tailwind's output order, not the order written — `inline-flex` here silently beat
+// the caller's `hidden` and put the hamburger on every width.
+const iconButton =
+  'size-9 cursor-pointer items-center justify-center rounded-lg border border-border ' +
+  'bg-panel text-muted';
+
+const footerLink = 'inline-flex items-center text-muted no-underline hover:text-text';
+const sep = 'sep mx-2 opacity-50';
+
+// In the hamburger menu there is nothing to hover, so the libraries sit inline under
+// Compendium rather than behind a second layer.
+const submenuLink =
+  'block rounded-md px-2.5 py-2 whitespace-nowrap text-muted no-underline ' +
+  'transition-[color] leading-relaxed hover:bg-bg hover:text-text max-[640px]:text-sm ' +
+  'max-[640px]:font-medium';
+
+// Below 640px the nav becomes a dropdown panel, so its links become full-width rows.
+const navLink =
+  'text-muted no-underline transition-[color] hover:text-text ' +
+  'max-[640px]:block max-[640px]:w-full max-[640px]:rounded-md max-[640px]:px-3 ' +
+  'max-[640px]:py-2.5 max-[640px]:hover:bg-bg';
 ---
 
 <!doctype html>
@@ -72,9 +96,16 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
     }
   </head>
   <body>
-    <header class="topbar">
-      <a class="brand" href="/" aria-label="OpenFray home">
+    <header
+      class="topbar relative mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4.5"
+    >
+      <a
+        class="brand inline-flex items-center gap-2 text-lg leading-relaxed font-extrabold tracking-tight text-text no-underline"
+        href="/"
+        aria-label="OpenFray home"
+      >
         <svg
+          class="size-6 text-accent"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -101,16 +132,18 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
             x2="5"
             y2="21"></line>
         </svg>
-        <span><span class="o">Open</span>Fray</span>
+        <span><span class="o text-accent">Open</span>Fray</span>
       </a>
+      {/* The hamburger only exists on narrow screens; the nav below is inline above them. */}
       <button
-        class="nav-toggle"
+        class={`nav-toggle ${iconButton} mr-2 ml-auto hidden hover:text-text max-[640px]:inline-flex`}
         type="button"
         aria-label="Open the menu"
         aria-expanded="false"
         aria-controls="topnav"
       >
         <svg
+          class="size-[1.15rem]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -123,17 +156,31 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
           <line x1="4" y1="17" x2="20" y2="17"></line>
         </svg>
       </button>
-      <nav class="topnav" id="topnav" aria-label="Primary">
-        <a href="/console/">Console</a>
-        <a href="/docs/">Docs</a>
+      {
+        /* "Help & Documentation" alone eats most of a phone's top bar, so below 640px the
+          links collapse behind the hamburger and drop out of the bar as a panel. */
+      }
+      <nav
+        class="topnav mr-5 ml-auto flex items-center gap-5 text-sm leading-relaxed font-semibold max-[640px]:absolute max-[640px]:top-full max-[640px]:right-4 max-[640px]:z-20 max-[640px]:m-0 max-[640px]:hidden max-[640px]:min-w-52 max-[640px]:flex-col max-[640px]:items-start max-[640px]:gap-0 max-[640px]:rounded-xl max-[640px]:border max-[640px]:border-border max-[640px]:bg-panel max-[640px]:p-1.5 max-[640px]:shadow-[0_12px_30px_rgb(0_0_0/0.28)] max-[640px]:data-[open]:flex"
+        id="topnav"
+        aria-label="Primary"
+      >
+        <a class={navLink} href="/console/">Console</a>
+        <a class={navLink} href="/docs/">Docs</a>
         {
           /* The submenu opens on hover and on focus; the link itself always works, so
             keyboard and touch users reach /compendium without needing the dropdown. */
         }
-        <div class="navmenu">
-          <a href="/compendium/" aria-haspopup="true" aria-expanded="false">
+        <div class="navmenu group relative flex items-center max-[640px]:block max-[640px]:w-full">
+          <a
+            class={`${navLink} inline-flex items-center gap-1`}
+            href="/compendium/"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
             Compendium
             <svg
+              class="size-[0.85rem] max-[640px]:hidden"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -143,13 +190,22 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </a>
-          <ul>
+          {
+            /* The panel sits 0.4rem below the trigger, and crossing that gap used to drop
+              the hover and close the menu before it could be clicked. The ::before spans
+              the gap so the pointer never leaves .navmenu on the way down. */
+          }
+          <ul
+            class="absolute top-full left-1/2 z-30 mt-1.5 hidden min-w-48 -translate-x-1/2 list-none rounded-lg border border-border bg-panel p-1 shadow-[0_12px_30px_rgb(0_0_0/0.28)] before:absolute before:right-0 before:bottom-full before:left-0 before:h-2.5 before:content-[''] group-hover:block group-focus-within:block max-[640px]:static max-[640px]:m-0 max-[640px]:block max-[640px]:min-w-0 max-[640px]:translate-x-0 max-[640px]:border-0 max-[640px]:bg-transparent max-[640px]:p-0 max-[640px]:pl-3 max-[640px]:shadow-none"
+          >
             {
               libraries
                 .filter((library) => library.available)
                 .map((library) => (
                   <li>
-                    <a href={library.href}>{library.name}</a>
+                    <a class={submenuLink} href={library.href}>
+                      {library.name}
+                    </a>
                   </li>
                 ))
             }
@@ -157,13 +213,13 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
         </div>
       </nav>
       <button
-        class="theme-toggle"
+        class={`theme-toggle ${iconButton} inline-flex transition-[color,border-color] hover:border-accent hover:text-text`}
         type="button"
         aria-label="Switch between light and dark"
         title="Switch between light and dark"
       >
         <svg
-          class="sun"
+          class="sun size-[1.15rem]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -177,7 +233,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
           ></path><path d="m19.07 4.93-1.41 1.41"></path></svg
         >
         <svg
-          class="moon"
+          class="moon size-[1.15rem]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -191,33 +247,46 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, .
 
     <slot />
 
-    <footer>
-      <a href="/docs/">Docs</a><span class="sep">·</span>
-      <a href="/privacy">Privacy</a><span class="sep">·</span>
-      <a href="/terms">Terms</a><span class="sep">·</span>
+    <footer
+      class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-center border-t border-border px-6 py-7 text-center text-[0.82rem] leading-relaxed text-faint"
+    >
+      <a class={footerLink} href="/docs/">Docs</a><span class={sep}>·</span>
+      <a class={footerLink} href="/privacy">Privacy</a><span class={sep}>·</span>
+      <a class={footerLink} href="/terms">Terms</a><span class={sep}>·</span>
       <a
-        class="gh"
+        class={`gh ${footerLink}`}
         href={github}
         aria-label="OpenFray on GitHub"
         title="GitHub"
         target="_blank"
         rel="noreferrer"
       >
-        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
+        <svg class="block size-[1.05rem]" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
           ><path
             d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"
           ></path></svg
         >
       </a>
-      <span class="sep">·</span><span
-        ><a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noreferrer"
-          >AGPL-3.0</a
+      <span class={sep}>·</span><span
+        ><a
+          class={footerLink}
+          href="https://www.gnu.org/licenses/agpl-3.0.html"
+          target="_blank"
+          rel="noreferrer">AGPL-3.0</a
         ></span
       >
 
-      <p class="disclaimer">
+      {
+        /* The trademark notice sits below the links, on its own line. `basis-full` alone
+          doesn't guarantee that: max-width clamps the size flexbox breaks lines on, so
+          the row only wrapped because links + notice happened to exceed the footer by
+          1.4px. This zero-width item takes the break instead. */
+      }
+      <span class="basis-full" aria-hidden="true"></span>
+      <p class="disclaimer mx-auto mt-4.5 max-w-[44rem] basis-full text-[0.78rem] leading-relaxed">
         Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
         specifically approved by Wizards of the Coast LLC. Game reference content is used under <a
+          class="inline text-muted underline hover:text-text"
           href="https://creativecommons.org/licenses/by/4.0/legalcode.en"
           target="_blank"
           rel="noreferrer">CC-BY-4.0</a

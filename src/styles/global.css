@@ -141,135 +141,10 @@
     color: #fff;
   }
 
-  /* Shared top bar: brand left, theme toggle right. */
-  .topbar {
-    position: relative;
-    width: 100%;
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 1.1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 800;
-    font-size: 1.15rem;
-    letter-spacing: -0.02em;
-  }
-  .brand svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--accent);
-  }
-  .brand .o,
+  /* Layout.astro carries the top bar, the nav, the dropdown and the footer as utilities.
+   The `.o` in the hero's wordmark stays here because index.astro is still CSS. */
   .hero h1 .o {
     color: var(--accent);
-  }
-
-  /* The hamburger only exists on narrow screens; the nav below is inline above them. */
-  .nav-toggle {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    margin-left: auto;
-    margin-right: 0.5rem;
-    border-radius: 0.6rem;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--muted);
-    cursor: pointer;
-  }
-  .nav-toggle:hover {
-    color: var(--text);
-  }
-  .nav-toggle svg {
-    width: 1.15rem;
-    height: 1.15rem;
-  }
-
-  /* Primary nav sits with the theme toggle on the right of the top bar. */
-  .topnav {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin-left: auto;
-    margin-right: 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-  .topnav a {
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-  .topnav a:hover {
-    color: var(--text);
-  }
-
-  /* Compendium dropdown. The trigger is a real link to /compendium, so the submenu is a
-   shortcut rather than the only way in — it opens on hover and on keyboard focus. */
-  .navmenu {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .navmenu > a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-  .navmenu > a svg {
-    width: 0.85rem;
-    height: 0.85rem;
-  }
-  .navmenu > ul {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 30;
-    display: none;
-    margin: 0.4rem 0 0;
-    padding: 0.3rem;
-    min-width: 12rem;
-    list-style: none;
-    border: 1px solid var(--border);
-    border-radius: 0.6rem;
-    background: var(--panel);
-    box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
-  }
-  /* The panel sits 0.4rem below the trigger, and crossing that gap used to drop the
-   hover and close the menu before it could be clicked. This transparent bridge spans
-   the gap so the pointer never leaves .navmenu on the way down. */
-  .navmenu > ul::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    height: 0.6rem;
-  }
-  .navmenu:hover > ul,
-  .navmenu:focus-within > ul {
-    display: block;
-  }
-  .navmenu > ul a {
-    display: block;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.4rem;
-    white-space: nowrap;
-  }
-  .navmenu > ul a:hover {
-    background: var(--bg);
-    color: var(--text);
   }
 
   /* Compendium index: one card per published library. */
@@ -323,29 +198,9 @@
     color: var(--faint);
   }
 
-  .theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.6rem;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--muted);
-    cursor: pointer;
-    transition:
-      color 0.15s ease,
-      border-color 0.15s ease;
-  }
-  .theme-toggle:hover {
-    color: var(--text);
-    border-color: var(--accent);
-  }
-  .theme-toggle svg {
-    width: 1.15rem;
-    height: 1.15rem;
-  }
+  /* Which icon the theme toggle shows is the one piece of the top bar a utility can't
+   express: it keys off `.light` on <html>, and this site has no light/dark variant
+   (colours flip through the theme variables instead — see the note above `@theme`). */
   .theme-toggle .moon {
     display: none;
   }
@@ -354,52 +209,6 @@
   }
   :root.light .theme-toggle .moon {
     display: inline;
-  }
-
-  footer {
-    width: 100%;
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 1.75rem 1.5rem;
-    text-align: center;
-    font-size: 0.82rem;
-    color: var(--faint);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--border);
-  }
-  footer a {
-    color: var(--muted);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-  }
-  footer a:hover {
-    color: var(--text);
-  }
-  footer .gh svg {
-    width: 1.05rem;
-    height: 1.05rem;
-    display: block;
-  }
-  footer .sep {
-    margin: 0 0.55rem;
-    opacity: 0.5;
-  }
-  /* The trademark/attribution notice sits below the footer links — full-basis so it
-   wraps onto its own line rather than joining the row. */
-  footer .disclaimer {
-    flex-basis: 100%;
-    margin: 1.1rem auto 0;
-    max-width: 44rem;
-    font-size: 0.78rem;
-    line-height: 1.6;
-  }
-  footer .disclaimer a {
-    display: inline;
-    text-decoration: underline;
   }
 
   main {
@@ -680,66 +489,6 @@
       top: auto;
       bottom: 1rem;
       transform: none;
-    }
-
-    /* "Help & Documentation" alone eats most of a phone's top bar, so the links
-     collapse behind the hamburger and drop below the bar when opened. */
-    .nav-toggle {
-      display: inline-flex;
-    }
-    .topnav {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 1rem;
-      z-index: 20;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      margin: 0;
-      padding: 0.35rem;
-      min-width: 13rem;
-      border: 1px solid var(--border);
-      border-radius: 0.7rem;
-      background: var(--panel);
-      box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
-    }
-    .topnav[data-open] {
-      display: flex;
-    }
-    .topnav a {
-      display: block;
-      width: 100%;
-      padding: 0.6rem 0.7rem;
-      border-radius: 0.45rem;
-    }
-    .topnav a:hover {
-      background: var(--bg);
-    }
-
-    /* In the hamburger menu there is nothing to hover, so the libraries sit inline
-     under Compendium instead of behind a second layer. */
-    .navmenu {
-      display: block;
-      width: 100%;
-    }
-    .navmenu > a svg {
-      display: none;
-    }
-    .navmenu > ul {
-      display: block;
-      position: static;
-      transform: none;
-      margin: 0;
-      padding: 0 0 0 0.7rem;
-      min-width: 0;
-      border: 0;
-      background: none;
-      box-shadow: none;
-    }
-    .navmenu > ul a {
-      font-weight: 500;
-      font-size: 0.86rem;
     }
   }
 
