@@ -11,13 +11,14 @@ const { name } = Astro.props;
 const c = creature(name);
 ---
 
-<article class="entry" id={`c-${creatureSlug(c.name)}`}>
+<article class="entry my-10" id={`c-${creatureSlug(c.name)}`}>
   <StatBlock creature={c} />
   {
     /* Regional effects and the like sit outside the block: the 2024 stat block doesn't
-       carry them, and the schema has no field for them either. */
+       carry them, and the schema has no field for them either. The slot holds rendered
+       markdown, so its own elements are styled by the `.entry-extras` rules in CSS. */
     Astro.slots.has('default') && (
-      <div class="entry-extras">
+      <div class="entry-extras mt-4 border-l-2 border-border pl-[1.1rem]">
         <slot />
       </div>
     )

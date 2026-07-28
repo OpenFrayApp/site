@@ -23,15 +23,15 @@ const label = (action: Action): string =>
 
 {
   actions.length > 0 && (
-    <div class="sb-section">
-      <h4>{heading}</h4>
-      {note && <p class="sb-note">{note}</p>}
+    <div class="sb-section mt-3 border-t border-border pt-3">
+      <h4 class="m-0 mb-2 text-xs font-bold tracking-widest text-accent uppercase">{heading}</h4>
+      {note && <p class="sb-note m-0 mb-3 text-sm text-faint italic">{note}</p>}
       {actions.map((action) =>
         action.text && hasBlockMarkdown(action.text) ? (
           <StatText label={label(action)} text={action.text} />
         ) : (
-          <p class="sb-entry">
-            <strong>{label(action)}.</strong> {action.text}
+          <p class="sb-entry m-0 mb-2.5 text-muted">
+            <strong class="text-text">{label(action)}.</strong> {action.text}
           </p>
         ),
       )}

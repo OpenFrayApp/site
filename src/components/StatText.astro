@@ -23,7 +23,11 @@ const { label, text } = Astro.props;
 const html = await render(text);
 ---
 
-<div class="sb-entry sb-entry-block">
-  <p><strong>{label}.</strong></p>
+{
+  /* The rendered markdown inside carries no classes, so its elements are styled by the
+    `.sb-entry-block` rules in waking-garden.css — the one place utilities can't reach. */
+}
+<div class="sb-entry sb-entry-block m-0 mb-2.5 text-muted">
+  <p><strong class="text-text">{label}.</strong></p>
   <Fragment set:html={html} />
 </div>

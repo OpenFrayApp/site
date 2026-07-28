@@ -8,25 +8,34 @@ interface Props {
 }
 
 const { level } = Astro.props;
+
+// The three column headings share one look; named so they can't drift apart.
+const heading = 'm-0 mb-1.5 text-xs font-bold tracking-widest text-faint uppercase';
 ---
 
-<div class="seed">
-  {level && <p class="seed-level">{level}</p>}
+<div class="seed mb-10">
+  {
+    level && (
+      <p class="seed-level m-0 mb-4 text-xs font-bold tracking-widest text-accent uppercase">
+        {level}
+      </p>
+    )
+  }
 
   {
     Astro.slots.has('concept') && (
-      <div class="seed-concept">
-        <h3>Concept</h3>
+      <div class="seed-concept mb-5 rounded-lg border border-border border-l-[3px] border-l-accent bg-panel px-4 py-3.5">
+        <h3 class={heading}>Concept</h3>
         <slot name="concept" />
       </div>
     )
   }
 
-  <div class="seed-cols">
+  <div class="seed-cols grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:gap-7">
     {
       Astro.slots.has('terrain') && (
         <div class="seed-terrain">
-          <h3>Terrain</h3>
+          <h3 class={heading}>Terrain</h3>
           <slot name="terrain" />
         </div>
       )
@@ -34,7 +43,7 @@ const { level } = Astro.props;
     {
       Astro.slots.has('roster') && (
         <div class="seed-roster">
-          <h3>Roster</h3>
+          <h3 class={heading}>Roster</h3>
           <slot name="roster" />
         </div>
       )

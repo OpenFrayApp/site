@@ -74,65 +74,100 @@ const kicker =
 const legendaryNote =
   'Immediately after another creature’s turn, this creature can expend a use to take one of the ' +
   'following actions. It regains all expended uses at the start of each of its turns.';
+
+// Repeated across the two definition lists and the ability table; named so the markup
+// below stays readable and the two lists can't drift apart.
+const row = 'flex min-w-0 gap-2';
+const label = 'flex-none font-bold text-accent';
+const value = 'm-0 text-muted';
+// Deliberately colourless. Two utilities for the same property in one class list are
+// resolved by Tailwind's own output order, not by the order they're written — so
+// composing `cell` with a different text colour silently lost the header styling.
+const cell = 'border-none px-1.5 py-1 text-center';
+const bodyCell = `${cell} text-muted`;
+const headCell = `${cell} text-xs font-semibold tracking-widest text-faint uppercase`;
+const rowHeadCell = `${cell} text-left font-bold text-text`;
 ---
 
-<section class="statblock" id={creatureSlug(c.name)}>
-  <h3 class="sb-name">
-    <a href={`#${creatureSlug(c.name)}`}>{c.name}</a>
+<section
+  class="statblock scroll-mt-6 rounded-xl border border-border border-t-[3px] border-t-accent bg-panel p-5.5 text-base"
+  id={creatureSlug(c.name)}
+>
+  <h3 class="sb-name m-0 border-none p-0 text-2xl tracking-tight text-text">
+    <a class="text-inherit no-underline hover:text-accent" href={`#${creatureSlug(c.name)}`}>
+      {c.name}
+    </a>
   </h3>
-  <p class="sb-kicker">{kicker}</p>
+  <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-faint italic">{kicker}</p>
 
   {/* The lore sits inside the block, above the rule, as the printed book has it. */}
-  {c.description && <p class="sb-lore">{c.description}</p>}
+  {
+    c.description && (
+      <p class="sb-lore m-0 mb-3.5 text-base leading-relaxed text-muted">{c.description}</p>
+    )
+  }
 
-  <dl class="sb-top">
-    <div><dt>AC</dt><dd>{c.ac}</dd></div>
+  <dl class="sb-top m-0 flex flex-wrap gap-x-6.5 gap-y-1.5 border-t border-border py-3">
+    <div class={row}><dt class={label}>AC</dt><dd class={value}>{c.ac}</dd></div>
     {
       c.initiative != null && (
-        <div>
-          <dt>Initiative</dt>
-          <dd>
+        <div class={row}>
+          <dt class={label}>Initiative</dt>
+          <dd class={value}>
             {signed(c.initiative)} ({10 + c.initiative})
           </dd>
         </div>
       )
     }
-    <div>
-      <dt>HP</dt><dd>{c.maxHp}{c.hpFormula ? ` (${c.hpFormula})` : ''}</dd>
+    <div class={row}>
+      <dt class={label}>HP</dt>
+      <dd class={value}>{c.maxHp}{c.hpFormula ? ` (${c.hpFormula})` : ''}</dd>
     </div>
-    <div><dt>Speed</dt><dd>{formatSpeed(c.speed)}</dd></div>
+    <div class={row}>
+      <dt class={label}>Speed</dt><dd class={value}>{formatSpeed(c.speed)}</dd>
+    </div>
   </dl>
 
   {
     /* The six abilities sit in two column-groups, which is wider than a phone; the
       wrapper lets the table scroll itself instead of the page. */
   }
-  <div class="sb-abilities-scroll">
-    <table class="sb-abilities">
+  <div class="sb-abilities-scroll overflow-x-auto border-t border-border">
+    <table class="sb-abilities m-0 w-full min-w-88 border-collapse text-sm">
       <thead>
         <tr>
-          <th><span class="sr-only">Ability</span></th>
-          <th scope="col">Score</th>
-          <th scope="col">Mod</th>
-          <th scope="col">Save</th>
-          <th><span class="sr-only">Ability</span></th>
-          <th scope="col">Score</th>
-          <th scope="col">Mod</th>
-          <th scope="col">Save</th>
+          {
+            [0, 1].map(() => (
+              <>
+                <th class={headCell}>
+                  <span class="sr-only">Ability</span>
+                </th>
+                {['Score', 'Mod', 'Save'].map((h) => (
+                  <th class={headCell} scope="col">
+                    {h}
+                  </th>
+                ))}
+              </>
+            ))
+          }
         </tr>
       </thead>
       <tbody>
         {
-          left.map((row, i) => (
+          left.map((r, i) => (
             <tr>
-              <th scope="row">{row.label}</th>
-              <td>{row.score}</td>
-              <td>{signed(row.mod)}</td>
-              <td>{signed(row.save)}</td>
-              <th scope="row">{right[i].label}</th>
-              <td>{right[i].score}</td>
-              <td>{signed(right[i].mod)}</td>
-              <td>{signed(right[i].save)}</td>
+              <th class={rowHeadCell} scope="row">
+                {r.label}
+              </th>
+              <td class={bodyCell}>{r.score}</td>
+              <td class={bodyCell}>{signed(r.mod)}</td>
+              <td class={bodyCell}>{signed(r.save)}</td>
+              <th class={rowHeadCell} scope="row">
+                {right[i].label}
+              </th>
+              <td class={bodyCell}>{right[i].score}</td>
+              <td class={bodyCell}>{signed(right[i].mod)}</td>
+              <td class={bodyCell}>{signed(right[i].save)}</td>
             </tr>
           ))
         }
@@ -140,69 +175,69 @@ const legendaryNote =
     </table>
   </div>
 
-  <dl class="sb-traits-list">
+  <dl class="sb-traits-list m-0 border-t border-border py-3">
     {
       defenses.map(
-        ([label, values]) =>
+        ([name, values]) =>
           values &&
           values.length > 0 && (
-            <div>
-              <dt>{label}</dt>
-              <dd>{values.join(', ')}</dd>
+            <div class={`${row} py-0.5`}>
+              <dt class={label}>{name}</dt>
+              <dd class={value}>{values.join(', ')}</dd>
             </div>
           ),
       )
     }
     {
       immunities && (
-        <div>
-          <dt>Immunities</dt>
-          <dd>{immunities}</dd>
+        <div class={`${row} py-0.5`}>
+          <dt class={label}>Immunities</dt>
+          <dd class={value}>{immunities}</dd>
         </div>
       )
     }
     {
       skills && (
-        <div>
-          <>
-            <dt>Skills</dt>
-            <dd>{skills}</dd>
-          </>
+        <div class={`${row} py-0.5`}>
+          <dt class={label}>Skills</dt>
+          <dd class={value}>{skills}</dd>
         </div>
       )
     }
-    <div><dt>Senses</dt><dd>{formatSenses(c.senses)}</dd></div>
+    <div class={`${row} py-0.5`}>
+      <dt class={label}>Senses</dt><dd class={value}>{formatSenses(c.senses)}</dd>
+    </div>
     {
       c.languages && c.languages.length > 0 && (
-        <div>
-          <dt>Languages</dt>
-          <dd>{c.languages.join(', ')}</dd>
+        <div class={`${row} py-0.5`}>
+          <dt class={label}>Languages</dt>
+          <dd class={value}>{c.languages.join(', ')}</dd>
         </div>
       )
     }
     {
       c.gear && c.gear.length > 0 && (
-        <div>
-          <>
-            <dt>Gear</dt>
-            <dd>{c.gear.join(', ')}</dd>
-          </>
+        <div class={`${row} py-0.5`}>
+          <dt class={label}>Gear</dt>
+          <dd class={value}>{c.gear.join(', ')}</dd>
         </div>
       )
     }
-    <div><dt>CR</dt><dd>{crLine}</dd></div>
+    <div class={`${row} py-0.5`}>
+      <dt class={label}>CR</dt><dd class={value}>{crLine}</dd>
+    </div>
   </dl>
 
   {
     c.traits && c.traits.length > 0 && (
-      <div class="sb-section">
-        <h4>Traits</h4>
+      <div class="sb-section mt-3 border-t border-border pt-3">
+        <h4 class="m-0 mb-2 text-xs font-bold tracking-widest text-accent uppercase">Traits</h4>
         {c.traits.map((trait) =>
           hasBlockMarkdown(trait.text) ? (
             <StatText label={trait.name} text={trait.text} />
           ) : (
-            <p class="sb-entry">
-              <strong>{trait.name}.</strong> {trait.text}
+            <p class="sb-entry m-0 mb-2.5 text-muted">
+              <strong class="text-text">{trait.name}.</strong> {trait.text}
             </p>
           ),
         )}
@@ -212,15 +247,17 @@ const legendaryNote =
 
   {
     c.spellcasting && (
-      <div class="sb-section">
-        <h4>Spellcasting</h4>
-        <p class="sb-note">
+      <div class="sb-section mt-3 border-t border-border pt-3">
+        <h4 class="m-0 mb-2 text-xs font-bold tracking-widest text-accent uppercase">
+          Spellcasting
+        </h4>
+        <p class="sb-note m-0 mb-3 text-sm text-faint italic">
           Spell save DC {c.spellcasting.saveDc}
           {c.spellcasting.ability ? `, using ${c.spellcasting.ability.toUpperCase()}` : ''}.
         </p>
         {c.spellcasting.groups.map((group) => (
-          <p class="sb-entry">
-            <strong>
+          <p class="sb-entry m-0 mb-2.5 text-muted">
+            <strong class="text-text">
               {group.usage.type === 'atWill'
                 ? 'At will'
                 : group.usage.type === 'perDay'
@@ -231,7 +268,9 @@ const legendaryNote =
             {group.spells.map((s) => spellName(s.name)).join(', ')}
           </p>
         ))}
-        {c.spellcasting.note && <p class="sb-note">{c.spellcasting.note}</p>}
+        {c.spellcasting.note && (
+          <p class="sb-note m-0 mb-3 text-sm text-faint italic">{c.spellcasting.note}</p>
+        )}
       </div>
     )
   }
