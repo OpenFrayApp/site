@@ -26,14 +26,19 @@
   padding-right: 0.5rem;
   font-size: 0.9rem;
 }
+/* Two columns: a narrow gutter of chapter numbers, then the labels. Everything —
+   chapter titles, headings, sub-headings — hangs off the same text edge, so depth is
+   read from indent and weight rather than from a stack of boxes and rules. */
 .book-home {
   display: block;
   font-weight: 700;
+  font-size: 0.95rem;
   color: var(--text);
   text-decoration: none;
   letter-spacing: -0.01em;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.45rem;
+  padding: 0 0 0.7rem;
+  margin-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border);
 }
 .book-home:hover,
 .book-home[aria-current='page'] {
@@ -42,64 +47,64 @@
 .book-sidebar ol,
 .book-sidebar ul {
   list-style: none;
-  margin: 0.4rem 0 0;
+  margin: 0;
   padding: 0;
-}
-.book-chapters {
-  border-left: 1px solid var(--border);
 }
 .book-sidebar li {
   margin: 0;
 }
+
 .book-chapters > li > a {
-  display: block;
-  padding: 0.42rem 0.7rem;
-  margin-left: -1px;
-  border-left: 2px solid transparent;
+  display: grid;
+  grid-template-columns: 1.35rem 1fr;
+  align-items: baseline;
+  padding: 0.34rem 0;
   color: var(--muted);
   text-decoration: none;
   line-height: 1.35;
 }
+/* --muted, not --faint: in the light theme --faint is #94a3b8 on #f8fafc, about 2.3:1.
+   These are navigation, so size and weight carry the hierarchy instead of low contrast. */
+.book-chapters > li > a .num {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
 .book-chapters > li > a:hover {
   color: var(--text);
-  background: var(--panel);
 }
 .book-chapters > li > a[aria-current='page'] {
   color: var(--accent);
-  border-left-color: var(--accent);
   font-weight: 600;
 }
+.book-chapters > li > a[aria-current='page'] .num {
+  color: var(--accent);
+}
 
-/* The current chapter's own headings, nested under it. Creature names never appear —
-   they are component-rendered, so they are not markdown headings. */
+/* The current chapter's own headings. They start at the label column, so they read as
+   contents *of* the chapter above rather than as siblings of it. Creature names never
+   appear — they are component-rendered, so they are not markdown headings. */
 .book-headings {
-  margin: 0.15rem 0 0.5rem;
+  margin: 0.1rem 0 0.6rem 1.35rem;
   border-left: 1px solid var(--border);
-  margin-left: 0.75rem;
 }
 .book-headings a {
   display: block;
-  padding: 0.28rem 0.6rem;
+  padding: 0.26rem 0 0.26rem 0.7rem;
   margin-left: -1px;
-  border-left: 2px solid transparent;
-  color: var(--faint);
+  border-left: 1px solid transparent;
+  color: var(--muted);
   text-decoration: none;
-  font-size: 0.83rem;
+  font-size: 0.84rem;
   line-height: 1.35;
 }
 .book-headings a:hover {
   color: var(--text);
+  border-left-color: var(--accent);
 }
 .book-headings .depth-3 a {
-  padding-left: 1.3rem;
+  padding-left: 1.5rem;
   font-size: 0.8rem;
-}
-.book-sidebar .num {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--faint);
 }
 
 /* The sidebar is plain markup on wide screens; the checkbox only drives it below. It

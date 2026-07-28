@@ -31,6 +31,9 @@ const base = '/the-waking-garden';
 // chapter from flooding the nav.
 const navHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
+/** The short marker in the sidebar's number column: "Chapter 6" → 6, "Appendix A" → A. */
+const marker = (eyebrowText?: string) => eyebrowText?.split(' ').pop() ?? '';
+
 const BOOK_ID = `${SITE}${base}/#book`;
 const bookNode = {
   '@type': 'Book',
@@ -106,8 +109,10 @@ const schema = current
                   href={`${base}/${chapter.id}/`}
                   aria-current={chapter.id === current ? 'page' : undefined}
                 >
-                  {chapter.data.eyebrow && <span class="num">{chapter.data.eyebrow}</span>}
-                  {chapter.data.label}
+                  <span class="num" aria-hidden="true">
+                    {marker(chapter.data.eyebrow)}
+                  </span>
+                  <span class="label">{chapter.data.label}</span>
                 </a>
                 {chapter.id === current && navHeadings.length > 0 && (
                   <ul class="book-headings">
