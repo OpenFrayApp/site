@@ -255,20 +255,9 @@
   }
 
   /* ---------- a grouped run of creatures ---------- */
-
-  .group {
-    margin: 2.75rem 0;
-    padding: 0 0 0.25rem 1.25rem;
-    border-left: 3px solid var(--border);
-  }
-  .group-title {
-    font-size: 1.45rem;
-    letter-spacing: -0.02em;
-    margin: 0 0 0.6rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 2px solid var(--accent);
-  }
-  .group .entry:last-child {
+  /* Group.astro carries its own utilities; only this cross-component rule is left,
+     because it reaches into .entry, which the component doesn't render itself. */
+  .creature-group .entry:last-child {
     margin-bottom: 0;
   }
 

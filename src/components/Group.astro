@@ -2,6 +2,11 @@
 // A run of creatures that belong to one section — the Gardener's six animated tools.
 // A plain heading doesn't work here: the entries after the group carry no heading of
 // their own, so the section would look like it swallowed the rest of the chapter.
+//
+// The semantic class names are kept alongside the utilities: they are the hooks the
+// style probes and any future script select on, and they say what the element is in a
+// way a list of utilities doesn't. Note `creature-group`, not `group` — Tailwind
+// reserves that one for its `group-*` variants.
 interface Props {
   title: string;
 }
@@ -9,7 +14,11 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<section class="group">
-  <h2 class="group-title">{title}</h2>
+<section class="creature-group my-11 border-l-[3px] border-border pt-0 pr-0 pb-1 pl-5">
+  <h2
+    class="creature-group-title m-0 mb-[0.6rem] border-b-2 border-accent pb-[0.4rem] text-[1.45rem] font-bold tracking-[-0.02em]"
+  >
+    {title}
+  </h2>
   <slot />
 </section>
