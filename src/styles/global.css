@@ -376,6 +376,14 @@ h1 {
   line-height: 1.55;
   margin: 0 0 1.75rem;
 }
+/* A tagline placed after a section joins the hero's 3.5rem block rhythm instead of
+   butting against it. Its own bottom margin is dropped so the following section's
+   3.5rem isn't stacked on top of it, which would leave the paragraph sitting closer
+   to what's above it than what's below. */
+.hero section + .tagline {
+  margin-top: 3.5rem;
+  margin-bottom: 0;
+}
 .cta {
   display: inline-flex;
   align-items: center;
