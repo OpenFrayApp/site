@@ -26,27 +26,38 @@ const description =
     them, the fey who tend them, and the thing they are all cuttings from.
   </p>
 
-  <ul class="book-stats">
-    <li><strong>{creatures.length}</strong> creatures</li>
-    <li><strong>CR {lowest}–{highest}</strong></li>
-    <li><strong>19</strong> ready-to-run encounters from level 1 to 20</li>
+  <ul
+    class="book-stats my-6 flex list-none flex-wrap gap-x-7 gap-y-2 border-y border-border px-0 py-4 text-sm leading-relaxed text-muted"
+  >
+    <li><strong class="text-text">{creatures.length}</strong> creatures</li>
+    <li><strong class="text-text">CR {lowest}–{highest}</strong></li>
+    <li><strong class="text-text">19</strong> ready-to-run encounters from level 1 to 20</li>
   </ul>
 
-  <p class="book-cta-row">
+  <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
     <a class="cta" href="/console/">Open the console</a>
     <a class="cta cta-ghost" href={`/the-waking-garden/${chapters[0].id}/`}>Start reading</a>
   </p>
 
   <h2>Contents</h2>
 
-  <ol class="book-contents">
+  <ol class="book-contents mt-4 grid list-none gap-2.5 p-0">
     {
       chapters.map((chapter) => (
         <li>
-          <a href={`/the-waking-garden/${chapter.id}/`}>
-            {chapter.data.eyebrow && <span class="num">{chapter.data.eyebrow}</span>}
-            <strong>{chapter.data.label}</strong>
-            <span class="blurb">{chapter.data.description}</span>
+          <a
+            class="block rounded-lg border border-border bg-panel px-4 py-3.5 no-underline transition-[border-color,transform] hover:-translate-y-px hover:border-accent"
+            href={`/the-waking-garden/${chapter.id}/`}
+          >
+            {chapter.data.eyebrow && (
+              <span class="num block text-xs leading-relaxed tracking-widest text-faint uppercase">
+                {chapter.data.eyebrow}
+              </span>
+            )}
+            <strong class="text-base leading-relaxed text-text">{chapter.data.label}</strong>
+            <span class="blurb mt-0.5 block text-sm leading-normal text-muted">
+              {chapter.data.description}
+            </span>
           </a>
         </li>
       ))

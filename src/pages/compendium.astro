@@ -54,14 +54,23 @@ const published = libraries.filter((library) => library.available);
       roll. The console also ships the official Basic Rules and the Tome of Beasts books.
     </p>
 
-    <ul class="library-grid">
+    <ul
+      class="library-grid mt-7 grid list-none grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-4 p-0"
+    >
       {
         published.map((library) => (
           <li>
-            <a href={library.href}>
-              <span class="library-edition">{library.edition}</span>
-              <strong>{library.name}</strong>
-              <span class="library-blurb">{library.blurb}</span>
+            <a
+              class="block h-full rounded-xl border border-border bg-panel px-5 py-4.5 no-underline transition-[border-color,transform] hover:-translate-y-0.5 hover:border-accent"
+              href={library.href}
+            >
+              <span class="library-edition mb-1 block text-xs leading-relaxed tracking-widest text-accent uppercase">
+                {library.edition}
+              </span>
+              <strong class="block text-base leading-relaxed text-text">{library.name}</strong>
+              <span class="library-blurb mt-1.5 block text-sm leading-normal text-muted">
+                {library.blurb}
+              </span>
             </a>
           </li>
         ))

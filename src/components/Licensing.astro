@@ -39,7 +39,14 @@ const CC_BY = 'https://creativecommons.org/licenses/by/4.0/legalcode.en';
   Document 5.2.1, used under CC BY 4.0.
 </p>
 
-<blockquote class="book-attribution">
+{
+  /* The prose here deliberately carries no utilities: it renders inside .book-body and
+    inherits its rules, so classing it would only duplicate them. Only the two elements
+    with a look of their own are converted. */
+}
+<blockquote
+  class="book-attribution my-5 rounded-lg border border-border border-l-[3px] border-l-accent bg-panel px-4 py-3.5 text-sm leading-relaxed text-muted"
+>
   This work includes material from the System Reference Document 5.2.1 (“SRD 5.2.1”) by Wizards of
   the Coast LLC, available at <a
     href="https://www.dndbeyond.com/srd"
@@ -52,7 +59,7 @@ const CC_BY = 'https://creativecommons.org/licenses/by/4.0/legalcode.en';
   >.
 </blockquote>
 
-<p class="book-fineprint">
+<p class="book-fineprint mt-8 text-[0.82rem] leading-relaxed text-faint">
   Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
   specifically approved by Wizards of the Coast LLC. OpenFray is free and ad-free, and the console's
   own code is licensed AGPL-3.0.

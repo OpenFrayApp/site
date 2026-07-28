@@ -147,57 +147,6 @@
     color: var(--accent);
   }
 
-  /* Compendium index: one card per published library. */
-  .library-grid {
-    list-style: none;
-    margin: 1.75rem 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-    gap: 1rem;
-  }
-  .library-grid a {
-    display: block;
-    height: 100%;
-    padding: 1.1rem 1.2rem;
-    border: 1px solid var(--border);
-    border-radius: 0.8rem;
-    background: var(--panel);
-    text-decoration: none;
-    transition:
-      border-color 0.15s ease,
-      transform 0.15s ease;
-  }
-  .library-grid a:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .library-edition {
-    display: block;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.3rem;
-  }
-  .library-grid strong {
-    display: block;
-    color: var(--text);
-    font-size: 1.05rem;
-  }
-  .library-blurb {
-    display: block;
-    margin-top: 0.35rem;
-    color: var(--muted);
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-  .library-note {
-    margin-top: 2rem;
-    font-size: 0.85rem;
-    color: var(--faint);
-  }
-
   /* Which icon the theme toggle shows is the one piece of the top bar a utility can't
    express: it keys off `.light` on <html>, and this site has no light/dark variant
    (colours flip through the theme variables instead — see the note above `@theme`). */
@@ -528,8 +477,8 @@
     color: var(--text);
     font-size: 1.05rem;
   }
-  /* :where() zeroes the specificity, so a component list (.library-grid) keeps its own
-   padding without needing a guard here. */
+  /* :where() zeroes the specificity, so a list that sets its own padding — whether by a
+   class or, now, by a `p-0` utility — keeps it without needing a guard here. */
   :where(.doc) :where(ul, ol) {
     padding-left: 1.2rem;
   }
