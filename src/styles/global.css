@@ -180,6 +180,17 @@ h1 .o {
   background: var(--panel);
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
 }
+/* The panel sits 0.4rem below the trigger, and crossing that gap used to drop the
+   hover and close the menu before it could be clicked. This transparent bridge spans
+   the gap so the pointer never leaves .navmenu on the way down. */
+.navmenu > ul::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 0.6rem;
+}
 .navmenu:hover > ul,
 .navmenu:focus-within > ul {
   display: block;
@@ -688,7 +699,11 @@ h1 {
   color: var(--text);
   font-size: 1.05rem;
 }
-.doc ul {
+/* `:not([class])` scopes this to plain prose lists. Without it, any list that is a
+   component (.library-grid, .book-contents) inherits the indent — a descendant
+   selector outranks the component's own class, which has bitten this file repeatedly. */
+.doc ul:not([class]),
+.doc ol:not([class]) {
   padding-left: 1.2rem;
 }
 .doc li {

@@ -159,25 +159,28 @@
   font-size: 1.15rem;
   color: var(--text);
 }
-.book-body h2 {
+/* `:not([class])` keeps these prose rules off component internals. A bare
+   `.book-body h3` outranks `.sb-name { margin: 0 }` and was adding 1.9rem inside every
+   stat block — the same descendant-beats-class trap as the lists above. */
+.book-body h2:not([class]) {
   font-size: 1.45rem;
   letter-spacing: -0.02em;
   margin: 2.75rem 0 0.4rem;
   padding-bottom: 0.4rem;
   border-bottom: 2px solid var(--accent);
 }
-.book-body h3 {
+.book-body h3:not([class]) {
   font-size: 1.12rem;
   margin: 1.9rem 0 0.4rem;
 }
-.book-body h4 {
+.book-body h4:not([class]) {
   font-size: 1rem;
   margin: 1.4rem 0 0.3rem;
 }
-/* `:not(...)` matters: this outranks .book-contents' own `padding: 0`, which is what
-   was indenting the Contents cards. Same trap as .book-body a vs .cta below. */
-.book-body ul:not(.book-contents):not(.library-grid),
-.book-body ol:not(.book-contents):not(.library-grid) {
+/* `:not([class])` scopes this to plain prose lists — see the same guard in global.css.
+   A bare `.book-body ol` outranks .book-contents' own `padding: 0` and indents it. */
+.book-body ul:not([class]),
+.book-body ol:not([class]) {
   padding-left: 1.2rem;
 }
 .book-body li {
@@ -213,13 +216,28 @@
   white-space: nowrap;
 }
 
-/* Any table wide enough to overflow scrolls inside itself rather than pushing the
-   page sideways. Astro wraps markdown tables in no container, so the body scrolls. */
-.book-body > .table-scroll,
-.book-body > table {
-  display: block;
+/* The wrapper (added by rehype-table-scroll) takes the overflow, so the table itself
+   stays `display: table` and its `width: 100%` actually fills the column. */
+.book-body .table-scroll {
   overflow-x: auto;
   max-width: 100%;
+  margin: 1rem 0 1.5rem;
+}
+.book-body .table-scroll table {
+  margin: 0;
+}
+
+/* The challenge-rating index is 67 short rows — two columns instead of one long run. */
+.index-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.5rem;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .index-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ---------- creature entry ---------- */
@@ -241,7 +259,7 @@
   border: 1px solid var(--border);
   border-top: 3px solid var(--accent);
   border-radius: 0.7rem;
-  padding: 1.25rem 1.4rem 1.4rem;
+  padding: 1.4rem;
   font-size: 0.94rem;
   scroll-margin-top: 1.5rem;
 }
@@ -346,6 +364,12 @@
   margin: 0 0 0.6rem;
   color: var(--muted);
 }
+/* The trailing entry's margin would otherwise stack onto the block's bottom padding
+   and make the box look bottom-light against its top. */
+.statblock > *:last-child,
+.sb-section > *:last-child {
+  margin-bottom: 0;
+}
 .sb-entry strong {
   color: var(--text);
 }
@@ -389,20 +413,30 @@
   margin: 0.2rem 0;
 }
 
-/* Regional effects and the like, passed into the block as slot content. */
-.statblock > h4 {
-  margin: 1.2rem 0 0.4rem;
+/* Regional effects and the like: below the block, not inside it. The 2024 stat block
+   doesn't carry them, so they shouldn't look like one of its sections. */
+.entry-extras {
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--border);
+}
+.entry-extras h4 {
+  margin: 0 0 0.4rem;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
 }
-.statblock > ul,
-.statblock > p {
+.entry-extras p,
+.entry-extras li {
   color: var(--muted);
 }
-.statblock > ul {
+.entry-extras ul {
+  margin: 0.4rem 0;
   padding-left: 1.2rem;
+}
+.entry-extras > *:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- landing page ---------- */

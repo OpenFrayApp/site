@@ -12,7 +12,14 @@ const c = creature(name);
 ---
 
 <article class="entry" id={`c-${creatureSlug(c.name)}`}>
-  <StatBlock creature={c}>
-    <slot />
-  </StatBlock>
+  <StatBlock creature={c} />
+  {
+    /* Regional effects and the like sit outside the block: the 2024 stat block doesn't
+       carry them, and the schema has no field for them either. */
+    Astro.slots.has('default') && (
+      <div class="entry-extras">
+        <slot />
+      </div>
+    )
+  }
 </article>
