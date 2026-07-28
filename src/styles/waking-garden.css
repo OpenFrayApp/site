@@ -184,12 +184,13 @@
 .book-body li {
   margin: 0.35rem 0;
 }
-.book-body strong {
+:where(.book-body) :where(strong) {
   color: var(--text);
 }
-/* `:not(.cta)` matters: this rule outranks global.css's `.cta`, so without it the
-   buttons on the landing page lose their white-on-indigo label. */
-.book-body a:not(.cta) {
+/* :where() so this carries no specificity: .cta keeps its white-on-indigo label and
+   .sb-name keeps its heading colour, without either having to out-specify a :not()
+   hack that only grew as more components were added. */
+:where(.book-body) :where(a) {
   color: var(--accent);
 }
 
@@ -299,8 +300,9 @@
   border: none;
   padding: 0;
 }
-/* The name links to its own anchor, so a creature can be linked to directly. It should
-   read as a heading until you reach for it. */
+/* The name links to its own anchor, so a creature can be linked to directly — but it
+   reads as the block's heading, not as a link: the resting state is the heading colour
+   with no underline. Hover is the only tell. */
 .sb-name a {
   color: inherit;
   text-decoration: none;

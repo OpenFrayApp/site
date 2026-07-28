@@ -75,6 +75,22 @@ body::after {
 a {
   color: var(--accent);
 }
+/* Emphasis inside a link takes the link's color. Without this, a bolded link renders
+   with `strong`'s own colour and shows as white text under a blue underline — the same
+   link reading three different ways depending on whether its text happened to be bold. */
+a strong,
+a em,
+a b,
+a i,
+a code {
+  color: inherit;
+}
+
+/* Text selection. The browser default ignores the theme entirely. */
+::selection {
+  background: var(--accent-strong);
+  color: #fff;
+}
 
 /* Shared top bar: brand left, theme toggle right. */
 .topbar {
