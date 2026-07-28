@@ -441,23 +441,17 @@
     }
   }
 
-  /* Document pages (privacy, terms): contained but wider than the old layout. */
-  .doc {
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 1rem 1.5rem 3rem;
-  }
+  /* Document pages (compendium, privacy, terms). The container and the three classed
+   elements — .updated, .lead, .note — carry their own utilities. What's left is the
+   prose defaults, and they stay here for the same reason .book-body's do: they style
+   bare h2/p/li/td/code in long-form copy, and a legal page has no place to hang a
+   utility on without classing every paragraph in it. */
   :where(.doc) :where(h1) {
     font-size: clamp(1.9rem, 5vw, 2.6rem);
     line-height: 1.02;
     letter-spacing: -0.02em;
     margin: 0 0 0.4rem;
     font-weight: 800;
-  }
-  .doc .updated {
-    color: var(--faint);
-    font-size: 0.85rem;
-    margin: 0 0 2rem;
   }
   :where(.doc) :where(h2) {
     font-size: 1.2rem;
@@ -472,10 +466,6 @@
   :where(.doc) :where(p),
   :where(.doc) :where(li) {
     color: var(--muted);
-  }
-  .doc .lead {
-    color: var(--text);
-    font-size: 1.05rem;
   }
   /* :where() zeroes the specificity, so a list that sets its own padding — whether by a
    class or, now, by a `p-0` utility — keeps it without needing a guard here. */
@@ -503,15 +493,6 @@
     font-weight: 600;
   }
   :where(.doc) :where(td) {
-    color: var(--muted);
-  }
-  .doc .note {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 0.6rem;
-    padding: 0.9rem 1.1rem;
-    margin: 1.2rem 0;
-    font-size: 0.92rem;
     color: var(--muted);
   }
   :where(.doc) :where(code) {
