@@ -2,14 +2,16 @@
    variables in global.css, so it follows the light/dark toggle with no extra wiring.
    Dark is the default; :root.light supplies the light values. */
 
+/* 64rem matches the top bar, the footer, and the privacy/terms pages, so every page on
+   the site lines up at the same width. */
 .book {
   width: 100%;
-  max-width: 78rem;
+  max-width: 64rem;
   margin: 0 auto;
   padding: 0 1.5rem 3rem;
   display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
-  gap: 2.5rem;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  gap: 2rem;
   align-items: start;
 }
 
@@ -37,16 +39,19 @@
 .book-home[aria-current='page'] {
   color: var(--accent);
 }
-.book-sidebar ol {
+.book-sidebar ol,
+.book-sidebar ul {
   list-style: none;
   margin: 0.4rem 0 0;
   padding: 0;
+}
+.book-chapters {
   border-left: 1px solid var(--border);
 }
 .book-sidebar li {
   margin: 0;
 }
-.book-sidebar ol a {
+.book-chapters > li > a {
   display: block;
   padding: 0.42rem 0.7rem;
   margin-left: -1px;
@@ -55,14 +60,39 @@
   text-decoration: none;
   line-height: 1.35;
 }
-.book-sidebar ol a:hover {
+.book-chapters > li > a:hover {
   color: var(--text);
   background: var(--panel);
 }
-.book-sidebar ol a[aria-current='page'] {
+.book-chapters > li > a[aria-current='page'] {
   color: var(--accent);
   border-left-color: var(--accent);
   font-weight: 600;
+}
+
+/* The current chapter's own headings, nested under it. Creature names never appear —
+   they are component-rendered, so they are not markdown headings. */
+.book-headings {
+  margin: 0.15rem 0 0.5rem;
+  border-left: 1px solid var(--border);
+  margin-left: 0.75rem;
+}
+.book-headings a {
+  display: block;
+  padding: 0.28rem 0.6rem;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--faint);
+  text-decoration: none;
+  font-size: 0.83rem;
+  line-height: 1.35;
+}
+.book-headings a:hover {
+  color: var(--text);
+}
+.book-headings .depth-3 a {
+  padding-left: 1.3rem;
+  font-size: 0.8rem;
 }
 .book-sidebar .num {
   display: block;
@@ -135,8 +165,10 @@
   font-size: 1rem;
   margin: 1.4rem 0 0.3rem;
 }
-.book-body ul,
-.book-body ol {
+/* `:not(...)` matters: this outranks .book-contents' own `padding: 0`, which is what
+   was indenting the Contents cards. Same trap as .book-body a vs .cta below. */
+.book-body ul:not(.book-contents):not(.library-grid),
+.book-body ol:not(.book-contents):not(.library-grid) {
   padding-left: 1.2rem;
 }
 .book-body li {
@@ -186,12 +218,13 @@
 .entry {
   margin: 2.5rem 0;
 }
-.entry .lore {
+
+/* The creature's lore, inside the block above the rule, as the printed book has it. */
+.sb-lore {
+  margin: 0 0 0.9rem;
   color: var(--muted);
-  font-size: 1.02rem;
-  margin: 0 0 1rem;
-  padding-left: 0.9rem;
-  border-left: 2px solid var(--border);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .statblock {
@@ -430,6 +463,62 @@
   margin-top: 2rem;
   font-size: 0.82rem;
   color: var(--faint);
+}
+
+/* ---------- encounter seeds (appendix A) ---------- */
+
+.seed {
+  margin: 0 0 2.5rem;
+}
+.seed-level {
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.seed h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-weight: 700;
+}
+.seed-concept {
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0.5rem;
+}
+.seed-concept p {
+  margin: 0;
+  color: var(--text);
+}
+.seed-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+.seed-cols p {
+  margin: 0;
+  color: var(--muted);
+}
+.seed-cols table {
+  margin: 0;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.86rem;
+}
+@media (max-width: 720px) {
+  .seed-cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
 }
 
 /* ---------- pager ---------- */

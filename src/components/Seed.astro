@@ -1,0 +1,45 @@
+---
+// One Appendix A encounter. The concept leads, then terrain and roster sit side by
+// side — the print layout stacks them and puts the idea last, which reads worse on a
+// screen where the table is the thing you scan for.
+interface Props {
+  /** The level band and XP budget, e.g. "Levels 1–2 · 300 XP". */
+  level?: string;
+}
+
+const { level } = Astro.props;
+---
+
+<div class="seed">
+  {level && <p class="seed-level">{level}</p>}
+
+  {
+    Astro.slots.has('concept') && (
+      <div class="seed-concept">
+        <h3>Concept</h3>
+        <slot name="concept" />
+      </div>
+    )
+  }
+
+  <div class="seed-cols">
+    {
+      Astro.slots.has('terrain') && (
+        <div class="seed-terrain">
+          <h3>Terrain</h3>
+          <slot name="terrain" />
+        </div>
+      )
+    }
+    {
+      Astro.slots.has('roster') && (
+        <div class="seed-roster">
+          <h3>Roster</h3>
+          <slot name="roster" />
+        </div>
+      )
+    }
+  </div>
+
+  <slot />
+</div>

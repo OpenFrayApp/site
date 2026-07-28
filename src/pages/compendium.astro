@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { libraries } from '../data/libraries.ts';
+import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
+
+const title = 'Compendium — OpenFray’s own DnD 5e creature libraries';
+const description =
+  'The creature libraries OpenFray writes and publishes in full, free to read: original ' +
+  'Dungeons and Dragons 5e stat blocks you can use at the table or in the console.';
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${SITE}/compendium/#page`,
+    name: 'Compendium',
+    description,
+    url: `${SITE}/compendium/`,
+    isPartOf: { '@id': WEBSITE_ID },
+    publisher: { '@id': PUBLISHER_ID },
+    hasPart: libraries
+      .filter((library) => library.available)
+      .map((library) => ({
+        '@type': 'Book',
+        name: library.name,
+        url: `${SITE}${library.href}`,
+        author: { '@id': PUBLISHER_ID },
+      })),
+  },
+  breadcrumbs([
+    { name: 'OpenFray', url: '/' },
+    { name: 'Compendium', url: '/compendium/' },
+  ]),
+];
+
+const published = libraries.filter((library) => library.available);
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={['OpenFray compendium', 'DnD 5e bestiary', 'free 5e stat blocks']}
+  schema={schema}
+>
+  <main class="doc">
+    <h1>Compendium</h1>
+
+    <p class="lead">
+      The creature libraries OpenFray writes itself, published here in full and free to read.
+    </p>
+
+    <p>
+      Each one is built into <a href="/console/">the console</a> as well — turn it on in{' '}
+      <strong>Settings</strong> and its creatures appear in <strong>Add creature</strong>, ready to
+      roll. The console also ships the official Basic Rules and the Tome of Beasts books; those are
+      other people's, so they're available in the app rather than published here.
+    </p>
+
+    <ul class="library-grid">
+      {
+        published.map((library) => (
+          <li>
+            <a href={library.href}>
+              <span class="library-edition">{library.edition}</span>
+              <strong>{library.name}</strong>
+              <span class="library-blurb">{library.blurb}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="library-note">
+      More libraries are on the way. Stat blocks and mechanics are licensed{' '}
+      <a href="https://creativecommons.org/licenses/by/4.0/legalcode.en">CC BY 4.0</a>; lore, art,
+      and prose stay © OpenFray.
+    </p>
+  </main>
+</Layout>

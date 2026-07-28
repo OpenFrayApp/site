@@ -8,7 +8,15 @@ export async function getStaticPaths() {
 }
 
 const { chapter } = Astro.props;
-const { Content } = await render(chapter);
+const { Content, headings } = await render(chapter);
+
+const keywords = [
+  'The Waking Garden',
+  'OpenFray bestiary',
+  'DnD 5e plant monsters',
+  'Dungeons and Dragons 5e homebrew creatures',
+  chapter.data.title,
+];
 ---
 
 <BookLayout
@@ -17,6 +25,8 @@ const { Content } = await render(chapter);
   current={chapter.id}
   eyebrow={chapter.data.eyebrow}
   heading={chapter.data.title}
+  headings={headings}
+  keywords={keywords}
 >
   <Content />
 </BookLayout>

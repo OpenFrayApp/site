@@ -12,7 +12,6 @@ const c = creature(name);
 ---
 
 <article class="entry" id={`c-${creatureSlug(c.name)}`}>
-  {c.description && <p class="lore">{c.description}</p>}
   <StatBlock creature={c}>
     <slot />
   </StatBlock>

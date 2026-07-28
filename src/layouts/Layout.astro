@@ -1,19 +1,30 @@
 ---
 import '../styles/global.css';
+import { baseKeywords, websiteNodes } from '../data/seo.ts';
+import { libraries } from '../data/libraries.ts';
 
 interface Props {
   title: string;
   description?: string;
+  /** Page-specific search terms, layered on top of the site-wide list. */
+  keywords?: string[];
+  /** JSON-LD nodes for this page, added to the shared website/publisher graph. */
+  schema?: Record<string, unknown>[];
 }
 
 const {
   title,
   description = 'OpenFray is a free combat console for running DnD 5e fights in your browser.',
+  keywords = [],
+  schema = [],
 } = Astro.props;
 
 const github = 'https://github.com/SirDarcanos/openfray';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og-image.png', Astro.site);
+
+const keywordList = [...new Set([...keywords, ...baseKeywords])].join(', ');
+const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, ...schema] };
 ---
 
 <!doctype html>
@@ -23,6 +34,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywordList} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" />
     <meta name="theme-color" content="#020617" />
@@ -39,6 +51,7 @@ const ogImage = new URL('/og-image.png', Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
     {/* Apply the saved theme before paint (dark is the default) to avoid a flash. */}
     <script is:inline>
       try {
@@ -112,7 +125,35 @@ const ogImage = new URL('/og-image.png', Astro.site);
       <nav class="topnav" id="topnav" aria-label="Primary">
         <a href="/console/">Console</a>
         <a href="/docs/">Docs</a>
-        <a href="/the-waking-garden/">Bestiary</a>
+        {
+          /* The submenu opens on hover and on focus; the link itself always works, so
+            keyboard and touch users reach /compendium without needing the dropdown. */
+        }
+        <div class="navmenu">
+          <a href="/compendium/" aria-haspopup="true" aria-expanded="false">
+            Compendium
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </a>
+          <ul>
+            {
+              libraries
+                .filter((library) => library.available)
+                .map((library) => (
+                  <li>
+                    <a href={library.href}>{library.name}</a>
+                  </li>
+                ))
+            }
+          </ul>
+        </div>
       </nav>
       <button
         class="theme-toggle"
@@ -174,8 +215,8 @@ const ogImage = new URL('/og-image.png', Astro.site);
       >
 
       <p class="disclaimer">
-        Compatible with fifth edition. Not affiliated with, endorsed, sponsored, or specifically
-        approved by Wizards of the Coast LLC. Game reference content is used under <a
+        Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
+        specifically approved by Wizards of the Coast LLC. Game reference content is used under <a
           href="https://creativecommons.org/licenses/by/4.0/legalcode.en"
           target="_blank"
           rel="noreferrer">CC-BY-4.0</a

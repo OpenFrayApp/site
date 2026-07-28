@@ -1,6 +1,8 @@
 ---
+import type { MarkdownHeading } from 'astro';
 import { getCollection } from 'astro:content';
 import Layout from './Layout.astro';
+import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
 import '../styles/waking-garden.css';
 
 interface Props {
@@ -10,9 +12,12 @@ interface Props {
   current?: string;
   eyebrow?: string;
   heading: string;
+  /** The chapter's own headings, for the in-page nav under the sidebar entry. */
+  headings?: MarkdownHeading[];
+  keywords?: string[];
 }
 
-const { title, description, current, eyebrow, heading } = Astro.props;
+const { title, description, current, eyebrow, heading, headings = [], keywords = [] } = Astro.props;
 
 const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
 
@@ -20,9 +25,57 @@ const index = chapters.findIndex((c) => c.id === current);
 const previous = index > 0 ? chapters[index - 1] : undefined;
 const next = index >= 0 && index < chapters.length - 1 ? chapters[index + 1] : undefined;
 const base = '/the-waking-garden';
+
+// Only H2 and H3 reach the sidebar. Creature names are component-rendered rather than
+// markdown headings, so they never appear here — which is what keeps a 16-creature
+// chapter from flooding the nav.
+const navHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const BOOK_ID = `${SITE}${base}/#book`;
+const bookNode = {
+  '@type': 'Book',
+  '@id': BOOK_ID,
+  name: 'The Waking Garden',
+  url: `${SITE}${base}/`,
+  author: { '@id': PUBLISHER_ID },
+  publisher: { '@id': PUBLISHER_ID },
+  inLanguage: 'en',
+  isPartOf: { '@id': WEBSITE_ID },
+  genre: 'Tabletop role-playing game supplement',
+  about: [
+    { '@type': 'Thing', name: 'Dungeons and Dragons 5e' },
+    { '@type': 'Thing', name: 'Tabletop role-playing games' },
+  ],
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  isAccessibleForFree: true,
+};
+
+const crumbs = [
+  { name: 'OpenFray', url: '/' },
+  { name: 'Compendium', url: '/compendium/' },
+  { name: 'The Waking Garden', url: `${base}/` },
+];
+
+const schema = current
+  ? [
+      bookNode,
+      {
+        '@type': 'Article',
+        '@id': `${SITE}${base}/${current}/#article`,
+        headline: heading,
+        description,
+        url: `${SITE}${base}/${current}/`,
+        inLanguage: 'en',
+        isPartOf: { '@id': BOOK_ID },
+        author: { '@id': PUBLISHER_ID },
+        publisher: { '@id': PUBLISHER_ID },
+      },
+      breadcrumbs([...crumbs, { name: heading, url: `${base}/${current}/` }]),
+    ]
+  : [bookNode, breadcrumbs(crumbs)];
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} keywords={keywords} schema={schema}>
   <div class="book">
     <input class="book-nav-state sr-only" id="book-nav-state" type="checkbox" />
     <label class="book-nav-toggle" for="book-nav-state">
@@ -45,7 +98,7 @@ const base = '/the-waking-garden';
         <a class="book-home" href={`${base}/`} aria-current={current ? undefined : 'page'}>
           The Waking Garden
         </a>
-        <ol>
+        <ol class="book-chapters">
           {
             chapters.map((chapter) => (
               <li>
@@ -56,6 +109,15 @@ const base = '/the-waking-garden';
                   {chapter.data.eyebrow && <span class="num">{chapter.data.eyebrow}</span>}
                   {chapter.data.label}
                 </a>
+                {chapter.id === current && navHeadings.length > 0 && (
+                  <ul class="book-headings">
+                    {navHeadings.map((h) => (
+                      <li class={`depth-${h.depth}`}>
+                        <a href={`#${h.slug}`}>{h.text}</a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))
           }

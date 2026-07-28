@@ -78,6 +78,9 @@ const legendaryNote =
     {titleCase(c.type)}{c.alignment ? `, ${titleCase(c.alignment)}` : ''}
   </p>
 
+  {/* The lore sits inside the block, above the rule, as the printed book has it. */}
+  {c.description && <p class="sb-lore">{c.description}</p>}
+
   <dl class="sb-top">
     <div><dt>AC</dt><dd>{c.ac}</dd></div>
     {

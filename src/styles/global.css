@@ -148,6 +148,104 @@ h1 .o {
   color: var(--text);
 }
 
+/* Compendium dropdown. The trigger is a real link to /compendium, so the submenu is a
+   shortcut rather than the only way in — it opens on hover and on keyboard focus. */
+.navmenu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.navmenu > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.navmenu > a svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+.navmenu > ul {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: none;
+  margin: 0.4rem 0 0;
+  padding: 0.3rem;
+  min-width: 12rem;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--panel);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
+}
+.navmenu:hover > ul,
+.navmenu:focus-within > ul {
+  display: block;
+}
+.navmenu > ul a {
+  display: block;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.4rem;
+  white-space: nowrap;
+}
+.navmenu > ul a:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Compendium index: one card per published library. */
+.library-grid {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+}
+.library-grid a {
+  display: block;
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: var(--panel);
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+.library-grid a:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.library-edition {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.library-grid strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+.library-blurb {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.library-note {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -527,6 +625,31 @@ h1 {
   }
   .topnav a:hover {
     background: var(--bg);
+  }
+
+  /* In the hamburger menu there is nothing to hover, so the libraries sit inline
+     under Compendium instead of behind a second layer. */
+  .navmenu {
+    display: block;
+    width: 100%;
+  }
+  .navmenu > a svg {
+    display: none;
+  }
+  .navmenu > ul {
+    display: block;
+    position: static;
+    transform: none;
+    margin: 0;
+    padding: 0 0 0 0.7rem;
+    min-width: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .navmenu > ul a {
+    font-weight: 500;
+    font-size: 0.86rem;
   }
 }
 
