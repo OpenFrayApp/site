@@ -1,723 +1,727 @@
-/* The Waking Garden bestiary, under /the-waking-garden. Layered on the site's shared
+@layer components {
+  /* The Waking Garden bestiary, under /the-waking-garden. Layered on the site's shared
    variables in global.css, so it follows the light/dark toggle with no extra wiring.
    Dark is the default; :root.light supplies the light values. */
 
-/* 64rem matches the top bar, the footer, and the privacy/terms pages, so every page on
+  /* 64rem matches the top bar, the footer, and the privacy/terms pages, so every page on
    the site lines up at the same width. */
-.book {
-  width: 100%;
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 0 1.5rem 3rem;
-  display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
-  gap: 2rem;
-  align-items: start;
-}
+  .book {
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+    display: grid;
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
 
-/* ---------- sidebar ---------- */
+  /* ---------- sidebar ---------- */
 
-.book-sidebar {
-  position: sticky;
-  top: 1.5rem;
-  align-self: start;
-  max-height: calc(100vh - 3rem);
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  font-size: 0.9rem;
-}
-/* One text edge for chapters, a deeper one for their headings. The gutter holds the
+  .book-sidebar {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    font-size: 0.9rem;
+  }
+  /* One text edge for chapters, a deeper one for their headings. The gutter holds the
    chapter number. Depth reads from indent + size; nothing is boxed or filled. */
-.book-home {
-  display: block;
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: -0.01em;
-  padding: 0 0 0.7rem;
-  margin-bottom: 0.55rem;
-  border-bottom: 1px solid var(--border);
-}
-.book-home:hover,
-.book-home[aria-current='page'] {
-  color: var(--accent);
-}
-/* Scoped to the chapter list only. A blanket `.book-sidebar ul` reset here would
+  .book-home {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    padding: 0 0 0.7rem;
+    margin-bottom: 0.55rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .book-home:hover,
+  .book-home[aria-current='page'] {
+    color: var(--accent);
+  }
+  /* Scoped to the chapter list only. A blanket `.book-sidebar ul` reset here would
    outrank .book-headings' own indent (0,1,1 vs 0,1,0) and flatten the nesting — which
    is exactly what it did, leaving sub-headings sitting left of their own chapter. */
-.book-chapters {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.book-chapters li {
-  margin: 0;
-}
+  .book-chapters {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .book-chapters li {
+    margin: 0;
+  }
 
-/* Gutter for the number, then the label. --gutter is the shared text edge that the
+  /* Gutter for the number, then the label. --gutter is the shared text edge that the
    headings below indent from, so the two can never drift apart. */
-.book-chapters {
-  --gutter: 1.4rem;
-}
-.book-chapters > li > a {
-  display: grid;
-  grid-template-columns: var(--gutter) 1fr;
-  align-items: baseline;
-  padding: 0.36rem 0;
-  color: var(--text);
-  text-decoration: none;
-  line-height: 1.35;
-}
-.book-chapters > li > a .num {
-  font-size: 0.72rem;
-  font-variant-numeric: tabular-nums;
-  /* --muted, not --faint: light-theme --faint is #94a3b8 on #f8fafc, about 2.3:1. */
-  color: var(--muted);
-}
-.book-chapters > li > a:hover {
-  color: var(--accent);
-}
-.book-chapters > li > a[aria-current='page'],
-.book-chapters > li > a[aria-current='page'] .num {
-  color: var(--accent);
-  font-weight: 600;
-}
+  .book-chapters {
+    --gutter: 1.4rem;
+  }
+  .book-chapters > li > a {
+    display: grid;
+    grid-template-columns: var(--gutter) 1fr;
+    align-items: baseline;
+    padding: 0.36rem 0;
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.35;
+  }
+  .book-chapters > li > a .num {
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    /* --muted, not --faint: light-theme --faint is #94a3b8 on #f8fafc, about 2.3:1. */
+    color: var(--muted);
+  }
+  .book-chapters > li > a:hover {
+    color: var(--accent);
+  }
+  .book-chapters > li > a[aria-current='page'],
+  .book-chapters > li > a[aria-current='page'] .num {
+    color: var(--accent);
+    font-weight: 600;
+  }
 
-/* The current chapter's headings, indented past the chapter's own text edge so they
+  /* The current chapter's headings, indented past the chapter's own text edge so they
    read as its contents. Creature names never appear — they are component-rendered,
    so they are not markdown headings. */
-.book-chapters .book-headings {
-  list-style: none;
-  margin: 0.1rem 0 0.7rem;
-  padding: 0;
-  padding-left: var(--gutter);
-  border-left: 1px solid var(--border);
-  margin-left: 0.45rem;
-}
-.book-chapters .book-headings a {
-  display: block;
-  padding: 0.22rem 0;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.82rem;
-  line-height: 1.4;
-}
-.book-chapters .book-headings a:hover {
-  color: var(--accent);
-}
-.book-chapters .book-headings .depth-3 a {
-  padding-left: 0.8rem;
-  font-size: 0.78rem;
-}
+  .book-chapters .book-headings {
+    list-style: none;
+    margin: 0.1rem 0 0.7rem;
+    padding: 0;
+    padding-left: var(--gutter);
+    border-left: 1px solid var(--border);
+    margin-left: 0.45rem;
+  }
+  .book-chapters .book-headings a {
+    display: block;
+    padding: 0.22rem 0;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+  .book-chapters .book-headings a:hover {
+    color: var(--accent);
+  }
+  .book-chapters .book-headings .depth-3 a {
+    padding-left: 0.8rem;
+    font-size: 0.78rem;
+  }
 
-/* The sidebar is plain markup on wide screens; the checkbox only drives it below. It
+  /* The sidebar is plain markup on wide screens; the checkbox only drives it below. It
    stays in the accessibility tree (sr-only, not hidden) so it is keyboard-reachable. */
-.book-nav-toggle {
-  display: none;
-}
-.book-nav-state:focus-visible + .book-nav-toggle {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
+  .book-nav-toggle {
+    display: none;
+  }
+  .book-nav-state:focus-visible + .book-nav-toggle {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 
-/* ---------- page body ---------- */
+  /* ---------- page body ---------- */
 
-.book-main {
-  min-width: 0;
-}
-.book-head {
-  padding: 1rem 0 0.5rem;
-}
-.book-eyebrow {
-  margin: 0 0 0.4rem;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.book-head h1 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  margin: 0 0 1.25rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 3px solid var(--accent);
-}
+  .book-main {
+    min-width: 0;
+  }
+  .book-head {
+    padding: 1rem 0 0.5rem;
+  }
+  .book-eyebrow {
+    margin: 0 0 0.4rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .book-head h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    /* Declared, not inherited: preflight resets heading weight to `inherit`. */
+    font-weight: bold;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 3px solid var(--accent);
+  }
 
-.book-body {
-  font-size: 1rem;
-  line-height: 1.65;
-}
-:where(.book-body) > :where(p),
-:where(.book-body) > :where(ul),
-:where(.book-body) > :where(ol) {
-  color: var(--muted);
-}
-.book-body .lead {
-  font-size: 1.15rem;
-  color: var(--text);
-}
-/* Prose defaults, wrapped in :where() so they carry zero specificity. Any component
+  .book-body {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  :where(.book-body) > :where(p),
+  :where(.book-body) > :where(ul),
+  :where(.book-body) > :where(ol) {
+    color: var(--muted);
+  }
+  .book-body .lead {
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+  /* Prose defaults, wrapped in :where() so they carry zero specificity. Any component
    rule — .sb-name, .seed h3, .entry-extras h4 — then wins without needing a guard.
    Written as plain descendant selectors, these repeatedly beat the component's own
    class (0,1,1 vs 0,1,0) and leaked into stat blocks, seeds, and the sidebar. */
-:where(.book-body) :where(h2) {
-  font-size: 1.45rem;
-  letter-spacing: -0.02em;
-  margin: 2.75rem 0 0.4rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 2px solid var(--accent);
-}
-:where(.book-body) :where(h3) {
-  font-size: 1.12rem;
-  margin: 1.9rem 0 0.4rem;
-}
-:where(.book-body) :where(h4) {
-  font-size: 1rem;
-  margin: 1.4rem 0 0.3rem;
-}
-:where(.book-body) :where(ul, ol) {
-  padding-left: 1.2rem;
-}
-:where(.book-body) :where(li) {
-  margin: 0.35rem 0;
-}
-:where(.book-body) :where(strong) {
-  color: var(--text);
-}
-/* :where() so this carries no specificity: .cta keeps its white-on-indigo label and
+  :where(.book-body) :where(h2) {
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+    margin: 2.75rem 0 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  :where(.book-body) :where(h3) {
+    font-size: 1.12rem;
+    margin: 1.9rem 0 0.4rem;
+  }
+  :where(.book-body) :where(h4) {
+    font-size: 1rem;
+    margin: 1.4rem 0 0.3rem;
+  }
+  :where(.book-body) :where(ul, ol) {
+    padding-left: 1.2rem;
+  }
+  :where(.book-body) :where(li) {
+    margin: 0.35rem 0;
+  }
+  :where(.book-body) :where(strong) {
+    color: var(--text);
+  }
+  /* :where() so this carries no specificity: .cta keeps its white-on-indigo label and
    .sb-name keeps its heading colour, without either having to out-specify a :not()
    hack that only grew as more components were added. */
-:where(.book-body) :where(a) {
-  color: var(--accent);
-}
-
-:where(.book-body) :where(table) {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0 1.5rem;
-  font-size: 0.92rem;
-}
-:where(.book-body) :where(th),
-:where(.book-body) :where(td) {
-  text-align: left;
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-  color: var(--muted);
-}
-:where(.book-body) :where(thead) :where(th) {
-  color: var(--text);
-  font-weight: 600;
-  border-bottom-color: var(--accent);
-  white-space: nowrap;
-}
-
-/* The wrapper (added by rehype-table-scroll) takes the overflow, so the table itself
-   stays `display: table` and its `width: 100%` actually fills the column. */
-.book-body .table-scroll {
-  overflow-x: auto;
-  max-width: 100%;
-  margin: 1rem 0 1.5rem;
-}
-:where(.book-body) :where(.table-scroll) :where(table) {
-  margin: 0;
-}
-
-/* The challenge-rating index is 67 short rows — two columns instead of one long run.
-   Slightly smaller type so the "Ch. 5" cell never wraps at half width. */
-.index-split {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 1.25rem;
-  align-items: start;
-}
-.index-split table {
-  font-size: 0.8rem;
-}
-.index-split th,
-.index-split td {
-  padding: 0.4rem 0.35rem;
-  white-space: nowrap;
-}
-.index-split td:nth-child(3) {
-  white-space: normal;
-}
-@media (max-width: 720px) {
-  .index-split {
-    grid-template-columns: minmax(0, 1fr);
+  :where(.book-body) :where(a) {
+    color: var(--accent);
   }
-}
 
-/* ---------- a grouped run of creatures ---------- */
+  :where(.book-body) :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.92rem;
+  }
+  :where(.book-body) :where(th),
+  :where(.book-body) :where(td) {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+  }
+  :where(.book-body) :where(thead) :where(th) {
+    color: var(--text);
+    font-weight: 600;
+    border-bottom-color: var(--accent);
+    white-space: nowrap;
+  }
 
-.group {
-  margin: 2.75rem 0;
-  padding: 0 0 0.25rem 1.25rem;
-  border-left: 3px solid var(--border);
-}
-.group-title {
-  font-size: 1.45rem;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.6rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 2px solid var(--accent);
-}
-.group .entry:last-child {
-  margin-bottom: 0;
-}
+  /* The wrapper (added by rehype-table-scroll) takes the overflow, so the table itself
+   stays `display: table` and its `width: 100%` actually fills the column. */
+  .book-body .table-scroll {
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 1rem 0 1.5rem;
+  }
+  :where(.book-body) :where(.table-scroll) :where(table) {
+    margin: 0;
+  }
 
-/* ---------- creature entry ---------- */
+  /* The challenge-rating index is 67 short rows — two columns instead of one long run.
+   Slightly smaller type so the "Ch. 5" cell never wraps at half width. */
+  .index-split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.25rem;
+    align-items: start;
+  }
+  .index-split table {
+    font-size: 0.8rem;
+  }
+  .index-split th,
+  .index-split td {
+    padding: 0.4rem 0.35rem;
+    white-space: nowrap;
+  }
+  .index-split td:nth-child(3) {
+    white-space: normal;
+  }
+  @media (max-width: 720px) {
+    .index-split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 
-.entry {
-  margin: 2.5rem 0;
-}
+  /* ---------- a grouped run of creatures ---------- */
 
-/* The creature's lore, inside the block above the rule, as the printed book has it. */
-.sb-lore {
-  margin: 0 0 0.9rem;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
+  .group {
+    margin: 2.75rem 0;
+    padding: 0 0 0.25rem 1.25rem;
+    border-left: 3px solid var(--border);
+  }
+  .group-title {
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  .group .entry:last-child {
+    margin-bottom: 0;
+  }
 
-.statblock {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
-  border-radius: 0.7rem;
-  padding: 1.4rem;
-  font-size: 0.94rem;
-  scroll-margin-top: 1.5rem;
-}
-.sb-name {
-  margin: 0;
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  border: none;
-  padding: 0;
-}
-/* The name links to its own anchor, so a creature can be linked to directly — but it
+  /* ---------- creature entry ---------- */
+
+  .entry {
+    margin: 2.5rem 0;
+  }
+
+  /* The creature's lore, inside the block above the rule, as the printed book has it. */
+  .sb-lore {
+    margin: 0 0 0.9rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .statblock {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0.7rem;
+    padding: 1.4rem;
+    font-size: 0.94rem;
+    scroll-margin-top: 1.5rem;
+  }
+  .sb-name {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    border: none;
+    padding: 0;
+  }
+  /* The name links to its own anchor, so a creature can be linked to directly — but it
    reads as the block's heading, not as a link: the resting state is the heading colour
    with no underline. Hover is the only tell. */
-.sb-name a {
-  color: inherit;
-  text-decoration: none;
-}
-.sb-name a:hover {
-  color: var(--accent);
-}
-.sb-kicker {
-  margin: 0.1rem 0 0.9rem;
-  font-style: italic;
-  color: var(--faint);
-  font-size: 0.9rem;
-}
+  .sb-name a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .sb-name a:hover {
+    color: var(--accent);
+  }
+  .sb-kicker {
+    margin: 0.1rem 0 0.9rem;
+    font-style: italic;
+    color: var(--faint);
+    font-size: 0.9rem;
+  }
 
-/* The headline numbers and the defenses block share one definition-list shape:
+  /* The headline numbers and the defenses block share one definition-list shape:
    a bold label followed by its value, wrapping as the column narrows. */
-.sb-top,
-.sb-traits-list {
-  margin: 0;
-  padding: 0.8rem 0;
-  border-top: 1px solid var(--border);
-}
-.sb-top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1.6rem;
-}
-.sb-top > div,
-.sb-traits-list > div {
-  display: flex;
-  gap: 0.45rem;
-  min-width: 0;
-}
-.sb-traits-list > div {
-  padding: 0.12rem 0;
-}
-.sb-top dt,
-.sb-traits-list dt {
-  font-weight: 700;
-  color: var(--accent);
-  flex: none;
-}
-.sb-top dd,
-.sb-traits-list dd {
-  margin: 0;
-  color: var(--muted);
-}
+  .sb-top,
+  .sb-traits-list {
+    margin: 0;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .sb-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.6rem;
+  }
+  .sb-top > div,
+  .sb-traits-list > div {
+    display: flex;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+  .sb-traits-list > div {
+    padding: 0.12rem 0;
+  }
+  .sb-top dt,
+  .sb-traits-list dt {
+    font-weight: 700;
+    color: var(--accent);
+    flex: none;
+  }
+  .sb-top dd,
+  .sb-traits-list dd {
+    margin: 0;
+    color: var(--muted);
+  }
 
-.sb-abilities-scroll {
-  overflow-x: auto;
-  border-top: 1px solid var(--border);
-}
-.sb-abilities {
-  width: 100%;
-  min-width: 22rem;
-  border-collapse: collapse;
-  margin: 0;
-  font-size: 0.88rem;
-}
-.sb-abilities th,
-.sb-abilities td {
-  padding: 0.3rem 0.4rem;
-  text-align: center;
-  color: var(--muted);
-  border: none;
-}
-.sb-abilities thead th {
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
-  font-weight: 600;
-}
-.sb-abilities tbody th {
-  text-align: left;
-  color: var(--text);
-  font-weight: 700;
-}
-.sb-abilities tbody tr:nth-child(odd) td,
-.sb-abilities tbody tr:nth-child(odd) th {
-  background: color-mix(in srgb, var(--border) 45%, transparent);
-}
+  .sb-abilities-scroll {
+    overflow-x: auto;
+    border-top: 1px solid var(--border);
+  }
+  .sb-abilities {
+    width: 100%;
+    min-width: 22rem;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.88rem;
+  }
+  .sb-abilities th,
+  .sb-abilities td {
+    padding: 0.3rem 0.4rem;
+    text-align: center;
+    color: var(--muted);
+    border: none;
+  }
+  .sb-abilities thead th {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 600;
+  }
+  .sb-abilities tbody th {
+    text-align: left;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .sb-abilities tbody tr:nth-child(odd) td,
+  .sb-abilities tbody tr:nth-child(odd) th {
+    background: color-mix(in srgb, var(--border) 45%, transparent);
+  }
 
-.sb-section {
-  border-top: 1px solid var(--border);
-  padding-top: 0.8rem;
-  margin-top: 0.8rem;
-}
-.sb-section h4 {
-  margin: 0 0 0.5rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 700;
-}
-.sb-entry {
-  margin: 0 0 0.6rem;
-  color: var(--muted);
-}
-/* The trailing entry's margin would otherwise stack onto the block's bottom padding
+  .sb-section {
+    border-top: 1px solid var(--border);
+    padding-top: 0.8rem;
+    margin-top: 0.8rem;
+  }
+  .sb-section h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .sb-entry {
+    margin: 0 0 0.6rem;
+    color: var(--muted);
+  }
+  /* The trailing entry's margin would otherwise stack onto the block's bottom padding
    and make the box look bottom-light against its top. */
-.statblock > *:last-child,
-.sb-section > *:last-child {
-  margin-bottom: 0;
-}
-.sb-entry strong {
-  color: var(--text);
-}
-.sb-note {
-  margin: 0 0 0.7rem;
-  font-size: 0.86rem;
-  font-style: italic;
-  color: var(--faint);
-}
+  .statblock > *:last-child,
+  .sb-section > *:last-child {
+    margin-bottom: 0;
+  }
+  .sb-entry strong {
+    color: var(--text);
+  }
+  .sb-note {
+    margin: 0 0 0.7rem;
+    font-size: 0.86rem;
+    font-style: italic;
+    color: var(--faint);
+  }
 
-/* A trait or action whose text carries a table or a list (the Perennial's Grafts,
+  /* A trait or action whose text carries a table or a list (the Perennial's Grafts,
    the Gardener's Patient) renders as blocks under its bold label. */
-.sb-entry-block > p {
-  margin: 0 0 0.4rem;
-}
-.sb-entry-block table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0.4rem 0 0.8rem;
-  font-size: 0.86rem;
-  display: block;
-  overflow-x: auto;
-}
-.sb-entry-block th,
-.sb-entry-block td {
-  text-align: left;
-  padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-.sb-entry-block thead th {
-  color: var(--text);
-  font-weight: 600;
-  white-space: nowrap;
-}
-.sb-entry-block ul {
-  margin: 0.3rem 0 0.7rem;
-  padding-left: 1.2rem;
-}
-.sb-entry-block li {
-  margin: 0.2rem 0;
-}
+  .sb-entry-block > p {
+    margin: 0 0 0.4rem;
+  }
+  .sb-entry-block table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.4rem 0 0.8rem;
+    font-size: 0.86rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .sb-entry-block th,
+  .sb-entry-block td {
+    text-align: left;
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .sb-entry-block thead th {
+    color: var(--text);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .sb-entry-block ul {
+    margin: 0.3rem 0 0.7rem;
+    padding-left: 1.2rem;
+  }
+  .sb-entry-block li {
+    margin: 0.2rem 0;
+  }
 
-/* Regional effects and the like: below the block, not inside it. The 2024 stat block
+  /* Regional effects and the like: below the block, not inside it. The 2024 stat block
    doesn't carry them, so they shouldn't look like one of its sections. */
-.entry-extras {
-  margin: 1rem 0 0;
-  padding-left: 1.1rem;
-  border-left: 2px solid var(--border);
-}
-.entry-extras h4 {
-  margin: 0 0 0.4rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.entry-extras p,
-.entry-extras li {
-  color: var(--muted);
-}
-.entry-extras ul {
-  margin: 0.4rem 0;
-  padding-left: 1.2rem;
-}
-.entry-extras > *:last-child {
-  margin-bottom: 0;
-}
-
-/* ---------- landing page ---------- */
-
-.book-stats {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
-  margin: 1.5rem 0;
-  padding: 1rem 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-.book-stats strong {
-  color: var(--text);
-}
-.book-cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 1.5rem 0 0;
-}
-.book-contents {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
-  display: grid;
-  gap: 0.6rem;
-}
-.book-contents a {
-  display: block;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  background: var(--panel);
-  text-decoration: none;
-  transition:
-    border-color 0.15s ease,
-    transform 0.15s ease;
-}
-.book-contents a:hover {
-  border-color: var(--accent);
-  transform: translateY(-1px);
-}
-.book-contents .num {
-  display: block;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-.book-contents strong {
-  color: var(--text);
-  font-size: 1.02rem;
-}
-.book-contents .blurb {
-  display: block;
-  margin-top: 0.2rem;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.5;
-}
-.book-fineprint {
-  margin-top: 2rem;
-  font-size: 0.82rem;
-  color: var(--faint);
-}
-
-/* The required SRD attribution, set apart but not indented — it is a notice to read,
-   not a pull quote. */
-.book-attribution {
-  margin: 1.25rem 0;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 0.5rem;
-  background: var(--panel);
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-
-/* ---------- encounter seeds (appendix A) ---------- */
-
-.seed {
-  margin: 0 0 2.5rem;
-}
-.seed-level {
-  margin: 0 0 1rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.seed h3 {
-  margin: 0 0 0.35rem;
-  font-size: 0.74rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--faint);
-  font-weight: 700;
-}
-.seed-concept {
-  margin: 0 0 1.25rem;
-  padding: 0.9rem 1.1rem;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 0.5rem;
-}
-.seed-concept p {
-  margin: 0;
-  color: var(--text);
-}
-.seed-cols {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1.75rem;
-  align-items: start;
-}
-.seed-cols p {
-  margin: 0;
-  color: var(--muted);
-}
-.seed-cols table {
-  margin: 0;
-  display: block;
-  overflow-x: auto;
-  font-size: 0.86rem;
-}
-@media (max-width: 720px) {
-  .seed-cols {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.25rem;
-  }
-}
-
-/* ---------- pager ---------- */
-
-.book-pager {
-  display: flex;
-  gap: 1rem;
-  margin-top: 3.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.book-pager a {
-  flex: 1;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  background: var(--panel);
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 600;
-  transition: border-color 0.15s ease;
-}
-.book-pager a:hover {
-  border-color: var(--accent);
-}
-.book-pager .next {
-  text-align: right;
-}
-.book-pager span {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--faint);
-  font-weight: 500;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ---------- narrow screens ---------- */
-
-@media (max-width: 900px) {
-  .book {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-  /* The contents collapse behind a button; the checkbox holds the open state so the
-     nav needs no JavaScript, matching how the top bar's menu behaves. */
-  .book-nav-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+  .entry-extras {
     margin: 1rem 0 0;
-    padding: 0.55rem 0.9rem;
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--border);
+  }
+  .entry-extras h4 {
+    margin: 0 0 0.4rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .entry-extras p,
+  .entry-extras li {
+    color: var(--muted);
+  }
+  .entry-extras ul {
+    margin: 0.4rem 0;
+    padding-left: 1.2rem;
+  }
+  .entry-extras > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---------- landing page ---------- */
+
+  .book-stats {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin: 1.5rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .book-stats strong {
+    color: var(--text);
+  }
+  .book-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0 0;
+  }
+  .book-contents {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .book-contents a {
+    display: block;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background: var(--panel);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .book-contents a:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .book-contents .num {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .book-contents strong {
+    color: var(--text);
+    font-size: 1.02rem;
+  }
+  .book-contents .blurb {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .book-fineprint {
+    margin-top: 2rem;
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+
+  /* The required SRD attribution, set apart but not indented — it is a notice to read,
+   not a pull quote. */
+  .book-attribution {
+    margin: 1.25rem 0;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0.5rem;
+    background: var(--panel);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  /* ---------- encounter seeds (appendix A) ---------- */
+
+  .seed {
+    margin: 0 0 2.5rem;
+  }
+  .seed-level {
+    margin: 0 0 1rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .seed h3 {
+    margin: 0 0 0.35rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 700;
+  }
+  .seed-concept {
+    margin: 0 0 1.25rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0.5rem;
+  }
+  .seed-concept p {
+    margin: 0;
+    color: var(--text);
+  }
+  .seed-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.75rem;
+    align-items: start;
+  }
+  .seed-cols p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .seed-cols table {
+    margin: 0;
+    display: block;
+    overflow-x: auto;
+    font-size: 0.86rem;
+  }
+  @media (max-width: 720px) {
+    .seed-cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  /* ---------- pager ---------- */
+
+  .book-pager {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .book-pager a {
+    flex: 1;
+    padding: 0.8rem 1rem;
     border: 1px solid var(--border);
     border-radius: 0.6rem;
     background: var(--panel);
     color: var(--text);
-    font-size: 0.9rem;
+    text-decoration: none;
     font-weight: 600;
-    cursor: pointer;
-    width: fit-content;
+    transition: border-color 0.15s ease;
   }
-  .book-nav-toggle svg {
-    width: 1.05rem;
-    height: 1.05rem;
-  }
-  .book-sidebar {
-    display: none;
-    position: static;
-    max-height: none;
-    margin-top: 0.75rem;
-    padding: 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 0.7rem;
-    background: var(--panel);
-  }
-  .book-nav-state:checked ~ .book-sidebar {
-    display: block;
-  }
-}
-
-@media (max-width: 560px) {
-  .book {
-    padding: 0 1rem 2.5rem;
-  }
-  .statblock {
-    padding: 1rem 1rem 1.2rem;
-    border-radius: 0.5rem;
-  }
-  .book-pager {
-    flex-direction: column;
+  .book-pager a:hover {
+    border-color: var(--accent);
   }
   .book-pager .next {
-    text-align: left;
+    text-align: right;
+  }
+  .book-pager span {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 500;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---------- narrow screens ---------- */
+
+  @media (max-width: 900px) {
+    .book {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    /* The contents collapse behind a button; the checkbox holds the open state so the
+     nav needs no JavaScript, matching how the top bar's menu behaves. */
+    .book-nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0 0;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: fit-content;
+    }
+    .book-nav-toggle svg {
+      width: 1.05rem;
+      height: 1.05rem;
+    }
+    .book-sidebar {
+      display: none;
+      position: static;
+      max-height: none;
+      margin-top: 0.75rem;
+      padding: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 0.7rem;
+      background: var(--panel);
+    }
+    .book-nav-state:checked ~ .book-sidebar {
+      display: block;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .book {
+      padding: 0 1rem 2.5rem;
+    }
+    .statblock {
+      padding: 1rem 1rem 1.2rem;
+      border-radius: 0.5rem;
+    }
+    .book-pager {
+      flex-direction: column;
+    }
+    .book-pager .next {
+      text-align: left;
+    }
   }
 }

@@ -1,5 +1,30 @@
 /* OpenFray marketing-site styles. Shared by every page via Layout.astro.
    Dark is the default; the toggle adds .light to <html>. */
+@import 'tailwindcss';
+
+/*
+ * The theme stays in these custom properties rather than in Tailwind's own colour
+ * scale, because the light/dark switch works by swapping the variables under
+ * `:root.light` — one class on <html>, set before paint. Mapping them into `@theme`
+ * gives us `bg-panel`, `text-muted`, `border-border` and friends, and each one
+ * resolves through the variable, so a utility flips with the theme for free. That's
+ * why there is no `dark:` variant anywhere in this site.
+ *
+ * The app (src/) uses the opposite convention — a `.dark` class and `dark:` variants.
+ * Both read the same `openfray-theme` key; only the class name differs. Don't
+ * "unify" them without changing the inline pre-paint script in both places.
+ */
+@theme {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-border: var(--border);
+}
+
 :root {
   --bg: #020617;
   --panel: #0b1222;
@@ -21,754 +46,781 @@
   --border: #e2e8f0;
 }
 
-* {
-  box-sizing: border-box;
-}
-/* Only html is full-height; body uses min-height so it grows with the content.
+@layer components {
+  * {
+    box-sizing: border-box;
+  }
+
+  /*
+   * Tailwind's preflight removes the browser defaults this site's prose had been
+   * relying on without ever declaring: bold headings, list markers, and the margin
+   * between paragraphs. Restoring them here — for prose containers only — is what
+   * keeps the legal pages and the library reading as they did. Component markup is
+   * unaffected: it sets its own and always did.
+   *
+   * These sit at the top of the layer and carry no specificity, so any rule below
+   * overrides them by source order alone.
+   */
+  :where(.doc, .book-body) :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: bold;
+  }
+  :where(.doc, .book-body) :where(p) {
+    margin: 1em 0;
+  }
+  :where(.doc, .book-body) :where(ul) {
+    list-style: disc;
+  }
+  :where(.doc, .book-body) :where(ol) {
+    list-style: decimal;
+  }
+  /* Only html is full-height; body uses min-height so it grows with the content.
    (A fixed height:100% on body would pin it to the viewport, which made the
    absolutely-positioned bottom glow anchor to the viewport instead of the page.) */
-html {
-  height: 100%;
-}
-body {
-  margin: 0;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  line-height: 1.6;
-}
-/* A glow behind the header (top) and a softer mirror behind the footer (bottom),
+  html {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    line-height: 1.6;
+  }
+  /* A glow behind the header (top) and a softer mirror behind the footer (bottom),
    with the middle left plain dark. Absolutely positioned so they anchor to the
    document's top and bottom — not the viewport — and don't become flex items. */
-body::before,
-body::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  z-index: -1;
-}
-body::before {
-  top: 0;
-  height: 480px;
-  background: radial-gradient(1000px 480px at 50% 0%, rgba(99, 102, 241, 0.18), transparent 70%);
-}
-body::after {
-  bottom: 0;
-  height: 460px;
-  background: radial-gradient(900px 460px at 50% 100%, rgba(99, 102, 241, 0.13), transparent 70%);
-}
-a {
-  color: var(--accent);
-}
-/* Emphasis inside a link takes the link's color. Without this, a bolded link renders
+  body::before,
+  body::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+  body::before {
+    top: 0;
+    height: 480px;
+    background: radial-gradient(1000px 480px at 50% 0%, rgba(99, 102, 241, 0.18), transparent 70%);
+  }
+  body::after {
+    bottom: 0;
+    height: 460px;
+    background: radial-gradient(900px 460px at 50% 100%, rgba(99, 102, 241, 0.13), transparent 70%);
+  }
+  a {
+    color: var(--accent);
+  }
+  /* Emphasis inside a link takes the link's color. Without this, a bolded link renders
    with `strong`'s own colour and shows as white text under a blue underline — the same
    link reading three different ways depending on whether its text happened to be bold. */
-a strong,
-a em,
-a b,
-a i,
-a code {
-  color: inherit;
-}
-
-/* Text selection. The browser default ignores the theme entirely. */
-::selection {
-  background: var(--accent-strong);
-  color: #fff;
-}
-
-/* Shared top bar: brand left, theme toggle right. */
-.topbar {
-  position: relative;
-  width: 100%;
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 1.1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
-}
-.brand svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--accent);
-}
-.brand .o,
-.hero h1 .o {
-  color: var(--accent);
-}
-
-/* The hamburger only exists on narrow screens; the nav below is inline above them. */
-.nav-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin-left: auto;
-  margin-right: 0.5rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--muted);
-  cursor: pointer;
-}
-.nav-toggle:hover {
-  color: var(--text);
-}
-.nav-toggle svg {
-  width: 1.15rem;
-  height: 1.15rem;
-}
-
-/* Primary nav sits with the theme toggle on the right of the top bar. */
-.topnav {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  margin-left: auto;
-  margin-right: 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.topnav a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-.topnav a:hover {
-  color: var(--text);
-}
-
-/* Compendium dropdown. The trigger is a real link to /compendium, so the submenu is a
-   shortcut rather than the only way in — it opens on hover and on keyboard focus. */
-.navmenu {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.navmenu > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-.navmenu > a svg {
-  width: 0.85rem;
-  height: 0.85rem;
-}
-.navmenu > ul {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 30;
-  display: none;
-  margin: 0.4rem 0 0;
-  padding: 0.3rem;
-  min-width: 12rem;
-  list-style: none;
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  background: var(--panel);
-  box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
-}
-/* The panel sits 0.4rem below the trigger, and crossing that gap used to drop the
-   hover and close the menu before it could be clicked. This transparent bridge spans
-   the gap so the pointer never leaves .navmenu on the way down. */
-.navmenu > ul::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  height: 0.6rem;
-}
-.navmenu:hover > ul,
-.navmenu:focus-within > ul {
-  display: block;
-}
-.navmenu > ul a {
-  display: block;
-  padding: 0.5rem 0.6rem;
-  border-radius: 0.4rem;
-  white-space: nowrap;
-}
-.navmenu > ul a:hover {
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* Compendium index: one card per published library. */
-.library-grid {
-  list-style: none;
-  margin: 1.75rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: 1rem;
-}
-.library-grid a {
-  display: block;
-  height: 100%;
-  padding: 1.1rem 1.2rem;
-  border: 1px solid var(--border);
-  border-radius: 0.8rem;
-  background: var(--panel);
-  text-decoration: none;
-  transition:
-    border-color 0.15s ease,
-    transform 0.15s ease;
-}
-.library-grid a:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.library-edition {
-  display: block;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.3rem;
-}
-.library-grid strong {
-  display: block;
-  color: var(--text);
-  font-size: 1.05rem;
-}
-.library-blurb {
-  display: block;
-  margin-top: 0.35rem;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.5;
-}
-.library-note {
-  margin-top: 2rem;
-  font-size: 0.85rem;
-  color: var(--faint);
-}
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--muted);
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-.theme-toggle:hover {
-  color: var(--text);
-  border-color: var(--accent);
-}
-.theme-toggle svg {
-  width: 1.15rem;
-  height: 1.15rem;
-}
-.theme-toggle .moon {
-  display: none;
-}
-:root.light .theme-toggle .sun {
-  display: none;
-}
-:root.light .theme-toggle .moon {
-  display: inline;
-}
-
-footer {
-  width: 100%;
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 1.75rem 1.5rem;
-  text-align: center;
-  font-size: 0.82rem;
-  color: var(--faint);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--border);
-}
-footer a {
-  color: var(--muted);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-footer a:hover {
-  color: var(--text);
-}
-footer .gh svg {
-  width: 1.05rem;
-  height: 1.05rem;
-  display: block;
-}
-footer .sep {
-  margin: 0 0.55rem;
-  opacity: 0.5;
-}
-/* The trademark/attribution notice sits below the footer links — full-basis so it
-   wraps onto its own line rather than joining the row. */
-footer .disclaimer {
-  flex-basis: 100%;
-  margin: 1.1rem auto 0;
-  max-width: 44rem;
-  font-size: 0.78rem;
-  line-height: 1.6;
-}
-footer .disclaimer a {
-  display: inline;
-  text-decoration: underline;
-}
-
-main {
-  flex: 1;
-  width: 100%;
-}
-
-/* Hero (homepage, 404). */
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 2.5rem 1.5rem 4rem;
-}
-.badge {
-  display: inline-block;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 999px;
-  padding: 0.35rem 0.85rem;
-  margin-bottom: 1.5rem;
-}
-/* Scoped to the hero rather than left as a bare `h1`. The prose defaults carry no
-   specificity by design, so an unscoped element rule would beat `.doc h1` and set the
-   privacy page's heading at hero size. */
-:where(.hero) :where(h1) {
-  font-size: clamp(2.6rem, 8vw, 4.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  margin: 0 0 1rem;
-  font-weight: 800;
-}
-.tagline {
-  max-width: 41rem;
-  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
-  color: var(--muted);
-  line-height: 1.55;
-  margin: 0 0 1.75rem;
-}
-/* A tagline placed after a section joins the hero's 3.5rem block rhythm instead of
-   butting against it. Its own bottom margin is dropped so the following section's
-   3.5rem isn't stacked on top of it, which would leave the paragraph sitting closer
-   to what's above it than what's below. */
-.hero section + .tagline {
-  margin-top: 3.5rem;
-  margin-bottom: 0;
-}
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.98rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--accent-strong);
-  border-radius: 0.6rem;
-  padding: 0.8rem 1.4rem;
-  text-decoration: none;
-  transition: background 0.15s ease;
-}
-.cta:hover {
-  background: var(--accent);
-}
-.cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-}
-/* The importer sits below the feature grid, after the pitch — it's a companion tool,
-   not the way in. A second (Firefox) button will sit beside it later. */
-.importer-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 3.5rem;
-}
-.chrome-icon {
-  width: 1.15rem;
-  height: 1.15rem;
-}
-.cta-ghost {
-  color: var(--text);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  transition:
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-.cta-ghost:hover {
-  background: var(--panel);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.cta-ghost svg {
-  width: 1.05rem;
-  height: 1.05rem;
-}
-.cta-note {
-  max-width: 34rem;
-  margin: 1rem 0 0;
-  font-size: 0.85rem;
-  color: var(--faint);
-}
-.features {
-  margin-top: 3.5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1rem;
-  max-width: 56rem;
-  width: 100%;
-  text-align: left;
-}
-.feature {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 0.8rem;
-  padding: 1.1rem 1.2rem;
-}
-.feature h2 {
-  margin: 0 0 0.35rem;
-  font-size: 0.98rem;
-  color: var(--text);
-}
-.feature p {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* Screenshot gallery: small thumbnails that open a lightbox. */
-.shots {
-  margin-top: 3.5rem;
-  width: 100%;
-  max-width: 56rem;
-}
-.shots-title {
-  margin: 0 0 1.1rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-.shot-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.9rem;
-}
-@media (min-width: 940px) {
-  .shot-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-.shot-thumb {
-  display: block;
-  padding: 0;
-  margin: 0;
-  border: 1px solid var(--border);
-  border-radius: 0.7rem;
-  overflow: hidden;
-  background: var(--panel);
-  cursor: zoom-in;
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-}
-.shot-thumb:hover,
-.shot-thumb:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px -12px rgba(99, 102, 241, 0.55);
-  outline: none;
-}
-.shot-thumb img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  object-position: top left;
-}
-
-.lightbox {
-  border: 0;
-  padding: 0;
-  background: transparent;
-  width: 100vw;
-  height: 100dvh;
-  max-width: 100vw;
-  max-height: 100dvh;
-  overflow: hidden;
-}
-.lightbox::backdrop {
-  background: rgba(2, 6, 23, 0.85);
-  backdrop-filter: blur(2px);
-}
-/* The dialog fills the viewport; the active slide is centered inside it, so a click
-   anywhere off the image lands on the dialog and closes it. */
-.lightbox-track {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 3.5rem 1rem;
-  pointer-events: none;
-}
-.lightbox-slide {
-  display: none;
-  margin: 0;
-}
-.lightbox-slide[data-active] {
-  display: block;
-}
-.lightbox-slide img {
-  display: block;
-  max-width: min(92vw, 1040px);
-  max-height: min(84vh, 84dvh);
-  width: auto;
-  height: auto;
-  border: 1px solid var(--border);
-  border-radius: 0.7rem;
-  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
-  pointer-events: auto;
-}
-.lightbox-close,
-.lightbox-nav {
-  position: absolute;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--panel);
-  color: var(--text);
-  line-height: 1;
-  cursor: pointer;
-}
-.lightbox-close:hover,
-.lightbox-nav:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.lightbox-close {
-  top: 1rem;
-  right: 1rem;
-  width: 2.4rem;
-  height: 2.4rem;
-  font-size: 1.4rem;
-}
-.lightbox-nav {
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.8rem;
-  height: 2.8rem;
-  font-size: 1.8rem;
-  padding-bottom: 0.15rem;
-}
-.lightbox-prev {
-  left: 1rem;
-}
-.lightbox-next {
-  right: 1rem;
-}
-@media (max-width: 640px) {
-  .lightbox-nav {
-    top: auto;
-    bottom: 1rem;
-    transform: none;
+  a strong,
+  a em,
+  a b,
+  a i,
+  a code {
+    color: inherit;
   }
 
-  /* "Help & Documentation" alone eats most of a phone's top bar, so the links
-     collapse behind the hamburger and drop below the bar when opened. */
-  .nav-toggle {
+  /* Text selection. The browser default ignores the theme entirely. */
+  ::selection {
+    background: var(--accent-strong);
+    color: #fff;
+  }
+
+  /* Shared top bar: brand left, theme toggle right. */
+  .topbar {
+    position: relative;
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1.1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
     display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
   }
-  .topnav {
+  .brand svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--accent);
+  }
+  .brand .o,
+  .hero h1 .o {
+    color: var(--accent);
+  }
+
+  /* The hamburger only exists on narrow screens; the nav below is inline above them. */
+  .nav-toggle {
     display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .nav-toggle:hover {
+    color: var(--text);
+  }
+  .nav-toggle svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  /* Primary nav sits with the theme toggle on the right of the top bar. */
+  .topnav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-left: auto;
+    margin-right: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .topnav a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .topnav a:hover {
+    color: var(--text);
+  }
+
+  /* Compendium dropdown. The trigger is a real link to /compendium, so the submenu is a
+   shortcut rather than the only way in — it opens on hover and on keyboard focus. */
+  .navmenu {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .navmenu > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .navmenu > a svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+  .navmenu > ul {
     position: absolute;
     top: 100%;
-    right: 1rem;
-    z-index: 20;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    margin: 0;
-    padding: 0.35rem;
-    min-width: 13rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: none;
+    margin: 0.4rem 0 0;
+    padding: 0.3rem;
+    min-width: 12rem;
+    list-style: none;
     border: 1px solid var(--border);
-    border-radius: 0.7rem;
+    border-radius: 0.6rem;
     background: var(--panel);
     box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
   }
-  .topnav[data-open] {
-    display: flex;
+  /* The panel sits 0.4rem below the trigger, and crossing that gap used to drop the
+   hover and close the menu before it could be clicked. This transparent bridge spans
+   the gap so the pointer never leaves .navmenu on the way down. */
+  .navmenu > ul::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 0.6rem;
   }
-  .topnav a {
+  .navmenu:hover > ul,
+  .navmenu:focus-within > ul {
     display: block;
-    width: 100%;
-    padding: 0.6rem 0.7rem;
-    border-radius: 0.45rem;
-  }
-  .topnav a:hover {
-    background: var(--bg);
-  }
-
-  /* In the hamburger menu there is nothing to hover, so the libraries sit inline
-     under Compendium instead of behind a second layer. */
-  .navmenu {
-    display: block;
-    width: 100%;
-  }
-  .navmenu > a svg {
-    display: none;
-  }
-  .navmenu > ul {
-    display: block;
-    position: static;
-    transform: none;
-    margin: 0;
-    padding: 0 0 0 0.7rem;
-    min-width: 0;
-    border: 0;
-    background: none;
-    box-shadow: none;
   }
   .navmenu > ul a {
-    font-weight: 500;
-    font-size: 0.86rem;
+    display: block;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.4rem;
+    white-space: nowrap;
   }
-}
+  .navmenu > ul a:hover {
+    background: var(--bg);
+    color: var(--text);
+  }
 
-/* Document pages (privacy, terms): contained but wider than the old layout. */
-.doc {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 3rem;
-}
-:where(.doc) :where(h1) {
-  font-size: clamp(1.9rem, 5vw, 2.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.4rem;
-  font-weight: 800;
-}
-.doc .updated {
-  color: var(--faint);
-  font-size: 0.85rem;
-  margin: 0 0 2rem;
-}
-:where(.doc) :where(h2) {
-  font-size: 1.2rem;
-  margin: 2.2rem 0 0.6rem;
-  letter-spacing: -0.01em;
-}
-:where(.doc) :where(h3) {
-  font-size: 1rem;
-  margin: 1.4rem 0 0.3rem;
-  color: var(--text);
-}
-:where(.doc) :where(p),
-:where(.doc) :where(li) {
-  color: var(--muted);
-}
-.doc .lead {
-  color: var(--text);
-  font-size: 1.05rem;
-}
-/* :where() zeroes the specificity, so a component list (.library-grid) keeps its own
+  /* Compendium index: one card per published library. */
+  .library-grid {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1rem;
+  }
+  .library-grid a {
+    display: block;
+    height: 100%;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 0.8rem;
+    background: var(--panel);
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .library-grid a:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .library-edition {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .library-grid strong {
+    display: block;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+  .library-blurb {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .library-note {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--faint);
+  }
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .theme-toggle:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .theme-toggle svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+  .theme-toggle .moon {
+    display: none;
+  }
+  :root.light .theme-toggle .sun {
+    display: none;
+  }
+  :root.light .theme-toggle .moon {
+    display: inline;
+  }
+
+  footer {
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+  }
+  footer a {
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  footer a:hover {
+    color: var(--text);
+  }
+  footer .gh svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    display: block;
+  }
+  footer .sep {
+    margin: 0 0.55rem;
+    opacity: 0.5;
+  }
+  /* The trademark/attribution notice sits below the footer links — full-basis so it
+   wraps onto its own line rather than joining the row. */
+  footer .disclaimer {
+    flex-basis: 100%;
+    margin: 1.1rem auto 0;
+    max-width: 44rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+  footer .disclaimer a {
+    display: inline;
+    text-decoration: underline;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* Hero (homepage, 404). */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  /* Scoped to the hero rather than left as a bare `h1`. The prose defaults carry no
+   specificity by design, so an unscoped element rule would beat `.doc h1` and set the
+   privacy page's heading at hero size. */
+  :where(.hero) :where(h1) {
+    font-size: clamp(2.6rem, 8vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin: 0 0 1rem;
+    font-weight: 800;
+  }
+  .tagline {
+    max-width: 41rem;
+    font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+    color: var(--muted);
+    line-height: 1.55;
+    margin: 0 0 1.75rem;
+  }
+  /* A tagline placed after a section joins the hero's 3.5rem block rhythm instead of
+   butting against it. Its own bottom margin is dropped so the following section's
+   3.5rem isn't stacked on top of it, which would leave the paragraph sitting closer
+   to what's above it than what's below. */
+  .hero section + .tagline {
+    margin-top: 3.5rem;
+    margin-bottom: 0;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent-strong);
+    border-radius: 0.6rem;
+    padding: 0.8rem 1.4rem;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .cta:hover {
+    background: var(--accent);
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  /* The importer sits below the feature grid, after the pitch — it's a companion tool,
+   not the way in. A second (Firefox) button will sit beside it later. */
+  .importer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 3.5rem;
+  }
+  .chrome-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+  .cta-ghost {
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .cta-ghost:hover {
+    background: var(--panel);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .cta-ghost svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+  .cta-note {
+    max-width: 34rem;
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--faint);
+  }
+  .features {
+    margin-top: 3.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+    max-width: 56rem;
+    width: 100%;
+    text-align: left;
+  }
+  .feature {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 0.8rem;
+    padding: 1.1rem 1.2rem;
+  }
+  .feature h2 {
+    margin: 0 0 0.35rem;
+    font-size: 0.98rem;
+    /* Declared, not inherited from the browser: preflight resets heading weight. */
+    font-weight: bold;
+    color: var(--text);
+  }
+  .feature p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Screenshot gallery: small thumbnails that open a lightbox. */
+  .shots {
+    margin-top: 3.5rem;
+    width: 100%;
+    max-width: 56rem;
+  }
+  .shots-title {
+    margin: 0 0 1.1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .shot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
+  }
+  @media (min-width: 940px) {
+    .shot-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .shot-thumb {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 0.7rem;
+    overflow: hidden;
+    background: var(--panel);
+    cursor: zoom-in;
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .shot-thumb:hover,
+  .shot-thumb:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px -12px rgba(99, 102, 241, 0.55);
+    outline: none;
+  }
+  .shot-thumb img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top left;
+  }
+
+  .lightbox {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+  .lightbox::backdrop {
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(2px);
+  }
+  /* The dialog fills the viewport; the active slide is centered inside it, so a click
+   anywhere off the image lands on the dialog and closes it. */
+  .lightbox-track {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 3.5rem 1rem;
+    pointer-events: none;
+  }
+  .lightbox-slide {
+    display: none;
+    margin: 0;
+  }
+  .lightbox-slide[data-active] {
+    display: block;
+  }
+  .lightbox-slide img {
+    display: block;
+    max-width: min(92vw, 1040px);
+    max-height: min(84vh, 84dvh);
+    width: auto;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.7rem;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+    pointer-events: auto;
+  }
+  .lightbox-close,
+  .lightbox-nav {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--text);
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lightbox-close:hover,
+  .lightbox-nav:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .lightbox-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.4rem;
+  }
+  .lightbox-nav {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1.8rem;
+    padding-bottom: 0.15rem;
+  }
+  .lightbox-prev {
+    left: 1rem;
+  }
+  .lightbox-next {
+    right: 1rem;
+  }
+  @media (max-width: 640px) {
+    .lightbox-nav {
+      top: auto;
+      bottom: 1rem;
+      transform: none;
+    }
+
+    /* "Help & Documentation" alone eats most of a phone's top bar, so the links
+     collapse behind the hamburger and drop below the bar when opened. */
+    .nav-toggle {
+      display: inline-flex;
+    }
+    .topnav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      z-index: 20;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      margin: 0;
+      padding: 0.35rem;
+      min-width: 13rem;
+      border: 1px solid var(--border);
+      border-radius: 0.7rem;
+      background: var(--panel);
+      box-shadow: 0 12px 30px rgb(0 0 0 / 0.28);
+    }
+    .topnav[data-open] {
+      display: flex;
+    }
+    .topnav a {
+      display: block;
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      border-radius: 0.45rem;
+    }
+    .topnav a:hover {
+      background: var(--bg);
+    }
+
+    /* In the hamburger menu there is nothing to hover, so the libraries sit inline
+     under Compendium instead of behind a second layer. */
+    .navmenu {
+      display: block;
+      width: 100%;
+    }
+    .navmenu > a svg {
+      display: none;
+    }
+    .navmenu > ul {
+      display: block;
+      position: static;
+      transform: none;
+      margin: 0;
+      padding: 0 0 0 0.7rem;
+      min-width: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+    }
+    .navmenu > ul a {
+      font-weight: 500;
+      font-size: 0.86rem;
+    }
+  }
+
+  /* Document pages (privacy, terms): contained but wider than the old layout. */
+  .doc {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+  }
+  :where(.doc) :where(h1) {
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.4rem;
+    font-weight: 800;
+  }
+  .doc .updated {
+    color: var(--faint);
+    font-size: 0.85rem;
+    margin: 0 0 2rem;
+  }
+  :where(.doc) :where(h2) {
+    font-size: 1.2rem;
+    margin: 2.2rem 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  :where(.doc) :where(h3) {
+    font-size: 1rem;
+    margin: 1.4rem 0 0.3rem;
+    color: var(--text);
+  }
+  :where(.doc) :where(p),
+  :where(.doc) :where(li) {
+    color: var(--muted);
+  }
+  .doc .lead {
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+  /* :where() zeroes the specificity, so a component list (.library-grid) keeps its own
    padding without needing a guard here. */
-:where(.doc) :where(ul, ol) {
-  padding-left: 1.2rem;
-}
-:where(.doc) :where(li) {
-  margin: 0.3rem 0;
-}
-:where(.doc) :where(table) {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0.8rem 0;
-  font-size: 0.92rem;
-}
-:where(.doc) :where(th),
-:where(.doc) :where(td) {
-  text-align: left;
-  padding: 0.55rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-:where(.doc) :where(th) {
-  color: var(--text);
-  font-weight: 600;
-}
-:where(.doc) :where(td) {
-  color: var(--muted);
-}
-.doc .note {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 0.6rem;
-  padding: 0.9rem 1.1rem;
-  margin: 1.2rem 0;
-  font-size: 0.92rem;
-  color: var(--muted);
-}
-:where(.doc) :where(code) {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 0.3rem;
-  padding: 0.05rem 0.3rem;
-  font-size: 0.85em;
+  :where(.doc) :where(ul, ol) {
+    padding-left: 1.2rem;
+  }
+  :where(.doc) :where(li) {
+    margin: 0.3rem 0;
+  }
+  :where(.doc) :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.8rem 0;
+    font-size: 0.92rem;
+  }
+  :where(.doc) :where(th),
+  :where(.doc) :where(td) {
+    text-align: left;
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  :where(.doc) :where(th) {
+    color: var(--text);
+    font-weight: 600;
+  }
+  :where(.doc) :where(td) {
+    color: var(--muted);
+  }
+  .doc .note {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    padding: 0.9rem 1.1rem;
+    margin: 1.2rem 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  :where(.doc) :where(code) {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.85em;
+  }
 }

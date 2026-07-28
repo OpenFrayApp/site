@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import tailwindcss from '@tailwindcss/vite';
 import rehypeTableScroll from './src/plugins/rehype-table-scroll.mjs';
 import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
 
@@ -23,4 +24,5 @@ export default defineConfig({
   // an origin, because each emits root-relative asset URLs (/node_modules/…,
   // /@vite/client) that the other one then tries to serve.
   server: { port: 4321 },
+  vite: { plugins: [tailwindcss()] },
 });
