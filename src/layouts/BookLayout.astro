@@ -34,6 +34,21 @@ const navHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 /** The short marker in the sidebar's number column: "Chapter 6" → 6, "Appendix A" → A. */
 const marker = (eyebrowText?: string) => eyebrowText?.split(' ').pop() ?? '';
 
+// The sidebar's three text sizes are deliberately closer together than Tailwind's
+// scale allows: depth reads from indent *and* size, and snapping all three to the
+// nearest step would collapse them into one. Only these three keep exact values.
+const chapterLink =
+  'group grid grid-cols-[var(--gutter)_1fr] items-baseline py-1.5 leading-snug ' +
+  'text-text no-underline hover:text-accent ' +
+  'aria-[current=page]:font-semibold aria-[current=page]:text-accent';
+
+const pagerLink =
+  'flex-1 rounded-lg border border-border bg-panel px-4 py-3 font-semibold text-text ' +
+  'no-underline transition-[border-color] hover:border-accent';
+// `leading-relaxed` is not decoration: a Tailwind `text-*` utility also sets a
+// line-height, which would otherwise silently replace the 1.6 these inherit from body.
+const pagerLabel = 'block text-xs leading-relaxed font-medium tracking-widest text-faint uppercase';
+
 const BOOK_ID = `${SITE}${base}/#book`;
 const bookNode = {
   '@type': 'Book',
@@ -79,10 +94,21 @@ const schema = current
 ---
 
 <Layout title={title} description={description} keywords={keywords} schema={schema}>
-  <div class="book">
-    <input class="book-nav-state sr-only" id="book-nav-state" type="checkbox" />
-    <label class="book-nav-toggle" for="book-nav-state">
+  <div
+    class="book mx-auto grid w-full max-w-5xl grid-cols-[14rem_minmax(0,1fr)] items-start gap-8 px-6 pb-12 max-[900px]:grid-cols-[minmax(0,1fr)] max-[900px]:gap-0 max-[560px]:px-4 max-[560px]:pb-10"
+  >
+    {
+      /* The contents collapse behind a button below 900px, and the checkbox holds the
+        open state, so the nav needs no JavaScript. It stays in the accessibility tree
+        (sr-only, not hidden) so it is keyboard-reachable. */
+    }
+    <input class="book-nav-state peer sr-only" id="book-nav-state" type="checkbox" />
+    <label
+      class="book-nav-toggle hidden w-fit cursor-pointer items-center gap-2 rounded-lg border border-border bg-panel px-3.5 py-2 text-sm leading-relaxed font-semibold text-text peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent max-[900px]:mt-4 max-[900px]:inline-flex"
+      for="book-nav-state"
+    >
       <svg
+        class="size-4"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -96,29 +122,52 @@ const schema = current
       Contents
     </label>
 
-    <aside class="book-sidebar">
+    <aside
+      class="book-sidebar sticky top-6 max-h-[calc(100vh-3rem)] self-start overflow-y-auto pr-2 text-sm leading-relaxed max-[900px]:static max-[900px]:mt-3 max-[900px]:hidden max-[900px]:max-h-none max-[900px]:rounded-xl max-[900px]:border max-[900px]:border-border max-[900px]:bg-panel max-[900px]:p-2.5 max-[900px]:peer-checked:block"
+    >
       <nav aria-label="The Waking Garden contents">
-        <a class="book-home" href={`${base}/`} aria-current={current ? undefined : 'page'}>
+        <a
+          class="book-home mb-2 block border-b border-border pb-3 text-base font-bold tracking-tight text-text no-underline hover:text-accent aria-[current=page]:text-accent"
+          href={`${base}/`}
+          aria-current={current ? undefined : 'page'}
+        >
           The Waking Garden
         </a>
-        <ol class="book-chapters">
+        {
+          /* --gutter is the shared text edge: the chapter link's number column and the
+            headings' indent both read it, so the two can never drift apart. */
+        }
+        <ol class="book-chapters m-0 list-none p-0 [--gutter:1.4rem]">
           {
             chapters.map((chapter) => (
-              <li>
+              <li class="m-0">
                 <a
+                  class={chapterLink}
                   href={`${base}/${chapter.id}/`}
                   aria-current={chapter.id === current ? 'page' : undefined}
                 >
-                  <span class="num" aria-hidden="true">
+                  {/* --muted, not --faint: light-theme --faint is #94a3b8 on #f8fafc,
+                    about 2.3:1. */}
+                  <span
+                    class="num text-xs tabular-nums text-muted group-aria-[current=page]:text-accent"
+                    aria-hidden="true"
+                  >
                     {marker(chapter.data.eyebrow)}
                   </span>
                   <span class="label">{chapter.data.label}</span>
                 </a>
                 {chapter.id === current && navHeadings.length > 0 && (
-                  <ul class="book-headings">
+                  <ul class="book-headings mt-0.5 mr-0 mb-3 ml-2 list-none border-l border-border p-0 pl-[var(--gutter)]">
                     {navHeadings.map((h) => (
-                      <li class={`depth-${h.depth}`}>
-                        <a href={`#${h.slug}`}>{h.text}</a>
+                      <li class={`depth-${h.depth} m-0`}>
+                        <a
+                          class={`block py-1 leading-snug text-muted no-underline hover:text-accent ${
+                            h.depth === 3 ? 'pl-3 text-[0.78rem]' : 'text-[0.82rem]'
+                          }`}
+                          href={`#${h.slug}`}
+                        >
+                          {h.text}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -130,29 +179,42 @@ const schema = current
       </nav>
     </aside>
 
-    <main class="book-main">
-      <header class="book-head">
-        {eyebrow && <p class="book-eyebrow">{eyebrow}</p>}
-        <h1>{heading}</h1>
+    <main class="book-main min-w-0">
+      <header class="book-head pt-4 pb-2">
+        {
+          eyebrow && (
+            <p class="book-eyebrow m-0 mb-1.5 text-xs leading-relaxed font-bold tracking-widest text-accent uppercase">
+              {eyebrow}
+            </p>
+          )
+        }
+        <h1
+          class="mt-0 mb-5 border-b-[3px] border-accent pb-5 text-[clamp(2rem,5vw,3rem)] leading-[1.05] font-bold tracking-tight"
+        >
+          {heading}
+        </h1>
       </header>
 
       <div class="book-body">
         <slot />
       </div>
 
-      <nav class="book-pager" aria-label="Chapters">
+      <nav
+        class="book-pager mt-14 flex gap-4 border-t border-border pt-6 max-[560px]:flex-col"
+        aria-label="Chapters"
+      >
         {
           previous && (
-            <a class="prev" href={`${base}/${previous.id}/`}>
-              <span>Previous</span>
+            <a class={pagerLink} href={`${base}/${previous.id}/`}>
+              <span class={pagerLabel}>Previous</span>
               {previous.data.label}
             </a>
           )
         }
         {
           next && (
-            <a class="next" href={`${base}/${next.id}/`}>
-              <span>Next</span>
+            <a class={`${pagerLink} text-right max-[560px]:text-left`} href={`${base}/${next.id}/`}>
+              <span class={pagerLabel}>Next</span>
               {next.data.label}
             </a>
           )
