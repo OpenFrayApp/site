@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from './Layout.astro';
+import '../styles/waking-garden.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Slug of the current chapter, or undefined on the book's front page. */
+  current?: string;
+  eyebrow?: string;
+  heading: string;
+}
+
+const { title, description, current, eyebrow, heading } = Astro.props;
+
+const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
+
+const index = chapters.findIndex((c) => c.id === current);
+const previous = index > 0 ? chapters[index - 1] : undefined;
+const next = index >= 0 && index < chapters.length - 1 ? chapters[index + 1] : undefined;
+const base = '/the-waking-garden';
+---
+
+<Layout title={title} description={description}>
+  <div class="book">
+    <input class="book-nav-state sr-only" id="book-nav-state" type="checkbox" />
+    <label class="book-nav-toggle" for="book-nav-state">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
+      </svg>
+      Contents
+    </label>
+
+    <aside class="book-sidebar">
+      <nav aria-label="The Waking Garden contents">
+        <a class="book-home" href={`${base}/`} aria-current={current ? undefined : 'page'}>
+          The Waking Garden
+        </a>
+        <ol>
+          {
+            chapters.map((chapter) => (
+              <li>
+                <a
+                  href={`${base}/${chapter.id}/`}
+                  aria-current={chapter.id === current ? 'page' : undefined}
+                >
+                  {chapter.data.eyebrow && <span class="num">{chapter.data.eyebrow}</span>}
+                  {chapter.data.label}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </aside>
+
+    <main class="book-main">
+      <header class="book-head">
+        {eyebrow && <p class="book-eyebrow">{eyebrow}</p>}
+        <h1>{heading}</h1>
+      </header>
+
+      <div class="book-body">
+        <slot />
+      </div>
+
+      <nav class="book-pager" aria-label="Chapters">
+        {
+          previous && (
+            <a class="prev" href={`${base}/${previous.id}/`}>
+              <span>Previous</span>
+              {previous.data.label}
+            </a>
+          )
+        }
+        {
+          next && (
+            <a class="next" href={`${base}/${next.id}/`}>
+              <span>Next</span>
+              {next.data.label}
+            </a>
+          )
+        }
+      </nav>
+    </main>
+  </div>
+</Layout>

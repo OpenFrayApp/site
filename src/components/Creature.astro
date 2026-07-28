@@ -1,0 +1,19 @@
+---
+import StatBlock from './StatBlock.astro';
+import { creature, creatureSlug } from '../data/wakingGarden.ts';
+
+interface Props {
+  /** Compendium name, e.g. "Harvest Crown" — no leading article. */
+  name: string;
+}
+
+const { name } = Astro.props;
+const c = creature(name);
+---
+
+<article class="entry" id={`c-${creatureSlug(c.name)}`}>
+  {c.description && <p class="lore">{c.description}</p>}
+  <StatBlock creature={c}>
+    <slot />
+  </StatBlock>
+</article>

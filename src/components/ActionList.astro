@@ -1,0 +1,40 @@
+---
+import type { Action } from '../../../src/schema/action.ts';
+import StatText from './StatText.astro';
+import { hasBlockMarkdown, rechargeLabel } from '../data/wakingGarden.ts';
+
+interface Props {
+  heading: string;
+  actions: Action[];
+  /** The preamble printed under a Legendary Actions heading. */
+  note?: string;
+}
+
+const { heading, actions, note } = Astro.props;
+
+/** The full bold label a stat block prints before an action's text. */
+const label = (action: Action): string =>
+  action.name +
+  rechargeLabel(action.recharge) +
+  (action.legendaryCost && action.legendaryCost > 1
+    ? ` (Costs ${action.legendaryCost} Actions)`
+    : '');
+---
+
+{
+  actions.length > 0 && (
+    <div class="sb-section">
+      <h4>{heading}</h4>
+      {note && <p class="sb-note">{note}</p>}
+      {actions.map((action) =>
+        action.text && hasBlockMarkdown(action.text) ? (
+          <StatText label={label(action)} text={action.text} />
+        ) : (
+          <p class="sb-entry">
+            <strong>{label(action)}.</strong> {action.text}
+          </p>
+        ),
+      )}
+    </div>
+  )
+}

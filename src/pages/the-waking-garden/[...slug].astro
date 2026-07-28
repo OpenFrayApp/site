@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from 'astro:content';
+import BookLayout from '../../layouts/BookLayout.astro';
+
+export async function getStaticPaths() {
+  const chapters = await getCollection('waking-garden');
+  return chapters.map((chapter) => ({ params: { slug: chapter.id }, props: { chapter } }));
+}
+
+const { chapter } = Astro.props;
+const { Content } = await render(chapter);
+---
+
+<BookLayout
+  title={`${chapter.data.title} — The Waking Garden | OpenFray`}
+  description={chapter.data.description}
+  current={chapter.id}
+  eyebrow={chapter.data.eyebrow}
+  heading={chapter.data.title}
+>
+  <Content />
+</BookLayout>

@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import BookLayout from '../../layouts/BookLayout.astro';
+import { creatures, formatCr } from '../../data/wakingGarden.ts';
+
+const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
+
+const crs = creatures.map((c) => c.cr ?? 0);
+const lowest = formatCr(Math.min(...crs));
+const highest = formatCr(Math.max(...crs));
+
+const title = 'The Waking Garden — a DnD 5e bestiary for OpenFray';
+const description =
+  'Sixty-seven original creatures for Dungeons and Dragons 5e: sentient vegetables across three ' +
+  'stages of growth, the ecology around them, and the thing they all grew from. Free to read, ' +
+  'and built into the OpenFray combat console.';
+---
+
+<BookLayout title={title} description={description} heading="The Waking Garden">
+  <p class="lead">A bestiary of cultivated horrors, compatible with 5e and 5.5e.</p>
+
+  <p>
+    Sixty-seven creatures for a world where the things people grow have started growing back. Twelve
+    species of sentient vegetable across three stages of life, the ecology that lives alongside
+    them, the fey who tend them, and the thing they are all cuttings from.
+  </p>
+
+  <ul class="book-stats">
+    <li><strong>{creatures.length}</strong> creatures</li>
+    <li><strong>CR {lowest}–{highest}</strong></li>
+    <li><strong>19</strong> ready-to-run fights</li>
+  </ul>
+
+  <p class="book-cta-row">
+    <a class="cta" href="/console/">Open the console</a>
+    <a class="cta cta-ghost" href={`/the-waking-garden/${chapters[0].id}/`}>Start reading</a>
+  </p>
+
+  <h2>Contents</h2>
+
+  <ol class="book-contents">
+    {
+      chapters.map((chapter) => (
+        <li>
+          <a href={`/the-waking-garden/${chapter.id}/`}>
+            {chapter.data.eyebrow && <span class="num">{chapter.data.eyebrow}</span>}
+            <strong>{chapter.data.label}</strong>
+            <span class="blurb">{chapter.data.description}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2>Run it in the console</h2>
+
+  <p>
+    Every creature on these pages is already in OpenFray. Open <a href="/console/">the console</a>,
+    then turn on <strong>The Waking Garden</strong> in <strong>Settings</strong> (the gear at the top
+    right). After that the whole bestiary shows up in <strong>Add creature</strong> and in the compendium,
+    with its attacks, saves, and recharge abilities ready to roll. See
+    <a href="/docs/reference/settings/">Settings and appearance</a> in the handbook.
+  </p>
+
+  <h2>Licensing and credits</h2>
+
+  <p>
+    <em>The Waking Garden</em> is written for OpenFray and contains no material from the System Reference
+    Document or any third-party book. It is licensed by layer:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Stat blocks and mechanics</strong> — every field of a creature entry except its description
+      — are released under
+      <a href="https://creativecommons.org/licenses/by/4.0/legalcode.en">CC-BY-4.0</a>. Reuse them
+      with attribution to OpenFray.
+    </li>
+    <li>
+      <strong>Lore and prose</strong> — the descriptive text on this page and each creature's description
+      — are © OpenFray, all rights reserved. They're free to read here, but not licensed for reuse in
+      other products.
+    </li>
+  </ul>
+
+  <p class="book-fineprint">
+    OpenFray is compatible with fifth edition and is not affiliated with, endorsed, sponsored, or
+    specifically approved by Wizards of the Coast LLC.
+  </p>
+</BookLayout>

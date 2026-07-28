@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
 
 // The marketing site for openfray.app. Builds to site/dist, which the root build
 // (scripts/assemble-site.mjs) merges into the site root of dist/, alongside the app
@@ -8,7 +9,10 @@ import sitemap from '@astrojs/sitemap';
 // URLs (/privacy, /terms) plus a root 404.html that Cloudflare Pages serves.
 export default defineConfig({
   site: 'https://openfray.app',
-  integrations: [sitemap()],
+  // MDX backs the bestiary chapters under /the-waking-garden: their prose is Markdown,
+  // but each creature entry is a <Creature> component rendering the shipped compendium
+  // JSON, so the stat blocks can't drift from what the console loads.
+  integrations: [mdx(), sitemap()],
   // Each part runs its own dev server on a fixed port (see AGENTS.md). Serving all
   // three through one origin was tried and abandoned: two Vite dev servers can't share
   // an origin, because each emits root-relative asset URLs (/node_modules/…,

@@ -1,0 +1,29 @@
+---
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+
+// A few stat-block texts carry block markdown — the Perennial's Graft table, the
+// Gardener's bulleted Patient trait. Rendering them through Astro's own markdown
+// pipeline (the one behind .md pages, GFM tables included) keeps this page matching
+// how the console renders the same strings, without a second markdown dependency.
+// The processor is built once per build, not per creature.
+let processor: Awaited<ReturnType<typeof createMarkdownProcessor>> | undefined;
+async function render(markdown: string): Promise<string> {
+  processor ??= await createMarkdownProcessor({});
+  const { code } = await processor.render(markdown);
+  return code;
+}
+
+interface Props {
+  /** The name printed in bold before the text, e.g. "Grafted of Every Garden". */
+  label: string;
+  text: string;
+}
+
+const { label, text } = Astro.props;
+const html = await render(text);
+---
+
+<div class="sb-entry sb-entry-block">
+  <p><strong>{label}.</strong></p>
+  <Fragment set:html={html} />
+</div>

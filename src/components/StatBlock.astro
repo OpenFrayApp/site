@@ -1,0 +1,251 @@
+---
+import type { Creature } from '../../../src/schema/creature.ts';
+import ActionList from './ActionList.astro';
+import StatText from './StatText.astro';
+import {
+  abilityMod,
+  creatureSlug,
+  formatCr,
+  formatSenses,
+  formatSpeed,
+  hasBlockMarkdown,
+  proficiencyBonus,
+  signed,
+  spellName,
+  titleCase,
+} from '../data/wakingGarden.ts';
+
+interface Props {
+  creature: Creature;
+}
+
+const { creature: c } = Astro.props;
+
+const abilities = [
+  ['STR', 'str'],
+  ['DEX', 'dex'],
+  ['CON', 'con'],
+  ['INT', 'int'],
+  ['WIS', 'wis'],
+  ['CHA', 'cha'],
+] as const;
+
+// A stat block prints the save bonus for every ability: the proficient ones from
+// `saves`, the rest falling back to the plain modifier.
+const rows = abilities.map(([label, key]) => {
+  const score = c.abilities[key];
+  const mod = abilityMod(score);
+  return { label, score, mod, save: c.saves?.[key] ?? mod };
+});
+const left = rows.slice(0, 3);
+const right = rows.slice(3);
+
+const skills = Object.entries(c.skills ?? {})
+  .map(
+    ([name, bonus]) => `${titleCase(name.replace(/([A-Z])/g, ' $1'))} ${signed(bonus as number)}`,
+  )
+  .join(', ');
+
+const pb = c.cr != null ? proficiencyBonus(c.cr) : undefined;
+const crDetail = [
+  c.xp != null ? `XP ${c.xp.toLocaleString('en-US')}` : null,
+  pb != null ? `PB ${signed(pb)}` : null,
+]
+  .filter(Boolean)
+  .join('; ');
+const crLine = formatCr(c.cr) + (crDetail ? ` (${crDetail})` : '');
+
+const defenses = [
+  ['Resistances', c.resistances],
+  ['Vulnerabilities', c.vulnerabilities],
+] as const;
+
+// Damage and condition immunities share one "Immunities" line, separated by a
+// semicolon the way a printed stat block does: "Fire; Blinded, Frightened".
+const immunities = [(c.immunities ?? []).join(', '), (c.conditionImmunities ?? []).join(', ')]
+  .filter(Boolean)
+  .join('; ');
+
+const legendaryNote =
+  'Immediately after another creature’s turn, this creature can expend a use to take one of the ' +
+  'following actions. It regains all expended uses at the start of each of its turns.';
+---
+
+<section class="statblock" id={creatureSlug(c.name)}>
+  <h3 class="sb-name">{c.name}</h3>
+  <p class="sb-kicker">
+    {c.size}
+    {titleCase(c.type)}{c.alignment ? `, ${titleCase(c.alignment)}` : ''}
+  </p>
+
+  <dl class="sb-top">
+    <div><dt>AC</dt><dd>{c.ac}</dd></div>
+    {
+      c.initiative != null && (
+        <div>
+          <dt>Initiative</dt>
+          <dd>
+            {signed(c.initiative)} ({10 + c.initiative})
+          </dd>
+        </div>
+      )
+    }
+    <div>
+      <dt>HP</dt><dd>{c.maxHp}{c.hpFormula ? ` (${c.hpFormula})` : ''}</dd>
+    </div>
+    <div><dt>Speed</dt><dd>{formatSpeed(c.speed)}</dd></div>
+  </dl>
+
+  {
+    /* The six abilities sit in two column-groups, which is wider than a phone; the
+      wrapper lets the table scroll itself instead of the page. */
+  }
+  <div class="sb-abilities-scroll">
+    <table class="sb-abilities">
+      <thead>
+        <tr>
+          <th><span class="sr-only">Ability</span></th>
+          <th scope="col">Score</th>
+          <th scope="col">Mod</th>
+          <th scope="col">Save</th>
+          <th><span class="sr-only">Ability</span></th>
+          <th scope="col">Score</th>
+          <th scope="col">Mod</th>
+          <th scope="col">Save</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          left.map((row, i) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <td>{row.score}</td>
+              <td>{signed(row.mod)}</td>
+              <td>{signed(row.save)}</td>
+              <th scope="row">{right[i].label}</th>
+              <td>{right[i].score}</td>
+              <td>{signed(right[i].mod)}</td>
+              <td>{signed(right[i].save)}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <dl class="sb-traits-list">
+    {
+      defenses.map(
+        ([label, values]) =>
+          values &&
+          values.length > 0 && (
+            <div>
+              <dt>{label}</dt>
+              <dd>{values.join(', ')}</dd>
+            </div>
+          ),
+      )
+    }
+    {
+      immunities && (
+        <div>
+          <dt>Immunities</dt>
+          <dd>{immunities}</dd>
+        </div>
+      )
+    }
+    {
+      skills && (
+        <div>
+          <>
+            <dt>Skills</dt>
+            <dd>{skills}</dd>
+          </>
+        </div>
+      )
+    }
+    <div><dt>Senses</dt><dd>{formatSenses(c.senses)}</dd></div>
+    {
+      c.languages && c.languages.length > 0 && (
+        <div>
+          <dt>Languages</dt>
+          <dd>{c.languages.join(', ')}</dd>
+        </div>
+      )
+    }
+    {
+      c.gear && c.gear.length > 0 && (
+        <div>
+          <>
+            <dt>Gear</dt>
+            <dd>{c.gear.join(', ')}</dd>
+          </>
+        </div>
+      )
+    }
+    <div><dt>CR</dt><dd>{crLine}</dd></div>
+  </dl>
+
+  {
+    c.traits && c.traits.length > 0 && (
+      <div class="sb-section">
+        <h4>Traits</h4>
+        {c.traits.map((trait) =>
+          hasBlockMarkdown(trait.text) ? (
+            <StatText label={trait.name} text={trait.text} />
+          ) : (
+            <p class="sb-entry">
+              <strong>{trait.name}.</strong> {trait.text}
+            </p>
+          ),
+        )}
+      </div>
+    )
+  }
+
+  {
+    c.spellcasting && (
+      <div class="sb-section">
+        <h4>Spellcasting</h4>
+        <p class="sb-note">
+          Spell save DC {c.spellcasting.saveDc}
+          {c.spellcasting.ability ? `, using ${c.spellcasting.ability.toUpperCase()}` : ''}.
+        </p>
+        {c.spellcasting.groups.map((group) => (
+          <p class="sb-entry">
+            <strong>
+              {group.usage.type === 'atWill'
+                ? 'At will'
+                : group.usage.type === 'perDay'
+                  ? `${group.usage.per}/day each`
+                  : `Level ${group.usage.level}`}
+              :
+            </strong>{' '}
+            {group.spells.map((s) => spellName(s.name)).join(', ')}
+          </p>
+        ))}
+        {c.spellcasting.note && <p class="sb-note">{c.spellcasting.note}</p>}
+      </div>
+    )
+  }
+
+  <ActionList heading="Actions" actions={c.actions ?? []} />
+  <ActionList heading="Bonus Actions" actions={c.bonusActions ?? []} />
+  <ActionList heading="Reactions" actions={c.reactions ?? []} />
+
+  {
+    /* Legendary Resistance needs no section of its own: it is already the first entry
+      in `traits`, carrying its per-day and in-lair counts in the trait name. */
+  }
+  {
+    c.legendaryActions && c.legendaryActions.actions.length > 0 && (
+      <ActionList
+        heading={`Legendary Actions (${c.legendaryActions.perRound}/round)`}
+        actions={c.legendaryActions.actions}
+        note={legendaryNote}
+      />
+    )
+  }
+
+  <slot />
+</section>
