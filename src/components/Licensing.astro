@@ -2,21 +2,20 @@
 // The licensing notice for a first-party OpenFray library. This is the canonical
 // wording — CREDITS.md and the print edition's licensing page carry the same terms,
 // and any future library renders this component rather than restating them.
+//
+// It renders as a chapter of its own, so the page heading names the library and this
+// opens on the first term. It takes no `work` for that reason.
+//
+// The web edition carries no fineprint line: the site footer already states the edition
+// compatibility, the Wizards of the Coast disclaimer, and the AGPL on every page. The
+// print edition still needs one, and keeps it in its own source — it has no footer.
 interface Props {
-  work: string;
   year: number;
 }
 
-const { work, year } = Astro.props;
+const { year } = Astro.props;
 const CC_BY = 'https://creativecommons.org/licenses/by/4.0/legalcode.en';
 ---
-
-<h2 id="licensing-and-credits">Licensing and credits</h2>
-
-<p>
-  <em>{work}</em> is © {year} OpenFray. It is licensed in layers, and the layer decides what you may do
-  with it.
-</p>
 
 <p>
   <strong>Creatures and mechanics.</strong> The stat blocks and game mechanics — every field of a creature
@@ -58,9 +57,3 @@ const CC_BY = 'https://creativecommons.org/licenses/by/4.0/legalcode.en';
     >creativecommons.org/licenses/by/4.0/legalcode</a
   >.
 </blockquote>
-
-<p class="book-fineprint mt-8 text-[0.82rem] leading-relaxed text-faint">
-  Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
-  specifically approved by Wizards of the Coast LLC. OpenFray is free and ad-free, and the console's
-  own code is licensed AGPL-3.0.
-</p>

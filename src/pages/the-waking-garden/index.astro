@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BookLayout from '../../layouts/BookLayout.astro';
-import Licensing from '../../components/Licensing.astro';
 import Cta from '../../components/Cta.astro';
 import { creatures, formatCr } from '../../data/wakingGarden.ts';
 
@@ -74,6 +73,4 @@ const description =
     with its attacks, saves, and recharge abilities ready to roll. See{' '}
     <a href="/docs/reference/settings/">Settings and appearance</a> in the handbook.
   </p>
-
-  <Licensing work="The Waking Garden" year={2026} />
 </BookLayout>
