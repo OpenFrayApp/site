@@ -141,12 +141,6 @@
     color: #fff;
   }
 
-  /* Layout.astro carries the top bar, the nav, the dropdown and the footer as utilities.
-   The `.o` in the hero's wordmark stays here because index.astro is still CSS. */
-  .hero h1 .o {
-    color: var(--accent);
-  }
-
   /* Which icon the theme toggle shows is the one piece of the top bar a utility can't
    express: it keys off `.light` on <html>, and this site has no light/dark variant
    (colours flip through the theme variables instead — see the note above `@theme`). */
