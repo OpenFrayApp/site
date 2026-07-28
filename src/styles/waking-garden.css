@@ -26,9 +26,8 @@
   padding-right: 0.5rem;
   font-size: 0.9rem;
 }
-/* Two columns: a narrow gutter of chapter numbers, then the labels. Everything —
-   chapter titles, headings, sub-headings — hangs off the same text edge, so depth is
-   read from indent and weight rather than from a stack of boxes and rules. */
+/* One text edge for chapters, a deeper one for their headings. The gutter holds the
+   chapter number. Depth reads from indent + size; nothing is boxed or filled. */
 .book-home {
   display: block;
   font-weight: 700;
@@ -44,67 +43,72 @@
 .book-home[aria-current='page'] {
   color: var(--accent);
 }
-.book-sidebar ol,
-.book-sidebar ul {
+/* Scoped to the chapter list only. A blanket `.book-sidebar ul` reset here would
+   outrank .book-headings' own indent (0,1,1 vs 0,1,0) and flatten the nesting — which
+   is exactly what it did, leaving sub-headings sitting left of their own chapter. */
+.book-chapters {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.book-sidebar li {
+.book-chapters li {
   margin: 0;
 }
 
+/* Gutter for the number, then the label. --gutter is the shared text edge that the
+   headings below indent from, so the two can never drift apart. */
+.book-chapters {
+  --gutter: 1.4rem;
+}
 .book-chapters > li > a {
   display: grid;
-  grid-template-columns: 1.35rem 1fr;
+  grid-template-columns: var(--gutter) 1fr;
   align-items: baseline;
-  padding: 0.34rem 0;
-  color: var(--muted);
+  padding: 0.36rem 0;
+  color: var(--text);
   text-decoration: none;
   line-height: 1.35;
 }
-/* --muted, not --faint: in the light theme --faint is #94a3b8 on #f8fafc, about 2.3:1.
-   These are navigation, so size and weight carry the hierarchy instead of low contrast. */
 .book-chapters > li > a .num {
   font-size: 0.72rem;
   font-variant-numeric: tabular-nums;
+  /* --muted, not --faint: light-theme --faint is #94a3b8 on #f8fafc, about 2.3:1. */
   color: var(--muted);
 }
 .book-chapters > li > a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
-.book-chapters > li > a[aria-current='page'] {
+.book-chapters > li > a[aria-current='page'],
+.book-chapters > li > a[aria-current='page'] .num {
   color: var(--accent);
   font-weight: 600;
 }
-.book-chapters > li > a[aria-current='page'] .num {
-  color: var(--accent);
-}
 
-/* The current chapter's own headings. They start at the label column, so they read as
-   contents *of* the chapter above rather than as siblings of it. Creature names never
-   appear — they are component-rendered, so they are not markdown headings. */
-.book-headings {
-  margin: 0.1rem 0 0.6rem 1.35rem;
+/* The current chapter's headings, indented past the chapter's own text edge so they
+   read as its contents. Creature names never appear — they are component-rendered,
+   so they are not markdown headings. */
+.book-chapters .book-headings {
+  list-style: none;
+  margin: 0.1rem 0 0.7rem;
+  padding: 0;
+  padding-left: var(--gutter);
   border-left: 1px solid var(--border);
+  margin-left: 0.45rem;
 }
-.book-headings a {
+.book-chapters .book-headings a {
   display: block;
-  padding: 0.26rem 0 0.26rem 0.7rem;
-  margin-left: -1px;
-  border-left: 1px solid transparent;
+  padding: 0.22rem 0;
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.84rem;
-  line-height: 1.35;
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
-.book-headings a:hover {
-  color: var(--text);
-  border-left-color: var(--accent);
+.book-chapters .book-headings a:hover {
+  color: var(--accent);
 }
-.book-headings .depth-3 a {
-  padding-left: 1.5rem;
-  font-size: 0.8rem;
+.book-chapters .book-headings .depth-3 a {
+  padding-left: 0.8rem;
+  font-size: 0.78rem;
 }
 
 /* The sidebar is plain markup on wide screens; the checkbox only drives it below. It
