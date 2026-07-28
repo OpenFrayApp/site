@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BookLayout from '../../layouts/BookLayout.astro';
 import Licensing from '../../components/Licensing.astro';
+import Cta from '../../components/Cta.astro';
 import { creatures, formatCr } from '../../data/wakingGarden.ts';
 
 const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
@@ -35,8 +36,8 @@ const description =
   </ul>
 
   <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
-    <a class="cta" href="/console/">Open the console</a>
-    <a class="cta cta-ghost" href={`/the-waking-garden/${chapters[0].id}/`}>Start reading</a>
+    <Cta href="/console/">Open the console</Cta>
+    <Cta href={`/the-waking-garden/${chapters[0].id}/`} variant="ghost">Start reading</Cta>
   </p>
 
   <h2>Contents</h2>

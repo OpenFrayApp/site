@@ -1,0 +1,26 @@
+---
+// The site's one button. It exists as a component because three pages use it — the home
+// page, the 404, and the bestiary's landing page — so there was no single file to own its
+// utilities, and a shared class rule is the thing this migration is removing.
+interface Props {
+  href: string;
+  /** Ghost sits on the panel with a border, for the secondary action beside a solid one. */
+  variant?: 'solid' | 'ghost';
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { href, variant = 'solid', class: extra = '', ...rest } = Astro.props;
+
+const base =
+  'cta inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base leading-relaxed ' +
+  'font-semibold no-underline';
+const solid = 'bg-accent-strong text-white transition-[background-color] hover:bg-accent';
+const ghost =
+  'cta-ghost border border-border bg-panel text-text transition-[border-color,color] ' +
+  'hover:border-accent hover:text-accent';
+---
+
+<a href={href} class={`${base} ${variant === 'ghost' ? ghost : solid} ${extra}`} {...rest}>
+  <slot />
+</a>

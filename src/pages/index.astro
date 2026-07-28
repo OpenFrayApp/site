@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Cta from '../components/Cta.astro';
+import { hero, tagline } from '../data/hero.ts';
 import { Picture } from 'astro:assets';
 import combat from '../assets/screenshots/combat.png';
 import compendium from '../assets/screenshots/compendium.png';
@@ -27,6 +29,19 @@ const shots = [
     alt: 'The built-in SRD compendium, showing an Aboleth stat block next to the searchable creature list.',
   },
 ];
+
+// The hero's block rhythm: each section after the first sits 3.5rem below what precedes
+// it. The second tagline uses it too, so the paragraph isn't nearer what's above it than
+// what's below — which is what the old `.hero section + .tagline` rule was for.
+const BLOCK = 'mt-14';
+
+const lightboxButton =
+  'absolute z-1 grid cursor-pointer place-items-center rounded-full border border-border ' +
+  'bg-panel leading-none text-text hover:border-accent hover:text-accent';
+// Below 640px the arrows drop to the bottom rather than sitting over the image.
+const lightboxNav =
+  'size-11 pb-0.5 text-3xl top-1/2 -translate-y-1/2 ' +
+  'max-[640px]:top-auto max-[640px]:bottom-4 max-[640px]:translate-y-0';
 
 const features = [
   {
@@ -60,28 +75,40 @@ const features = [
   title="OpenFray — a DnD 5e combat console for GMs"
   description="OpenFray is a free, open-source combat console for running encounters in the world's oldest tabletop roleplaying game. Compatible with 5.5e and 5e: initiative, creature resources, conditions, group saves, and honest dice."
 >
-  <main class="hero">
-    <span class="badge">Alpha</span>
+  <main class={hero}>
+    <span
+      class="badge mb-6 inline-block rounded-full border border-border bg-panel px-3.5 py-1.5 text-xs leading-relaxed font-semibold tracking-[0.18em] text-accent uppercase"
+      >Alpha</span
+    >
 
-    <h1><span class="o">Open</span>Fray</h1>
+    <h1
+      class="mt-0 mb-4 text-[clamp(2.6rem,8vw,4.5rem)] leading-[1.02] font-extrabold tracking-tight"
+    >
+      <span class="text-accent">Open</span>Fray
+    </h1>
 
-    <p class="tagline">
+    <p class={`${tagline} mb-7`}>
       OpenFray is a free, open-source <strong>combat console</strong> for running encounters in the world's
       oldest tabletop roleplaying game, in your browser. Compatible with 5.5e and 5e.
     </p>
 
-    <div class="cta-row">
-      <a class="cta" href="/console/">Open the console →</a>
+    <div class="cta-row flex flex-wrap justify-center gap-3">
+      <Cta href="/console/">Open the console →</Cta>
     </div>
 
-    <section class="shots" aria-labelledby="shots-title">
-      <h2 id="shots-title" class="shots-title">See it in action</h2>
-      <div class="shot-grid">
+    <section class={`shots w-full max-w-4xl ${BLOCK}`} aria-labelledby="shots-title">
+      <h2
+        id="shots-title"
+        class="shots-title m-0 mb-4 text-[0.78rem] leading-relaxed font-semibold tracking-widest text-faint uppercase"
+      >
+        See it in action
+      </h2>
+      <div class="shot-grid grid grid-cols-2 gap-3.5 min-[940px]:grid-cols-4">
         {
           shots.map((s, i) => (
             <button
               type="button"
-              class="shot-thumb"
+              class="shot-thumb m-0 block cursor-zoom-in overflow-hidden rounded-xl border border-border bg-panel p-0 transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-accent hover:shadow-[0_8px_24px_-12px_rgba(99,102,241,0.55)] focus-visible:-translate-y-0.5 focus-visible:border-accent focus-visible:shadow-[0_8px_24px_-12px_rgba(99,102,241,0.55)] focus-visible:outline-none"
               data-index={i}
               aria-label={`Enlarge screenshot: ${s.alt}`}
             >
@@ -93,6 +120,7 @@ const features = [
                 sizes="(max-width: 640px) 92vw, (max-width: 940px) 44vw, 20rem"
                 alt={s.alt}
                 loading="lazy"
+                class="block aspect-[16/10] h-auto w-full object-cover object-left-top"
               />
             </button>
           ))
@@ -100,32 +128,38 @@ const features = [
       </div>
     </section>
 
-    <p class="tagline">
+    <p class={`${tagline} ${BLOCK} mb-0`}>
       OpenFray keeps the initiative order, everyone's hit points, the conditions and effects on each
       creature, what a creature has left to spend, and the dice — so you can run the fight instead
       of remembering it.
     </p>
 
-    <section class="features">
+    <section
+      class={`features grid w-full max-w-4xl grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4 text-left ${BLOCK}`}
+    >
       {
         features.map((f) => (
-          <div class="feature">
-            <h2>{f.title}</h2>
-            <p>{f.body}</p>
+          <div class="feature rounded-xl border border-border bg-panel px-5 py-4.5">
+            <h2 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h2>
+            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
           </div>
         ))
       }
     </section>
 
-    <div class="importer-row">
-      <a
-        class="cta cta-ghost"
+    {
+      /* The importer sits below the feature grid, after the pitch — it's a companion tool,
+        not the way in. A second (Firefox) button will sit beside it later. */
+    }
+    <div class={`importer-row flex flex-wrap justify-center gap-3 ${BLOCK}`}>
+      <Cta
         href={importer}
+        variant="ghost"
         target="_blank"
         rel="noreferrer"
         title="OpenFray Importer on the Chrome Web Store"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="chrome-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="chrome-icon size-[1.15rem]">
           <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"
           ></circle>
           <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
@@ -134,10 +168,10 @@ const features = [
           <line x1="15.5" y1="14" x2="10.7" y2="22.3" stroke="currentColor" stroke-width="2"></line>
         </svg>
         Get the importer for Chrome
-      </a>
+      </Cta>
     </div>
 
-    <p class="cta-note">
+    <p class="cta-note mt-4 mb-0 max-w-[34rem] text-sm leading-relaxed text-faint">
       The importer is a free Chrome extension that turns a D&amp;D&nbsp;Beyond creature page into an
       OpenFray creature, so you never retype a stat block. A Firefox version is on the way.
     </p>
@@ -147,16 +181,36 @@ const features = [
     /* One lightbox for the whole gallery; the active slide is swapped in place so the
       arrows can step through without reopening. */
   }
-  <dialog class="lightbox" aria-label="Screenshot viewer">
-    <button type="button" class="lightbox-close" aria-label="Close">×</button>
-    <button type="button" class="lightbox-nav lightbox-prev" aria-label="Previous screenshot"
-      >‹</button
+  <dialog
+    class="lightbox h-[100dvh] max-h-[100dvh] w-screen max-w-[100vw] overflow-hidden border-0 bg-transparent p-0"
+    aria-label="Screenshot viewer"
+  >
+    {/* The lightbox-* names are the hooks the inline script selects on — keep them. */}
+    <button
+      type="button"
+      class={`lightbox-close ${lightboxButton} top-4 right-4 size-10 text-2xl`}
+      aria-label="Close">×</button
     >
-    <button type="button" class="lightbox-nav lightbox-next" aria-label="Next screenshot">›</button>
-    <div class="lightbox-track">
+    <button
+      type="button"
+      class={`lightbox-nav lightbox-prev ${lightboxButton} ${lightboxNav} left-4`}
+      aria-label="Previous screenshot">‹</button
+    >
+    <button
+      type="button"
+      class={`lightbox-nav lightbox-next ${lightboxButton} ${lightboxNav} right-4`}
+      aria-label="Next screenshot">›</button
+    >
+    {
+      /* The dialog fills the viewport and the active slide is centred inside it, so a
+        click anywhere off the image lands on the dialog and closes it. */
+    }
+    <div
+      class="lightbox-track absolute inset-0 grid place-items-center px-4 py-14 pointer-events-none"
+    >
       {
         shots.map((s, i) => (
-          <figure class="lightbox-slide" data-index={i}>
+          <figure class="lightbox-slide m-0 hidden data-[active]:block" data-index={i}>
             <Picture
               src={s.img}
               formats={['avif', 'webp']}
@@ -164,6 +218,7 @@ const features = [
               widths={[900, 1440, 2000]}
               sizes="(max-width: 1100px) 92vw, 1040px"
               alt={s.alt}
+              class="pointer-events-auto block h-auto max-h-[min(84vh,84dvh)] w-auto max-w-[min(92vw,1040px)] rounded-xl border border-border shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)]"
             />
           </figure>
         ))
