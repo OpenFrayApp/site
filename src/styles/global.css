@@ -699,11 +699,9 @@ h1 {
   color: var(--text);
   font-size: 1.05rem;
 }
-/* `:not([class])` scopes this to plain prose lists. Without it, any list that is a
-   component (.library-grid, .book-contents) inherits the indent — a descendant
-   selector outranks the component's own class, which has bitten this file repeatedly. */
-.doc ul:not([class]),
-.doc ol:not([class]) {
+/* :where() zeroes the specificity, so a component list (.library-grid) keeps its own
+   padding without needing a guard here. */
+:where(.doc) :where(ul, ol) {
   padding-left: 1.2rem;
 }
 .doc li {

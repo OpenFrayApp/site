@@ -1,0 +1,15 @@
+---
+// A run of creatures that belong to one section — the Gardener's six animated tools.
+// A plain heading doesn't work here: the entries after the group carry no heading of
+// their own, so the section would look like it swallowed the rest of the chapter.
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="group">
+  <h2 class="group-title">{title}</h2>
+  <slot />
+</section>

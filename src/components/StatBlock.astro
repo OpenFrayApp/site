@@ -66,17 +66,21 @@ const immunities = [(c.immunities ?? []).join(', '), (c.conditionImmunities ?? [
   .filter(Boolean)
   .join('; ');
 
+// Built here rather than inline: as separate expressions on separate lines, Astro
+// collapses the newline between them and the block reads "MediumPlant, Unaligned".
+const kicker =
+  `${c.size} ${titleCase(c.type)}` + (c.alignment ? `, ${titleCase(c.alignment)}` : '');
+
 const legendaryNote =
   'Immediately after another creature’s turn, this creature can expend a use to take one of the ' +
   'following actions. It regains all expended uses at the start of each of its turns.';
 ---
 
 <section class="statblock" id={creatureSlug(c.name)}>
-  <h3 class="sb-name">{c.name}</h3>
-  <p class="sb-kicker">
-    {c.size}
-    {titleCase(c.type)}{c.alignment ? `, ${titleCase(c.alignment)}` : ''}
-  </p>
+  <h3 class="sb-name">
+    <a href={`#${creatureSlug(c.name)}`}>{c.name}</a>
+  </h3>
+  <p class="sb-kicker">{kicker}</p>
 
   {/* The lore sits inside the block, above the rule, as the printed book has it. */}
   {c.description && <p class="sb-lore">{c.description}</p>}

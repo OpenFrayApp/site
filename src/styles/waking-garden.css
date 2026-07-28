@@ -159,28 +159,26 @@
   font-size: 1.15rem;
   color: var(--text);
 }
-/* `:not([class])` keeps these prose rules off component internals. A bare
-   `.book-body h3` outranks `.sb-name { margin: 0 }` and was adding 1.9rem inside every
-   stat block — the same descendant-beats-class trap as the lists above. */
-.book-body h2:not([class]) {
+/* Prose defaults, wrapped in :where() so they carry zero specificity. Any component
+   rule — .sb-name, .seed h3, .entry-extras h4 — then wins without needing a guard.
+   Written as plain descendant selectors, these repeatedly beat the component's own
+   class (0,1,1 vs 0,1,0) and leaked into stat blocks, seeds, and the sidebar. */
+:where(.book-body) :where(h2) {
   font-size: 1.45rem;
   letter-spacing: -0.02em;
   margin: 2.75rem 0 0.4rem;
   padding-bottom: 0.4rem;
   border-bottom: 2px solid var(--accent);
 }
-.book-body h3:not([class]) {
+:where(.book-body) :where(h3) {
   font-size: 1.12rem;
   margin: 1.9rem 0 0.4rem;
 }
-.book-body h4:not([class]) {
+:where(.book-body) :where(h4) {
   font-size: 1rem;
   margin: 1.4rem 0 0.3rem;
 }
-/* `:not([class])` scopes this to plain prose lists — see the same guard in global.css.
-   A bare `.book-body ol` outranks .book-contents' own `padding: 0` and indents it. */
-.book-body ul:not([class]),
-.book-body ol:not([class]) {
+:where(.book-body) :where(ul, ol) {
   padding-left: 1.2rem;
 }
 .book-body li {
@@ -227,17 +225,47 @@
   margin: 0;
 }
 
-/* The challenge-rating index is 67 short rows — two columns instead of one long run. */
+/* The challenge-rating index is 67 short rows — two columns instead of one long run.
+   Slightly smaller type so the "Ch. 5" cell never wraps at half width. */
 .index-split {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 1.5rem;
+  gap: 0 1.25rem;
   align-items: start;
+}
+.index-split table {
+  font-size: 0.8rem;
+}
+.index-split th,
+.index-split td {
+  padding: 0.4rem 0.35rem;
+  white-space: nowrap;
+}
+.index-split td:nth-child(3) {
+  white-space: normal;
 }
 @media (max-width: 720px) {
   .index-split {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* ---------- a grouped run of creatures ---------- */
+
+.group {
+  margin: 2.75rem 0;
+  padding: 0 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--border);
+}
+.group-title {
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--accent);
+}
+.group .entry:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- creature entry ---------- */
@@ -270,6 +298,15 @@
   color: var(--text);
   border: none;
   padding: 0;
+}
+/* The name links to its own anchor, so a creature can be linked to directly. It should
+   read as a heading until you reach for it. */
+.sb-name a {
+  color: inherit;
+  text-decoration: none;
+}
+.sb-name a:hover {
+  color: var(--accent);
 }
 .sb-kicker {
   margin: 0.1rem 0 0.9rem;
@@ -506,6 +543,19 @@
   margin-top: 2rem;
   font-size: 0.82rem;
   color: var(--faint);
+}
+
+/* The required SRD attribution, set apart but not indented — it is a notice to read,
+   not a pull quote. */
+.book-attribution {
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0.5rem;
+  background: var(--panel);
+  font-size: 0.88rem;
+  color: var(--muted);
 }
 
 /* ---------- encounter seeds (appendix A) ---------- */
