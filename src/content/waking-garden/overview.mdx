@@ -1,10 +1,14 @@
 ---
-title: 'How to use this library'
-label: 'How to use this library'
+title: 'Using this library'
+label: 'Using this library'
 description: 'How the bestiary is organized, why Stage 1 challenge ratings depend on terrain, and every creature indexed by challenge rating and by species.'
 order: 0
 ---
 
+import Licensing from '../../components/Licensing.astro';
+import PageBreak from '../../components/PageBreak.astro';
+
+<div class="wide">
 _A bestiary of cultivated horrors, compatible with 5e and 5.5e_
 
 Sixty-seven creatures for a world where the things people grow have started growing back. Twelve species of sentient vegetable across three stages of life, the ecology that lives alongside them, the fey who tend them, and the thing they are all cuttings from.
@@ -13,127 +17,8 @@ Every stat block is compatible with 5.5e and 5e. It is tuned mainly for the powe
 
 Use as much of it as you want. A single creature is a roadside encounter. One stage is a set of random encounters for a tier of play. A group of them is a one-shot. All three stages, in order, is a campaign.
 
-## What's in each chapter
+## License
 
-**Chapter 1** is the setting: how these plants grow, what makes them dangerous, and what a party can tell by looking at the dirt. It’s short, and it makes everything after it make sense. Read it first.
-
-**Chapters 2–4** are the cultivated plants, arranged by stage of life. A plant does not change stage during a fight — it changes over seasons. Which stage a party meets is a fact about the _place_.
-
-**Chapter 5** is everything else that lives in a garden. Weeds, pests, rot, and the things that keep them down. Several of these would rather eat a vegetable than a person.
-
-**Chapter 6** is the answer to who has been doing all this on purpose.
-
-**Chapter 7** is the answer to why any of it woke up in the first place.
-
-**Appendix A** has nineteen ready-to-run encounters from level 1 to level 20, each with its terrain, its roster, and the concept it’s built around.
-
-### Stage 1 and challenge rating
-
-A creature with Speed 0 is a hazard, not an encounter. Players will walk around it, and they’re right to. Every Stage 1 creature in Chapter 2 earns its listed challenge rating only when one of these is true:
-
-- **Terrain forces contact.** A walled kitchen garden, a greenhouse, a hedge maze, furrows narrow enough that a 10-foot reach covers the path.
-- **The plants are the objective.** The party needs them harvested, cleared, or taken alive.
-- **They’re guarding something.** A Stage 1 patch around a cache is a cheap, patient alarm that never sleeps and can’t be bribed.
-- **They’re supporting something mobile.** One [Stalkstrider](/the-waking-garden/chapter-3/#c-stalkstrider) among four rooted Maize Sentinels is a better fight than either alone.
-
-In open ground with no clock, halve their effective challenge rating. The ash-grown plants are the exception, because they move.
-
-## Index by challenge rating
-
-<div class="index-split">
-
-| CR  |    XP | Creature              | Type      | Ch.   |
-| :-: | ----: | --------------------- | --------- | ----- |
-|  0  |    10 | Gloamsnail            | Beast     | Ch. 5 |
-| 1/8 |    25 | Weeping Onion         | Plant     | Ch. 2 |
-| 1/4 |    50 | Aphid Bloom           | Beast     | Ch. 5 |
-| 1/4 |    50 | Emberpod              | Plant     | Ch. 2 |
-| 1/4 |    50 | Grinning Gourd        | Plant     | Ch. 2 |
-| 1/4 |    50 | Maize Sentinel        | Plant     | Ch. 2 |
-| 1/4 |    50 | Snaproot              | Plant     | Ch. 2 |
-| 1/4 |    50 | Speartip Row          | Plant     | Ch. 2 |
-| 1/4 |    50 | Thistleheart Cabbage  | Plant     | Ch. 2 |
-| 1/4 |    50 | Wardbulb              | Plant     | Ch. 2 |
-| 1/2 |   100 | Blightspud            | Plant     | Ch. 2 |
-| 1/2 |   100 | Bloodvine Tomato      | Plant     | Ch. 2 |
-| 1/2 |   100 | Numbknot              | Plant     | Ch. 2 |
-| 1/2 |   100 | Podswarm              | Plant     | Ch. 2 |
-| 1/2 |   100 | Pruneling             | Fey       | Ch. 6 |
-|  1  |   200 | Animated Hoe          | Construct | Ch. 6 |
-|  1  |   200 | Animated Shears       | Construct | Ch. 6 |
-|  1  |   200 | Animated Spade        | Construct | Ch. 6 |
-|  1  |   200 | Animated Watering Can | Construct | Ch. 6 |
-|  1  |   200 | Bindweed Creeper      | Plant     | Ch. 5 |
-|  1  |   200 | Chimeweed             | Plant     | Ch. 2 |
-|  1  |   200 | Rollrind              | Plant     | Ch. 2 |
-|  1  |   200 | The Runt Patch        | Plant     | Ch. 2 |
-|  2  |   450 | Animated Scythe       | Construct | Ch. 6 |
-|  2  |   450 | Sting-Choir           | Beast     | Ch. 5 |
-|  2  |   450 | Tearmonger            | Plant     | Ch. 3 |
-|  2  |   450 | Tithe-Crow            | Fey       | Ch. 6 |
-|  3  |   700 | Animated Hose         | Construct | Ch. 6 |
-|  3  |   700 | Compost Shambler      | Ooze      | Ch. 5 |
-|  3  |   700 | Gourdstalker          | Plant     | Ch. 3 |
-|  3  |   700 | Pikeling              | Plant     | Ch. 3 |
-|  3  |   700 | Stalkstrider          | Plant     | Ch. 3 |
-|  3  |   700 | Tumblewrack           | Plant     | Ch. 3 |
-|  4  | 1,100 | Bramblehead           | Plant     | Ch. 3 |
-
-| CR  |     XP | Creature                | Type        | Ch.   |
-| :-: | -----: | ----------------------- | ----------- | ----- |
-|  4  |  1,100 | Censerhead              | Plant       | Ch. 3 |
-|  4  |  1,100 | Drownbulb               | Plant       | Ch. 3 |
-|  4  |  1,100 | Gravegourd              | Plant       | Ch. 3 |
-|  4  |  1,100 | Rookery Choir           | Fey         | Ch. 6 |
-|  4  |  1,100 | Rootlance               | Plant       | Ch. 3 |
-|  4  |  1,100 | Shellmaw                | Monstrosity | Ch. 5 |
-|  4  |  1,100 | Vinelasher              | Plant       | Ch. 3 |
-|  5  |  1,800 | Fondvine                | Plant       | Ch. 3 |
-|  5  |  1,800 | Gingerling              | Plant       | Ch. 3 |
-|  5  |  1,800 | Hollowman               | Plant       | Ch. 3 |
-|  5  |  1,800 | Tanglepod               | Plant       | Ch. 3 |
-|  5  |  1,800 | The Scarecrow           | Construct   | Ch. 5 |
-|  5  |  1,800 | The Under-Gardener      | Fey         | Ch. 6 |
-|  6  |  2,300 | Scorchvine              | Plant       | Ch. 3 |
-|  6  |  2,300 | Shearbeetle             | Beast       | Ch. 5 |
-|  7  |  2,900 | Blight Mother           | Plant       | Ch. 5 |
-|  7  |  2,900 | Hive-Warden             | Monstrosity | Ch. 5 |
-|  7  |  2,900 | The Wick                | Construct   | Ch. 5 |
-|  8  |  3,900 | The Gardener            | Fey         | Ch. 6 |
-|  9  |  5,000 | Gallows Rook            | Fey         | Ch. 6 |
-|  9  |  5,000 | The Lachrymose          | Plant       | Ch. 4 |
-| 10  |  5,900 | The Thistle Colossus    | Plant       | Ch. 4 |
-| 11  |  7,200 | Deepspire               | Plant       | Ch. 4 |
-| 11  |  7,200 | The Harvest Crown       | Plant       | Ch. 4 |
-| 12  |  8,400 | The Bloodvine Sovereign | Plant       | Ch. 4 |
-| 12  |  8,400 | The Reliquary           | Plant       | Ch. 4 |
-| 13  | 10,000 | The Serried Crown       | Plant       | Ch. 4 |
-| 13  | 10,000 | Torpor                  | Plant       | Ch. 4 |
-| 14  | 11,500 | The Pumpkin King        | Plant       | Ch. 4 |
-| 15  | 13,000 | The Scald               | Plant       | Ch. 4 |
-| 16  | 15,000 | The Green Multitude     | Plant       | Ch. 4 |
-| 16  | 15,000 | The Long Root           | Plant       | Ch. 4 |
-| 22  | 41,000 | The Perennial           | Plant       | Ch. 7 |
+<Licensing year={2026} />
 
 </div>
-
-## Index by species
-
-The ten cultivated species, each across all three stages. The number after each creature is its challenge rating.
-
-| Species   | Stage 1                    | Stage 2          | Stage 3                  |
-| --------- | -------------------------- | ---------------- | ------------------------ |
-| Pumpkin   | Grinning Gourd (1/4)       | Gourdstalker (3) | Pumpkin King (14)        |
-| Onion     | Weeping Onion (1/8)        | Tearmonger (2)   | Lachrymose (9)           |
-| Maize     | Maize Sentinel (1/4)       | Stalkstrider (3) | Harvest Crown (11)       |
-| Cabbage   | Thistleheart Cabbage (1/4) | Bramblehead (4)  | Thistle Colossus (10)    |
-| Tomato    | Bloodvine Tomato (1/2)     | Vinelasher (4)   | Bloodvine Sovereign (12) |
-| Potato    | Blightspud (1/2)           | Hollowman (5)    | Long Root (16)           |
-| Garlic    | Wardbulb (1/4)             | Censerhead (4)   | Reliquary (12)           |
-| Chili     | Emberpod (1/4)             | Scorchvine (6)   | Scald (15)               |
-| Asparagus | Speartip Row (1/4)         | Pikeling (3)     | Serried Crown (13)       |
-| Pea       | Podswarm (1/2)             | Tanglepod (5)    | Green Multitude (16)     |
-| Carrot    | Snaproot (1/4)             | Rootlance (4)    | Deepspire (11)           |
-| Ginger    | Numbknot (1/2)             | Gingerling (5)   | Torpor (13)              |
-
-**Variants** are their own creatures, not modifiers: [Rollrind](/the-waking-garden/chapter-2/#c-rollrind) (1), [Chimeweed](/the-waking-garden/chapter-2/#c-chimeweed) (1), The [Runt Patch](/the-waking-garden/chapter-2/#c-runt-patch) (1), [Drownbulb](/the-waking-garden/chapter-3/#c-drownbulb) (4), [Gravegourd](/the-waking-garden/chapter-3/#c-gravegourd) (4), [Fondvine](/the-waking-garden/chapter-3/#c-fondvine) (5), [Tumblewrack](/the-waking-garden/chapter-3/#c-tumblewrack) (3). See _The Soil_ in Chapter 1 for which ground produces what.

@@ -6,6 +6,8 @@ order: 1
 eyebrow: 'Chapter 1'
 ---
 
+import PageBreak from '../../components/PageBreak.astro';
+
 Before the creatures, the ground they came out of. This chapter covers how a plant wakes and advances, the five kinds of ground that produce something other than the usual, what a party can read off a field before they step into it, and what they can take home afterwards.
 
 ## The growth cycle
@@ -58,17 +60,36 @@ To add a variety that isn’t in this library, write it as a new creature with i
 
 ## Reading the bed
 
-A party that looks before it walks can tell which stage is in the field, and often what kind of ground grew it. Each sign below is a single check made from the edge of the bed — on a success, tell them the right-hand column.
+A party that looks before it walks can tell which stage is in the field, and often what kind of ground grew it. Each sign below is a single **Intelligence (Nature)** or **Wisdom (Survival) check** made from the edge of the bed — on a success, tell them what it means. It becomes easier to read the signs as stages advance, as they are more obvious to see.
 
-| Sign                                                          | DC (Nature or Survival) | Tells them                                         |
-| ------------------------------------------------------------- | ----------------------- | -------------------------------------------------- |
-| Furrows disturbed from beneath, no tracks leading away        | 10                      | Stage 1 present                                    |
-| Drag-marks: a broad trailing groove between prints            | 13                      | Stage 2 active                                     |
-| Wide dead zone, stunted plants, soil gray and depleted        | 15                      | Stage 3 nearby, and it has been here years         |
-| Scorched hardpan, rinds cracked and weeping sap               | 13                      | Ash ground — expect things that roll, do not melee |
-| Soil that smells of iron; bone fragments turned by the plough | 14                      | Grave ground                                       |
-| Compass needles drifting; frost in summer, dew in drought     | 15                      | Ley ground                                         |
-| Total birdsong silence over a cultivated field                | 14                      | Something is hunting here now                      |
+| Stage/Ground | DC  |
+| ------------ | --- |
+| 1            | 15  |
+| 2            | 13  |
+| 3            | 10  |
+
+Increase the DC by 4 to detect Ash and Grave ground, by 3 to detect Ley ground, and by 2 to detect Starved ground.
+
+Signs can vary from bed to bed and from ground to ground, here are some examples:
+
+| Sign                                                                  | Stage/Ground |
+| --------------------------------------------------------------------- | ------------ |
+| Furrows disturbed from beneath, no tracks leading away                | 1            |
+| Leaves that track a walking figure instead of the sun                 | 1            |
+| Drag-marks: a broad trailing groove between prints                    | 2            |
+| A crater where something was rooted, the taproot torn out whole       | 2            |
+| Wide dead zone, stunted plants, soil gray and depleted                | 3            |
+| One plant taller than the wall, nothing growing within a stride of it | 3            |
+| Scorched hardpan, rinds cracked and weeping sap                       | Ash          |
+| Rinds gone hollow, ringing when they are kicked                       | Ash          |
+| Soil that smells of iron; bone fragments turned by the plough         | Grave        |
+| Rows nobody planted, following the cuts of older graves               | Grave        |
+| Compass needles drifting; frost in summer, dew in drought             | Ley          |
+| A hum off the bed that stops whenever you look for it                 | Ley          |
+| Standing water that never drains, skinned over and sweet-smelling     | Bog          |
+| Root mats firm enough to walk on, sinking a hand's breadth each step  | Bog          |
+| A ring of stunted plants around bare soil, every one the same height  | Starved      |
+| Seedlings crowded so tight that none has room to swell                | Starved      |
 
 ## Harvesting
 
@@ -77,6 +98,8 @@ A creature within 5 feet of any Stage 1 or Stage 2 plant at 0 Hit Points can tak
 - **Success:** permanently harvested, yields 1 usable component.
 - **Failure by 4 or less:** dead, but the component is ruined.
 - **Failure by 5 or more:** the taproot retracts into the soil and regrows at half its Hit Point maximum within 30 feet, after 1 minute at Stage 1 or 1 hour at Stage 2.
+
+An ash-grown plant’s component always detonates for 2d6 Fire if the harvester fails the check by any margin.
 
 | Species   | Component     | Suggested use                                                                             |
 | --------- | ------------- | ----------------------------------------------------------------------------------------- |
@@ -93,4 +116,29 @@ A creature within 5 feet of any Stage 1 or Stage 2 plant at 0 Hit Points can tak
 | Carrot    | Snapped point | Improvised piercing weapon, +1 to hit while it lasts (1 hour)                             |
 | Ginger    | Numbing root  | Chewed: Advantage on the next Constitution saving throw against poison, within 10 minutes |
 
-An ash-grown plant’s component always detonates for 2d6 Fire if the harvester fails the check by any margin.
+<PageBreak />
+
+<div class="wide">
+
+## Cultivated species
+
+The twelve cultivated species, each across all three stages of growth.
+
+**Variants** are their own creatures, not modifiers: [Rollrind](/the-waking-garden/chapter-2/#c-rollrind), [Chimeweed](/the-waking-garden/chapter-2/#c-chimeweed), The [Runt Patch](/the-waking-garden/chapter-2/#c-runt-patch), [Drownbulb](/the-waking-garden/chapter-3/#c-drownbulb), [Gravegourd](/the-waking-garden/chapter-3/#c-gravegourd), [Fondvine](/the-waking-garden/chapter-3/#c-fondvine), [Tumblewrack](/the-waking-garden/chapter-3/#c-tumblewrack). See _The Soil_ in Chapter 1 for which ground produces what.
+
+| Species   | Stage 1              | Stage 2      | Stage 3             |
+| --------- | -------------------- | ------------ | ------------------- |
+| Pumpkin   | Grinning Gourd       | Gourdstalker | Pumpkin King        |
+| Onion     | Weeping Onion        | Tearmonger   | Lachrymose          |
+| Maize     | Maize Sentinel       | Stalkstrider | Harvest Crown       |
+| Cabbage   | Thistleheart Cabbage | Bramblehead  | Thistle Colossus    |
+| Tomato    | Bloodvine Tomato     | Vinelasher   | Bloodvine Sovereign |
+| Potato    | Blightspud           | Hollowman    | Long Root           |
+| Garlic    | Wardbulb             | Censerhead   | Reliquary           |
+| Chili     | Emberpod             | Scorchvine   | Scald               |
+| Asparagus | Speartip Row         | Pikeling     | Serried Crown       |
+| Pea       | Podswarm             | Tanglepod    | Green Multitude     |
+| Carrot    | Snaproot             | Rootlance    | Deepspire           |
+| Ginger    | Numbknot             | Gingerling   | Torpor              |
+
+</div>

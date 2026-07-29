@@ -1,17 +1,13 @@
 ---
-// The print edition. LOCAL ONLY — scripts/assemble-site.mjs deletes this route from
-// dist/, so it never ships. Run `npm run dev -w site`, open
-// http://localhost:4321/the-waking-garden/print/, and print to PDF.
+// The print edition, LOCAL ONLY — assemble-site.mjs drops this route from dist/ and the
+// sitemap filter hides it. Run `npm run dev -w site`, open /the-waking-garden/print/,
+// print to PDF. Pagination takes about a minute and the page is blank while it runs.
 //
-// It exists as an Astro page rather than a generator so the book and the site render
-// through the same components and the same stylesheet. The previous edition was built
-// in Typst, and most of that work went into restating the site's CSS in another
-// language; anything that has to be restated eventually drifts.
-//
-// Paged.js supplies what a browser's print engine does not: @page margin boxes, a page
-// counter, and target-counter() so a creature link can print its page number.
+// It is a page rather than a generator so the book renders through the site's own
+// components and stylesheet; the Typst edition it replaced spent most of its effort
+// restating that CSS in another language.
 import { getCollection, render } from 'astro:content';
-import { creatures, formatCr, creatureSlug, titleCase } from '../../data/wakingGarden.ts';
+import { creatures, formatCr } from '../../data/wakingGarden.ts';
 import '../../styles/global.css';
 import '../../styles/waking-garden.css';
 
@@ -20,18 +16,8 @@ const parts = await Promise.all(
   chapters.map(async (c) => ({ ...c, Content: (await render(c)).Content })),
 );
 
-const byCr = [...creatures].sort(
-  (a, b) => (a.cr ?? 0) - (b.cr ?? 0) || a.name.localeCompare(b.name),
-);
-const half = Math.ceil(byCr.length / 2);
-const crColumns = [byCr.slice(0, half), byCr.slice(half)];
-
 const crs = creatures.map((c) => c.cr ?? 0);
 const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
-
-// Print says "book" where the web says "library". The swap is asserted rather than
-// assumed: if a copy edit changes the count, the console says so instead of the two
-// editions quietly diverging.
 ---
 
 <html lang="en" class="light">
@@ -71,57 +57,17 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
       ))
     }
 
-    <section class="chapter">
-      <header class="chapter-head">
-        <p class="chapter-eyebrow">Index</p>
-        <h1 class="chapter-title">By challenge rating</h1>
-      </header>
-      <div class="book-body index-grid">
-        {
-          crColumns.map((column) => (
-            <table>
-              <thead>
-                <tr>
-                  <th>CR</th>
-                  <th>XP</th>
-                  <th>Creature</th>
-                  <th>Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {column.map((c) => (
-                  <tr>
-                    <td>{formatCr(c.cr)}</td>
-                    <td>{c.xp?.toLocaleString('en-US')}</td>
-                    <td>
-                      <a href={`#c-${creatureSlug(c.name)}`}>{c.name}</a>
-                    </td>
-                    <td>{titleCase(String(c.type).split(' ').pop() ?? '')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ))
-        }
-      </div>
-    </section>
-
-    {
-      /* `define:vars` would force this inline, and an inline script cannot resolve the
-        bare `pagedjs` specifier, so the expected count lives here instead. */
-    }
     <script>
-      // The web edition says "library"; print says "book". The count is asserted rather
-      // than assumed — a copy edit that changes it should say so, not silently rewrite
-      // a sentence that no longer means what the substitution expects.
+      // Print says "book" where the web says "library". The count is asserted so a copy
+      // edit that changes it reports rather than silently rewriting a sentence.
       const EXPECTED_LIBRARY_TERMS = 5;
       const TERMS = [
         [/\blibrary\b/g, 'book'],
         [/\blibraries\b/g, 'books'],
       ];
 
-      // SHOW_TEXT alone walks into <script> and <style>, where the first pass rewrote
-      // this file's own regex literals and inflated the count.
+      // Rejecting SCRIPT and STYLE matters: plain SHOW_TEXT rewrote this file's own
+      // regex literals and inflated the count.
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) =>
           /^(SCRIPT|STYLE)$/.test(node.parentElement?.tagName ?? '')
@@ -141,49 +87,49 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
       if (hits !== EXPECTED_LIBRARY_TERMS) {
         console.warn(
           `Print: replaced ${hits} "library" terms, expected ${EXPECTED_LIBRARY_TERMS}. ` +
-            'A copy edit changed how often the word appears — check the result, then ' +
-            'update EXPECTED_LIBRARY_TERMS in print.astro.',
+            'Check the result, then update EXPECTED_LIBRARY_TERMS in print.astro.',
         );
       }
 
-      // The overview carries a hand-maintained challenge-rating index for the web. This
-      // page generates one from the compendium, so the authored copy is dropped rather
-      // than printed twice — and a 4-column table in one of two columns clips its last
-      // column anyway. Everything from that heading to the next section goes.
-      const authoredCr = document.getElementById('index-by-challenge-rating');
-      const speciesHeading = document.getElementById('index-by-species');
-      if (authoredCr) {
-        for (let node = authoredCr; node && node !== speciesHeading;) {
-          const next = node.nextElementSibling;
-          node.remove();
-          node = next;
+      // The site folds a stat block into a <details>; print wants all of it, flattened
+      // back to plain siblings so the grouping below still sees name, lore, stats and
+      // defences as children of .statblock.
+      for (const fold of document.querySelectorAll('.statblock details')) {
+        const summary = fold.querySelector('summary');
+        if (summary) summary.replaceWith(...summary.childNodes);
+        fold.replaceWith(...fold.childNodes);
+      }
+
+      // A stat block breaks between its sections but never inside its identity — name,
+      // type line, lore, stats, abilities, defences. Those are siblings with no element
+      // of their own, so the run gets one to hang `break-inside: avoid` on.
+      for (const block of document.querySelectorAll('.statblock')) {
+        const children = [...block.children];
+        const end = children.findIndex((el) => el.classList.contains('sb-traits-list'));
+        if (end < 1) continue;
+        const group = document.createElement('div');
+        group.className = 'sb-head-group';
+        children[0].before(group);
+        group.append(...children.slice(0, end + 1));
+      }
+
+      // Paged.js discards `break-after: avoid` — it computes back to `auto` — so a
+      // heading and the paragraph under it are bound into one unsplittable block instead.
+      for (const body of document.querySelectorAll('.chapter-body')) {
+        for (const heading of [...body.querySelectorAll('h2, h3, h4')]) {
+          const next = heading.nextElementSibling;
+          if (!next || heading.closest('.wide, .sb-head-group') || next.tagName === 'H2') continue;
+          const keep = document.createElement('div');
+          keep.className = 'keep-with-next';
+          heading.before(keep);
+          keep.append(heading, next);
         }
       }
 
-      // The species index is authored — the stage-by-stage mapping is not in the
-      // compendium — so it stays, but it needs the page rather than a column.
-      if (speciesHeading) {
-        const wide = document.createElement('section');
-        // `book-body` too: every prose rule on the site is scoped to it, so a section
-        // moved out of one renders as unstyled text.
-        wide.className = 'chapter index-wide book-body';
-        for (let node = speciesHeading; node;) {
-          const next = node.nextElementSibling;
-          wide.append(node);
-          node = next;
-        }
-        document.querySelector('.cover')?.after(wide);
-      }
-
-      // A creature link prints its page number. Paged.js's own target-counter cannot do
-      // it: it resolves against the pages built so far, during layout, so every forward
-      // reference — which is most of them — finds nothing and renders empty. Filling it
-      // in afterwards is exact, but it would also grow text that has already been laid
-      // out and silently overflow a page, so the placeholder below reserves the space
-      // now and only the digits change later.
-      // `*=` not `^=`: a link to a creature in another chapter is a full site path
-      // (/the-waking-garden/chapter-2/#c-rollrind), and only same-chapter links are bare
-      // fragments. Matching just the latter silently skipped most of the book.
+      // Page numbers are filled in after pagination, so the placeholder has to reserve
+      // the space now — growing laid-out text would overflow a page silently.
+      // `*=` not `^=`: a link to another chapter is a full site path, and matching only
+      // bare fragments skipped most of the book.
       let refCount = 0;
       for (const link of document.querySelectorAll('.book-body a[href*="#c-"]')) {
         const ref = document.createElement('span');
@@ -193,27 +139,56 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         refCount += 1;
       }
 
-      // pagedjs gates its polyfill build behind an export condition Vite does not
-      // resolve, so drive the Previewer directly. It does what the polyfill does.
-      //
-      // preview() empties the body before it chunks, so a failure halfway leaves a blank
-      // page and no clue why. Say so instead.
       try {
-        // Hand it only the paged stylesheet. Given none, it strips every stylesheet in
-        // the document and parses them with css-tree, which cannot read Tailwind v4's
-        // `@media (width >= 40rem)` — the prelude comes back raw and Paged.js's own
-        // print-media handler throws on it. Passing one keeps the site's CSS out of that
-        // parser and applying through the normal cascade, which is where it belongs.
+        // Only print-paged.css is handed over. Given no stylesheets Paged.js strips and
+        // parses every one with css-tree, which cannot read Tailwind v4's
+        // `@media (width >= 40rem)` and throws on the raw prelude — leaving a blank page.
+        // Its polyfill build also sits behind an export condition Vite will not resolve,
+        // hence driving Previewer directly.
         const [{ Previewer }, { default: pagedCss }] = await Promise.all([
           import('pagedjs'),
           import('../../styles/print-paged.css?raw'),
+          // Chunking measures text, so it has to wait for the serif. Without this the
+          // book paginates against the fallback face and the result varies run to run —
+          // 65 or 66 pages, and the odd cross-reference resolving against a stale page.
+          document.fonts.ready,
         ]);
         const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': pagedCss }]);
 
-        // Resolve against the rendered pages, not the source. Paged.js keeps the
-        // original markup in a <template> and lays out clones of it, so the nodes
-        // captured above are the ones nobody sees — and every creature id now exists
-        // twice, which is why the lookup is scoped rather than getElementById.
+        // Drop the top margin off whatever opens a page or a column. Paged.js keeps it on
+        // the first column but collapses it in a continuation, so the two columns start
+        // at different heights. It cannot be a `:first-child` rule — Paged.js rebuilds
+        // the ancestor chain per page, so depth and sibling order vary — but the geometry
+        // is reliable: nothing above an element means its gap is exactly its own margin.
+        for (const content of document.querySelectorAll('.pagedjs_page_content')) {
+          const box = content.getBoundingClientRect();
+          const middle = box.left + box.width / 2;
+          const columns = { left: [], right: [] };
+
+          for (const block of content.querySelectorAll('h1, h2, h3, h4, p, ul, ol, dl, table')) {
+            const rect = block.getBoundingClientRect();
+            // A spanning element is not in either column and starts its own flow.
+            if (!rect.height || rect.width > box.width * 0.8) continue;
+            const margin = parseFloat(getComputedStyle(block).marginTop) || 0;
+            columns[rect.left < middle ? 'left' : 'right'].push({
+              block,
+              margin,
+              // Margin-box top: equal for everything that starts a column.
+              edge: rect.top - margin,
+            });
+          }
+
+          for (const items of Object.values(columns)) {
+            if (!items.length) continue;
+            const start = Math.min(...items.map((i) => i.edge));
+            for (const item of items) {
+              if (item.margin && item.edge - start <= 1) item.block.style.marginTop = '0';
+            }
+          }
+        }
+
+        // Resolve against the rendered pages: Paged.js lays out clones and keeps the
+        // source in a <template>, so every creature id exists twice.
         const area = document.querySelector('.pagedjs_pages');
         const pageOf = new Map();
         area.querySelectorAll('.pagedjs_page').forEach((page, i) => pageOf.set(page, i + 1));
@@ -238,6 +213,8 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         console.info(`Paged.js: ${flow.total} pages, ${resolved}/${refCount} refs resolved.`);
         document.body.dataset.pages = String(flow.total);
       } catch (error) {
+        // preview() empties the body before chunking, so a failure otherwise leaves a
+        // blank page and no clue why.
         console.error('Paged.js failed to paginate:', error);
         document.body.dataset.pages = 'failed';
       }

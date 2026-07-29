@@ -32,7 +32,13 @@ const base = '/the-waking-garden';
 const navHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 /** The short marker in the sidebar's number column: "Chapter 6" → 6, "Appendix A" → A. */
-const marker = (eyebrowText?: string) => eyebrowText?.split(' ').pop() ?? '';
+// The gutter column is 1.4rem — room for "6" or "A" and nothing else. An eyebrow whose
+// last word is a word, not a number ("Index"), overflowed it and sat on top of the
+// label, so anything longer than a couple of characters gets no marker at all.
+const marker = (eyebrowText?: string) => {
+  const last = eyebrowText?.split(' ').pop() ?? '';
+  return last.length <= 2 ? last : '';
+};
 
 // The sidebar's three text sizes are deliberately closer together than Tailwind's
 // scale allows: depth reads from indent *and* size, and snapping all three to the

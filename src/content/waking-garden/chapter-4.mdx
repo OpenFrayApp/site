@@ -7,6 +7,7 @@ eyebrow: 'Chapter 4'
 ---
 
 import Creature from '../../components/Creature.astro';
+import PageBreak from '../../components/PageBreak.astro';
 
 A Stage 3 plant is not an encounter that happened to be in the way. It took years, and something fed it for years. The interesting question is who let it get that big, and why nobody in the nearest village will talk about it.
 
@@ -15,6 +16,17 @@ A Stage 3 plant is not an encounter that happened to be in the way. It took year
 - **They cannot be harvested.** The taproot goes down forty feet. Killing one does not clear the soil; the bed produces Stage 1 growth again within a season unless it’s salted.
 
 Each of these is a legendary creature with regional or field-scale effects, and each is built around one idea a party has to solve rather than out-damage. Treat any Stage 3 as the centerpiece of a session.
+
+### Regional Effects
+
+Within 1 mile of a crowned creature's field:
+
+- Vegetables grow malformed faces and are inedible. Farmers who eat them dream of orange light.
+- Livestock refuse to enter the fields and will break a fence to avoid it.
+- Dusk holds for an extra hour, the light staying low and orange well past true sunset.
+- Travelers who leave the field at night find themselves walking back toward it. A DC 16 Wisdom (Survival) check each hour is needed to make genuine progress away.
+
+If the crowned dies, these fade over 1d10 days.
 
 <Creature name="Lachrymose" />
 
@@ -26,20 +38,7 @@ Each of these is a legendary creature with regional or field-scale effects, and 
 
 <Creature name="Bloodvine Sovereign" />
 
-<Creature name="Pumpkin King">
-
-#### Regional Effects
-
-Within 1 mile of the King’s field:
-
-- Vegetables grow malformed faces and are inedible. Farmers who eat them dream of orange light.
-- Livestock refuse to enter the fields and will break a fence to avoid it.
-- Dusk holds for an extra hour, the light staying low and orange well past true sunset.
-- Travelers who leave the field at night find themselves walking back toward it. A DC 16 Wisdom (Survival) check each hour is needed to make genuine progress away.
-
-If the King dies, these fade over 1d10 days.
-
-</Creature>
+<Creature name="Pumpkin King" />
 
 <Creature name="Serried Crown" />
 
@@ -53,7 +52,13 @@ If the King dies, these fade over 1d10 days.
 
 <Creature name="Torpor" />
 
+<PageBreak />
+
+<div class="wide">
+
 ## Which boss to use
+
+The choice of using one crowned creature over another should not be based solely on the party level. Each creature is built with specific mechanics. Choose one also baed on the terrain you will be using, the party composition, and their resources.
 
 | Boss                | CR  | What the fight is about                                               |
 | ------------------- | :-: | --------------------------------------------------------------------- |
@@ -69,3 +74,5 @@ If the King dies, these fade over 1d10 days.
 | Scald               | 15  | Speed and burst. Fire heals it — the reversal                         |
 | Green Multitude     | 16  | Hitting it makes more of it                                           |
 | Long Root           | 16  | A puzzle. You cannot hit what you can see                             |
+
+</div>

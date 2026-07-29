@@ -112,6 +112,74 @@
     }
   }
 
+  /* ---------- creature indexes (the two appendices) ---------- */
+  /* Layout only — the band heading keeps the site's own h3 style. The filled bar is a
+     print device and lives in print-paged.css. */
+  .creature-index {
+    columns: 16rem;
+    gap: 1.5rem;
+  }
+  .index-band {
+    break-inside: avoid;
+    margin: 0 0 1.25rem;
+  }
+  /* The gap between bands is the band's own bottom margin, never the heading's top one:
+     an h3 carrying `margin-top` from the prose defaults applies it at the head of one
+     column and not the next, so the columns start at different heights. */
+  .index-band-head {
+    margin: 0 0 0.5rem;
+  }
+  .index-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .index-list li {
+    margin: 0;
+    padding: 0.1rem 0;
+  }
+
+  /* ---------- the stat block's fold ---------- */
+  /* Closed, a block shows its name, type line and lore; open, the rest. The marker is
+     drawn by hand because the native one sits outside the summary box and cannot be
+     placed against a three-line header. */
+  .sb-summary {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    padding-right: 2rem;
+    list-style: none;
+  }
+  .sb-summary::-webkit-details-marker {
+    display: none;
+  }
+  .sb-summary::after {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    right: 0.25rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+  }
+  .sb-fold[open] .sb-summary::after {
+    transform: rotate(-135deg);
+  }
+  .sb-summary:hover .sb-name {
+    color: var(--accent);
+  }
+  .sb-fold[open] .sb-summary {
+    margin-bottom: 0.875rem;
+  }
+  .sb-summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 0.25rem;
+  }
+
   /* ---------- a grouped run of creatures ---------- */
   /* Group.astro carries its own utilities; only this cross-component rule is left,
      because it reaches into .entry, which the component doesn't render itself. */

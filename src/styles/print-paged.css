@@ -1,11 +1,8 @@
-/* The print edition's paged stylesheet — passed to Paged.js, not linked by the page.
-   Paged.js parses whatever stylesheets it is given with css-tree, and css-tree cannot
-   read Tailwind v4's modern media syntax (`@media (width >= 40rem)`): its prelude comes
-   back raw, and Paged.js's own print-media handler then throws on it. Handing it only
-   this file keeps the site's stylesheet out of that parser while leaving it to style the
-   content through the normal cascade. */
+/* The print edition's paged stylesheet. Handed to Paged.js by print.astro rather than
+   linked by the page: given no stylesheets it parses every one in the document with
+   css-tree, which cannot read Tailwind v4's `@media (width >= 40rem)` and throws on the
+   raw prelude. The site's own CSS still styles the content through the cascade. */
 
-/* ---------------------------------------------------------------- page --- */
 @page {
   size: A4;
   margin: 16mm 14mm 18mm;
@@ -27,7 +24,6 @@
   }
 }
 
-/* The cover carries no running feet and bleeds to its own margins. */
 @page cover {
   margin: 30mm 20mm 24mm;
   @bottom-left {
@@ -41,24 +37,28 @@
   }
 }
 
-/* --------------------------------------------------------------- scale --- */
-/* The one lever for the whole book. Every size on the site is in `rem` — the prose,
-   the stat blocks, Tailwind's own utilities — so the root size scales all of it at
-   once and the proportions stay exactly as they are on screen. At the browser's 16px
-   default an A4 page holds about half as much as it should. */
+/* The one scale lever: every size on the site is in `rem`, so the root size takes the
+   whole book with it and the proportions hold. */
 html {
   font-size: 9.6pt;
 }
 
-/* ---------------------------------------------------------------- type --- */
-/* Serif for anything read in long runs — that is what the body of a rulebook is,
-   and a serif carries a long paragraph on paper better than the site's UI stack.
-   Labels, table headers and stat-block furniture stay sans, for the contrast and
-   because they are scanned rather than read.
-   System faces only: this is a local tool, so there is no reason to ship a webfont. */
+/* Serif for what is read in long runs; sans for what is scanned — labels, table headers,
+   stat-block furniture. System faces only, since nothing here ships. */
 :root {
   --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* The site's `--faint` is 2.6:1 on white — tuned to recede from a backlit dark page, and
+   on paper it disappears. Everything set in it here is meant to be read: the
+   legendary-action note, the ability table's headers, the running footer. One step
+   darker clears 4.5:1 and keeps the faint/muted/text hierarchy intact.
+   `!important` because global.css sets it on `:root.light`, which outranks a plain
+   `:root` no matter which stylesheet lands last. */
+:root,
+:root.light {
+  --faint: #64748b !important;
 }
 body.print-book,
 .book-body,
@@ -81,21 +81,18 @@ body.print-book,
   font-family: var(--sans);
 }
 
-/* --------------------------------------------------------------- reset --- */
-/* The site's page furniture is screen-only: the radial glows behind the header
-   and footer cost ink and mean nothing on paper. */
 body.print-book {
   background: #fff;
   margin: 0;
-  font-size: 9.6pt;
   line-height: 1.5;
 }
+/* The radial glows behind the site's header and footer are screen furniture. */
 body.print-book::before,
 body.print-book::after {
   display: none;
 }
 
-/* --------------------------------------------------------------- cover --- */
+/* ---------- cover ---------- */
 .cover {
   page: cover;
   break-after: page;
@@ -140,16 +137,14 @@ body.print-book::after {
   margin: auto 0 0;
   padding-top: 4mm;
   border-top: 1px solid var(--border);
-  font-size: 9.6pt;
   color: var(--muted);
 }
 
-/* ------------------------------------------------------------- chapter --- */
+/* ---------- chapters ---------- */
 .chapter {
   break-before: page;
 }
 .chapter-head {
-  /* Spans both columns: the heading belongs to the chapter, not to column one. */
   column-span: all;
   margin-bottom: 6mm;
 }
@@ -171,45 +166,108 @@ body.print-book::after {
   letter-spacing: -0.025em;
   color: var(--text);
 }
+/* `column-fill` stays at `balance`. `auto` fills column one first, which sounds more
+   book-like, but the run after a spanning table then cannot fit and a whole section
+   jumps to the next page. */
 .chapter-body {
   column-count: 2;
   column-gap: 8mm;
-  font-size: inherit;
+}
+/* A sub-head takes the section heading's treatment one step smaller, so the two read as
+   one hierarchy. Index bands are h3 as well and keep their filled bar. */
+.chapter-body h3:not(.index-band-head) {
+  margin: 1.5rem 0 0.35rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--accent);
+  font-size: 1.08rem;
 }
 
-/* A creature link prints its page. The number is filled in after pagination — see
-   print.astro for why target-counter cannot do it — so the placeholder is real text
-   that reserves the space during layout. Tabular figures keep the width steady when
-   the digits are swapped in. */
-.book-body a {
-  color: inherit;
-  text-decoration: none;
+/* ---------- authored controls (see AGENTS.md) ---------- */
+/* `<div class="wide">` gives a section the page. Wrap the whole section, not just its
+   table: a spanning element splits the column flow, and the short run left above it
+   balances into two stubby columns. */
+.chapter-body > .wide {
+  column-span: all;
+  margin: 0.5rem 0 1.2rem;
 }
-.pageref {
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+/* `<PageBreak />`. `column-span` is what makes it break the page, not just its column. */
+.page-break {
+  break-before: page;
+  column-span: all;
+  height: 0;
+  margin: 0;
 }
 
-/* ---------------------------------------------------------- stat block --- */
-/* On screen the block is a card: panel fill, border, rounded corners, and a lot of
-   padding to lift it off the background. On paper the background is already white, so
-   the card reads as a box drawn around the text and costs a third of the page in
-   padding across 67 of them. What separates blocks here is the rule above the name
-   and the space between them. */
+/* ---------- fragmentation ---------- */
+/* Paged.js discards `break-after: avoid`, so both of these are groups built by
+   print.astro: a heading bound to its next paragraph, and a stat block's identity —
+   name through defences — bound as one object. */
+.keep-with-next,
+.sb-head-group {
+  break-inside: avoid;
+}
+/* One trait or action is one unit; a break inside lands mid-sentence. An entry taller
+   than a column splits anyway, which is the right fallback. */
+.sb-entry,
+.sb-note,
+.sb-entry-block,
+.seed,
+.entry-extras,
+tr {
+  break-inside: avoid;
+}
+
+/* ---------- stat blocks ---------- */
+/* On screen the block is a card lifted off a panel. On paper the page is already white,
+   so the border and its padding only draw a box and cost a third of a page across 67
+   creatures. The filled name bar marks the start instead. */
 .statblock {
   border: 0 !important;
-  border-top: 2pt solid var(--accent) !important;
   border-radius: 0 !important;
   background: none !important;
-  padding: 0.6rem 0 1.1rem !important;
+  padding: 0 0 1.1rem !important;
   margin: 0 !important;
+}
+.sb-name {
+  background: var(--accent);
+  padding: 0.2rem 0.45rem !important;
+  margin: 0 0 0.45rem !important;
+}
+.sb-name {
+  color: #fff !important;
+}
+/* `--faint` is tuned to sit back from a dark screen; on paper at 8.4pt it drops out of
+   the page. The type line is a fact about the creature, not a caption. */
+.sb-kicker {
+  color: var(--muted) !important;
 }
 .entry {
   margin: 0 0 1.4rem !important;
 }
-/* The ability grid is sized for a phone, not a 78mm column, and its Save column was
-   being clipped off the edge. */
+/* No rules between the parts either — five hairlines a creature, and space separates
+   them just as well. */
+.sb-top,
+.sb-abilities-scroll,
+.sb-traits-list,
+.sb-section {
+  border-top: 0 !important;
+  padding-top: 0 !important;
+}
+.sb-top,
+.sb-traits-list {
+  padding-bottom: 0 !important;
+  margin: 0.5rem 0 !important;
+}
+.sb-section {
+  margin-top: 0.6rem !important;
+}
+/* With no rule above it, the label is the only thing marking a section. */
+.sb-section h4 {
+  margin: 0 0 0.3rem !important;
+  font-size: 0.88rem !important;
+  letter-spacing: 0.08em;
+}
+/* The ability grid carries a phone-sized min-width that pushed Save off the column. */
 .sb-abilities {
   min-width: 0 !important;
   width: 100%;
@@ -219,45 +277,73 @@ body.print-book::after {
   overflow: visible !important;
 }
 
-/* ---------------------------------------------------------- pagination --- */
-/* A stat block may legitimately run longer than a column, so it may break — but
-   never in its opening, where the name would sit alone at the foot of one. */
-.statblock {
-  break-inside: auto;
+/* ---------- encounters ---------- */
+/* No box round the concept and no side-by-side terrain/roster: in a column the grid
+   halves an already narrow measure and clipped the roster's last column. Concept,
+   terrain and roster run one after another, and their headings drop the uppercase
+   label treatment to read as ordinary sub-heads. */
+.seed-concept {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 0 0.4rem !important;
 }
-.sb-name,
-.sb-kicker,
-.sb-top,
-.sb-abilities-scroll,
-.sb-traits-list {
+.seed-cols {
+  display: block !important;
+}
+.seed-terrain {
+  margin-bottom: 0.4rem;
+}
+.seed h3 {
+  font-family: var(--serif);
+  font-size: 1.08rem !important;
+  font-weight: 700 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: var(--text) !important;
+}
+
+/* ---------- creature indexes ---------- */
+/* Without the span this is nested multicol and the chapter's two columns win. */
+.creature-index {
+  column-span: all;
+  column-count: 3;
+  column-gap: 7mm;
+}
+.index-band {
   break-inside: avoid;
+  margin: 0 0 0.9rem;
 }
-.sb-name,
-.sb-kicker,
-.sb-section h4 {
-  break-after: avoid;
+.index-band-head {
+  margin: 0 0 0.35rem !important;
+  padding: 0.15rem 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
-.book-body h2,
-.book-body h3,
-.book-body h4 {
-  break-after: avoid;
+.index-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.seed,
-.entry-extras {
-  break-inside: avoid;
-}
-table {
-  break-inside: auto;
-}
-tr {
+.index-list li {
+  margin: 0;
+  padding: 0.05rem 0;
   break-inside: avoid;
 }
 
-/* ---------------------------------------------------------- CR index --- */
-.index-grid {
-  column-count: 2;
-  column-gap: 8mm;
+/* ---------- cross-references ---------- */
+/* print.astro fills the digits in after pagination; the placeholder reserves the space
+   during layout. Tabular figures keep the width steady when they are swapped. */
+.book-body a {
+  color: inherit;
+  text-decoration: none;
 }
-.index-grid table {
-  font-size: 7.6pt;
+.pageref {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
