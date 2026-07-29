@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.4",
@@ -16,6 +17,8 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "pagedjs": "^0.4.3"
+    "jsdom": "^26.1.0",
+    "pagedjs": "^0.4.3",
+    "vitest": "^3.2.6"
   }
 }

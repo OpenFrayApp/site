@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BookLayout from '../../layouts/BookLayout.astro';
 
+/** One route per chapter of the book, each handed its collection entry as props. */
 export async function getStaticPaths() {
   const chapters = await getCollection('waking-garden');
   return chapters.map((chapter) => ({ params: { slug: chapter.id }, props: { chapter } }));

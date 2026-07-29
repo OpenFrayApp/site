@@ -26,6 +26,7 @@ export const creatureSlug = (name: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
+/** A challenge rating as printed: fractions as "1/8"–"1/2", a missing CR as "—". */
 export const formatCr = (cr: number | undefined): string => {
   if (cr == null) return '—';
   if (cr === 0.125) return '1/8';
@@ -39,11 +40,13 @@ export const formatCr = (cr: number | undefined): string => {
 export const proficiencyBonus = (cr: number): number =>
   cr <= 4 ? 2 : 3 + Math.floor((Math.min(cr, 28) - 5) / 4) + (cr >= 29 ? 1 : 0);
 
+/** The ability modifier for a score: (score − 10) / 2, rounded down. */
 export const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 
 /** Signed modifier the way a stat block prints it, with a true minus sign. */
 export const signed = (n: number): string => (n < 0 ? `−${Math.abs(n)}` : `+${n}`);
 
+/** Uppercase the first letter of every word; the rest of each word is left as is. */
 export const titleCase = (s: string): string => s.replace(/\b\w/g, (c) => c.toUpperCase());
 
 // Spell names are stored lowercase; plain title case would give "Speak With Plants".

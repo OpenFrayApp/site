@@ -10,6 +10,7 @@
 // table and fill the column.
 export default function rehypeTableScroll() {
   return (tree) => {
+    /** Recurse the tree, swapping each table for a div.table-scroll that wraps it. */
     const walk = (node) => {
       if (!node.children) return;
       for (let i = 0; i < node.children.length; i++) {

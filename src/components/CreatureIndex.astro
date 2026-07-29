@@ -21,6 +21,7 @@ for (const chapter of await getCollection('waking-garden')) {
   }
 }
 
+/** The link to a creature's stat block: chapter page plus #c- anchor, or the anchor alone. */
 const href = (name: string) => {
   const anchor = `#c-${creatureSlug(name)}`;
   const chapter = chapterOf.get(name);

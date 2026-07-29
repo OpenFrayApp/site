@@ -58,32 +58,20 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
     }
 
     <script>
-      // Print says "book" where the web says "library". The count is asserted so a copy
-      // edit that changes it reports rather than silently rewriting a sentence.
+      import {
+        bindHeadingsToNext,
+        flattenStatBlockFolds,
+        groupStatBlockHeads,
+        insertPageRefPlaceholders,
+        normalizeColumnTops,
+        replaceLibraryTerms,
+        resolvePageRefs,
+      } from '../../lib/print.ts';
+
+      // The count is asserted so a copy edit that changes the web's "library" wording
+      // reports rather than silently rewriting a sentence.
       const EXPECTED_LIBRARY_TERMS = 5;
-      const TERMS = [
-        [/\blibrary\b/g, 'book'],
-        [/\blibraries\b/g, 'books'],
-      ];
-
-      // Rejecting SCRIPT and STYLE matters: plain SHOW_TEXT rewrote this file's own
-      // regex literals and inflated the count.
-      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-        acceptNode: (node) =>
-          /^(SCRIPT|STYLE)$/.test(node.parentElement?.tagName ?? '')
-            ? NodeFilter.FILTER_REJECT
-            : NodeFilter.FILTER_ACCEPT,
-      });
-
-      let hits = 0;
-      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-        let text = node.nodeValue;
-        for (const [from, to] of TERMS) {
-          hits += (text.match(from) ?? []).length;
-          text = text.replace(from, to);
-        }
-        if (text !== node.nodeValue) node.nodeValue = text;
-      }
+      const hits = replaceLibraryTerms(document.body);
       if (hits !== EXPECTED_LIBRARY_TERMS) {
         console.warn(
           `Print: replaced ${hits} "library" terms, expected ${EXPECTED_LIBRARY_TERMS}. ` +
@@ -91,53 +79,10 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         );
       }
 
-      // The site folds a stat block into a <details>; print wants all of it, flattened
-      // back to plain siblings so the grouping below still sees name, lore, stats and
-      // defences as children of .statblock.
-      for (const fold of document.querySelectorAll('.statblock details')) {
-        const summary = fold.querySelector('summary');
-        if (summary) summary.replaceWith(...summary.childNodes);
-        fold.replaceWith(...fold.childNodes);
-      }
-
-      // A stat block breaks between its sections but never inside its identity — name,
-      // type line, lore, stats, abilities, defences. Those are siblings with no element
-      // of their own, so the run gets one to hang `break-inside: avoid` on.
-      for (const block of document.querySelectorAll('.statblock')) {
-        const children = [...block.children];
-        const end = children.findIndex((el) => el.classList.contains('sb-traits-list'));
-        if (end < 1) continue;
-        const group = document.createElement('div');
-        group.className = 'sb-head-group';
-        children[0].before(group);
-        group.append(...children.slice(0, end + 1));
-      }
-
-      // Paged.js discards `break-after: avoid` — it computes back to `auto` — so a
-      // heading and the paragraph under it are bound into one unsplittable block instead.
-      for (const body of document.querySelectorAll('.chapter-body')) {
-        for (const heading of [...body.querySelectorAll('h2, h3, h4')]) {
-          const next = heading.nextElementSibling;
-          if (!next || heading.closest('.wide, .sb-head-group') || next.tagName === 'H2') continue;
-          const keep = document.createElement('div');
-          keep.className = 'keep-with-next';
-          heading.before(keep);
-          keep.append(heading, next);
-        }
-      }
-
-      // Page numbers are filled in after pagination, so the placeholder has to reserve
-      // the space now — growing laid-out text would overflow a page silently.
-      // `*=` not `^=`: a link to another chapter is a full site path, and matching only
-      // bare fragments skipped most of the book.
-      let refCount = 0;
-      for (const link of document.querySelectorAll('.book-body a[href*="#c-"]')) {
-        const ref = document.createElement('span');
-        ref.className = 'pageref';
-        ref.textContent = ' (p. 00)';
-        link.after(ref);
-        refCount += 1;
-      }
+      flattenStatBlockFolds(document);
+      groupStatBlockHeads(document);
+      bindHeadingsToNext(document);
+      const refCount = insertPageRefPlaceholders(document);
 
       try {
         // Only print-paged.css is handed over. Given no stylesheets Paged.js strips and

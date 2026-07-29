@@ -56,6 +56,7 @@ export interface Crumb {
   url: string;
 }
 
+/** A JSON-LD BreadcrumbList node; relative crumb URLs get the site origin prefixed. */
 export const breadcrumbs = (items: Crumb[]) => ({
   '@type': 'BreadcrumbList',
   itemListElement: items.map((item, i) => ({

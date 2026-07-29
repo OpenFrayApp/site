@@ -7,6 +7,7 @@ import { createMarkdownProcessor } from '@astrojs/markdown-remark';
 // how the console renders the same strings, without a second markdown dependency.
 // The processor is built once per build, not per creature.
 let processor: Awaited<ReturnType<typeof createMarkdownProcessor>> | undefined;
+/** Render a markdown string to HTML with the shared processor, created on first use. */
 async function render(markdown: string): Promise<string> {
   processor ??= await createMarkdownProcessor({});
   const { code } = await processor.render(markdown);

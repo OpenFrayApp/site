@@ -230,11 +230,13 @@ const features = [
     const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
     const slides = Array.from(document.querySelectorAll<HTMLElement>('.lightbox-slide'));
     if (dialog && slides.length) {
+      /** Make slide i active, wrapping past either end, and store the index on the dialog. */
       const show = (i: number) => {
         const index = (i + slides.length) % slides.length;
         slides.forEach((s, n) => s.toggleAttribute('data-active', n === index));
         dialog.dataset.index = String(index);
       };
+      /** Open the lightbox on slide i, with the page scroll locked behind it. */
       const open = (i: number) => {
         show(i);
         // Lock the page behind the modal so it can't scroll under the overlay.
@@ -247,6 +249,7 @@ const features = [
         document.documentElement.style.overflow = '';
         dialog.close();
       };
+      /** Move the lightbox by delta slides from the one on screen. */
       const step = (delta: number) => show(Number(dialog.dataset.index ?? 0) + delta);
 
       document.querySelectorAll<HTMLButtonElement>('.shot-thumb').forEach((btn) => {

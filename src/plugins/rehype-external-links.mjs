@@ -10,6 +10,7 @@ const SITE = /^https?:\/\/(www\.)?openfray\.app/i;
 
 export default function rehypeExternalLinks() {
   return (tree) => {
+    /** Recurse the tree, setting target and rel on every anchor that leaves the site. */
     const walk = (node) => {
       if (!node.children) return;
       for (const child of node.children) {
