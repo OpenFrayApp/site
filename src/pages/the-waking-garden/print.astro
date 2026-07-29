@@ -146,6 +146,53 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         );
       }
 
+      // The overview carries a hand-maintained challenge-rating index for the web. This
+      // page generates one from the compendium, so the authored copy is dropped rather
+      // than printed twice — and a 4-column table in one of two columns clips its last
+      // column anyway. Everything from that heading to the next section goes.
+      const authoredCr = document.getElementById('index-by-challenge-rating');
+      const speciesHeading = document.getElementById('index-by-species');
+      if (authoredCr) {
+        for (let node = authoredCr; node && node !== speciesHeading;) {
+          const next = node.nextElementSibling;
+          node.remove();
+          node = next;
+        }
+      }
+
+      // The species index is authored — the stage-by-stage mapping is not in the
+      // compendium — so it stays, but it needs the page rather than a column.
+      if (speciesHeading) {
+        const wide = document.createElement('section');
+        // `book-body` too: every prose rule on the site is scoped to it, so a section
+        // moved out of one renders as unstyled text.
+        wide.className = 'chapter index-wide book-body';
+        for (let node = speciesHeading; node;) {
+          const next = node.nextElementSibling;
+          wide.append(node);
+          node = next;
+        }
+        document.querySelector('.cover')?.after(wide);
+      }
+
+      // A creature link prints its page number. Paged.js's own target-counter cannot do
+      // it: it resolves against the pages built so far, during layout, so every forward
+      // reference — which is most of them — finds nothing and renders empty. Filling it
+      // in afterwards is exact, but it would also grow text that has already been laid
+      // out and silently overflow a page, so the placeholder below reserves the space
+      // now and only the digits change later.
+      // `*=` not `^=`: a link to a creature in another chapter is a full site path
+      // (/the-waking-garden/chapter-2/#c-rollrind), and only same-chapter links are bare
+      // fragments. Matching just the latter silently skipped most of the book.
+      let refCount = 0;
+      for (const link of document.querySelectorAll('.book-body a[href*="#c-"]')) {
+        const ref = document.createElement('span');
+        ref.className = 'pageref';
+        ref.textContent = ' (p. 00)';
+        link.after(ref);
+        refCount += 1;
+      }
+
       // pagedjs gates its polyfill build behind an export condition Vite does not
       // resolve, so drive the Previewer directly. It does what the polyfill does.
       //
@@ -162,7 +209,33 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
           import('../../styles/print-paged.css?raw'),
         ]);
         const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': pagedCss }]);
-        console.info(`Paged.js: ${flow.total} pages.`);
+
+        // Resolve against the rendered pages, not the source. Paged.js keeps the
+        // original markup in a <template> and lays out clones of it, so the nodes
+        // captured above are the ones nobody sees — and every creature id now exists
+        // twice, which is why the lookup is scoped rather than getElementById.
+        const area = document.querySelector('.pagedjs_pages');
+        const pageOf = new Map();
+        area.querySelectorAll('.pagedjs_page').forEach((page, i) => pageOf.set(page, i + 1));
+
+        let resolved = 0;
+        for (const ref of area.querySelectorAll('.pageref')) {
+          const href = ref.previousElementSibling?.getAttribute('href');
+          const slug = href?.slice(href.indexOf('#') + 1);
+          const target = slug && area.querySelector(`[id="${CSS.escape(slug)}"]`);
+          const page = target && pageOf.get(target.closest('.pagedjs_page'));
+          if (page) {
+            ref.textContent = ` (p. ${page})`;
+            resolved += 1;
+          } else {
+            ref.remove();
+          }
+        }
+        if (resolved < refCount) {
+          console.warn(`Print: ${refCount - resolved} creature reference(s) found no target.`);
+        }
+
+        console.info(`Paged.js: ${flow.total} pages, ${resolved}/${refCount} refs resolved.`);
         document.body.dataset.pages = String(flow.total);
       } catch (error) {
         console.error('Paged.js failed to paginate:', error);

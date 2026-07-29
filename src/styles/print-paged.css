@@ -50,6 +50,37 @@ html {
   font-size: 9.6pt;
 }
 
+/* ---------------------------------------------------------------- type --- */
+/* Serif for anything read in long runs — that is what the body of a rulebook is,
+   and a serif carries a long paragraph on paper better than the site's UI stack.
+   Labels, table headers and stat-block furniture stay sans, for the contrast and
+   because they are scanned rather than read.
+   System faces only: this is a local tool, so there is no reason to ship a webfont. */
+:root {
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+body.print-book,
+.book-body,
+.book-body p,
+.book-body li,
+.book-body td,
+.statblock {
+  font-family: var(--serif);
+}
+.chapter-eyebrow,
+.cover-kicker,
+.cover-meta,
+.book-body th,
+.sb-kicker,
+.sb-section h4,
+.sb-abilities,
+.sb-top,
+.sb-traits-list,
+.entry-extras h4 {
+  font-family: var(--sans);
+}
+
 /* --------------------------------------------------------------- reset --- */
 /* The site's page furniture is screen-only: the radial glows behind the header
    and footer cost ink and mean nothing on paper. */
@@ -146,14 +177,46 @@ body.print-book::after {
   font-size: inherit;
 }
 
-/* A creature link prints its page instead of going nowhere. Paged.js resolves
-   target-counter; a browser's own print engine does not implement it. */
-.book-body a[href^='#c-']::after {
-  content: ' (p. ' target-counter(attr(href url), page) ')';
-  color: var(--muted);
-}
+/* A creature link prints its page. The number is filled in after pagination — see
+   print.astro for why target-counter cannot do it — so the placeholder is real text
+   that reserves the space during layout. Tabular figures keep the width steady when
+   the digits are swapped in. */
 .book-body a {
+  color: inherit;
   text-decoration: none;
+}
+.pageref {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- stat block --- */
+/* On screen the block is a card: panel fill, border, rounded corners, and a lot of
+   padding to lift it off the background. On paper the background is already white, so
+   the card reads as a box drawn around the text and costs a third of the page in
+   padding across 67 of them. What separates blocks here is the rule above the name
+   and the space between them. */
+.statblock {
+  border: 0 !important;
+  border-top: 2pt solid var(--accent) !important;
+  border-radius: 0 !important;
+  background: none !important;
+  padding: 0.6rem 0 1.1rem !important;
+  margin: 0 !important;
+}
+.entry {
+  margin: 0 0 1.4rem !important;
+}
+/* The ability grid is sized for a phone, not a 78mm column, and its Save column was
+   being clipped off the edge. */
+.sb-abilities {
+  min-width: 0 !important;
+  width: 100%;
+  table-layout: fixed;
+}
+.sb-abilities-scroll {
+  overflow: visible !important;
 }
 
 /* ---------------------------------------------------------- pagination --- */
