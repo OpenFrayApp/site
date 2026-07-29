@@ -1,0 +1,200 @@
+/* The print edition's paged stylesheet — passed to Paged.js, not linked by the page.
+   Paged.js parses whatever stylesheets it is given with css-tree, and css-tree cannot
+   read Tailwind v4's modern media syntax (`@media (width >= 40rem)`): its prelude comes
+   back raw, and Paged.js's own print-media handler then throws on it. Handing it only
+   this file keeps the site's stylesheet out of that parser while leaving it to style the
+   content through the normal cascade. */
+
+/* ---------------------------------------------------------------- page --- */
+@page {
+  size: A4;
+  margin: 16mm 14mm 18mm;
+
+  @bottom-left {
+    content: 'The Waking Garden';
+    font-size: 7.5pt;
+    color: var(--faint);
+  }
+  @bottom-center {
+    content: counter(page);
+    font-size: 7.5pt;
+    color: var(--faint);
+  }
+  @bottom-right {
+    content: 'openfray.app';
+    font-size: 7.5pt;
+    color: var(--faint);
+  }
+}
+
+/* The cover carries no running feet and bleeds to its own margins. */
+@page cover {
+  margin: 30mm 20mm 24mm;
+  @bottom-left {
+    content: none;
+  }
+  @bottom-center {
+    content: none;
+  }
+  @bottom-right {
+    content: none;
+  }
+}
+
+/* --------------------------------------------------------------- scale --- */
+/* The one lever for the whole book. Every size on the site is in `rem` — the prose,
+   the stat blocks, Tailwind's own utilities — so the root size scales all of it at
+   once and the proportions stay exactly as they are on screen. At the browser's 16px
+   default an A4 page holds about half as much as it should. */
+html {
+  font-size: 9.6pt;
+}
+
+/* --------------------------------------------------------------- reset --- */
+/* The site's page furniture is screen-only: the radial glows behind the header
+   and footer cost ink and mean nothing on paper. */
+body.print-book {
+  background: #fff;
+  margin: 0;
+  font-size: 9.6pt;
+  line-height: 1.5;
+}
+body.print-book::before,
+body.print-book::after {
+  display: none;
+}
+
+/* --------------------------------------------------------------- cover --- */
+.cover {
+  page: cover;
+  break-after: page;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.cover-kicker {
+  margin: 0 0 14mm;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.cover-title {
+  margin: 0 0 3mm;
+  font-size: 46pt;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+.cover-subtitle {
+  margin: 0 0 7mm;
+  font-size: 15pt;
+  color: var(--muted);
+}
+.cover-rule {
+  width: 36mm;
+  margin: 0 0 7mm;
+  border: 0;
+  border-top: 2.5pt solid var(--accent);
+}
+.cover-lede {
+  max-width: 84%;
+  margin: 0;
+  font-size: 11pt;
+  color: var(--muted);
+}
+.cover-meta {
+  margin: auto 0 0;
+  padding-top: 4mm;
+  border-top: 1px solid var(--border);
+  font-size: 9.6pt;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------- chapter --- */
+.chapter {
+  break-before: page;
+}
+.chapter-head {
+  /* Spans both columns: the heading belongs to the chapter, not to column one. */
+  column-span: all;
+  margin-bottom: 6mm;
+}
+.chapter-eyebrow {
+  margin: 0 0 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.chapter-title {
+  margin: 0;
+  padding-bottom: 3mm;
+  border-bottom: 2.5pt solid var(--accent);
+  font-size: 21pt;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+.chapter-body {
+  column-count: 2;
+  column-gap: 8mm;
+  font-size: inherit;
+}
+
+/* A creature link prints its page instead of going nowhere. Paged.js resolves
+   target-counter; a browser's own print engine does not implement it. */
+.book-body a[href^='#c-']::after {
+  content: ' (p. ' target-counter(attr(href url), page) ')';
+  color: var(--muted);
+}
+.book-body a {
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------- pagination --- */
+/* A stat block may legitimately run longer than a column, so it may break — but
+   never in its opening, where the name would sit alone at the foot of one. */
+.statblock {
+  break-inside: auto;
+}
+.sb-name,
+.sb-kicker,
+.sb-top,
+.sb-abilities-scroll,
+.sb-traits-list {
+  break-inside: avoid;
+}
+.sb-name,
+.sb-kicker,
+.sb-section h4 {
+  break-after: avoid;
+}
+.book-body h2,
+.book-body h3,
+.book-body h4 {
+  break-after: avoid;
+}
+.seed,
+.entry-extras {
+  break-inside: avoid;
+}
+table {
+  break-inside: auto;
+}
+tr {
+  break-inside: avoid;
+}
+
+/* ---------------------------------------------------------- CR index --- */
+.index-grid {
+  column-count: 2;
+  column-gap: 8mm;
+}
+.index-grid table {
+  font-size: 7.6pt;
+}

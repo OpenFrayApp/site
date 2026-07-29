@@ -1,0 +1,173 @@
+---
+// The print edition. LOCAL ONLY — scripts/assemble-site.mjs deletes this route from
+// dist/, so it never ships. Run `npm run dev -w site`, open
+// http://localhost:4321/the-waking-garden/print/, and print to PDF.
+//
+// It exists as an Astro page rather than a generator so the book and the site render
+// through the same components and the same stylesheet. The previous edition was built
+// in Typst, and most of that work went into restating the site's CSS in another
+// language; anything that has to be restated eventually drifts.
+//
+// Paged.js supplies what a browser's print engine does not: @page margin boxes, a page
+// counter, and target-counter() so a creature link can print its page number.
+import { getCollection, render } from 'astro:content';
+import { creatures, formatCr, creatureSlug, titleCase } from '../../data/wakingGarden.ts';
+import '../../styles/global.css';
+import '../../styles/waking-garden.css';
+
+const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
+const parts = await Promise.all(
+  chapters.map(async (c) => ({ ...c, Content: (await render(c)).Content })),
+);
+
+const byCr = [...creatures].sort(
+  (a, b) => (a.cr ?? 0) - (b.cr ?? 0) || a.name.localeCompare(b.name),
+);
+const half = Math.ceil(byCr.length / 2);
+const crColumns = [byCr.slice(0, half), byCr.slice(half)];
+
+const crs = creatures.map((c) => c.cr ?? 0);
+const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
+
+// Print says "book" where the web says "library". The swap is asserted rather than
+// assumed: if a copy edit changes the count, the console says so instead of the two
+// editions quietly diverging.
+---
+
+<html lang="en" class="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>The Waking Garden — print edition</title>
+  </head>
+  <body class="print-book">
+    <section class="cover">
+      <p class="cover-kicker">OpenFray · Compendium</p>
+      <h1 class="cover-title">The Waking<br />Garden</h1>
+      <p class="cover-subtitle">A bestiary of cultivated horrors, compatible with 5e and 5.5e.</p>
+      <hr class="cover-rule" />
+      <p class="cover-lede">
+        Sixty-seven creatures for a world where the things people grow have started growing back.
+        Twelve species of sentient vegetable across three stages of life, the ecology that lives
+        alongside them, the fey who tend them, and the thing they are all cuttings from.
+      </p>
+      <p class="cover-meta">
+        <strong>{creatures.length} creatures</strong> · CR {range} · 19 ready-to-run fights<br />
+        Built for OpenFray, a free combat console for Game Masters — openfray.app
+      </p>
+    </section>
+
+    {
+      parts.map((part) => (
+        <section class="chapter">
+          <header class="chapter-head">
+            {part.data.eyebrow && <p class="chapter-eyebrow">{part.data.eyebrow}</p>}
+            <h1 class="chapter-title">{part.data.title}</h1>
+          </header>
+          <div class="book-body chapter-body">
+            <part.Content />
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="chapter">
+      <header class="chapter-head">
+        <p class="chapter-eyebrow">Index</p>
+        <h1 class="chapter-title">By challenge rating</h1>
+      </header>
+      <div class="book-body index-grid">
+        {
+          crColumns.map((column) => (
+            <table>
+              <thead>
+                <tr>
+                  <th>CR</th>
+                  <th>XP</th>
+                  <th>Creature</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {column.map((c) => (
+                  <tr>
+                    <td>{formatCr(c.cr)}</td>
+                    <td>{c.xp?.toLocaleString('en-US')}</td>
+                    <td>
+                      <a href={`#c-${creatureSlug(c.name)}`}>{c.name}</a>
+                    </td>
+                    <td>{titleCase(String(c.type).split(' ').pop() ?? '')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      /* `define:vars` would force this inline, and an inline script cannot resolve the
+        bare `pagedjs` specifier, so the expected count lives here instead. */
+    }
+    <script>
+      // The web edition says "library"; print says "book". The count is asserted rather
+      // than assumed — a copy edit that changes it should say so, not silently rewrite
+      // a sentence that no longer means what the substitution expects.
+      const EXPECTED_LIBRARY_TERMS = 5;
+      const TERMS = [
+        [/\blibrary\b/g, 'book'],
+        [/\blibraries\b/g, 'books'],
+      ];
+
+      // SHOW_TEXT alone walks into <script> and <style>, where the first pass rewrote
+      // this file's own regex literals and inflated the count.
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) =>
+          /^(SCRIPT|STYLE)$/.test(node.parentElement?.tagName ?? '')
+            ? NodeFilter.FILTER_REJECT
+            : NodeFilter.FILTER_ACCEPT,
+      });
+
+      let hits = 0;
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        let text = node.nodeValue;
+        for (const [from, to] of TERMS) {
+          hits += (text.match(from) ?? []).length;
+          text = text.replace(from, to);
+        }
+        if (text !== node.nodeValue) node.nodeValue = text;
+      }
+      if (hits !== EXPECTED_LIBRARY_TERMS) {
+        console.warn(
+          `Print: replaced ${hits} "library" terms, expected ${EXPECTED_LIBRARY_TERMS}. ` +
+            'A copy edit changed how often the word appears — check the result, then ' +
+            'update EXPECTED_LIBRARY_TERMS in print.astro.',
+        );
+      }
+
+      // pagedjs gates its polyfill build behind an export condition Vite does not
+      // resolve, so drive the Previewer directly. It does what the polyfill does.
+      //
+      // preview() empties the body before it chunks, so a failure halfway leaves a blank
+      // page and no clue why. Say so instead.
+      try {
+        // Hand it only the paged stylesheet. Given none, it strips every stylesheet in
+        // the document and parses them with css-tree, which cannot read Tailwind v4's
+        // `@media (width >= 40rem)` — the prelude comes back raw and Paged.js's own
+        // print-media handler throws on it. Passing one keeps the site's CSS out of that
+        // parser and applying through the normal cascade, which is where it belongs.
+        const [{ Previewer }, { default: pagedCss }] = await Promise.all([
+          import('pagedjs'),
+          import('../../styles/print-paged.css?raw'),
+        ]);
+        const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': pagedCss }]);
+        console.info(`Paged.js: ${flow.total} pages.`);
+        document.body.dataset.pages = String(flow.total);
+      } catch (error) {
+        console.error('Paged.js failed to paginate:', error);
+        document.body.dataset.pages = 'failed';
+      }
+    </script>
+  </body>
+</html>
