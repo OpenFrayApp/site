@@ -387,9 +387,11 @@ const navLink =
         document.querySelectorAll('a[href="/docs/"]').forEach(function (a) {
           a.addEventListener('click', send('Site: open docs'));
         });
-        document.querySelectorAll('a[href*="chromewebstore"]').forEach(function (a) {
-          a.addEventListener('click', send('Site: get importer'));
-        });
+        document
+          .querySelectorAll('a[href*="chromewebstore"], a[href*="addons.mozilla.org"]')
+          .forEach(function (a) {
+            a.addEventListener('click', send('Site: get importer'));
+          });
       })();
     </script>
   </body>

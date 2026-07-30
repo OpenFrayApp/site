@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Cta from '../components/Cta.astro';
+import DownloadIcon from '../components/DownloadIcon.astro';
 import { hero, tagline } from '../data/hero.ts';
 import { Picture } from 'astro:assets';
 import combat from '../assets/screenshots/combat.png';
@@ -8,8 +9,9 @@ import compendium from '../assets/screenshots/compendium.png';
 import groupSave from '../assets/screenshots/group-save.png';
 import spell from '../assets/screenshots/spell.png';
 
-const importer =
+const importerChrome =
   'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
+const importerFirefox = 'https://addons.mozilla.org/en-US/firefox/addon/openfray-importer/';
 
 const shots = [
   {
@@ -149,31 +151,32 @@ const features = [
 
     {
       /* The importer sits below the feature grid, after the pitch — it's a companion tool,
-        not the way in. A second (Firefox) button will sit beside it later. */
+        not the way in. One button per browser store, neither preferred over the other. */
     }
     <div class={`importer-row flex flex-wrap justify-center gap-3 ${BLOCK}`}>
       <Cta
-        href={importer}
-        variant="ghost"
+        href={importerChrome}
         target="_blank"
         rel="noreferrer"
         title="OpenFray Importer on the Chrome Web Store"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="chrome-icon size-[1.15rem]">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"
-          ></circle>
-          <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
-          <line x1="12" y1="8" x2="21.5" y2="8" stroke="currentColor" stroke-width="2"></line>
-          <line x1="8.5" y1="14" x2="3.7" y2="5.7" stroke="currentColor" stroke-width="2"></line>
-          <line x1="15.5" y1="14" x2="10.7" y2="22.3" stroke="currentColor" stroke-width="2"></line>
-        </svg>
+        <DownloadIcon />
         Get the importer for Chrome
+      </Cta>
+      <Cta
+        href={importerFirefox}
+        target="_blank"
+        rel="noreferrer"
+        title="OpenFray Importer on Firefox Browser Add-ons"
+      >
+        <DownloadIcon />
+        Get the importer for Firefox
       </Cta>
     </div>
 
     <p class="cta-note mt-4 mb-0 max-w-[34rem] text-sm leading-relaxed text-faint">
-      The importer is a free Chrome extension that turns a D&amp;D&nbsp;Beyond creature page into an
-      OpenFray creature, so you never retype a stat block. A Firefox version is on the way.
+      The importer is a free browser extension that turns a D&amp;D&nbsp;Beyond creature page into
+      an OpenFray creature, so you never retype a stat block.
     </p>
   </main>
 
