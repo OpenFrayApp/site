@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import Cta from '../../components/Cta.astro';
+import { BROOD_AND_BLOOM } from '../../data/books.ts';
+import { creatures } from '../../data/broodAndBloom.ts';
+import { formatCr } from '../../data/statblock.ts';
+import BookLayout from '../../layouts/BookLayout.astro';
+
+const chapters = (await getCollection('brood-and-bloom')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const crs = creatures.map((c) => c.cr ?? 0);
+const lowest = formatCr(Math.min(...crs));
+const highest = formatCr(Math.max(...crs));
+
+const title = 'Brood & Bloom — a DnD 5e bestiary for OpenFray';
+const description =
+  'Fifty-eight original creatures for Dungeons and Dragons 5e: three broods of parasites — ' +
+  'one that lives in people, one that takes ground and buildings, one that wants only the ' +
+  'dead — and the order that catalogs them. Free to read, and built into the OpenFray ' +
+  'combat console.';
+---
+
+<BookLayout title={title} description={description} book={BROOD_AND_BLOOM} heading="Brood & Bloom">
+  <p class="lead">A bestiary of parasites, compatible with 5e and 5.5e.</p>
+
+  <p>
+    Fifty-eight creatures whose lives run through other bodies — living, dead, or built — with the
+    rules for what they leave behind in the people, the ground, and the buildings that survive them,
+    and the order of physicians that has been writing all of it down for longer than anyone can
+    remember.
+  </p>
+
+  <ul
+    class="book-stats my-6 flex list-none flex-wrap gap-x-7 gap-y-2 border-y border-border px-0 py-4 text-sm leading-relaxed text-muted"
+  >
+    <li><strong class="text-text">{creatures.length}</strong> creatures</li>
+    <li><strong class="text-text">CR {lowest}–{highest}</strong></li>
+    <li><strong class="text-text">3</strong> broods, 10 lines, 7 diseases</li>
+  </ul>
+
+  <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
+    <Cta href="/console/">Open the console</Cta>
+    <Cta href={`/brood-and-bloom/${chapters[0].id}/`} variant="ghost">Start reading</Cta>
+  </p>
+
+  <h2>Contents</h2>
+
+  <ol class="book-contents mt-4 grid list-none gap-2.5 p-0">
+    {
+      chapters.map((chapter) => (
+        <li>
+          <a
+            class="block rounded-lg border border-border bg-panel px-4 py-3.5 no-underline transition-[border-color,transform] hover:-translate-y-px hover:border-accent"
+            href={`/brood-and-bloom/${chapter.id}/`}
+          >
+            {chapter.data.eyebrow && (
+              <span class="num block text-xs leading-relaxed tracking-widest text-faint uppercase">
+                {chapter.data.eyebrow}
+              </span>
+            )}
+            <strong class="text-base leading-relaxed text-text">{chapter.data.label}</strong>
+            <span class="blurb mt-0.5 block text-sm leading-normal text-muted">
+              {chapter.data.description}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2>Run it in the console</h2>
+
+  <p>
+    Every creature on these pages is already in OpenFray. Open <a href="/console/">the console</a>,
+    then turn on <strong>Brood &amp; Bloom</strong> in <strong>Settings</strong> (the gear at the top
+    right). After that the whole bestiary shows up in <strong>Add creature</strong> and in the compendium,
+    with its attacks, saves, and recharge abilities ready to roll. See{' '}
+    <a href="/docs/reference/settings/">Settings and appearance</a> in the handbook.
+  </p>
+</BookLayout>

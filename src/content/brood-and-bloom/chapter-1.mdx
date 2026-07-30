@@ -1,0 +1,159 @@
+---
+title: 'The Lazaret'
+label: 'The Lazaret'
+description: 'The order that catalogs the broods: its houses, ranks, and files, the classifications the whole library uses, and the rules for magic and terminal cases.'
+order: 1
+eyebrow: 'Chapter 1'
+---
+
+import Creature from '../../components/BroodCreature.astro';
+
+Everything in this library was recorded by the Lazaret, an order of physicians and
+archivists that has been cataloguing the broods for longer than anyone can remember.
+This chapter covers the order itself, the classifications the rest of the library is
+written in, what magic does against the broods, and the rule for the cases nothing
+cures. The terms defined here — the broods, the lines, and the two counters — are used
+by the stat blocks, so this chapter comes first.
+
+## What these creatures are
+
+A parasite is a living organism. In a host, it eats its way through for sustenance and
+growth. Common folk may call the results of its presence "disease" out of ignorance;
+these are not diseases and not curses, and they cannot be treated as either. In this
+library, we use the word "disease" as well where it is the practical word — because it
+is the word a victim uses.
+
+The practical consequence is that healing a victim does nothing. A body carrying a
+parasite is not wounded; it is inhabited. The organism has to come out — extracted,
+starved, driven off, or burned off the land — and each brood's chapter says how.
+
+## The order
+
+A lazaret is a house where the sick are kept apart from everyone else. The order took
+its name from one and never stopped being one. It began as a single quarantine house
+during an outbreak that no longer has a name; the house came through it by a method its
+physicians could not repeat, and what they wrote down afterward became the first file.
+That house still stands and is still in use. The order calls it the first house, and
+everything the Lazaret does now grew out of the habit of writing things down.
+
+The Lazaret does not believe the broods can be destroyed. It believes they can be
+described, and that a thing described accurately enough can be avoided, treated, or
+survived. Its houses take in the infected, its officers travel to find more, and its
+archive keeps what is learned from both. No part of the order is organized around
+killing anything.
+
+### Houses
+
+A lazaret house is a hospital, a school, and a records office in one building, usually
+at the edge of a settlement rather than inside it. There are somewhere between forty
+and sixty; nobody is certain, because houses are founded by officers in the field and
+reported afterward, and some are never reported at all. A house treats anyone who
+reaches it and does not turn out a patient it cannot cure.
+
+### Ranks
+
+The order has three ranks, and in a small house one person often holds two of them:
+
+- **Prosector.** The field rank. Prosectors travel alone, arrive uninvited, and perform
+  the surgeries and amputations described in this library. Most of its practical
+  knowledge was first written down by a prosector.
+- **Lector.** Runs a house. Lectors diagnose, teach, and decide who is admitted. A
+  lector who never served as a prosector is rare and not much respected.
+- **Registrar.** Keeps the files. Every house copies its records to the first house
+  twice a year, and the first house copies nothing back unless it is asked.
+
+No lector outranks another, the one in the first house included. The order has a center
+because its records need one, not because anyone rules from it.
+
+### Classifications
+
+Inquiline, Sporophore, and Necrophore are Lazaret classifications, and so are most of
+the creature names in this library — chantry, reliquary, palimpsest, psalter, censer,
+corbel, reredos. The vocabulary is clerical and archival because the first registrars
+were, and the order does not change a name once it has been filed. What everyone else
+calls these things is shorter, and rarely the same word twice from one valley to the
+next.
+
+Two collective terms from the files are used by stat blocks in this library:
+
+- A **brood creature** is any Inquiline, Sporophore, or Necrophore creature.
+- A **brood disease** is any disease described in this library.
+
+### The doctrine
+
+For each brood, the Lazaret's field instruction is one line long. Each brood's chapter
+explains its instruction in full:
+
+| Brood      | The standing instruction                       |
+| ---------- | ---------------------------------------------- |
+| Inquiline  | The parasite first, then the graft.            |
+| Sporophore | Go at noon, and bring tools for letting it in. |
+| Necrophore | Make no light, make no dead.                   |
+
+## What magic does
+
+Spells and features that restore Hit Points do nothing against any brood disease. Five
+spells are useful, and what each does differs by brood:
+
+| Spell                         | Inquiline                                                   | Sporophore                                                         | Necrophore                         |
+| ----------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------- |
+| _detect poison and disease_   | Finds every parasite and graft in range, and names its line | Reveals a creature's Spore Load, its line, and any disease's stage | Marks every seeded corpse in range |
+| _lesser restoration_          | Detaches a lesser parasite, and works Depth loose early     | Removes 3 Spore Load, and recedes an early disease                 | Nothing to cure                    |
+| _greater restoration_, _heal_ | Works Depth loose at any stage short of 4                   | Cures early, reduces late                                          | Nothing to cure                    |
+| _mass heal_                   | As _heal_, for every creature it heals                      | As _heal_, for every creature it heals                             | Nothing to cure                    |
+
+The exact amounts are in each brood's chapter. Three points apply everywhere:
+
+- **_Detect poison and disease_ is the cheap answer.** Most of what these creatures do
+  is invisible for the first several days; the spell finds it anyway. Against the
+  Necrophore it marks corpses that have been laid in — the only warning the brood
+  gives.
+- **_Protection from poison_ slows nothing down.** It grants Advantage on saving throws
+  against the Poisoned condition, which several stages impose, and makes a bad stage
+  more survivable.
+- **One caution.** Against the chantry line of the Inquiline, the four restoration
+  spells in the table feed the disease instead of treating it. Only _detect poison and
+  disease_ is safe on a chantry case. The rule is in
+  [chapter 2](/brood-and-bloom/chapter-2/#chantry-drought).
+
+## Stage 4
+
+Every brood disease ends at stage 4, and no medicine, procedure, or restoration spell
+in this library reaches a stage 4 case. Two rules govern what is left:
+
+- **The window.** Every stage 4 leaves 1d4 days between the end of the disease and the
+  arrival of the creature it produces. Where stage 4 kills, the victim is an ordinary
+  corpse during that window and a _resurrection_ spell works normally. Where stage 4
+  leaves the victim alive, _resurrection_ has nothing to work on — reaching the same
+  outcome means killing them first and raising them inside the same window.
+- **After the window.** Once the creature has formed, what can be destroyed is a brood
+  creature, and raising it raises a brood creature. What remains is a _wish_ spell, the
+  direct intervention of a god, or a pact with something powerful enough to overrule
+  the outcome.
+
+## The officers
+
+The three ranks share one piece of training, printed on each stat block as **The
+Trained Eye**: a Lazaret officer reads grafts, Spore Load, lines, and disease stages on
+sight. What differs is what each rank does with it.
+
+<Creature name="Lazaret Registrar">
+  **Running it.** The registrar's value is knowledge. The Files makes it a reference the party can
+  question about any brood creature, and Recite and Amend support allies' saving throws against
+  brood effects. It is not built to fight; the Lancet is for cases that stand up mid-examination.
+</Creature>
+
+<Creature name="Lazaret Lector">
+  **Running it.** The lector runs treatment. Intervene removes the small quantities — 1 Depth, 1
+  Spore Load, a Poisoned condition — and Direct hands an ally an immediate, Advantaged Extraction or
+  Medicine check, so treatment can happen twice in a round. A lector rarely travels; meeting one
+  usually means standing in its house.
+</Creature>
+
+<Creature name="Lazaret Prosector">
+  **Running it.** A prosector is statted as dangerous because the Lazaret sends them where nobody
+  else goes, and they come back. Extract removes an attached parasite with no check and no damage;
+  Excise compresses a full surgery into one action, once a day. A prosector who has spent Excise can
+  still perform every procedure in this library — its Medicine bonus meets each procedure's
+  Difficulty Class without Advantage.
+</Creature>

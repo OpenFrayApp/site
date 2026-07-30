@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import { BROOD_AND_BLOOM } from '../../data/books.ts';
+import BookLayout from '../../layouts/BookLayout.astro';
+
+/** One route per chapter of the book, each handed its collection entry as props. */
+export async function getStaticPaths() {
+  const chapters = await getCollection('brood-and-bloom');
+  return chapters.map((chapter) => ({ params: { slug: chapter.id }, props: { chapter } }));
+}
+
+const { chapter } = Astro.props;
+const { Content, headings } = await render(chapter);
+
+const keywords = [
+  'Brood & Bloom',
+  'OpenFray bestiary',
+  'DnD 5e parasite monsters',
+  'Dungeons and Dragons 5e homebrew creatures',
+  chapter.data.title,
+];
+---
+
+<BookLayout
+  title={`${chapter.data.title} — Brood & Bloom | OpenFray`}
+  description={chapter.data.description}
+  book={BROOD_AND_BLOOM}
+  current={chapter.id}
+  eyebrow={chapter.data.eyebrow}
+  heading={chapter.data.title}
+  headings={headings}
+  keywords={keywords}
+>
+  <Content />
+</BookLayout>

@@ -1,0 +1,12 @@
+---
+title: 'Index: By Type'
+label: 'Index: By Type'
+description: 'Every creature in Brood & Bloom listed by creature type — aberrations, plants, monstrosities, and humanoids.'
+order: 7
+eyebrow: 'Appendix C'
+---
+
+import CreatureIndex from '../../components/CreatureIndex.astro';
+import { BROOD_AND_BLOOM } from '../../data/books.ts';
+
+<CreatureIndex by="type" book={BROOD_AND_BLOOM} />
