@@ -24,14 +24,14 @@ its territory produces them faster than anything else in the world.
 
 ### Reproduction
 
-An adult lays in any fresh corpse it can reach, and hours later larvae climb out of
+An adult lays in any fresh corpse it can reach, and 1d6 + 2 hours later 1d4 larvae climb out of
 it:
 
-| Adult           | Lays in          | Larvae             | Time          |
-| --------------- | ---------------- | ------------------ | ------------- |
-| Emberwing       | Any fresh corpse | 1d4 Cinder Nits    | 1d6 + 2 hours |
-| Tallow Imago    | Any fresh corpse | 1d4 Gravewax Grubs | 1d6 + 2 hours |
-| Reliquary Imago | Any fresh corpse | 1d4 Crypt Instars  | 1d6 + 2 hours |
+| Adult           | Lays in          | Larvae         |
+| --------------- | ---------------- | -------------- |
+| Emberwing       | Any fresh corpse | Cinder Nits    |
+| Tallow Imago    | Any fresh corpse | Gravewax Grubs |
+| Reliquary Imago | Any fresh corpse | Crypt Instars  |
 
 <Note type="design note">
   Three hours is short enough that a party resting where they fought wakes to it, and long enough
@@ -49,15 +49,17 @@ it:
 
 Three creatures in this chapter pupate: the cinder nit, the gravewax grub, and the
 sepulchre nymph. Each is the last larval stage of its line, and each carries the
-Pupation trait in full on its stat block. The trait always works the same way: reduced
-to 0 Hit Points by anything except the damage its line cannot survive, the larva seals
-where it stands, and 1 hour later the husk splits and the adult takes its first turn:
+Pupation trait on its stat block. The trait always works the same way: reduced to 0 Hit
+Points by anything except the damage its line cannot survive, the larva seals where it
+stands as a husk, and 1 hour later the husk splits and the adult takes its first turn.
 
-| Line      | Larva           | Husk         | Weakness         | Opens as        |
-| --------- | --------------- | ------------ | ---------------- | --------------- |
-| Ember     | Cinder Nit      | AC 14, 10 HP | Cold             | Emberwing       |
-| Tallow    | Gravewax Grub   | AC 17, 15 HP | Cold and Thunder | Tallow Imago    |
-| Reliquary | Sepulchre Nymph | AC 19, 40 HP | Radiant          | Reliquary Imago |
+Each husk has a stat block of its own, at the end of this chapter:
+
+| Line      | Husk            | Destroyed by    | Opens as        |
+| --------- | --------------- | --------------- | --------------- |
+| Ember     | Cinder Nit      | Cold            | Emberwing       |
+| Tallow    | Gravewax Grub   | Cold or Thunder | Tallow Imago    |
+| Reliquary | Sepulchre Nymph | Radiant         | Reliquary Imago |
 
 Nothing else husks: instars and masses are destroyed at 0 Hit Points like anything
 living, and an adult, once opened, never seals again. During its hour a husk is immune
@@ -72,28 +74,33 @@ the whole time.
 
 ## A colony's territory
 
-A Necrophore colony has no den and no center. Its territory is wherever its dead are,
-and its dead are wherever things die:
+A Necrophore colony has no den and no center. Its territory is wherever corpses are.
 
-- **The standing assumption.** Inside a colony's ground, any corpse dead longer than 3
-  hours has been seeded unless something prevented it — burned, frozen, sunk in
-  running water, or sealed from the air.
-- **Reading the ground.** The signs are leavings: split husks beside old bones, runnels
-  of grey wax down a stair, scorch-rings in grass nothing ever burned, small carcasses
-  wedged into thorn trees at head height — the last being not the brood but the thing
-  that hunts it. A creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom
-  (Survival) check reads the signs, and the age of the oldest husk dates the colony.
-- **A fight is an announcement.** The adults navigate by warmth and by one another's
-  light, and fresh death draws them from miles away. When
-  creatures die in a colony's territory, 1d4 adults arrive within 1d6 + 2 hours of the
-  first death. They come to lay, and they fight whatever interferes.
-- **Camping.** A fire after dark in a colony's ground is a beacon, and so is a lantern.
-  A party that keeps a cold, dark camp — DC 13 Wisdom (Survival) to manage it
-  properly — passes the night beneath the colony's notice unless something nearby dies.
-- **Denying it.** The interval between death and hatching is the window. Corpses
-  burned or frozen inside it produce nothing, and a party willing to spend the hours
-  can starve a colony out of a region one battlefield at a time. The Lazaret pays for
-  exactly this work, by the field.
+Inside a colony's ground, any corpse that is not a necrophore and dead longer than 3
+hours has been seeded unless something prevented it — burned, frozen, sunk in
+running water, or sealed from the air.
+
+The adults navigate by warmth and by one another's light, and fresh death draws them from miles away.
+When creatures die in a colony's territory, 1d4 adults arrive within 1d6 + 2 hours of the
+first death. They come to lay, and they fight whatever interferes.
+
+The interval between death and hatching is the window. Corpses
+burned or frozen inside it produce nothing, and a party willing to spend the hours
+can starve a colony out of a region one battlefield at a time. The Lazaret pays for
+exactly this work, by the field.
+
+### Reading the ground
+
+The signs are leavings: split husks beside old bones, runnels
+of grey wax down a stair, scorch-rings in grass nothing ever burned, small carcasses
+wedged into thorn trees at head height — the last being not the brood but the thing
+that hunts it. A creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom
+(Survival) check reads the signs, and the age of the oldest husk dates the colony.
+
+### Resting and light in a colony's ground
+
+Fire after dark in a colony's ground is a beacon, and so is a lantern.
+A party that keeps a cold, dark camp passes the night beneath the colony's notice unless something nearby dies.
 
 ## No disease
 
@@ -211,6 +218,28 @@ dead were laid with care. Radiance is the one thing it cannot pass through:
   what it does to everything the fight kills is Seed the Dead: the bodies are the battle it is
   actually fighting. Inherited Memory speaks fluently in the voices of the dead its larva ate, and a
   creature that has eaten the right corpse knows things nobody living knows.
+</Creature>
+
+### The husks
+
+A husk is an hour of work left undone. It does nothing, it cannot be moved, and only its
+line's damage reaches what is sealed inside:
+
+<Creature name="Cinder Nit Husk">
+  **Running it.** The cheapest husk to finish and the easiest to walk away from: 10 Hit Points and
+  Vulnerability to Cold, so one cantrip does it. Six nits killed with steel are six husks, and six
+  emberwings loose in the region by evening.
+</Creature>
+
+<Creature name="Gravewax Grub Husk">
+  **Running it.** Two damage types open it, which is the tallow line's whole lesson: a party with
+  Cold or Thunder in reach never meets a Tallow Imago it did not choose to meet.
+</Creature>
+
+<Creature name="Sepulchre Nymph Husk">
+  **Running it.** Armor Class 19, 40 Hit Points, and one damage type that touches it, so a party
+  without Radiant damage cannot finish this inside the hour however hard it swings. Leaving is a
+  legitimate choice and a scheduled Reliquary Imago.
 </Creature>
 
 ### Strays of the wake
