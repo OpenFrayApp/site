@@ -21,7 +21,23 @@ bring tools for letting it in.**
 ## How a sporophore works
 
 No single Sporophore is the creature; the colony is, and every creature in this brood
-is part of one. Three traits carry that, printed in full on each stat block:
+is part of one.
+
+### Colonies and lines
+
+A **colony** is a family: everything grown from one original growth, however far it has
+spread, held together by Mycelial Chorus.
+
+A **line** is what a growth became — rotgill, ashcap, reredos, or orcshroom — and the
+ground decides it, not the parent. A colony whose spores drift across a flooded cellar,
+a burn scar, and a standing wall grows all three of those lines and remains one colony.
+Kinship follows the colony; form follows the ground. This is why a driftling carries
+the Chorus before it has a line: it is already its parent colony's, and only its
+landing decides what it grows into.
+
+### The shared traits
+
+Three traits carry the colony, printed in full on each stat block:
 
 - **Mycelial Chorus.** The creature knows the direction of, and can communicate
   wordlessly with, every member of its colony within 1 mile, and it has Advantage on
@@ -139,11 +155,12 @@ Sunlight stops a colony healing and blunts its spores, so a colony grows
 away from the sun — under floors, into hillsides, behind shutters — and every opened
 roof, felled wall, and dug trench pushes it back.
 
-## Between the lines
+## Between colonies
 
 Nothing a Sporophore grows harms its own colony: its contaminated areas, Difficult
-Terrain, Sporing, and spore actions have no effect on another creature of its own line.
-Between lines it is less simple:
+Terrain, Sporing, and spore actions have no effect on a fellow member, whatever line
+either of them belongs to. A rival colony is another matter, and what one colony can
+do to another depends on their lines:
 
 - **Rotgill and ashcap prey on anything with substance to take, including each other.**
   Rotgill rots what is wet; ashcap dries what is damp and feeds on what is left. Which
@@ -156,11 +173,10 @@ Between lines it is less simple:
 - **Nothing takes reredos.** A reredos growth is bound into masonry with nothing in it
   to rot and nothing to dry, so the other three lines cannot touch it.
 
-### When one line takes another
+### When one colony takes another
 
-A Sporophore that reaches 6 Spore Load from a hostile
-line does not sicken. It dies, and a stage 2 creature of the winning line grows from
-the remains within 1d4 days. Orcshrooms are the exception, being flesh: one that
+A Sporophore that reaches 6 Spore Load from a rival colony does not sicken. It dies,
+and a stage 2 creature of the winning colony grows from the remains within 1d4 days. Orcshrooms are the exception, being flesh: one that
 reaches 6 Spore Load contracts that line's disease and runs the stages like anything
 else, which is how a tribe overtaken by rotgill ends as Drowned Choruses still speaking
 Orc. This contest is also why there is no single Sporophore super-colony: the two lines
@@ -299,8 +315,8 @@ Its remedy and its procedure:
 - **Remedy.** A draught ground from reredos growth, taken over 3 days.
 - **Procedure — manipulation.** The fused joints are broken and reset by hand over an
   hour, with a DC 16 Wisdom (Medicine) check. **Success:** The disease ends and the
-  patient takes 27 (6d8) Bludgeoning damage. **Failure:** The disease is unchanged and
-  the patient takes 13 (3d8) Bludgeoning damage.
+  patient takes 13 (3d8) Bludgeoning damage. **Failure:** The disease is unchanged and
+  the patient takes 27 (6d8) Bludgeoning damage. **Success or Failure** the Bludgeoning damage ignores resistances gained by the disease.
 
 ### Metaplasia
 
@@ -309,20 +325,22 @@ Where the other three lines take a place and wait for people to pass through it,
 one takes the people — not eaten and not killed, but converted, a little at a time,
 into a member of the tribe:
 
-| Stage | Effect                                                                                                                                                                                                                                           |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1     | The fungus eats first. The creature needs twice as much food each day; on any day it goes without the full amount, it gains 1 Exhaustion level.                                                                                                  |
-| 2     | The creature knows the direction of the colony that infected it. At the end of each Long Rest it makes a DC 12 Wisdom saving throw; on a failure, it can't willingly increase its distance from that colony until it finishes another Long Rest. |
-| 3     | The grey shows plainly, and the creature's breath carries the colony. It gains the Sporing trait (5 feet, DC 11), and orcshroom creatures don't attack it unless it or its allies attack them first.                                             |
-| 4     | The creature does not die. Over 1d4 days the change completes, and it stands as an Orcshroom, a member of the tribe, under the Game Master's control.                                                                                            |
+| Stage | Effect                                                                                                                                                                                                                                                                              |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | The fungus eats first. The creature needs twice as much food each day; on any day it goes without the full amount, it gains 1 Exhaustion level.                                                                                                                                     |
+| 2     | The creature is drawn towards the direction of the colony that infected it. At the end of each Long Rest it makes a DC 12 Wisdom saving throw; on a failure, it can't willingly increase its distance from that colony until it finishes another Long Rest with a successful check. |
+| 3     | Grey shows plainly, and the creature's breath carries the colony. It gains the Sporing trait (5 feet, DC 11), and orcshroom creatures don't attack it unless it or its allies attack them first.                                                                                    |
+| 4     | The creature does not die and knows the exact location of the colony that infected it. Over 1d4 days the change completes, and it stands as an Orcshroom, a member of the tribe, under the Game Master's control.                                                                   |
 
 <Note type="design note">
   Stage 3 puts the victim on both sides at once: still themselves, still fighting, and a hazard to
   stand beside, while the tribe has stopped treating them as prey. Stage 4 is the only terminal
   stage in the brood its victim walks away from. A tribe grows two ways — whelps are born colonized,
   and Metaplasia takes everyone else. The [Spore-Struck](#c-spore-struck) is the swifter route, a
-  settled driftling rather than this disease, and its Not Yet Gone trait belongs to that route
-  alone.
+  settled driftling rather than this disease, and its Not Yet Gone trait belongs to that route alone
+  — an unfinished growth is still a guest the body can be made to reject, which is what that Lesser
+  Restoration spell does (see [Stage 4](/brood-and-bloom/chapter-1/#stage-4)). Metaplasia follows
+  the rules above at every stage.
 </Note>
 
 Its remedy and its procedure:
@@ -332,8 +350,8 @@ Its remedy and its procedure:
 - **Procedure — starvation.** The fungus eats what the host eats, so the host stops
   eating: a strict fast of 3 days, tended by someone who makes a DC 16 Wisdom
   (Medicine) check at its end. **Success:** The disease ends and the patient gains 3
-  Exhaustion levels. **Failure:** The disease is unchanged and the patient gains 1
-  Exhaustion level.
+  Exhaustion levels. **Failure:** The disease is unchanged and the patient gains 3
+  Exhaustion level and takes 13 (3d8) Percing damage, as the fungus eats the creature's flesh.
 
 ## Harvesting
 
@@ -342,8 +360,7 @@ means cutting a piece off the thing that caused it. For most of the brood this n
 roll: a fruiting body, a crust, a rind, or a colonized limb is solid matter, and taking
 a usable portion is a minute's work with any blade. Two conditions constrain it
 instead — the creature has to be dead, and the piece has to be undamaged. That rules
-out fire, and fire is otherwise the most efficient way to deal with a colony: a party
-that burns a brooding ground out has also burned every dose of the cure growing in it.
+out fire, and fire is otherwise the most efficient way to deal with a colony.
 
 The [Rotgill Fleece](#c-rotgill-fleece) is the exception, and its stat block carries
 the rule: a fleece is loose filament, and cutting one cleanly is a check. Metaplasia is
@@ -354,7 +371,8 @@ shelving of the tribe's dead, and a party that wants some has to make some first
 
 ### The two every line begins with
 
-These are not any line's creatures. Every Sporophore line starts here and diverges
+These belong to the colony that made them and to no line at all. Every Sporophore line
+starts here and diverges
 according to what the spore lands on:
 
 <Creature name="Driftling">
