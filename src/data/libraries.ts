@@ -20,4 +20,12 @@ export const libraries: Library[] = [
     edition: '5.5e (2024)',
     available: true,
   },
+  {
+    name: 'Brood & Bloom',
+    href: '/brood-and-bloom/',
+    blurb:
+      'Fifty-eight parasites in three broods — one that lives in people, one that takes ground and buildings, one that wants only the dead — and the order that catalogs them.',
+    edition: '5.5e (2024)',
+    available: true,
+  },
 ];
