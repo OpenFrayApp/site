@@ -1,7 +1,8 @@
 @layer components {
-  /* The Waking Garden bestiary, under /the-waking-garden. Layered on the site's shared
-   variables in global.css, so it follows the light/dark toggle with no extra wiring.
-   Dark is the default; :root.light supplies the light values. */
+  /* The bestiary books — The Waking Garden and Brood & Bloom, under their own routes.
+   Layered on the site's shared variables in global.css, so it follows the light/dark
+   toggle with no extra wiring. Dark is the default; :root.light supplies the light
+   values. */
 
   /* BookLayout.astro carries its own utilities: the 64rem grid, the sidebar, the head,
      and the pager all live there now. What stays here is the prose body and the

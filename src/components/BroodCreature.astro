@@ -1,0 +1,23 @@
+---
+// Brood & Bloom's <Creature> tag: the same entry component, pointed at the book's own
+// compendium. Chapters import this as `Creature`, so the MDX reads identically in both
+// books and CreatureIndex's <Creature name="…"> scan matches either.
+import Creature from './Creature.astro';
+
+interface Props {
+  /** Compendium name, e.g. "Latchling" — no leading article. */
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+{
+  Astro.slots.has('default') ? (
+    <Creature name={name} book="brood-and-bloom">
+      <slot />
+    </Creature>
+  ) : (
+    <Creature name={name} book="brood-and-bloom" />
+  )
+}

@@ -1,22 +1,27 @@
 ---
 import StatBlock from './StatBlock.astro';
-import { creature, creatureSlug } from '../data/wakingGarden.ts';
+import { creature as broodAndBloom } from '../data/broodAndBloom.ts';
+import { creatureSlug } from '../data/statblock.ts';
+import { creature as wakingGarden } from '../data/wakingGarden.ts';
 
 interface Props {
   /** Compendium name, e.g. "Harvest Crown" — no leading article. */
   name: string;
+  /** Which book's compendium holds the creature. */
+  book?: 'waking-garden' | 'brood-and-bloom';
 }
 
-const { name } = Astro.props;
-const c = creature(name);
+const { name, book = 'waking-garden' } = Astro.props;
+const c = (book === 'brood-and-bloom' ? broodAndBloom : wakingGarden)(name);
 ---
 
 <article class="entry my-10" id={`c-${creatureSlug(c.name)}`}>
   <StatBlock creature={c} />
   {
-    /* Regional effects and the like sit outside the block: the 2024 stat block doesn't
-       carry them, and the schema has no field for them either. The slot holds rendered
-       markdown, so its own elements are styled by the `.entry-extras` rules in CSS. */
+    /* Regional effects, Running it notes, and the like sit outside the block: the 2024
+       stat block doesn't carry them, and the schema has no field for them either. The
+       slot holds rendered markdown, so its own elements are styled by the
+       `.entry-extras` rules in CSS. */
     Astro.slots.has('default') && (
       <div class="entry-extras mt-4 border-l-2 border-border pl-[1.1rem]">
         <slot />

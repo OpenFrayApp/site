@@ -7,9 +7,10 @@
 // components and stylesheet; the Typst edition it replaced spent most of its effort
 // restating that CSS in another language.
 import { getCollection, render } from 'astro:content';
-import { creatures, formatCr } from '../../data/wakingGarden.ts';
+import { formatCr } from '../../data/statblock.ts';
+import { creatures } from '../../data/wakingGarden.ts';
 import '../../styles/global.css';
-import '../../styles/waking-garden.css';
+import '../../styles/book.css';
 
 const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
 const parts = await Promise.all(

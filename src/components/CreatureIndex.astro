@@ -1,21 +1,26 @@
 ---
 // Every creature in the book, grouped by challenge rating or by type. Built from the
 // compendium JSON the console fetches, so it cannot disagree with the stat blocks.
-// Used by the two appendix chapters, which is how the site and the print edition share
+// Used by the appendix chapters, which is how the site and the print edition share
 // it — and in print each link becomes a page number, resolved by print.astro.
 import { getCollection } from 'astro:content';
-import { creatures, creatureSlug, formatCr, titleCase } from '../data/wakingGarden.ts';
+import { WAKING_GARDEN, type Book } from '../data/books.ts';
+import { creatures as broodAndBloom } from '../data/broodAndBloom.ts';
+import { creatureSlug, formatCr, titleCase } from '../data/statblock.ts';
+import { creatures as wakingGarden } from '../data/wakingGarden.ts';
 
 interface Props {
   by: 'cr' | 'type';
+  book?: Book;
 }
 
-const { by } = Astro.props;
+const { by, book = WAKING_GARDEN } = Astro.props;
+const creatures = book.collection === 'brood-and-bloom' ? broodAndBloom : wakingGarden;
 
 // Which chapter holds each creature. Only the MDX knows the book's arrangement, so it
 // is read back out of the <Creature> tags rather than kept as a second list that drifts.
 const chapterOf = new Map<string, string>();
-for (const chapter of await getCollection('waking-garden')) {
+for (const chapter of await getCollection(book.collection)) {
   for (const [, name] of (chapter.body ?? '').matchAll(/<Creature\b[^>]*name="([^"]+)"/g)) {
     chapterOf.set(name, chapter.id);
   }
@@ -25,13 +30,14 @@ for (const chapter of await getCollection('waking-garden')) {
 const href = (name: string) => {
   const anchor = `#c-${creatureSlug(name)}`;
   const chapter = chapterOf.get(name);
-  return chapter ? `/the-waking-garden/${chapter}/${anchor}` : anchor;
+  return chapter ? `${book.base}/${chapter}/${anchor}` : anchor;
 };
 
 // "Swarm of Tiny Beasts" is a Beast; grouping on the raw string scatters four creatures
-// into three groups of one.
+// into three groups of one. A parenthesized tag ("plant (orc)") groups under its base.
 const baseType = (type: string) => {
-  const word = titleCase(String(type).split(' ').pop() ?? '');
+  const bare = String(type).replace(/\s*\([^)]*\)/, '');
+  const word = titleCase(bare.split(' ').pop() ?? '');
   return word.endsWith('s') ? word.slice(0, -1) : word;
 };
 
