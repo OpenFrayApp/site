@@ -139,6 +139,13 @@ body.print-book::after {
   border-top: 1px solid var(--border);
   color: var(--muted);
 }
+/* The compatibility and trademark notice the site keeps in its footer; print has no
+   footer to carry it, so the cover does. */
+.cover-legal {
+  margin: 3mm 0 0;
+  font-size: 8pt;
+  color: var(--faint);
+}
 
 /* ---------- chapters ---------- */
 .chapter {

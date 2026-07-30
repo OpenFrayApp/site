@@ -12,12 +12,13 @@ import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
 // URLs (/privacy, /terms) plus a root 404.html that Cloudflare Pages serves.
 export default defineConfig({
   site: 'https://openfray.app',
-  // MDX backs the bestiary chapters under /the-waking-garden: their prose is Markdown,
-  // but each creature entry is a <Creature> component rendering the shipped compendium
-  // JSON, so the stat blocks can't drift from what the console loads.
-  // The print edition is a local tool, not a page of the site: scripts/assemble-site.mjs
-  // drops it from dist/, so advertising it here would point crawlers at a 404.
-  integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/the-waking-garden/print') })],
+  // MDX backs the bestiary chapters under /the-waking-garden and /brood-and-bloom:
+  // their prose is Markdown, but each creature entry is a <Creature> component
+  // rendering the shipped compendium JSON, so the stat blocks can't drift from what
+  // the console loads.
+  // The print editions are local tools, not pages of the site: scripts/assemble-site.mjs
+  // drops them from dist/, so advertising them here would point crawlers at 404s.
+  integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/print') })],
   // MDX inherits these, so chapter tables get their scroll wrapper and off-site links
   // open in a new tab without every page having to remember.
   markdown: { rehypePlugins: [rehypeTableScroll, rehypeExternalLinks] },

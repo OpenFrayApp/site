@@ -1,18 +1,19 @@
 ---
 // The print edition, LOCAL ONLY — assemble-site.mjs drops this route from dist/ and the
-// sitemap filter hides it. Run `npm run dev -w site`, open /the-waking-garden/print/,
+// sitemap filter hides it. Run `npm run dev -w site`, open /brood-and-bloom/print/,
 // print to PDF. Pagination takes about a minute and the page is blank while it runs.
 //
 // It is a page rather than a generator so the book renders through the site's own
-// components and stylesheet; the Typst edition it replaced spent most of its effort
-// restating that CSS in another language.
+// components and stylesheet — see the Waking Garden's print.astro, which this mirrors.
 import { getCollection, render } from 'astro:content';
+import { creatures } from '../../data/broodAndBloom.ts';
 import { formatCr } from '../../data/statblock.ts';
-import { creatures } from '../../data/wakingGarden.ts';
 import '../../styles/global.css';
 import '../../styles/book.css';
 
-const chapters = (await getCollection('waking-garden')).sort((a, b) => a.data.order - b.data.order);
+const chapters = (await getCollection('brood-and-bloom')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 const parts = await Promise.all(
   chapters.map(async (c) => ({ ...c, Content: (await render(c)).Content })),
 );
@@ -25,21 +26,23 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
   <head>
     <meta charset="utf-8" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>The Waking Garden — print edition</title>
+    <title>Brood & Bloom — print edition</title>
   </head>
   <body class="print-book">
     <section class="cover">
       <p class="cover-kicker">OpenFray · Compendium</p>
-      <h1 class="cover-title">The Waking<br />Garden</h1>
-      <p class="cover-subtitle">A bestiary of cultivated horrors, compatible with 5e and 5.5e.</p>
+      <h1 class="cover-title">Brood &<br />Bloom</h1>
+      <p class="cover-subtitle">A bestiary of parasites, compatible with 5e and 5.5e.</p>
       <hr class="cover-rule" />
       <p class="cover-lede">
-        Sixty-seven creatures for a world where the things people grow have started growing back.
-        Twelve species of sentient vegetable across three stages of life, the ecology that lives
-        alongside them, the fey who tend them, and the thing they are all cuttings from.
+        Fifty-eight creatures whose lives run through other bodies — living, dead, or built — with
+        the rules for what they leave behind in the people, the ground, and the buildings that
+        survive them, and the order of physicians that has been writing all of it down for longer
+        than anyone can remember.
       </p>
       <p class="cover-meta">
-        <strong>{creatures.length} creatures</strong> · CR {range} · 19 ready-to-run fights<br />
+        <strong>{creatures.length} creatures</strong> · CR {range} · 3 broods, 10 lines, 7 diseases<br
+        />
         Built for OpenFray, a free combat console for Game Masters — openfray.app
       </p>
       <p class="cover-legal">
@@ -68,14 +71,13 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         flattenStatBlockFolds,
         groupStatBlockHeads,
         insertPageRefPlaceholders,
-        normalizeColumnTops,
         replaceLibraryTerms,
         resolvePageRefs,
       } from '../../lib/print.ts';
 
       // The count is asserted so a copy edit that changes the web's "library" wording
       // reports rather than silently rewriting a sentence.
-      const EXPECTED_LIBRARY_TERMS = 5;
+      const EXPECTED_LIBRARY_TERMS = 20;
       const hits = replaceLibraryTerms(document.body);
       if (hits !== EXPECTED_LIBRARY_TERMS) {
         console.warn(
@@ -90,26 +92,19 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
       const refCount = insertPageRefPlaceholders(document);
 
       try {
-        // Only print-paged.css is handed over. Given no stylesheets Paged.js strips and
-        // parses every one with css-tree, which cannot read Tailwind v4's
-        // `@media (width >= 40rem)` and throws on the raw prelude — leaving a blank page.
-        // Its polyfill build also sits behind an export condition Vite will not resolve,
-        // hence driving Previewer directly.
+        // Only print-paged.css is handed over — see the Waking Garden's print.astro for
+        // why. The running footer names the book, so the shared stylesheet's title is
+        // swapped before Paged.js reads it.
         const [{ Previewer }, { default: pagedCss }] = await Promise.all([
           import('pagedjs'),
           import('../../styles/print-paged.css?raw'),
-          // Chunking measures text, so it has to wait for the serif. Without this the
-          // book paginates against the fallback face and the result varies run to run —
-          // 65 or 66 pages, and the odd cross-reference resolving against a stale page.
           document.fonts.ready,
         ]);
-        const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': pagedCss }]);
+        const bookCss = pagedCss.replace("'The Waking Garden'", "'Brood & Bloom'");
+        const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': bookCss }]);
 
-        // Drop the top margin off whatever opens a page or a column. Paged.js keeps it on
-        // the first column but collapses it in a continuation, so the two columns start
-        // at different heights. It cannot be a `:first-child` rule — Paged.js rebuilds
-        // the ancestor chain per page, so depth and sibling order vary — but the geometry
-        // is reliable: nothing above an element means its gap is exactly its own margin.
+        // Drop the top margin off whatever opens a page or a column — see the Waking
+        // Garden's print.astro for the geometry.
         for (const content of document.querySelectorAll('.pagedjs_page_content')) {
           const box = content.getBoundingClientRect();
           const middle = box.left + box.width / 2;
@@ -117,13 +112,11 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
 
           for (const block of content.querySelectorAll('h1, h2, h3, h4, p, ul, ol, dl, table')) {
             const rect = block.getBoundingClientRect();
-            // A spanning element is not in either column and starts its own flow.
             if (!rect.height || rect.width > box.width * 0.8) continue;
             const margin = parseFloat(getComputedStyle(block).marginTop) || 0;
             columns[rect.left < middle ? 'left' : 'right'].push({
               block,
               margin,
-              // Margin-box top: equal for everything that starts a column.
               edge: rect.top - margin,
             });
           }
@@ -137,8 +130,7 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
           }
         }
 
-        // Resolve against the rendered pages: Paged.js lays out clones and keeps the
-        // source in a <template>, so every creature id exists twice.
+        // Resolve creature references against the rendered pages.
         const area = document.querySelector('.pagedjs_pages');
         const pageOf = new Map();
         area.querySelectorAll('.pagedjs_page').forEach((page, i) => pageOf.set(page, i + 1));
@@ -163,8 +155,6 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         console.info(`Paged.js: ${flow.total} pages, ${resolved}/${refCount} refs resolved.`);
         document.body.dataset.pages = String(flow.total);
       } catch (error) {
-        // preview() empties the body before chunking, so a failure otherwise leaves a
-        // blank page and no clue why.
         console.error('Paged.js failed to paginate:', error);
         document.body.dataset.pages = 'failed';
       }
