@@ -79,7 +79,7 @@ Two collective terms from the files are used by stat blocks in this library:
 - A **brood creature** is any Inquiline, Sporophore, or Necrophore creature.
 - A **brood disease** is any disease described in this library.
 
-### The doctrine
+### Doctrine
 
 For each brood, the Lazaret's field instruction is one line long. Each brood's chapter
 explains its instruction in full:
@@ -89,6 +89,41 @@ explains its instruction in full:
 | Inquiline  | The parasite first, then the graft.            |
 | Sporophore | Go at noon, and bring tools for letting it in. |
 | Necrophore | Make no light, make no dead.                   |
+
+### Officers
+
+The three ranks share one piece of training, printed on each stat block as **The
+Trained Eye**: a Lazaret officer reads grafts, Spore Load, lines, and disease stages on
+sight. Every officer also carries the order's field spells — cleaning, water, records,
+and a Command that holds a panicking patient still. None of it is restoration magic:
+the order teaches none, because an officer's spells must be safe to cast on any case,
+and on a chantry case a restoration spell is a meal. Rank follows the career — every
+lector served as a prosector first, which is why the officer running a house is the
+strongest the order fields.
+
+<Creature name="Lazaret Registrar">
+  **Running it.** The registrar's value is knowledge. The Files makes it a reference the party can
+  question about any brood creature, and Recite and Amend support allies' saving throws against
+  brood effects. Its spells are the field kit plus the archive's tools — Mending, Message,
+  Comprehend Languages, and Identify, for keeping and reading the files. It is not built to fight;
+  the Lancet is for cases that stand up mid-examination.
+</Creature>
+
+<Creature name="Lazaret Prosector">
+  **Running it.** A prosector is built for fieldwork rather than war. Extract removes an attached
+  parasite with no check and no damage, Excise compresses a full surgery into one action once a day,
+  and Steady keeps its Medicine checks reliable while something is still attached to the patient.
+  Command is the closest thing it carries to a weapon spell, and it is mostly cast at patients —
+  Halt keeps a frightened victim still long enough to treat.
+</Creature>
+
+<Creature name="Lazaret Lector">
+  **Running it.** A lector served as a prosector first and keeps the whole field kit — Extract,
+  Excise, the flask — with the house layer on top: Intervene removes the small quantities (1 Depth,
+  1 Spore Load, a Poisoned condition), and Direct hands an ally an immediate, Advantaged Extraction
+  or Medicine check, so treatment can happen twice in a round. It is the strongest officer the order
+  fields, and it rarely leaves its house.
+</Creature>
 
 ## What magic does
 
@@ -129,30 +164,3 @@ in this library reaches a stage 4 case. Two rules govern what is left:
   creature, and raising it raises a brood creature. What remains is a Wish spell, the
   direct intervention of a god, or a pact with something powerful enough to overrule
   the outcome.
-
-## The officers
-
-The three ranks share one piece of training, printed on each stat block as **The
-Trained Eye**: a Lazaret officer reads grafts, Spore Load, lines, and disease stages on
-sight. What differs is what each rank does with it.
-
-<Creature name="Lazaret Registrar">
-  **Running it.** The registrar's value is knowledge. The Files makes it a reference the party can
-  question about any brood creature, and Recite and Amend support allies' saving throws against
-  brood effects. It is not built to fight; the Lancet is for cases that stand up mid-examination.
-</Creature>
-
-<Creature name="Lazaret Lector">
-  **Running it.** The lector runs treatment. Intervene removes the small quantities — 1 Depth, 1
-  Spore Load, a Poisoned condition — and Direct hands an ally an immediate, Advantaged Extraction or
-  Medicine check, so treatment can happen twice in a round. A lector rarely travels; meeting one
-  usually means standing in its house.
-</Creature>
-
-<Creature name="Lazaret Prosector">
-  **Running it.** A prosector is statted as dangerous because the Lazaret sends them where nobody
-  else goes, and they come back. Extract removes an attached parasite with no check and no damage;
-  Excise compresses a full surgery into one action, once a day. A prosector who has spent Excise can
-  still perform every procedure in this library — its Medicine bonus meets each procedure's
-  Difficulty Class without Advantage.
-</Creature>

@@ -77,7 +77,7 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
 
       // The count is asserted so a copy edit that changes the web's "library" wording
       // reports rather than silently rewriting a sentence.
-      const EXPECTED_LIBRARY_TERMS = 20;
+      const EXPECTED_LIBRARY_TERMS = 19;
       const hits = replaceLibraryTerms(document.body);
       if (hits !== EXPECTED_LIBRARY_TERMS) {
         console.warn(
