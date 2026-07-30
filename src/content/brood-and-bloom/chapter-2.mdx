@@ -7,6 +7,7 @@ eyebrow: 'Chapter 2'
 ---
 
 import Creature from '../../components/BroodCreature.astro';
+import Note from '../../components/Note.astro';
 
 The Lazaret classes these parasites as inquilines, from the old word for a thing that
 lives inside the dwelling of another. Common folk call them latchkin. An inquiline
@@ -41,11 +42,15 @@ first feeding. It is a cutting in the gardener's sense: an independent copy of i
 parent, already growing, and alive only while it has a body to grow in. Killing or
 removing the parent does not affect it.
 
-**What it looks like.** Pale and threadlike at first, an inch or two long, and easy to
+### What it looks like
+
+Pale and threadlike at first, an inch or two long, and easy to
 mistake for a vein or a healed cut. It thickens as it grows; by stage 3 it stands up
 under the skin as a raised line, and anyone who has seen one before knows it on sight.
 
-**Which line it belongs to.** A graft belongs to its parent's line. A graft left by a
+### Which line it belongs to
+
+A graft belongs to its parent's line. A graft left by a
 latchling — which has no line yet — belongs to the line the host's own body sets: a
 physical score (Strength, Dexterity, or Constitution) highest makes it sallow,
 Intelligence makes it chantry, Wisdom or Charisma makes it palimpsest. Each line's
@@ -57,7 +62,9 @@ graft differs:
 | Chantry    | Fine and black, and hard as wire          | Along the nerves, toward wherever the host keeps magic |
 | Palimpsest | Almost transparent, and warm to the touch | Up the spine, toward the base of the skull             |
 
-**Where it is.** A sallow or chantry graft has a fixed location. Roll 1d6 or choose:
+### Where it is
+
+A sallow or chantry graft has a fixed location. Roll 1d6 or choose:
 
 | 1d6 | Location     |
 | --- | ------------ |
@@ -74,13 +81,17 @@ A palimpsest graft always roots in the spine, which is why no blade short of the
 is one of the two counters in this library — the Sporophore's Spore Load in
 [chapter 3](/brood-and-bloom/chapter-3/) runs the same 0-to-6 shape.
 
-**Gaining it.** A host gains 1 Depth whenever an inquiline's feeding action resolves
+### Gaining it
+
+A host gains 1 Depth whenever an inquiline's feeding action resolves
 against it, on a successful saving throw as well as a failed one — the save reduces
 what the feeding takes, never what it leaves. If the host carries no graft from that
 line, the feeding also leaves one. A host also gains 1 Depth at the end of every Long
 Rest taken while it carries a graft: the graft works inward while the body is still.
 
-**One graft per line.** A host carries at most one graft from each line. Further
+### One graft per line
+
+A host carries at most one graft from each line. Further
 feedings from that line deepen the graft already there — the 1d4 + 1 latchlings a
 clutch fastens to one character all feed the same graft. Grafts from different lines
 act and progress independently, and their effects stack.
@@ -88,8 +99,10 @@ act and progress independently, and their effects stack.
 **At 6 Depth** the graft deepens. The host contracts the line's disease at stage 1, or
 advances that disease one stage if it already has it, and Depth resets to 0.
 
-**Depth never recedes on its own.** Rest does not remove it and distance does not
-either; the graft has to come out. The treatments below remove it.
+<Note>
+  **Depth never recedes on its own.** Rest does not remove it and distance does not either; the
+  graft has to come out. The treatments below remove it.
+</Note>
 
 ## Diagnosis
 
@@ -184,17 +197,19 @@ worked loose: the spell removes Depth, and the deeper the graft sits, the less e
 casting moves it. One casting does both at once, detaching the parasite and removing
 Depth:
 
-| Spell               | Depth removed                          |
-| ------------------- | -------------------------------------- |
-| Lesser Restoration  | 1d4, and only at stage 1 or 2          |
-| Greater Restoration | 2d4 at stage 1 or 2, or 1d4 at stage 3 |
-| Heal                | 3d4 at stage 1 or 2, or 2d4 at stage 3 |
-| Mass Heal           | As Heal, for every creature it heals   |
+| Spell               | Depth removed                        |
+| ------------------- | ------------------------------------ |
+| Lesser Restoration  | 1d4, and only below stage 3          |
+| Greater Restoration | 2d4 below stage 3, or 1d4 at stage 3 |
+| Heal                | 3d4 below stage 3, or 2d4 at stage 3 |
+| Mass Heal           | As Heal, for every creature it heals |
 
-**The counter runs both ways.** Removing more Depth than a host has does not stop at
-zero: the graft slips back a stage, and the host lands part-way up the stage below — 6
-Depth given back for every stage lost. A host at stage 3 with 2 Depth whose Heal spell
-rolls a 6 ends at stage 2 with 4 Depth.
+<Note>
+  **The counter runs both ways.** Removing more Depth than a host has does not stop at zero: the
+  graft slips back a stage, and the host lands part-way up the stage below — 6 Depth given back for
+  every stage lost. A host at stage 3 with 2 Depth whose Heal spell rolls a 6 ends at stage 2 with 4
+  Depth.
+</Note>
 
 **Stage 1 with 0 Depth is the floor, and reaching it removes the graft.** A caster has
 to walk the graft down every rung it climbed:
@@ -271,20 +286,20 @@ contracts it at stage 1 when it reaches 6 Depth from a sallow graft:
 Hit Point maximum reductions last until the disease ends and do not stack with
 themselves — a creature at stage 3 is down 30, not 30 on top of 10.
 
-**Design note.** Sallow Rot is the plainest disease in the library and usually the
-first a party meets, at low levels, from a cyst picked up in a fen. It teaches the
-whole system in miniature: something got in, it fed, and days later somebody is slower
-and does not heal right.
+<Note type="design note">
+  Sallow Rot is the plainest disease in the library and usually the first a party meets, at low
+  levels, from a cyst picked up in a fen. It teaches the whole system in miniature: something got
+  in, it fed, and days later somebody is slower and does not heal right.
+</Note>
 
 ### Chantry Drought
 
 The Lazaret files it as Chantry Drought; common folk call it the emptying. The graft
 feeds on the magic in the host's body, and the body loses the ability to hold magic as
-the graft advances. A creature contracts it at stage 1 when it reaches 6 Depth from a
+the graft advances and feeds on it. A creature contracts it at stage 1 when it reaches 6 Depth from a
 chantry graft.
 
-**Casting adds Depth.** While a creature carries a chantry graft, it gains 1 Depth
-whenever it expends a spell slot of level 1 or higher.
+While a creature carries a chantry graft, **it gains 1 Depth whenever it expends a spell slot** of level 1 or higher.
 
 **Restoration magic adds Depth.** A Lesser Restoration, Greater Restoration,
 Heal, or Mass Heal spell cast on a creature carrying a chantry graft adds 1d4
