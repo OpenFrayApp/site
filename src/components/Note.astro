@@ -1,0 +1,18 @@
+---
+// A titled aside for the book chapters: a bordered card with an uppercase kicker,
+// for a rule worth stepping out of the prose flow for.
+interface Props {
+  type?: string;
+}
+
+const { type = 'Note' } = Astro.props;
+---
+
+<div
+  class="note mb-5 rounded-lg border border-border border-l-[3px] border-l-accent bg-panel px-4 py-3.5"
+>
+  <h3 class="m-0 mb-1.5 text-xs font-bold tracking-widest text-faint uppercase">
+    {type.toUpperCase()}
+  </h3>
+  <slot />
+</div>

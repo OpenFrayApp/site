@@ -205,24 +205,24 @@ Depth:
 | Mass Heal           | As Heal, for every creature it heals |
 
 <Note>
-  **The counter runs both ways.** Removing more Depth than a host has does not stop at zero: the
-  graft slips back a stage, and the host lands part-way up the stage below — 6 Depth given back for
-  every stage lost. A host at stage 3 with 2 Depth whose Heal spell rolls a 6 ends at stage 2 with 4
-  Depth.
+  **Magic works against the whole climb.** A graft's hold is one number: 6 Depth for each stage of
+  its disease, plus its current Depth — a graft that has not yet caused a disease is just its
+  current Depth. Restoration magic subtracts from that total, the disease's stage at any moment is
+  the total divided by 6 (rounded down), and at 0 the graft has nothing left to hold with: it comes
+  out, and its disease ends with it.
 </Note>
 
-**Stage 1 with 0 Depth is the floor, and reaching it removes the graft.** A caster has
-to walk the graft down every rung it climbed:
+Some examples of the climb a caster has to walk back down:
 
-| Where the host is | Depth a caster must remove |
-| ----------------- | -------------------------- |
-| Stage 1, Depth 3  | 3                          |
-| Stage 2, Depth 3  | 9                          |
-| Stage 3, Depth 3  | 15                         |
-| Stage 3, Depth 5  | 17                         |
+| Where the host is       | Depth a caster must remove |
+| ----------------------- | -------------------------- |
+| No disease yet, Depth 3 | 3                          |
+| Stage 1, Depth 3        | 9                          |
+| Stage 2, Depth 3        | 15                         |
+| Stage 3, Depth 5        | 23                         |
 
 Expulsion, surgery, and amputation skip all of this; magic is the only treatment that
-works a rung at a time. Stage 4 is beyond all four tiers — see
+walks back down the whole climb. Stage 4 is beyond all four tiers — see
 [Stage 4](/brood-and-bloom/chapter-1/#stage-4) and each disease below.
 
 ## Death and the graft
@@ -299,16 +299,14 @@ feeds on the magic in the host's body, and the body loses the ability to hold ma
 the graft advances and feeds on it. A creature contracts it at stage 1 when it reaches 6 Depth from a
 chantry graft.
 
-While a creature carries a chantry graft, **it gains 1 Depth whenever it expends a spell slot** of level 1 or higher.
+#### Using magic
 
-**Restoration magic adds Depth.** A Lesser Restoration, Greater Restoration,
-Heal, or Mass Heal spell cast on a creature carrying a chantry graft adds 1d4
-Depth instead of removing any. The graft consumes the spell's magic like any other
-magic in the body. Of the five spells in
-[What magic does](/brood-and-bloom/chapter-1/#what-magic-does), only Detect Poison and Disease is safe to cast on a chantry case — identify the line before treating it. A
-Lesser Restoration spell still detaches a chantry parasite, as each stat block's
-Extraction says, but what would have worked the graft loose feeds it instead: the
-parasite drops off well fed, and the graft deepens.
+The graft consumes spells' magic like any other magic in the body. Of the five spells in
+[What magic does](/brood-and-bloom/chapter-1/#what-magic-does), only Detect Poison and Disease is safe to cast on a chantry case.
+
+While a creature carries a chantry graft, it gains 1 Depth whenever it expends a spell slot of level 1 or higher. A Lesser Restoration, Greater Restoration, Heal, or Mass Heal spell cast on a creature carrying a chantry graft adds 1d4
+Depth instead of removing any. A Lesser Restoration spell still detaches a chantry parasite, as each stat block's
+Extraction says, but what would have worked the graft loose feeds it instead: the parasite drops off well fed, and the graft deepens.
 
 | Stage | Effect                                                                                                                                                                                                                                                           |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -317,10 +315,12 @@ parasite drops off well fed, and the graft deepens.
 | 3     | The creature's two highest-level spell slots can't be recovered on a Long Rest, and it has Disadvantage on Constitution saving throws made to maintain Concentration.                                                                                            |
 | 4     | The creature loses its spellcasting entirely and has the Incapacitated and Unconscious conditions. It does not die. Over 1d4 days the graft withdraws along the nerves and emerges, swollen with a lifetime of magic, as a Psalter Tick. What wakes is a Lacuna. |
 
-**Design note.** Chantry Drought is the only disease in this library a victim can
-worsen by acting: each leveled spell the host casts moves it closer to stage 4. Stage 4
-does not kill. The host survives as a Lacuna, the graft emerges as a Psalter Tick after
-1d4 days, and both stat blocks are in this chapter.
+<Note type="design note">
+  Chantry Drought is the only disease in this library a victim can worsen by acting: each leveled
+  spell the host casts moves it closer to stage 4. Stage 4 does not kill. The host survives as a
+  Lacuna, the graft emerges as a Psalter Tick after 1d4 days, and both stat blocks are in this
+  chapter.
+</Note>
 
 ### The Forgetting
 
@@ -336,11 +336,12 @@ reaches 6 Depth from a palimpsest graft:
 | 3     | A second mental ability score decreases by 2. The creature can no longer reliably distinguish its own memories from the ones it has been given.                                                                             |
 | 4     | The creature does not die. Over 1d4 days the graft uncoils from the spine and emerges, grown fat on a whole life's recollection, as a Palimpsest Wyrm. What remains — and insists that nothing happened — is an Amanuensis. |
 
-**Design note.** The Forgetting takes things from a character without telling the
-player: stage 1 is written to be tracked silently, and noticed at the table only when
-the character reaches for what is gone. The stage 2 gain is the counterweight and is
-meant to be played straight — the character is genuinely better at something they were
-never taught, and cannot say where it came from.
+<Note type="design note">
+  The Forgetting takes things from a character without telling the player: stage 1 is written to be
+  tracked silently, and noticed at the table only when the character reaches for what is gone. The
+  stage 2 gain is the counterweight and is meant to be played straight — the character is genuinely
+  better at something they were never taught, and cannot say where it came from.
+</Note>
 
 ## The creatures
 
