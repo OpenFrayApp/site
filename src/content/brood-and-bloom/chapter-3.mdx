@@ -76,20 +76,18 @@ once for the whole brood.
 
 Every Sporophore contaminates through one counter. A creature can carry up to 6
 **Spore Load** — the same 0-to-6 shape as the Inquiline's Depth in
-[chapter 2](/brood-and-bloom/chapter-2/) — and it does nothing until it accumulates:
-
-| Spore Load | Effect                                                             |
-| ---------- | ------------------------------------------------------------------ |
-| 1–2        | Nothing yet                                                        |
-| 3 or more  | The creature has Disadvantage on Constitution saving throws        |
-| 5 or more  | The creature has the Poisoned condition                            |
-| 6          | The counter resets to 0, and the creature is colonized (see below) |
+[chapter 2](/brood-and-bloom/chapter-2/), and symptomless like it. Every penalty in
+this brood comes from a disease's stage, never from the load itself: a creature learns
+what it carries from a Lazaret officer's eye, a Detect Poison and Disease spell, or
+the moment the counter fills. What the load changes is how the brood fights it —
+several spore actions bear down harder on a creature carrying 3 or more, and a
+stalker tracks anything carrying 1 or more.
 
 ### Colonization
 
-On reaching 6 Spore Load, a creature contracts the disease of the
-line that gave it the sixth point, at stage 1 — or advances that disease one stage if
-it already has it. That is the only way a Sporophore disease advances: a fungal colony
+On reaching 6 Spore Load, the counter resets to 0 and the creature contracts the
+disease of the line that gave it the sixth point, at stage 1 — or advances that
+disease one stage if it already has it. That is the only way a Sporophore disease advances: a fungal colony
 does not incubate, it spreads, and it spreads only while a creature keeps breathing it
 in.
 
@@ -100,10 +98,10 @@ at the end of a Long Rest, provided the rest is taken more than 1 mile from a co
 Lesser Restoration spell removes 3. Inside a brooding ground none of that works —
 Spore Load is not lost while the colony is close enough to replace it.
 
-### Mixed exposure
-
-Spore Load is one pool no matter how many lines contributed to it.
-Only the sixth point decides which disease the creature takes.
+<Note type="mixed exposure">
+  Spore Load is one pool no matter how many lines contributed to it. Only the sixth point decides
+  which disease the creature takes.
+</Note>
 
 ## Contaminated ground
 
@@ -194,11 +192,12 @@ Stage 4 allows no save.
 
 The spells work by stage, identically for all four lines:
 
-| Spell                     | Stage 1 | Stage 2            | Stage 3            | Stage 4 |
-| ------------------------- | ------- | ------------------ | ------------------ | ------- |
-| Lesser Restoration        | Cures   | Reduces to stage 1 | Nothing            | Nothing |
-| Greater Restoration, Heal | Cures   | Cures              | Reduces to stage 2 | Nothing |
-| Mass Heal                 | As Heal | As Heal            | As Heal            | Nothing |
+| Spell               | Stage 1 | Stage 2            | Stage 3            | Stage 4 |
+| ------------------- | ------- | ------------------ | ------------------ | ------- |
+| Lesser Restoration  | Cures   | Reduces to stage 1 | Nothing            | Nothing |
+| Greater Restoration | Cures   | Cures              | Reduces to stage 2 | Nothing |
+| Heal                | Cures   | Cures              | Reduces to stage 1 | Nothing |
+| Mass Heal           | As Heal | As Heal            | As Heal            | Nothing |
 
 ### Treatment
 
@@ -211,6 +210,10 @@ The Lazaret's other tiers, shared by all four lines:
    [Harvesting](#harvesting)). Taking a line's remedy drops its disease one stage.
 3. **Procedure.** A physical treatment, different per line, listed with each disease
    below.
+
+Any creature can attempt a procedure. A trained physician makes its Wisdom (Medicine)
+check with Advantage, and a Lazaret officer automatically succeeds on the check —
+compressing these into a day's work is much of what the order's houses are for.
 
 Stage 4 in every case is governed by the library-wide rule in
 [chapter 1](/brood-and-bloom/chapter-1/#stage-4). Two of these diseases kill and two do
@@ -230,18 +233,17 @@ everything it cannot do without:
 | 4     | The creature dies. After 1d4 days it rises as a Drowned Chorus.                                                                       |
 
 The Hit Point maximum reductions last until the disease ends and do not stack with
-themselves. Stage 2's Disadvantage and stage 3's Poisoned condition overlap with the
-same effects from Spore Load rather than compounding — but the recovery save is a
-Constitution save, so a creature at stage 2 is measurably worse at leaving stage 2 than
-it was at leaving stage 1, before the Difficulty Class rises.
+themselves. Stage 2's Disadvantage counts twice: the save to recede is itself a
+Constitution save, so a creature at stage 2 is measurably worse at leaving stage 2
+than it was at leaving stage 1, before the Difficulty Class rises.
 
 Its remedy and its procedure:
 
 - **Remedy.** The gills of a rotgill creature, boiled and inhaled.
 - **Procedure — extraction.** An hour of surgery and a DC 18 Wisdom (Medicine) check.
-  **Success:** The disease ends, and the patient's Hit Point maximum decreases by 10
-  until it finishes 3 Long Rests. **Failure:** The patient takes 22 (4d10) Slashing
-  damage and the disease is unchanged.
+  **Success:** The disease ends and the patient takes 22 (4d10) Slashing damage.
+  **Failure:** The patient takes 11 (2d10) Slashing damage and the disease is
+  unchanged.
 
 ### Calcination
 
