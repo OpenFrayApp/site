@@ -228,4 +228,24 @@
     padding: 0.05rem 0.3rem;
     font-size: 0.85em;
   }
+
+  /* Back to top. The button is always in the DOM so it needs no JavaScript to exist and
+     keeps its place in the tab order; the script only adds `data-show` once there is
+     something to scroll back from. State lives here rather than in `data-[show]:`
+     utilities: `visibility` and `opacity` are set twice on one element, and two
+     utilities for the same property resolve by Tailwind's output order, not the order
+     written (see AGENTS.md). Two rules in one layer resolve by specificity, always. */
+  .to-top {
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.18s ease,
+      visibility 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease;
+  }
+  .to-top[data-show] {
+    visibility: visible;
+    opacity: 1;
+  }
 }

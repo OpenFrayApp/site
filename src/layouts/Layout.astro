@@ -97,6 +97,7 @@ const navLink =
   </head>
   <body>
     <header
+      id="top"
       class="topbar relative mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4.5"
     >
       <a
@@ -294,7 +295,54 @@ const navLink =
       </p>
     </footer>
 
+    {
+      /* An anchor, not a button: it returns to the top with no JavaScript and moves
+        keyboard focus there, which a scroll handler alone would not. The script only
+        reveals it once there is something to go back up from. */
+    }
+    <a
+      class="to-top fixed right-5 bottom-5 z-40 flex size-11 items-center justify-center rounded-full border border-border bg-panel text-muted shadow-lg hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent print:hidden max-[560px]:right-3 max-[560px]:bottom-3"
+      href="#top"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      <svg
+        class="size-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 19V5"></path>
+        <path d="m5 12 7-7 7 7"></path>
+      </svg>
+    </a>
+
     <script is:inline>
+      // Show the back-to-top control only past a screenful of scrolling, and scroll
+      // smoothly unless the reader has asked for less motion. Without JavaScript the
+      // anchor stays hidden and the browser's own end/home keys still work.
+      (function () {
+        var link = document.querySelector('.to-top');
+        if (!link) return;
+        var sync = function () {
+          link.toggleAttribute('data-show', window.scrollY > window.innerHeight * 0.6);
+        };
+        sync();
+        window.addEventListener('scroll', sync, { passive: true });
+        link.addEventListener('click', function (e) {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Keep the anchor's focus behaviour: the header is the landmark to land on.
+          document.getElementById('top').setAttribute('tabindex', '-1');
+          document.getElementById('top').focus({ preventScroll: true });
+        });
+      })();
+
       document.querySelector('.theme-toggle').addEventListener('click', function () {
         var light = document.documentElement.classList.toggle('light');
         try {
