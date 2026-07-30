@@ -220,6 +220,7 @@ body.print-book::after {
 .sb-entry-block,
 .seed,
 .entry-extras,
+.note,
 tr {
   break-inside: avoid;
 }
@@ -309,6 +310,32 @@ tr {
   letter-spacing: normal !important;
   text-transform: none !important;
   color: var(--text) !important;
+}
+
+/* ---------- notes ---------- */
+/* The kicker is a label, not a sub-head, but `.chapter-body h3` outranks its utilities
+   and was giving it the section-heading size, rule and 1.5rem of space above. The box
+   keeps its accent edge and loses the panel fill: on paper the page is already white,
+   the same reason the stat blocks drop their border. */
+.chapter-body .note {
+  margin: 0.5rem 0 0.9rem;
+  padding: 0 0 0 3mm;
+  border: 0;
+  border-left: 1.5pt solid var(--accent);
+  border-radius: 0;
+  background: none;
+}
+.chapter-body .note h3 {
+  margin: 0 0 0.15rem;
+  padding: 0;
+  border: 0;
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+.chapter-body .note > :last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- creature indexes ---------- */
