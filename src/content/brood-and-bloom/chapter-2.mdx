@@ -8,6 +8,7 @@ eyebrow: 'Chapter 2'
 
 import Creature from '../../components/BroodCreature.astro';
 import Note from '../../components/Note.astro';
+import PageBreak from '../../components/PageBreak.astro';
 
 The Lazaret classes these parasites as inquilines, from the old word for a thing that
 lives inside the dwelling of another. Common folk call them latchkin. An inquiline
@@ -148,7 +149,13 @@ However the graft comes out, its disease ends within 1d4 hours of the removal.
 Expulsion removes a graft by denying it, for as long as the line takes to give up,
 whatever that line cannot live without. A completed Expulsion removes the graft
 entirely — sweated out through the skin, passed, or brought up — at whatever stage and
-Depth it had reached:
+Depth it had reached.
+
+Expulsion removes the graft, not the parasite. A host who spends 6 hours in a sweat
+house with a fluke still attached walks out clean and is grafted again at the next
+feeding — extraction comes first, always.
+
+<div class="wide">
 
 | Line       | Process                                                                                                                                                           | Why it works                                                   | Cost                                                                                 |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -156,9 +163,9 @@ Depth it had reached:
 | Chantry    | 24 continuous hours with no unexpended spell slot, no magical feature, no spell or magical effect targeting the host, and no magical aura or location around them | The graft feeds on magic in the body and finds none            | 1 Exhaustion level, and a full day of recovery after                                 |
 | Palimpsest | 24 continuous hours spent insensible — heavily drugged, comatose, or deprived of every sense                                                                      | There is nothing coherent to read, so there is nothing to take | 3 Exhaustion levels, a full day of recovery after, and the cost of the insensibility |
 
-Expulsion removes the graft, not the parasite. A host who spends 6 hours in a sweat
-house with a fluke still attached walks out clean and is grafted again at the next
-feeding — extraction comes first, always.
+</div>
+
+<PageBreak />
 
 ### Surgery and amputation
 
@@ -248,7 +255,7 @@ starves its graft nor feeds it.
 
 Every sated adult leaves its host to lay, and each line lays where its food will pass.
 The ground an adult chooses is where a clutch waits, where the first feedings happen,
-and where the [lancebills](#c-lancebill) stand:
+and where the [lancebills](#c-lancebill) stand.
 
 | Line       | Where it lays                                                                       | What the ground looks like                                                              |
 | ---------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -264,13 +271,13 @@ broods' chapters.
 ## The diseases
 
 Each line's graft causes one disease, and every one of them ends the same way: the
-graft finishes, and something leaves the body. What differs is what it leaves behind:
+graft finishes, and something leaves the body. What differs is what it leaves behind.
 
-| Line       | The Lazaret's name | Common name    | At stage 4                                                                 |
-| ---------- | ------------------ | -------------- | -------------------------------------------------------------------------- |
-| Sallow     | Sallow Rot         | the wetting    | The host dies. The graft stays in the corpse and matures into a Quagdam    |
-| Chantry    | Chantry Drought    | the emptying   | The graft emerges as a Psalter Tick. The host lives on as a Lacuna         |
-| Palimpsest | —                  | the Forgetting | The graft emerges as a Palimpsest Wyrm. The host lives on as an Amanuensis |
+| Line       | Name            | Common name    | At stage 4                                                                 |
+| ---------- | --------------- | -------------- | -------------------------------------------------------------------------- |
+| Sallow     | Sallow Rot      | the wetting    | The host dies. The graft stays in the corpse and matures into a Quagdam    |
+| Chantry    | Chantry Drought | the emptying   | The graft emerges as a Psalter Tick. The host lives on as a Lacuna         |
+| Palimpsest | —               | the Forgetting | The graft emerges as a Palimpsest Wyrm. The host lives on as an Amanuensis |
 
 A graft that reaches stage 4 has eaten a whole person's worth of what it feeds on —
 flesh, magic, or memory — and skips its line's small forms accordingly. The
