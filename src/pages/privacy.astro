@@ -45,6 +45,14 @@ import Layout from '../layouts/Layout.astro';
       >. Nothing about your gameplay is sent to or stored on our servers, and we set no advertising
       or analytics cookies. Clearing your browser storage removes this data.
     </p>
+    <p>
+      The one exception is the <strong>player view</strong>, which you turn on yourself. While you
+      are sharing, the part of the fight your players see — the turn order and the game log — passes
+      through our hosting provider’s realtime service so it can reach their devices. It is relayed,
+      not stored: nothing is written to a database, and there is nothing to read back once you stop
+      sharing or close the tab. Anyone holding the link can watch while you share, so give it to
+      your table rather than posting it publicly.
+    </p>
 
     <h2>3. Data we collect when you sign in</h2>
     <p>
@@ -87,8 +95,13 @@ import Layout from '../layouts/Layout.astro';
     <ul>
       <li><strong>Theme preference</strong> — light or dark, in <code>localStorage</code>.</li>
       <li>
-        <strong>App settings</strong> — which content libraries you have turned on, and how the compendium
-        is sorted, in <code>localStorage</code>.
+        <strong>App settings</strong> — which content libraries you have turned on, how the compendium
+        is sorted, and what your player view reveals, in <code>localStorage</code>.
+      </li>
+      <li>
+        <strong>Player view link</strong> — without an account, the name of your share link, in <code
+          >localStorage</code
+        >, so the link stays the same each session.
       </li>
       <li>
         <strong>Anonymous session state</strong> — your in-progress encounter, in <code
@@ -153,7 +166,9 @@ import Layout from '../layouts/Layout.astro';
       We keep your account and content until you delete them. You can permanently delete your
       account and all associated data at any time from within the app (Account → Delete account);
       this erases your encounters, custom creatures, custom spells, campaigns and characters, and
-      your sign-in record. Anonymous data lives only in your browser and is never sent to us.
+      your sign-in record. Anonymous data lives only in your browser, and the only thing that ever
+      leaves it is the player view you choose to share, which is relayed to your players and never
+      stored.
     </p>
 
     <h2>8. Your rights</h2>
