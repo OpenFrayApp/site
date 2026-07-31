@@ -11,6 +11,7 @@ import {
   postMeta,
   postPath,
   postUrl,
+  readingTimeLabel,
 } from '../../data/news.ts';
 
 const posts = byNewest(await getCollection('news'));
@@ -45,6 +46,10 @@ const schema = [
     { name: 'News', url: `${NEWS_BASE}/` },
   ]),
 ];
+
+// The rail's two stacked lines. Uppercase and tracked so the date and the kind read as
+// one label block against the title beside them.
+const RAIL = 'text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted uppercase';
 ---
 
 <Layout
@@ -53,47 +58,74 @@ const schema = [
   keywords={['OpenFray news', 'DnD 5e adventures', 'Dungeons and Dragons 5e one shot']}
   schema={schema}
 >
-  <main class="doc mx-auto max-w-3xl px-6 pt-4 pb-12">
-    <h1>News</h1>
+  <main class="mx-auto w-full max-w-5xl px-6 pt-4 pb-16 max-[560px]:px-4">
+    <header class="mb-12 max-w-[42rem]">
+      <h1
+        class="mt-0 mb-4 text-[clamp(2.1rem,4.6vw,3rem)] leading-[1.06] font-extrabold tracking-tight text-text"
+      >
+        News
+      </h1>
 
-    <p class="lead text-[1.05rem] leading-relaxed text-text">
-      What has changed in the console, and short adventures to run with it.
-    </p>
+      <p class="m-0 mb-4 text-[1.3rem] leading-[1.55] text-text">
+        What has changed in the console, and short adventures to run with it.
+      </p>
 
-    <p>
-      Adventures use creatures from <a href="/compendium/">OpenFray’s own libraries</a>, so
-      everything a fight needs is already in <a href="/console/">the console</a> — turn the library on
-      in <strong>Settings</strong> and add them from <strong>Add creature</strong>. There is{' '}
-      <a href={`${NEWS_BASE}/rss.xml`}>a feed</a> if you would rather not check back.
-    </p>
+      <p class="m-0 text-base leading-relaxed text-muted">
+        Adventures use creatures from <a class="text-accent" href="/compendium/"
+          >OpenFray’s own libraries</a
+        >, so everything a fight needs is already in <a class="text-accent" href="/console/"
+          >the console</a
+        >. There is <a class="text-accent" href={`${NEWS_BASE}/rss.xml`}>a feed</a> if you would rather
+        not check back.
+      </p>
+    </header>
 
     {
       posts.length === 0 ? (
-        <p>Nothing here yet. The first post lands with the next release.</p>
+        <p class="text-base leading-relaxed text-muted">
+          Nothing here yet. The first post lands with the next release.
+        </p>
       ) : (
-        <ul class="mt-8 grid list-none gap-4 p-0">
+        <ul class="m-0 list-none border-t border-border p-0">
           {posts.map((post) => {
             const meta = postMeta(post.data);
             return (
-              <li class="m-0">
+              <li class="m-0 border-b border-border">
+                {/* The whole row is one link, so the target is the entry rather than the
+                    title alone — easier to hit, and one stop in the tab order. */}
                 <a
-                  class="block h-full rounded-xl border border-border bg-panel px-5 py-4.5 no-underline transition-[border-color,transform] hover:-translate-y-0.5 hover:border-accent"
+                  class="group grid grid-cols-[8.5rem_minmax(0,1fr)] items-start gap-x-8 py-8 no-underline max-[640px]:grid-cols-[minmax(0,1fr)] max-[640px]:gap-y-3 max-[640px]:py-6"
                   href={postPath(post.id)}
                 >
-                  <span class="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-relaxed font-semibold tracking-widest uppercase">
-                    {/* --muted, not --faint: light-theme --faint is about 2.5:1 on the
-                        card, and the date and level band are content, not furniture. */}
-                    <span class="text-accent">{KIND_LABEL[post.data.kind]}</span>
-                    <time class="text-muted" datetime={isoDate(post.data.date)}>
+                  <span
+                    class={`flex flex-col gap-1 ${RAIL} max-[640px]:flex-row max-[640px]:gap-3`}
+                  >
+                    <time class="tracking-normal normal-case" datetime={isoDate(post.data.date)}>
                       {formatDate(post.data.date)}
                     </time>
-                    {meta && <span class="text-muted normal-case">{meta}</span>}
+                    <span>{KIND_LABEL[post.data.kind]}</span>
                   </span>
-                  <strong class="block text-base leading-relaxed text-text">
-                    {post.data.title}
-                  </strong>
-                  <span class="mt-1.5 block text-sm leading-normal text-muted">
-                    {post.data.description}
+
+                  <span class="min-w-0">
+                    <strong class="block text-[1.2rem] leading-snug font-bold text-text transition-[color] group-hover:text-accent">
+                      {post.data.title}
+                    </strong>
+
+                    <span class="mt-2 block text-base leading-relaxed text-muted">
+                      {post.data.description}
+                    </span>
+
+                    <span class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.85rem] leading-relaxed text-muted">
+                      <span>{readingTimeLabel(post.body ?? '')}</span>
+                      {meta && (
+                        <>
+                          <span class="text-border" aria-hidden="true">
+                            /
+                          </span>
+                          <span>{meta}</span>
+                        </>
+                      )}
+                    </span>
                   </span>
                 </a>
               </li>

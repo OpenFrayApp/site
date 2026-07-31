@@ -1,0 +1,154 @@
+@layer components {
+  /* The body of a news post. Imported by NewsLayout.astro only, the way book.css is
+     imported by BookLayout — the home page and the legal pages never load it.
+
+     Why a third prose container: `.doc` is set for documents you consult (the legal
+     pages, the compendium listing) and `.book-body` for a bestiary read in columns.
+     A post is read straight through at length, so it wants larger type and more line
+     spacing than either. Changing `.doc` to get that would have moved the legal and
+     compendium pages with it.
+
+     Every prose default is wrapped in :where() so it carries no specificity and any
+     component nested in a post still wins — scripts/check-css-specificity.mjs fails the
+     build on one written the plain way. */
+
+  /* Preflight strips the browser defaults this prose relies on and never declared:
+     bold headings, list markers, paragraph margins. `.doc` and `.book-body` have their
+     own restoration in global.css; a post's lives here, next to the rest of its type. */
+  :where(.post-body) :where(h2, h3, h4) {
+    font-weight: bold;
+  }
+  :where(.post-body) :where(ul) {
+    list-style: disc;
+  }
+  :where(.post-body) :where(ol) {
+    list-style: decimal;
+  }
+
+  .post-body {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  :where(.post-body) :where(p),
+  :where(.post-body) :where(ul),
+  :where(.post-body) :where(ol) {
+    color: var(--muted);
+    margin: 1.35rem 0;
+  }
+
+  /* Bold inside body prose lifts to the foreground colour. Bolding a phrase is how a
+     post points at something, and at --muted it points at nothing. */
+  :where(.post-body) :where(strong) {
+    color: var(--text);
+  }
+
+  :where(.post-body) :where(a) {
+    color: var(--accent);
+  }
+
+  /* Headings are the post's structure and sit at the foreground colour. The top margin
+     is large enough that a section reads as a break rather than a new paragraph. */
+  :where(.post-body) :where(h2) {
+    font-size: 1.85rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 3.25rem 0 1rem;
+  }
+  :where(.post-body) :where(h3) {
+    font-size: 1.3rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 2.25rem 0 0.6rem;
+  }
+  :where(.post-body) :where(h4) {
+    font-size: 1.05rem;
+    color: var(--text);
+    margin: 1.75rem 0 0.4rem;
+  }
+
+  :where(.post-body) :where(ul, ol) {
+    padding-left: 1.4rem;
+  }
+  :where(.post-body) :where(li) {
+    margin: 0.5rem 0;
+  }
+
+  /* Tables run a step smaller than the body: a roster is scanned, not read, and at
+     1.125rem a four-column table stops fitting the measure. */
+  :where(.post-body) :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  :where(.post-body) :where(th),
+  :where(.post-body) :where(td) {
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--muted);
+  }
+  :where(.post-body) :where(thead) :where(th) {
+    color: var(--text);
+    font-weight: 600;
+    border-bottom-color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* rehype-table-scroll wraps every markdown table. The wrapper takes the overflow so
+     the table stays a real table and its width: 100% keeps filling the column — without
+     it, the only way to contain a wide table is to make it a block, and then it shrinks
+     to fit instead. */
+  .post-body .table-scroll {
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  :where(.post-body) :where(code) {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.85em;
+  }
+
+  :where(.post-body) :where(blockquote) {
+    margin: 1.5rem 0;
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--border);
+  }
+
+  :where(.post-body) :where(hr) {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  /* The reading rail's current section: the accent segment of the rule that runs down
+     the list. `aria-current` is what the scroll spy sets, so the styling and the
+     accessible state can't drift apart.
+
+     The colour of that entry is NOT set here — it is an `aria-[current=true]:text-accent`
+     utility in NewsLayout. This stylesheet is inside @layer components, and utilities
+     beat that layer whatever the specificity, so a colour written here would lose to the
+     `text-muted` on the same element. Nothing competes for box-shadow, so the bar can
+     stay. */
+  .post-toc a[aria-current='true'] {
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  @media (max-width: 560px) {
+    .post-body {
+      font-size: 1.0625rem;
+    }
+    :where(.post-body) :where(h2) {
+      font-size: 1.55rem;
+    }
+  }
+}

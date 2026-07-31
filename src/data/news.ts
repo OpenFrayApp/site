@@ -39,22 +39,10 @@ export const postUrl = (id: string) => `${SITE}${postPath(id)}`;
 // Dates come out of the frontmatter as UTC midnight, so every reader gets the day the
 // post says it is. Reading them back with local getters would move a post to the day
 // before west of Greenwich, which is how a dateline and a feed drift apart.
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-/** The dateline a post prints, in the house's American form: "July 31, 2026". */
+/** The dateline a post prints: "Jul 31, 2026". Month first, per the house's American
+ *  convention, and abbreviated so it sits on one line in the listing's narrow rail. */
 export const formatDate = (date: Date) =>
   `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 
@@ -71,6 +59,30 @@ export const byNewest = <T extends NewsPost>(posts: T[]): T[] =>
 /** The one-line summary under a card's title: an adventure's level band and running
  *  time, joined; an update has neither and gets nothing. */
 export const postMeta = (data: NewsData) => [data.levels, data.length].filter(Boolean).join(' · ');
+
+// 200 words a minute is the usual desk-reading figure. The number is a courtesy, not a
+// measurement — it only has to tell a reader "a coffee" from "a lunch break".
+const WORDS_PER_MINUTE = 200;
+
+/**
+ * Rough minutes to read a post, from its raw markdown body. Strips the things a reader
+ * never reads word by word — MDX imports, fenced code, tags, and markdown punctuation —
+ * so a post heavy in roster tables isn't credited with the pipe characters.
+ */
+export const readingTime = (body: string): number => {
+  const words = body
+    .replace(/^---[\s\S]*?\n---/, ' ')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^import\s[\s\S]*?$/gm, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/[#*_>|`~[\]()·—–-]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+};
+
+/** The reading time as the listing prints it. */
+export const readingTimeLabel = (body: string) => `${readingTime(body)} min read`;
 
 /** Escape the five characters that would otherwise close a tag or an entity in XML. */
 export const escapeXml = (value: string) =>

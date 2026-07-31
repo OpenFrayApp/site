@@ -15,6 +15,8 @@ import {
   postMeta,
   postPath,
   postUrl,
+  readingTime,
+  readingTimeLabel,
   rfc822,
   rssXml,
   type NewsPost,
@@ -36,13 +38,13 @@ describe('news dates', () => {
   it('prints the day the frontmatter says, not the reader’s local one', () => {
     // Frontmatter dates parse as UTC midnight. Read back with local getters, this is
     // July 30 anywhere west of Greenwich — the dateline and the feed would disagree.
-    expect(formatDate(new Date('2026-07-31'))).toBe('July 31, 2026');
+    expect(formatDate(new Date('2026-07-31'))).toBe('Jul 31, 2026');
     expect(isoDate(new Date('2026-07-31'))).toBe('2026-07-31');
   });
 
-  it('spells the month out, American style, per STYLE.md', () => {
-    expect(formatDate(new Date('2026-01-05'))).toBe('January 5, 2026');
-    expect(formatDate(new Date('2026-12-25'))).toBe('December 25, 2026');
+  it('puts the month first and abbreviates it, so it fits the listing’s rail', () => {
+    expect(formatDate(new Date('2026-01-05'))).toBe('Jan 5, 2026');
+    expect(formatDate(new Date('2026-12-25'))).toBe('Dec 25, 2026');
   });
 
   it('gives RSS an RFC 822 pubDate, not the ISO form', () => {
@@ -96,6 +98,42 @@ describe('news metadata', () => {
   });
 });
 
+describe('reading time', () => {
+  it('counts prose at 200 words a minute', () => {
+    expect(readingTime('word '.repeat(200))).toBe(1);
+    expect(readingTime('word '.repeat(1200))).toBe(6);
+  });
+
+  it('never reads as zero minutes, however short the post', () => {
+    expect(readingTime('One line.')).toBe(1);
+    expect(readingTime('')).toBe(1);
+  });
+
+  it('does not credit a roster table’s pipes and dashes as words', () => {
+    const table = ['| Creature | № | CR |', '| --- | :-: | :-: |', '| Snaproot | 2 | 1/4 |'].join(
+      '\n',
+    );
+    // Nine words of content, not the thirty-odd tokens the raw markdown splits into.
+    expect(readingTime(table + ' ' + 'word '.repeat(191))).toBe(1);
+  });
+
+  it('skips MDX imports, fenced code, and tags', () => {
+    const body = [
+      "import Note from '../../components/Note.astro';",
+      '```js',
+      'const noise = "not prose";',
+      '```',
+      '<Note type="Running it">Real words here.</Note>',
+    ].join('\n');
+    expect(readingTime(body)).toBe(1);
+    expect(readingTime(body + ' ' + 'word '.repeat(600))).toBe(3);
+  });
+
+  it('labels itself the way the listing prints it', () => {
+    expect(readingTimeLabel('word '.repeat(800))).toBe('4 min read');
+  });
+});
+
 describe('the news feed', () => {
   const feed = rssXml([
     post('second', '2026-01-01'),
@@ -146,7 +184,12 @@ describe('the news feed', () => {
 
 describe('the section is reachable', () => {
   const layout = readFileSync(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
-  const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  const newsLayout = readFileSync(
+    new URL('../src/layouts/NewsLayout.astro', import.meta.url),
+    'utf8',
+  );
+  const css = readFileSync(new URL('../src/styles/news.css', import.meta.url), 'utf8');
+  const global = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
 
   it('has a nav entry, so the posts are not orphans', () => {
     expect(layout).toContain('href="/news/"');
@@ -158,8 +201,40 @@ describe('the section is reachable', () => {
   });
 
   it('gives a post’s markdown tables somewhere to scroll', () => {
-    // rehype-table-scroll wraps every markdown table; without a rule for the wrapper
-    // inside `.doc`, a wide roster table scrolls the whole page sideways instead.
-    expect(css).toMatch(/\.doc \.table-scroll\s*\{[^}]*overflow-x:\s*auto/);
+    // rehype-table-scroll wraps every markdown table; without a rule for the wrapper,
+    // a wide roster table scrolls the whole page sideways instead.
+    expect(css).toMatch(/\.post-body \.table-scroll\s*\{[^}]*overflow-x:\s*auto/);
+  });
+
+  it('sizes posts without touching the containers other pages use', () => {
+    // `.doc` styles the legal and listing pages; a post reads longer and larger, so it
+    // has its own container. Moving `.doc` instead would have moved those pages too.
+    expect(css).toMatch(/\.post-body\s*\{[^}]*font-size/);
+    expect(global).not.toContain('.post-body');
+  });
+
+  it('restores the preflight defaults its prose relies on', () => {
+    // Preflight strips these and news.css is the only stylesheet a post loads, so the
+    // restoration has to be in here or headings render regular and lists lose markers.
+    expect(css).toMatch(/:where\(\.post-body\) :where\(h2, h3, h4\)\s*\{[^}]*font-weight: bold/);
+    expect(css).toMatch(/:where\(\.post-body\) :where\(ul\)\s*\{[^}]*list-style: disc/);
+  });
+
+  it('keys the reading rail’s highlight off aria-current, not a class', () => {
+    // The stylesheet and the accessibility tree then cannot drift apart.
+    expect(newsLayout).toContain("setAttribute('aria-current', 'true')");
+    expect(css).toContain("aria-current='true'");
+  });
+
+  it('colours the current entry with a utility, because the stylesheet would lose', () => {
+    // Site CSS lives in @layer components and utilities beat that layer whatever the
+    // specificity, so a colour in news.css loses to the `text-muted` on the same anchor.
+    // This cost the accent its colour once already — the bar showed, the text did not.
+    expect(newsLayout).toContain('aria-[current=true]:text-accent');
+    expect(css).not.toMatch(/a\[aria-current='true'\]\s*\{[^}]*color:/);
+  });
+
+  it('leaves the rail working without JavaScript', () => {
+    expect(newsLayout).toMatch(/href=\{`#\$\{h\.slug\}`\}/);
   });
 });

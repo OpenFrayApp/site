@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { post, older } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const keywords = [
   'OpenFray news',
@@ -24,6 +24,13 @@ const keywords = [
 ];
 ---
 
-<NewsLayout id={post.id} data={post.data} older={older} keywords={keywords}>
+<NewsLayout
+  id={post.id}
+  data={post.data}
+  body={post.body ?? ''}
+  headings={headings}
+  older={older}
+  keywords={keywords}
+>
   <Content />
 </NewsLayout>

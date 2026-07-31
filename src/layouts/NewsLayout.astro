@@ -1,4 +1,5 @@
 ---
+import type { MarkdownHeading } from 'astro';
 import Layout from './Layout.astro';
 import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
 import {
@@ -9,22 +10,36 @@ import {
   postMeta,
   postPath,
   postUrl,
+  readingTimeLabel,
   type NewsData,
   type NewsPost,
 } from '../data/news.ts';
+import '../styles/news.css';
 
 interface Props {
   /** The post being rendered — its id is the slug, its data the frontmatter. */
   id: string;
   data: NewsData;
+  /** Raw markdown, for the reading time. */
+  body: string;
+  /** The post's own headings, for the reading rail. */
+  headings?: MarkdownHeading[];
   /** The post published before this one, if any, for the link at the foot. */
   older?: NewsPost;
   keywords?: string[];
 }
 
-const { id, data, older, keywords = [] } = Astro.props;
+const { id, data, body, headings = [], older, keywords = [] } = Astro.props;
 
 const meta = postMeta(data);
+
+// Only H2 and H3 reach the rail, and only when there are at least two — a rail with one
+// entry is furniture, not navigation.
+const navHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = navHeadings.length > 1;
+
+// The left rail's stacked date and kind, shared by the header here and the listing.
+const RAIL_LABEL = 'text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted uppercase';
 
 // BlogPosting rather than Article: this is a dated feed entry, and the type is what
 // tells a search engine to show the date beside it.
@@ -63,48 +78,139 @@ const schema = [
   keywords={keywords}
   schema={schema}
 >
-  <main class="doc mx-auto max-w-3xl px-6 pt-4 pb-12">
-    <article>
-      <header>
-        <p
-          class="m-0 mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-relaxed font-semibold tracking-widest uppercase"
-        >
+  {
+    /* Prose left, reading rail right. Below 900px the rail moves above the article, where
+      a contents list is still useful but a sticky column is not. */
+  }
+  <main
+    class="mx-auto grid w-full max-w-5xl grid-cols-[minmax(0,1fr)_13rem] items-start gap-12 px-6 pt-4 pb-16 max-[900px]:grid-cols-[minmax(0,1fr)] max-[900px]:gap-0 max-[560px]:px-4"
+  >
+    <article class="min-w-0 max-[900px]:order-2">
+      <header class="mb-10">
+        <p class={`m-0 mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 ${RAIL_LABEL}`}>
+          <span>{KIND_LABEL[data.kind]}</span>
+          <span class="text-border" aria-hidden="true">/</span>
+          <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
           {
-            /* --muted, not --faint: a date and a level band are content, and light-theme
-              --faint is #94a3b8 on #f8fafc — about 2.5:1. */
+            meta && (
+              <>
+                <span class="text-border" aria-hidden="true">
+                  /
+                </span>
+                <span class="normal-case">{meta}</span>
+              </>
+            )
           }
-          <span class="text-accent">{KIND_LABEL[data.kind]}</span>
-          <time class="text-muted" datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
-          {meta && <span class="text-muted normal-case">{meta}</span>}
         </p>
 
-        <h1>{data.title}</h1>
+        <h1
+          class="mt-0 mb-5 max-w-[20ch] text-[clamp(2.1rem,4.6vw,3rem)] leading-[1.06] font-extrabold tracking-tight text-text"
+        >
+          {data.title}
+        </h1>
 
-        <p class="lead mt-3 mb-8 text-[1.05rem] leading-relaxed text-text">
+        <p class="m-0 max-w-[42rem] text-[1.3rem] leading-[1.55] text-text">
           {data.description}
         </p>
       </header>
 
-      <slot />
+      <div class="post-body max-w-[44rem]">
+        <slot />
+      </div>
+
+      <nav
+        class="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-sm leading-relaxed"
+        aria-label="More news"
+      >
+        <a class="font-semibold text-accent no-underline hover:underline" href={`${NEWS_BASE}/`}>
+          ← All news
+        </a>
+        {
+          older && (
+            <a
+              class="text-right font-semibold text-accent no-underline hover:underline"
+              href={postPath(older.id)}
+            >
+              {older.data.title} →
+            </a>
+          )
+        }
+      </nav>
     </article>
 
-    <nav
-      class="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-sm leading-relaxed"
-      aria-label="More news"
+    <aside
+      class="sticky top-6 self-start max-[900px]:static max-[900px]:order-1 max-[900px]:mb-10 max-[900px]:w-full"
     >
-      <a class="font-semibold text-accent no-underline hover:underline" href={`${NEWS_BASE}/`}>
-        ← All news
-      </a>
       {
-        older && (
-          <a
-            class="text-right font-semibold text-accent no-underline hover:underline"
-            href={postPath(older.id)}
-          >
-            {older.data.title} →
-          </a>
+        showToc && (
+          <nav class="post-toc" aria-labelledby="toc-heading">
+            <p id="toc-heading" class={`m-0 mb-3 ${RAIL_LABEL}`}>
+              On this page
+            </p>
+            <ul class="m-0 list-none border-l border-border p-0">
+              {navHeadings.map((h) => (
+                <li class="m-0">
+                  {/* The current entry's colour is a utility, not a stylesheet rule:
+                      this site wraps its own CSS in @layer components, and utilities
+                      beat that layer whatever the specificity — so `text-muted` would
+                      win over a `.post-toc a[aria-current]` colour every time. Same
+                      `aria-[…]` variant BookLayout uses for the chapter it is on. */}
+                  <a
+                    class={`block py-1.5 pr-2 leading-snug text-muted no-underline transition-[color,box-shadow] hover:text-accent aria-[current=true]:font-semibold aria-[current=true]:text-accent ${
+                      h.depth === 3 ? 'pl-6 text-[0.8rem]' : 'pl-3 text-[0.85rem]'
+                    }`}
+                    href={`#${h.slug}`}
+                  >
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         )
       }
-    </nav>
+
+      <p class={showToc ? 'mt-6 mb-0 text-sm leading-relaxed' : 'm-0 text-sm leading-relaxed'}>
+        <a class="font-semibold text-accent no-underline hover:underline" href="/console/">
+          Try it in the console →
+        </a>
+      </p>
+    </aside>
   </main>
+
+  <script>
+    // Marks the section you are reading in the rail. Progressive enhancement: with no
+    // JavaScript every entry is still a working anchor, just none of them highlighted.
+    // `aria-current` carries the state so the stylesheet and the accessibility tree
+    // cannot disagree — news.css keys its accent off the same attribute.
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.post-toc a'));
+    const targets = links
+      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    if (links.length && targets.length) {
+      /** Highlight the entry for `id`, clearing whichever was set before. */
+      const mark = (id: string) => {
+        for (const link of links) {
+          const match = decodeURIComponent(link.hash.slice(1)) === id;
+          if (match) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        }
+      };
+
+      // The heading nearest the top of the viewport wins, so the rail tracks what is
+      // being read rather than whatever crossed the threshold most recently.
+      const sync = () => {
+        let current = targets[0];
+        for (const target of targets) {
+          if (target.getBoundingClientRect().top <= 120) current = target;
+        }
+        mark(current.id);
+      };
+
+      sync();
+      window.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync, { passive: true });
+    }
+  </script>
 </Layout>
