@@ -36,7 +36,11 @@ const newsSchema = ({ image }: SchemaContext) =>
       description: z.string(),
       // Publication date, `YYYY-MM-DD`. Sorts the section and prints as the dateline.
       date: z.coerce.date(),
-      kind: z.enum(['update', 'adventure']),
+      // What the post is. A release is a version going out and takes a generated cover
+      // (scripts/make-release-cover.mjs); an update is anything else that changed; an
+      // adventure is something to run, and follows STYLE.md's game-content register
+      // rather than its plain-instruction one.
+      kind: z.enum(['release', 'update', 'adventure']),
       // Adventures only: the level band and how long a table should expect it to take.
       // An update leaves both out, so the card shows nothing where they would go.
       levels: z.string().optional(),

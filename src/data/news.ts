@@ -4,11 +4,12 @@
 import type { ImageMetadata } from 'astro';
 import { SITE } from './seo.ts';
 
-/** What a post is. An update is a release note; an adventure is something to run. */
-export type NewsKind = 'update' | 'adventure';
+/** What a post is: a version going out, anything else that changed, or something to run. */
+export type NewsKind = 'release' | 'update' | 'adventure';
 
 /** The badge each kind carries on its card and above its title. */
 export const KIND_LABEL: Record<NewsKind, string> = {
+  release: 'Release',
   update: 'Update',
   adventure: 'Adventure',
 };
