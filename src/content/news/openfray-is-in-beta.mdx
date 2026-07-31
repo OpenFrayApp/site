@@ -2,6 +2,7 @@
 title: 'OpenFray is in beta'
 description: 'The combat console is out of alpha. Here is what it runs at the table today, which libraries it ships with, and the one part still to come.'
 date: 2026-07-31
+slug: 'openfray-beta-release'
 kind: 'release'
 cover: '../../assets/news/openfray-is-in-beta.webp'
 coverAlt: 'The version number 0.2.0, large and pale over a dark indigo wash, under the word RELEASE and above the line “Out of alpha”.'
@@ -9,7 +10,41 @@ coverAlt: 'The version number 0.2.0, large and pale over a dark indigo wash, und
 
 The version number moved to 0.2.0 and the label moved from alpha to beta. Nothing about
 the way you use OpenFray changed — it still opens in a browser tab, still needs no
-account, and still keeps your fight in that tab until you decide otherwise.
+account, and still keeps your fight in that tab until you decide otherwise. What changed
+is how much of a session it covers.
+
+## What's new since the alpha
+
+[The alpha](/news/openfray-is-in-alpha/) ran a fight: initiative, resources, effects,
+spells, group saves and dice. It had one book in it and stopped at the last hit point.
+Since then:
+
+- **Four more libraries.** The alpha shipped the 2024 rules alone. There are now the 2014
+  rules as well, the three Tome of Beasts books from Kobold Press, and two OpenFray writes
+  itself — see [the libraries](#the-libraries) below.
+- **The creatures come from the source.** The 2024 stat blocks and spells are now read
+  from the official rules document rather than a third-party feed, which fixed a long tail
+  of wrong sizes, missing alignments and mangled casting times.
+- **The fight is rated before it starts.** The footer says how hard the board in front of
+  you looks, and changes as you add and remove creatures.
+- **And summarized after it ends.** Experience earned and what it works out to per player,
+  how many rounds, how long in real time and in game time, total damage each way, and
+  three awards.
+- **The roll log became a game log.** It records the fight rather than the dice —
+  turns and rounds, conditions applied and cleared, concentration started and broken,
+  damage, healing, knockouts, rests — kept for the whole fight, grouped by round, and
+  filterable by kind. A resolved attack collapses into one line.
+- **Clocks while you fight.** Real time, with pauses excluded, and in-game time at six
+  seconds a round — which answers "how long has that spell got left?".
+- **Never retype a stat block.** Paste a creature as JSON, or use the free
+  [OpenFray Importer](/docs/library/importer/) browser add-on to take one from a
+  D&amp;D&nbsp;Beyond page.
+- **Conditions explain themselves.** Point at a condition anywhere it appears and its
+  rules text comes up, the way spell names already did.
+- **Counters.** A tally you keep by hand for the things nothing counts for you —
+  Exhaustion, a corruption track, a countdown of your own.
+- **A handbook.** Every part of the console, written out and illustrated, at
+  [openfray.app/docs](/docs/).
 
 ## What the console runs
 
