@@ -238,3 +238,48 @@ describe('the section is reachable', () => {
     expect(newsLayout).toMatch(/href=\{`#\$\{h\.slug\}`\}/);
   });
 });
+
+describe('featured images', () => {
+  const config = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
+  const newsLayout = readFileSync(
+    new URL('../src/layouts/NewsLayout.astro', import.meta.url),
+    'utf8',
+  );
+  const listing = readFileSync(new URL('../src/pages/news/index.astro', import.meta.url), 'utf8');
+  const layout = readFileSync(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
+
+  it('runs through astro:assets, so a phone never fetches the full-size file', () => {
+    expect(newsLayout).toContain("from 'astro:assets'");
+    expect(listing).toContain("from 'astro:assets'");
+    expect(newsLayout).toContain('sizes=');
+    expect(listing).toContain('sizes=');
+  });
+
+  it('is optional, so a post without one still builds', () => {
+    expect(config).toMatch(/cover:\s*image\(\)\.optional\(\)/);
+    expect(config).toMatch(/coverAlt:\s*z\.string\(\)\.optional\(\)/);
+  });
+
+  it('refuses a cover that has no alt text', () => {
+    // Optional on its own would let an undescribed image ship. The pair is what the
+    // schema enforces, so the build fails rather than the page.
+    expect(config).toMatch(/\.refine\(\(data\) => !data\.cover \|\| Boolean\(data\.coverAlt\)/);
+  });
+
+  it('renders nothing at all when a post has no cover', () => {
+    // Not an empty <img> and not a reserved gutter — the column goes with the picture.
+    expect(newsLayout).toContain('data.cover && (');
+    expect(listing).toContain('post.data.cover && (');
+    expect(listing).toMatch(/post\.data\.cover\s*\?\s*'grid-cols-/);
+  });
+
+  it('gives a post its own social card, and falls back to the site banner without one', () => {
+    expect(layout).toContain('social?: { image: ImageMetadata; alt: string }');
+    expect(layout).toMatch(/getImage\(\{ src: social\.image, width: 1200, height: 630/);
+    expect(layout).toContain("new URL('/og-image.png', Astro.site)");
+    // The declared og:image:width/height are fixed at 1200x630, so the file has to be
+    // resized to match rather than linked at whatever size it happens to be.
+    expect(layout).toMatch(/og:image:width" content="1200"/);
+    expect(layout).toMatch(/og:image:height" content="630"/);
+  });
+});

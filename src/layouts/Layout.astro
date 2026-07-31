@@ -1,4 +1,6 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import '../styles/global.css';
 import { baseKeywords, websiteNodes } from '../data/seo.ts';
 import { libraries } from '../data/libraries.ts';
@@ -8,6 +10,9 @@ interface Props {
   description?: string;
   keywords?: string[];
   schema?: Record<string, unknown>[];
+  /** A page's own social image. Without one the site banner stands in, which is right
+   *  for pages that have no single picture of their own. */
+  social?: { image: ImageMetadata; alt: string };
 }
 
 const {
@@ -16,11 +21,23 @@ const {
     "world's oldest tabletop roleplaying game. Compatible with 5.5e and 5e.",
   keywords = [],
   schema = [],
+  social,
 } = Astro.props;
 
 const github = 'https://github.com/SirDarcanos/openfray';
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL('/og-image.png', Astro.site);
+
+// A social card wants a real file at a known size, so the source is resized here rather
+// than linked at whatever dimensions it happens to have. `.src` is a build path in a
+// build and an /@fs path on the dev server; crawlers only ever see the former, and
+// resolving it against the site origin is what makes it absolute, which they require.
+const socialImage = social
+  ? await getImage({ src: social.image, width: 1200, height: 630, format: 'png' })
+  : null;
+const ogImage = socialImage
+  ? new URL(socialImage.src, Astro.site)
+  : new URL('/og-image.png', Astro.site);
+const ogImageAlt = social?.alt ?? 'OpenFray — a DnD 5e combat console for Game Masters';
 
 const keywordList = [...new Set([...keywords, ...baseKeywords])].join(', ');
 const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, ...schema] };
@@ -63,7 +80,7 @@ const navLink =
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="OpenFray — a DnD 5e combat console for Game Masters" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

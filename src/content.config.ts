@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // One entry per chapter; `order` drives the sidebar and the previous/next links, so
@@ -28,17 +28,33 @@ const broodAndBloom = defineCollection({
 // The news section: release notes and short adventures, one file per post. `kind` is
 // what the post is, and it decides both the badge and which half of STYLE.md applies —
 // an update is documentation, an adventure is game content.
-const newsSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  // Publication date, `YYYY-MM-DD`. Sorts the section and prints as the dateline.
-  date: z.coerce.date(),
-  kind: z.enum(['update', 'adventure']),
-  // Adventures only: the level band and how long a table should expect it to take.
-  // An update leaves both out, so the card shows nothing where they would go.
-  levels: z.string().optional(),
-  length: z.string().optional(),
-});
+// `image()` needs the schema as a function, so this one is built rather than declared.
+const newsSchema = ({ image }: SchemaContext) =>
+  z
+    .object({
+      title: z.string(),
+      description: z.string(),
+      // Publication date, `YYYY-MM-DD`. Sorts the section and prints as the dateline.
+      date: z.coerce.date(),
+      kind: z.enum(['update', 'adventure']),
+      // Adventures only: the level band and how long a table should expect it to take.
+      // An update leaves both out, so the card shows nothing where they would go.
+      levels: z.string().optional(),
+      length: z.string().optional(),
+      // The featured image, as a path relative to the post — put the file in
+      // `src/assets/news/`. Optional: a post without one still builds, and the listing
+      // and the page simply leave the picture out rather than reserving a hole for it.
+      // A shared link then falls back to the site's own banner.
+      cover: image().optional(),
+      coverAlt: z.string().optional(),
+    })
+    // A cover without alt text is a bug, and the build is where it should stop rather
+    // than the page. Requiring `coverAlt` outright would instead have forced every post
+    // to carry an image it may not have.
+    .refine((data) => !data.cover || Boolean(data.coverAlt), {
+      message: 'A post with a `cover` also needs `coverAlt` describing it.',
+      path: ['coverAlt'],
+    });
 
 const news = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/news' }),

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 OpenFray contributors
 
+import type { ImageMetadata } from 'astro';
 import { SITE } from './seo.ts';
 
 /** What a post is. An update is a release note; an adventure is something to run. */
@@ -20,6 +21,10 @@ export interface NewsData {
   kind: NewsKind;
   levels?: string;
   length?: string;
+  /** The featured image, when the post has one. The schema keeps `coverAlt` beside it
+   *  and refuses one without the other. */
+  cover?: ImageMetadata;
+  coverAlt?: string;
 }
 
 /** A collection entry reduced to what these helpers need, so they stay testable. */

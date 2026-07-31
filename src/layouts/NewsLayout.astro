@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from 'astro';
+import { Image } from 'astro:assets';
 import Layout from './Layout.astro';
 import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
 import {
@@ -60,6 +61,7 @@ const schema = [
     url: postUrl(id),
     datePublished: isoDate(data.date),
     inLanguage: 'en',
+    ...(data.cover ? { image: new URL(data.cover.src, SITE).href } : {}),
     isPartOf: { '@id': `${SITE}${NEWS_BASE}/#blog` },
     author: { '@id': PUBLISHER_ID },
     publisher: { '@id': PUBLISHER_ID },
@@ -77,6 +79,7 @@ const schema = [
   description={data.description}
   keywords={keywords}
   schema={schema}
+  social={data.cover ? { image: data.cover, alt: data.coverAlt ?? data.title } : undefined}
 >
   {
     /* Prose left, reading rail right. Below 900px the rail moves above the article, where
@@ -112,6 +115,24 @@ const schema = [
         <p class="m-0 max-w-[42rem] text-[1.3rem] leading-[1.55] text-text">
           {data.description}
         </p>
+
+        {
+          /* The cover sits under the lead rather than above the title: the headline is
+            what a reader landed for, and a picture above it pushes it off a short
+            screen. `sizes` matches the prose column so a phone never downloads the
+            full-width source. A post without a cover just goes straight to its body. */
+          data.cover && (
+            <Image
+              class="mt-8 block h-auto w-full max-w-[44rem] rounded-xl border border-border"
+              src={data.cover}
+              alt={data.coverAlt ?? ''}
+              widths={[560, 900, 1400]}
+              sizes="(max-width: 900px) 92vw, 44rem"
+              formats={['avif', 'webp']}
+              loading="eager"
+            />
+          )
+        }
       </header>
 
       <div class="post-body max-w-[44rem]">

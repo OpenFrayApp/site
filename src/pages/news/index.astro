@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../../data/seo.ts';
 import {
@@ -67,16 +68,7 @@ const RAIL = 'text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted
       </h1>
 
       <p class="m-0 mb-4 text-[1.3rem] leading-[1.55] text-text">
-        What has changed in the console, and short adventures to run with it.
-      </p>
-
-      <p class="m-0 text-base leading-relaxed text-muted">
-        Adventures use creatures from <a class="text-accent" href="/compendium/"
-          >OpenFray’s own libraries</a
-        >, so everything a fight needs is already in <a class="text-accent" href="/console/"
-          >the console</a
-        >. There is <a class="text-accent" href={`${NEWS_BASE}/rss.xml`}>a feed</a> if you would rather
-        not check back.
+        What has changed in the console, updates, short adventures, how to run creatures, and more.
       </p>
     </header>
 
@@ -94,7 +86,11 @@ const RAIL = 'text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted
                 {/* The whole row is one link, so the target is the entry rather than the
                     title alone — easier to hit, and one stop in the tab order. */}
                 <a
-                  class="group grid grid-cols-[8.5rem_minmax(0,1fr)] items-start gap-x-8 py-8 no-underline max-[640px]:grid-cols-[minmax(0,1fr)] max-[640px]:gap-y-3 max-[640px]:py-6"
+                  class={`group grid items-start gap-x-7 py-8 no-underline max-[640px]:grid-cols-[minmax(0,1fr)] max-[640px]:gap-y-4 max-[640px]:py-6 ${
+                    post.data.cover
+                      ? 'grid-cols-[7.5rem_minmax(0,1fr)_12rem] max-[900px]:grid-cols-[7.5rem_minmax(0,1fr)]'
+                      : 'grid-cols-[7.5rem_minmax(0,1fr)]'
+                  }`}
                   href={postPath(post.id)}
                 >
                   <span
@@ -127,6 +123,23 @@ const RAIL = 'text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted
                       )}
                     </span>
                   </span>
+
+                  {/* Last in the DOM so a screen reader reaches the title before the
+                      picture of it. The grid puts it in the third column anyway; below
+                      900px it spans the row under the text rather than squeezing the
+                      summary into a gutter. Rows without a cover drop the column with
+                      it, so nothing reserves an empty gutter. */}
+                  {post.data.cover && (
+                    <Image
+                      class="block h-auto w-full rounded-lg border border-border transition-[border-color] group-hover:border-accent max-[900px]:col-span-2 max-[900px]:max-w-[22rem] max-[640px]:col-span-1 max-[640px]:max-w-none"
+                      src={post.data.cover}
+                      alt={post.data.coverAlt ?? ''}
+                      widths={[240, 480, 704]}
+                      sizes="(max-width: 640px) 92vw, (max-width: 900px) 22rem, 12rem"
+                      formats={['avif', 'webp']}
+                      loading="lazy"
+                    />
+                  )}
                 </a>
               </li>
             );
