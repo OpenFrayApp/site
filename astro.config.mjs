@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeTableScroll from './src/plugins/rehype-table-scroll.mjs';
 import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
+import { createLastmod } from './src/lib/lastmod.mjs';
 
 // The marketing site for openfray.app. Builds to site/dist, which the root build
 // (scripts/assemble-site.mjs) merges into the site root of dist/, alongside the app
@@ -19,9 +20,16 @@ export default defineConfig({
   // The print editions are local tools, not pages of the site: scripts/assemble-site.mjs
   // drops them from dist/, so advertising them here would point crawlers at 404s. The
   // news feed ships, but a sitemap lists pages — the feed is linked from <head> instead.
+  // `lastmod` comes from the last commit that touched each page's source, which is the
+  // only honest answer to when the page changed — a build timestamp would mark the whole
+  // site as modified on every deploy. It is omitted rather than guessed when git can't
+  // say (see src/lib/lastmod.mjs).
   integrations: [
     mdx(),
-    sitemap({ filter: (page) => !page.includes('/print') && !page.endsWith('/rss.xml') }),
+    sitemap({
+      filter: (page) => !page.includes('/print') && !page.endsWith('/rss.xml'),
+      serialize: createLastmod(),
+    }),
   ],
   // MDX inherits these, so chapter tables get their scroll wrapper and off-site links
   // open in a new tab without every page having to remember.
