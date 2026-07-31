@@ -304,6 +304,15 @@ describe('featured images', () => {
     expect(listing).toMatch(/post\.data\.cover\s*\?\s*'grid-cols-/);
   });
 
+  it('declares a post an article, not a website', () => {
+    // Open Graph splits pages by type, and every page here was `website` — including
+    // the posts, which is what stops a card showing a date. The switch is driven by the
+    // `article` prop so only dated posts get it; the home page stays a website.
+    expect(layout).toContain("content={article ? 'article' : 'website'}");
+    expect(layout).toContain('article:published_time');
+    expect(newsLayout).toContain('article={{ published: data.date }}');
+  });
+
   it('gives a post its own social card, and falls back to the site banner without one', () => {
     expect(layout).toContain('social?: { image: ImageMetadata; alt: string }');
     expect(layout).toMatch(/getImage\(\{ src: social\.image, width: 1200, height: 630/);

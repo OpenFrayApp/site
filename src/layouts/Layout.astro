@@ -13,6 +13,10 @@ interface Props {
   /** A page's own social image. Without one the site banner stands in, which is right
    *  for pages that have no single picture of their own. */
   social?: { image: ImageMetadata; alt: string };
+  /** Set on a dated post. Open Graph splits pages into types, and a news post is an
+   *  `article` rather than the `website` every other page here is — which is what lets a
+   *  card show a byline and a date instead of treating it as a landing page. */
+  article?: { published: Date };
 }
 
 const {
@@ -22,6 +26,7 @@ const {
   keywords = [],
   schema = [],
   social,
+  article,
 } = Astro.props;
 
 const github = 'https://github.com/SirDarcanos/openfray';
@@ -79,7 +84,12 @@ const navLink =
     <meta name="theme-color" content="#020617" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    {
+      article && (
+        <meta property="article:published_time" content={article.published.toISOString()} />
+      )
+    }
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="OpenFray" />
     <meta property="og:image" content={ogImage} />

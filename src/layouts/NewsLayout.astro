@@ -81,6 +81,7 @@ const schema = [
   keywords={keywords}
   schema={schema}
   social={data.cover ? { image: data.cover, alt: data.coverAlt ?? data.title } : undefined}
+  article={{ published: data.date }}
 >
   {
     /* Prose left, reading rail right. Below 900px the rail moves above the article, where
