@@ -239,6 +239,22 @@ describe('the section is reachable', () => {
   });
 });
 
+describe('post slugs', () => {
+  const config = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
+
+  it('lets a post set its own URL, separately from its title and file name', () => {
+    // The glob loader reads `slug` as the entry id before the schema runs, so declaring
+    // it here is what types and validates it — the routing works either way.
+    expect(config).toMatch(/slug: z\s*\n?\s*\.string\(\)/);
+    expect(config).toContain('.optional()');
+  });
+
+  it('holds a slug to lowercase kebab-case', () => {
+    // Astro will happily build a directory called "Hello World!" and report nothing.
+    expect(config).toContain('/^[a-z0-9]+(?:-[a-z0-9]+)*$/');
+  });
+});
+
 describe('featured images', () => {
   const config = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
   const newsLayout = readFileSync(

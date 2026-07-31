@@ -34,6 +34,22 @@ const newsSchema = ({ image }: SchemaContext) =>
     .object({
       title: z.string(),
       description: z.string(),
+      // The URL the post is served at, when it shouldn't be the file name. The glob
+      // loader reads this as the entry's id before the schema runs, so it decides the
+      // route, the feed's guid and the canonical link all at once — leave it out and
+      // the file name does the same job.
+      //
+      // Lowercase kebab-case is enforced rather than assumed: a slug of "Hello World!"
+      // builds a directory with a space and an exclamation mark in it, and nothing
+      // errors. `scripts/check-news-slugs.mjs` covers what a per-entry schema can't
+      // see, which is two posts claiming one slug.
+      slug: z
+        .string()
+        .regex(
+          /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          'must be lowercase letters, digits and single hyphens, e.g. "player-view"',
+        )
+        .optional(),
       // Publication date, `YYYY-MM-DD`. Sorts the section and prints as the dateline.
       date: z.coerce.date(),
       // What the post is. A release is a version going out and takes a generated cover
