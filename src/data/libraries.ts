@@ -22,6 +22,7 @@ export const shippedLibraries: string[] = [
   'Tome of Beasts 1 (Kobold Press)',
   'Tome of Beasts 2 (Kobold Press)',
   'Tome of Beasts 3 (Kobold Press)',
+  'Creature Codex (Kobold Press)',
 ];
 
 export const libraries: Library[] = [
