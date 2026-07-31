@@ -31,8 +31,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // than linked at whatever dimensions it happens to have. `.src` is a build path in a
 // build and an /@fs path on the dev server; crawlers only ever see the former, and
 // resolving it against the site origin is what makes it absolute, which they require.
+// JPEG, not PNG. Every crawler handles both, but a cover is either painted artwork or a
+// gradient — photographic either way, which is what JPEG is for and what PNG is worst
+// at. The painted Brood & Bloom cover is 1194KB as a PNG and 119KB here, at a quality
+// where the release covers' numerals show no ringing. WebP would be smaller again and is
+// a gamble on the older scrapers that still read these tags.
 const socialImage = social
-  ? await getImage({ src: social.image, width: 1200, height: 630, format: 'png' })
+  ? await getImage({ src: social.image, width: 1200, height: 630, format: 'jpeg', quality: 88 })
   : null;
 const ogImage = socialImage
   ? new URL(socialImage.src, Astro.site)
