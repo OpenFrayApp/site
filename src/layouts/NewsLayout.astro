@@ -1,0 +1,110 @@
+---
+import Layout from './Layout.astro';
+import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
+import {
+  KIND_LABEL,
+  NEWS_BASE,
+  formatDate,
+  isoDate,
+  postMeta,
+  postPath,
+  postUrl,
+  type NewsData,
+  type NewsPost,
+} from '../data/news.ts';
+
+interface Props {
+  /** The post being rendered — its id is the slug, its data the frontmatter. */
+  id: string;
+  data: NewsData;
+  /** The post published before this one, if any, for the link at the foot. */
+  older?: NewsPost;
+  keywords?: string[];
+}
+
+const { id, data, older, keywords = [] } = Astro.props;
+
+const meta = postMeta(data);
+
+// BlogPosting rather than Article: this is a dated feed entry, and the type is what
+// tells a search engine to show the date beside it.
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': `${SITE}${NEWS_BASE}/#blog`,
+    name: 'OpenFray news',
+    url: `${SITE}${NEWS_BASE}/`,
+    isPartOf: { '@id': WEBSITE_ID },
+    publisher: { '@id': PUBLISHER_ID },
+  },
+  {
+    '@type': 'BlogPosting',
+    '@id': `${postUrl(id)}#post`,
+    headline: data.title,
+    description: data.description,
+    url: postUrl(id),
+    datePublished: isoDate(data.date),
+    inLanguage: 'en',
+    isPartOf: { '@id': `${SITE}${NEWS_BASE}/#blog` },
+    author: { '@id': PUBLISHER_ID },
+    publisher: { '@id': PUBLISHER_ID },
+  },
+  breadcrumbs([
+    { name: 'OpenFray', url: '/' },
+    { name: 'News', url: `${NEWS_BASE}/` },
+    { name: data.title, url: postPath(id) },
+  ]),
+];
+---
+
+<Layout
+  title={`${data.title} — OpenFray news`}
+  description={data.description}
+  keywords={keywords}
+  schema={schema}
+>
+  <main class="doc mx-auto max-w-3xl px-6 pt-4 pb-12">
+    <article>
+      <header>
+        <p
+          class="m-0 mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-relaxed font-semibold tracking-widest uppercase"
+        >
+          {
+            /* --muted, not --faint: a date and a level band are content, and light-theme
+              --faint is #94a3b8 on #f8fafc — about 2.5:1. */
+          }
+          <span class="text-accent">{KIND_LABEL[data.kind]}</span>
+          <time class="text-muted" datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+          {meta && <span class="text-muted normal-case">{meta}</span>}
+        </p>
+
+        <h1>{data.title}</h1>
+
+        <p class="lead mt-3 mb-8 text-[1.05rem] leading-relaxed text-text">
+          {data.description}
+        </p>
+      </header>
+
+      <slot />
+    </article>
+
+    <nav
+      class="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-sm leading-relaxed"
+      aria-label="More news"
+    >
+      <a class="font-semibold text-accent no-underline hover:underline" href={`${NEWS_BASE}/`}>
+        ← All news
+      </a>
+      {
+        older && (
+          <a
+            class="text-right font-semibold text-accent no-underline hover:underline"
+            href={postPath(older.id)}
+          >
+            {older.data.title} →
+          </a>
+        )
+      }
+    </nav>
+  </main>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import NewsLayout from '../../layouts/NewsLayout.astro';
+import { KIND_LABEL, byNewest } from '../../data/news.ts';
+
+/** One route per post, each handed the entry after it in the running order so the
+ *  foot of the page can point at the next thing to read. */
+export async function getStaticPaths() {
+  const posts = byNewest(await getCollection('news'));
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, older: posts[i + 1] },
+  }));
+}
+
+const { post, older } = Astro.props;
+const { Content } = await render(post);
+
+const keywords = [
+  'OpenFray news',
+  `DnD 5e ${KIND_LABEL[post.data.kind].toLowerCase()}`,
+  post.data.kind === 'adventure' ? 'Dungeons and Dragons 5e one shot' : 'DnD 5e combat console',
+  post.data.title,
+];
+---
+
+<NewsLayout id={post.id} data={post.data} older={older} keywords={keywords}>
+  <Content />
+</NewsLayout>

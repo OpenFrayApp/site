@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../../data/seo.ts';
+import {
+  KIND_LABEL,
+  NEWS_BASE,
+  byNewest,
+  formatDate,
+  isoDate,
+  postMeta,
+  postPath,
+  postUrl,
+} from '../../data/news.ts';
+
+const posts = byNewest(await getCollection('news'));
+
+const title = 'News — OpenFray updates and short DnD 5e adventures';
+const description =
+  'What has changed in the OpenFray combat console, and short Dungeons and Dragons 5e ' +
+  'adventures to run with it — free to read, with the creatures already in the app.';
+
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': `${SITE}${NEWS_BASE}/#blog`,
+    name: 'OpenFray news',
+    description,
+    url: `${SITE}${NEWS_BASE}/`,
+    inLanguage: 'en',
+    isPartOf: { '@id': WEBSITE_ID },
+    publisher: { '@id': PUBLISHER_ID },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      '@id': `${postUrl(post.id)}#post`,
+      headline: post.data.title,
+      description: post.data.description,
+      url: postUrl(post.id),
+      datePublished: isoDate(post.data.date),
+      author: { '@id': PUBLISHER_ID },
+    })),
+  },
+  breadcrumbs([
+    { name: 'OpenFray', url: '/' },
+    { name: 'News', url: `${NEWS_BASE}/` },
+  ]),
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={['OpenFray news', 'DnD 5e adventures', 'Dungeons and Dragons 5e one shot']}
+  schema={schema}
+>
+  <main class="doc mx-auto max-w-3xl px-6 pt-4 pb-12">
+    <h1>News</h1>
+
+    <p class="lead text-[1.05rem] leading-relaxed text-text">
+      What has changed in the console, and short adventures to run with it.
+    </p>
+
+    <p>
+      Adventures use creatures from <a href="/compendium/">OpenFray’s own libraries</a>, so
+      everything a fight needs is already in <a href="/console/">the console</a> — turn the library on
+      in <strong>Settings</strong> and add them from <strong>Add creature</strong>. There is{' '}
+      <a href={`${NEWS_BASE}/rss.xml`}>a feed</a> if you would rather not check back.
+    </p>
+
+    {
+      posts.length === 0 ? (
+        <p>Nothing here yet. The first post lands with the next release.</p>
+      ) : (
+        <ul class="mt-8 grid list-none gap-4 p-0">
+          {posts.map((post) => {
+            const meta = postMeta(post.data);
+            return (
+              <li class="m-0">
+                <a
+                  class="block h-full rounded-xl border border-border bg-panel px-5 py-4.5 no-underline transition-[border-color,transform] hover:-translate-y-0.5 hover:border-accent"
+                  href={postPath(post.id)}
+                >
+                  <span class="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-relaxed font-semibold tracking-widest uppercase">
+                    {/* --muted, not --faint: light-theme --faint is about 2.5:1 on the
+                        card, and the date and level band are content, not furniture. */}
+                    <span class="text-accent">{KIND_LABEL[post.data.kind]}</span>
+                    <time class="text-muted" datetime={isoDate(post.data.date)}>
+                      {formatDate(post.data.date)}
+                    </time>
+                    {meta && <span class="text-muted normal-case">{meta}</span>}
+                  </span>
+                  <strong class="block text-base leading-relaxed text-text">
+                    {post.data.title}
+                  </strong>
+                  <span class="mt-1.5 block text-sm leading-normal text-muted">
+                    {post.data.description}
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+  </main>
+</Layout>

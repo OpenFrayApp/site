@@ -17,8 +17,12 @@ export default defineConfig({
   // rendering the shipped compendium JSON, so the stat blocks can't drift from what
   // the console loads.
   // The print editions are local tools, not pages of the site: scripts/assemble-site.mjs
-  // drops them from dist/, so advertising them here would point crawlers at 404s.
-  integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/print') })],
+  // drops them from dist/, so advertising them here would point crawlers at 404s. The
+  // news feed ships, but a sitemap lists pages — the feed is linked from <head> instead.
+  integrations: [
+    mdx(),
+    sitemap({ filter: (page) => !page.includes('/print') && !page.endsWith('/rss.xml') }),
+  ],
   // MDX inherits these, so chapter tables get their scroll wrapper and off-site links
   // open in a new tab without every page having to remember.
   markdown: { rehypePlugins: [rehypeTableScroll, rehypeExternalLinks] },

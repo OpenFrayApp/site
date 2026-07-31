@@ -229,6 +229,19 @@
     font-size: 0.85em;
   }
 
+  /* News posts are markdown, so their tables arrive wrapped by rehype-table-scroll with
+     nothing to hang a utility on. The wrapper takes the overflow, which is what lets a
+     wide roster table stay a real table and still not scroll the page sideways. Same
+     rule as .book-body's, and it has to be repeated because the containers differ. */
+  .doc .table-scroll {
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 0.8rem 0;
+  }
+  :where(.doc) :where(.table-scroll) :where(table) {
+    margin: 0;
+  }
+
   /* Back to top. The button is always in the DOM so it needs no JavaScript to exist and
      keeps its place in the tab order; the script only adds `data-show` once there is
      something to scroll back from. State lives here rather than in `data-[show]:`
