@@ -11,6 +11,19 @@ export interface Library {
   available: boolean;
 }
 
+/**
+ * The libraries the console ships that we only reference — the SRD sets and the Kobold
+ * Press books. Labels match the console's own Settings panel exactly, so a reader
+ * ticking them there recognises what they read here.
+ */
+export const shippedLibraries: string[] = [
+  'Basic Rules 2024 (SRD 5.2.1)',
+  'Basic Rules 2014 (SRD 5.1)',
+  'Tome of Beasts 1 (Kobold Press)',
+  'Tome of Beasts 2 (Kobold Press)',
+  'Tome of Beasts 3 (Kobold Press)',
+];
+
 export const libraries: Library[] = [
   {
     name: 'The Waking Garden',
@@ -24,7 +37,7 @@ export const libraries: Library[] = [
     name: 'Brood & Bloom',
     href: '/brood-and-bloom/',
     blurb:
-      'Fifty-eight parasites in three broods — one that lives in people, one that takes ground and buildings, one that wants only the dead — and the order that catalogs them.',
+      'Sixty-one parasites in three broods — one that lives in people, one that takes ground and buildings, one that wants only the dead — and the order that catalogs them.',
     edition: '5.5e (2024)',
     available: true,
   },

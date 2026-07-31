@@ -1,41 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Cta from '../components/Cta.astro';
-import DownloadIcon from '../components/DownloadIcon.astro';
+import ZoomIcon from '../components/ZoomIcon.astro';
+import CheckIcon from '../components/CheckIcon.astro';
 import { hero, tagline } from '../data/hero.ts';
+import { libraries, shippedLibraries } from '../data/libraries.ts';
 import { Picture } from 'astro:assets';
-import combat from '../assets/screenshots/combat.png';
-import compendium from '../assets/screenshots/compendium.png';
-import groupSave from '../assets/screenshots/group-save.png';
-import spell from '../assets/screenshots/spell.png';
+import castSpellHero from '../assets/screenshots/cast-spell-hero.png';
+import compendiumHero from '../assets/screenshots/compendium-hero.png';
+import consoleHero from '../assets/screenshots/console-hero.png';
+import groupSaveHero from '../assets/screenshots/group-save-hero.png';
 
 const importerChrome =
   'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
 const importerFirefox = 'https://addons.mozilla.org/en-US/firefox/addon/openfray-importer/';
 
-const shots = [
-  {
-    img: combat,
-    alt: "A fight in progress — initiative order with a party and its foes, an ogre's stat block with the conditions on it, and the dice log.",
-  },
-  {
-    img: groupSave,
-    alt: "Rolling a whole group's saving throw against a single effect at once, with allies and foes listed separately.",
-  },
-  {
-    img: spell,
-    alt: 'Casting a spell from a creature\u2019s stat block, with the full spell card and its remaining uses.',
-  },
-  {
-    img: compendium,
-    alt: 'The built-in SRD compendium, showing an Aboleth stat block next to the searchable creature list.',
-  },
+const repo = 'https://github.com/SirDarcanos/openfray';
+// The closing panel's links. Credits is the compliance record for every source we use,
+// which is where a licence question actually gets answered.
+const wrapUpLinks = [
+  { label: 'OpenFray on GitHub', href: repo },
+  { label: 'Report a bug', href: `${repo}/issues` },
+  { label: 'Credits and licenses', href: `${repo}/blob/main/CREDITS.md` },
+  { label: 'Read the handbook', href: '/docs/' },
 ];
 
 // The hero's block rhythm: each section after the first sits 3.5rem below what precedes
 // it. The second tagline uses it too, so the paragraph isn't nearer what's above it than
 // what's below — which is what the old `.hero section + .tagline` rule was for.
 const BLOCK = 'mt-14';
+
+// The small tracked caps above a headline. Two sections open this way, so the class
+// list has one home rather than being typed twice with a digit's difference.
+const EYEBROW =
+  'eyebrow m-0 text-xs leading-relaxed font-semibold tracking-[0.18em] text-muted uppercase';
+
+// Text lines up with the header's wordmark. The header is `max-w-5xl` carrying its own
+// `px-6`, while `hero` puts the `px-6` on <main> — so matching that left edge means
+// 64rem less the header's two gutters, not 64rem. Everything on the page sits in it,
+// pictures included.
+const TEXT_COL = 'w-full max-w-[61rem]';
+
+const consoleShot = {
+  img: consoleHero,
+  alt: "The console mid-fight: initiative order down the left with a wounded party and its foes, an Ogre's stat block in the middle showing it Prone and Frightened, and the game log on the right.",
+};
+
+// The two-up below the console shot. Both are the same fight as the shot above it, one
+// step further on, so the pair reads as the same session rather than three unrelated
+// apps. The lead sentence is what the picture proves; the rest is how.
+const pairs = [
+  {
+    img: castSpellHero,
+    alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
+    lead: 'Cast straight from the stat block.',
+    rest: "The full spell card and what's left of it, without flipping to a book.",
+  },
+  {
+    img: groupSaveHero,
+    alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — 0 against the fire-immune Hell Hound, 7 against the Quasit that resists it.',
+    lead: 'Six creatures, one Fireball, one click.',
+    rest: 'Allies and foes listed separately, every bonus and immunity already worked in.',
+  },
+];
+
+const compendiumShot = {
+  img: compendiumHero,
+  alt: 'The compendium open on the Creatures tab: a searchable list of 853 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
+};
+
+// Everything the lightbox can open, in the order its arrows step through. The index
+// into this array is what each figure's button carries.
+const zoomable = [consoleShot, ...pairs, compendiumShot];
+
+// The card shared by the three panels beside the compendium shot.
+const CARD = 'rounded-xl border border-border bg-panel px-5 py-4.5';
+
+// The two store links inside the importer card. Sized for a card rather than reusing
+// Cta, whose padding is built for a hero.
+const STORE_LINK =
+  'inline-flex flex-1 basis-32 items-center justify-center gap-1.5 rounded-lg border ' +
+  'border-border bg-bg px-4 py-3 text-base font-semibold text-accent no-underline ' +
+  'transition-[border-color,color] hover:border-accent hover:text-text';
+
+// A screenshot you can open. The magnifier only appears on hover or keyboard focus —
+// at rest the picture is the picture, and the affordance would just be furniture.
+const zoomTrigger =
+  'group relative block w-full cursor-zoom-in overflow-hidden border border-border p-0 ' +
+  'transition-[border-color] hover:border-accent focus-visible:border-accent ' +
+  'focus-visible:outline-none';
+const zoomOverlay =
+  'pointer-events-none absolute inset-0 grid place-items-center bg-bg/75 opacity-0 ' +
+  'transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100';
+const zoomBadge =
+  'grid size-12 place-items-center rounded-full border border-border bg-panel text-text';
 
 const lightboxButton =
   'absolute z-1 grid cursor-pointer place-items-center rounded-full border border-border ' +
@@ -45,30 +103,54 @@ const lightboxNav =
   'size-11 pb-0.5 text-3xl top-1/2 -translate-y-1/2 ' +
   'max-[640px]:top-auto max-[640px]:bottom-4 max-[640px]:translate-y-0';
 
-const features = [
+// What OpenFray holds that a plain initiative list doesn't. Every line here is a claim
+// about our own behaviour and checkable in the code — deliberately not a claim about
+// what other trackers do or don't do, which we can't verify and shouldn't assert.
+const differences = [
   {
-    title: 'The state others forget',
-    body: 'Who has advantage on whom, who is frightened by whom, who is concentrating on what. Other trackers lose that between one creature and the next; OpenFray keeps it.',
+    title: 'Relationships, not just creatures',
+    body: "Effects have two ends. The barbarian's Reckless Attack grants advantage against him; Vicious Mockery debuffs the goblin's next swing. OpenFray records which end is which and works it into the roll, whichever side is rolling.",
   },
   {
-    title: 'Creature resources, tracked',
-    body: 'Recharge abilities, legendary actions, legendary resistances, spell slots, concentration, and reactions all count down as you play.',
+    title: 'Resources that count themselves down',
+    body: "Recharge abilities, legendary actions, legendary resistance, spell slots, concentration, and reactions all tick as you play — so the mage's last slot is a fact, not a guess.",
   },
   {
-    title: 'Group saves in one click',
-    body: 'Roll a whole group\u2019s saving throw against one spell at once. Resistances, immunities, and each creature\u2019s own bonuses are worked in for you.',
+    title: 'Conditions that expire on the right turn',
+    body: 'A save-ends effect is rolled at the start or the end of the turn, whichever you chose. Timed effects count themselves down and clear. Concentration is checked the moment the damage lands.',
   },
   {
-    title: 'Honest dice you can check',
-    body: 'Every number is equally likely, every roll is written into the log with the dice that made it, and advantage and bonuses are shown. No fudging, ever.',
+    title: 'A scratchpad, not a second character sheet',
+    body: "OpenFray never asks you to model a player's build. It tracks what just happened and what has to be remembered this round — which is why it stays fast instead of becoming a worse VTT.",
+  },
+];
+
+// The table stakes. Two of these need an account and say so: the hero promises no
+// account needed, so a card that quietly requires one would contradict it.
+const rest = [
+  {
+    title: 'Honest dice, written down',
+    body: 'Every number equally likely, and every roll logged with the dice behind it.',
   },
   {
-    title: 'Build your own',
-    body: 'Creatures and spells the books leave out, in a full editor. Save your players once and reuse them. Set your table\u2019s house rules per campaign.',
+    title: 'End-of-combat recap',
+    body: 'Experience earned, how long the fight ran, and the hits your table will retell.',
   },
   {
-    title: 'Free, open source, and yours',
-    body: 'Runs in your browser with no account at all. Sign in free with Discord or Google to save your game and pick it up on another device.',
+    title: 'Campaigns with house rules',
+    body: "Your table's rulings set once and applied to every fight. Needs a free account.",
+  },
+  {
+    title: 'A durable roster',
+    body: 'Save your players once and drop them into any fight — with a free account — plus a quick add for whatever wanders in.',
+  },
+  {
+    title: 'Local-first speed',
+    body: 'State lives in the browser. Rolling a die never waits on the network.',
+  },
+  {
+    title: 'Sync when you want it',
+    body: 'Sign in free with Discord or Google to pick a fight up on another device.',
   },
 ];
 ---
@@ -78,106 +160,343 @@ const features = [
   description="OpenFray is a free, open-source combat console for running encounters in the world's oldest tabletop roleplaying game. Compatible with 5.5e and 5e: initiative, creature resources, conditions, group saves, and honest dice."
 >
   <main class={hero}>
-    <span
-      class="badge mb-6 inline-block rounded-full border border-border bg-panel px-3.5 py-1.5 text-xs leading-relaxed font-semibold tracking-[0.18em] text-accent uppercase"
-      >Alpha</span
+    <section class={`hero-lede ${TEXT_COL} text-left`}>
+      <p class={`${EYEBROW} mb-5`}>Free · Open source · No account</p>
+
+      <h1
+        class="mt-0 mb-5 max-w-[20ch] text-[clamp(2.5rem,6.5vw,4.25rem)] leading-[1.04] font-extrabold tracking-tight"
+      >
+        Your initiative tracker forgets. OpenFray doesn’t.
+      </h1>
+
+      <p class={`${tagline} mb-8`}>
+        OpenFray holds the whole state of a Dungeons and Dragons encounter — who’s frightened by
+        whom, who has advantage on whom, what every creature has left to spend — so you run it
+        instead of remembering it.
+      </p>
+
+      <div class="cta-row flex flex-wrap gap-3">
+        <Cta href="/console/">Open the console →</Cta>
+        <Cta href="#screenshots" variant="ghost">See it running</Cta>
+      </div>
+
+      <ul
+        class="facts m-0 mt-7 flex list-none flex-wrap gap-x-8 gap-y-1.5 p-0 text-sm leading-relaxed text-muted"
+      >
+        <li>Nothing to install</li>
+        <li>No account needed</li>
+        <li>Compatible with 5.5e and 5e</li>
+      </ul>
+    </section>
+
+    {
+      /* The payoff for "See it running": one honest picture of a fight already under way,
+        wounded party and all, rather than an empty board. Wider than the prose blocks
+        because a dense three-column console shrunk to reading width shows nothing. */
+    }
+    <section
+      class={`console-shot mt-20 ${TEXT_COL} text-left`}
+      id="screenshots"
+      aria-labelledby="console-shot-title"
     >
+      <p class={`${EYEBROW} mb-4`}>A fight in progress</p>
+      <h2
+        id="console-shot-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        The whole encounter on one screen
+      </h2>
 
-    <h1
-      class="mt-0 mb-4 text-[clamp(2.6rem,8vw,4.5rem)] leading-[1.02] font-extrabold tracking-tight"
-    >
-      <span class="o text-accent">Open</span>Fray
-    </h1>
+      <figure class="m-0">
+        <button
+          type="button"
+          class={`shot-thumb ${zoomTrigger} rounded-2xl`}
+          data-index="0"
+          aria-label={`Enlarge screenshot: ${consoleShot.alt}`}
+        >
+          <Picture
+            src={consoleShot.img}
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[1024, 1600, 2048]}
+            sizes="(max-width: 1024px) 94vw, 61rem"
+            alt={consoleShot.alt}
+            loading="lazy"
+            class="block h-auto w-full"
+          />
+          <span class={zoomOverlay} aria-hidden="true"
+            ><span class={zoomBadge}><ZoomIcon /></span></span
+          >
+        </button>
+        <figcaption class="mt-6 text-base leading-relaxed text-muted">
+          <strong class="font-semibold text-text">Manage everything from one screen.</strong> Initiative
+          tracker, stat blocks, controls, and game log all on the same screen.<br />No tabs, no
+          digging, nothing to reconcile between rounds.
+        </figcaption>
+      </figure>
+    </section>
 
-    <p class={`${tagline} mb-7`}>
-      OpenFray is a free, open-source <strong>combat console</strong> for running encounters in the world's
-      oldest tabletop roleplaying game, in your browser. Compatible with 5.5e and 5e.
-    </p>
-
-    <div class="cta-row flex flex-wrap justify-center gap-3">
-      <Cta href="/console/">Open the console →</Cta>
+    <div class={`two-up ${TEXT_COL} mt-20 text-left`}>
+      <div class="grid gap-x-8 gap-y-12 md:grid-cols-2">
+        {
+          pairs.map((p, i) => (
+            <figure class="m-0">
+              <button
+                type="button"
+                class={`shot-thumb ${zoomTrigger} rounded-xl`}
+                data-index={i + 1}
+                aria-label={`Enlarge screenshot: ${p.alt}`}
+              >
+                <Picture
+                  src={p.img}
+                  formats={['avif', 'webp']}
+                  fallbackFormat="png"
+                  widths={[560, 1120]}
+                  sizes="(max-width: 768px) 94vw, 30rem"
+                  alt={p.alt}
+                  loading="lazy"
+                  class="block h-auto w-full"
+                />
+                <span class={zoomOverlay} aria-hidden="true">
+                  <span class={zoomBadge}>
+                    <ZoomIcon />
+                  </span>
+                </span>
+              </button>
+              <figcaption class="mt-5 text-base leading-relaxed text-muted">
+                <strong class="font-semibold text-text">{p.lead}</strong> {p.rest}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
     </div>
 
-    <section class={`shots w-full max-w-4xl ${BLOCK}`} aria-labelledby="shots-title">
+    <section class={`libraries mt-20 ${TEXT_COL} text-left`} aria-labelledby="libraries-title">
+      <p class={`${EYEBROW} mb-4`}>Your books, your monsters</p>
       <h2
-        id="shots-title"
-        class="shots-title m-0 mb-4 text-[0.78rem] leading-relaxed font-semibold tracking-widest text-faint uppercase"
+        id="libraries-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
       >
-        See it in action
+        Bring the libraries you actually use
       </h2>
-      <div class="shot-grid grid grid-cols-2 gap-3.5 min-[940px]:grid-cols-4">
+
+      {
+        /* The shot leads and the cards sit beside it: at this width the compendium is
+          still readable, and the three panels stack to roughly its height. Below `lg`
+          they fall under it rather than squeezing either. */
+      }
+      <div class="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
+        <figure class="m-0">
+          <button
+            type="button"
+            class={`shot-thumb ${zoomTrigger} rounded-xl`}
+            data-index={zoomable.indexOf(compendiumShot)}
+            aria-label={`Enlarge screenshot: ${compendiumShot.alt}`}
+          >
+            <Picture
+              src={compendiumShot.img}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[640, 1280]}
+              sizes="(max-width: 1024px) 94vw, 32rem"
+              alt={compendiumShot.alt}
+              loading="lazy"
+              class="block h-auto w-full"
+            />
+            <span class={zoomOverlay} aria-hidden="true">
+              <span class={zoomBadge}>
+                <ZoomIcon />
+              </span>
+            </span>
+          </button>
+          <figcaption class="mt-5 text-base leading-relaxed text-muted">
+            A searchable compendium of creatures, spells, player characters, and campaigns, right
+            next to the fight.
+          </figcaption>
+        </figure>
+
+        <div class="grid gap-4">
+          <div class={CARD}>
+            <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
+              Over 1500 creatures included
+            </h3>
+            <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+              {
+                shippedLibraries.map((name) => (
+                  <li class="flex gap-2">
+                    <CheckIcon />
+                    <span>{name}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="mt-4 mb-2 text-sm leading-relaxed text-muted">
+              And OpenFray's own, free to read and use:
+            </p>
+            <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+              {
+                libraries.map((l) => (
+                  <li class="flex gap-2">
+                    <CheckIcon />
+                    <a href={l.href} class="font-semibold text-accent">
+                      {l.name}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div class={CARD}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Build your own</h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              A full editor for your homebrew creatures and spells. Save your player characters and
+              your campaigns and reuse them every session.
+            </p>
+          </div>
+
+          <div class={CARD}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Never retype a stat block
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              The free importer turns a D&amp;D&nbsp;Beyond creature page into an OpenFray creature.
+            </p>
+            <p class="mt-3 mb-2 text-sm leading-normal text-muted">
+              Add the extension to your browser:
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a
+                href={importerChrome}
+                target="_blank"
+                rel="noreferrer"
+                class={STORE_LINK}
+                title="OpenFray Importer on the Chrome Web Store"
+              >
+                Chrome →
+              </a>
+              <a
+                href={importerFirefox}
+                target="_blank"
+                rel="noreferrer"
+                class={STORE_LINK}
+                title="OpenFray Importer on Firefox Browser Add-ons"
+              >
+                Firefox →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class={`difference mt-20 ${TEXT_COL} text-left`} aria-labelledby="difference-title">
+      <p class={`${EYEBROW} mb-4`}>The difference</p>
+      <h2
+        id="difference-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        What OpenFray keeps hold of
+      </h2>
+      <div class="grid gap-4 md:grid-cols-2">
         {
-          shots.map((s, i) => (
-            <button
-              type="button"
-              class="shot-thumb m-0 block cursor-zoom-in overflow-hidden rounded-xl border border-border bg-panel p-0 transition-[transform,border-color,box-shadow] hover:-translate-y-0.5 hover:border-accent hover:shadow-[0_8px_24px_-12px_rgba(99,102,241,0.55)] focus-visible:-translate-y-0.5 focus-visible:border-accent focus-visible:shadow-[0_8px_24px_-12px_rgba(99,102,241,0.55)] focus-visible:outline-none"
-              data-index={i}
-              aria-label={`Enlarge screenshot: ${s.alt}`}
-            >
-              <Picture
-                src={s.img}
-                formats={['avif', 'webp']}
-                fallbackFormat="jpg"
-                widths={[440, 880]}
-                sizes="(max-width: 640px) 92vw, (max-width: 940px) 44vw, 20rem"
-                alt={s.alt}
-                loading="lazy"
-                class="block aspect-[16/10] h-auto w-full object-cover object-left-top"
-              />
-            </button>
+          differences.map((f) => (
+            <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
+              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
+            </div>
           ))
         }
       </div>
     </section>
 
-    <p class={`${tagline} ${BLOCK} mb-0`}>
-      OpenFray keeps the initiative order, everyone's hit points, the conditions and effects on each
-      creature, what a creature has left to spend, and the dice — so you can run the fight instead
-      of remembering it.
-    </p>
-
-    <section
-      class={`features grid w-full max-w-4xl grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4 text-left ${BLOCK}`}
-    >
-      {
-        features.map((f) => (
-          <div class="feature rounded-xl border border-border bg-panel px-5 py-4.5">
-            <h2 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h2>
-            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-          </div>
-        ))
-      }
+    <section class={`rest mt-20 ${TEXT_COL} text-left`} aria-labelledby="rest-title">
+      <p class={`${EYEBROW} mb-4`}>The rest of the table</p>
+      <h2
+        id="rest-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        Everything else you'd expect
+      </h2>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4">
+        {
+          rest.map((f) => (
+            <div class={`feature ${CARD}`}>
+              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
+              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
+            </div>
+          ))
+        }
+      </div>
     </section>
 
     {
       /* The importer sits below the feature grid, after the pitch — it's a companion tool,
         not the way in. One button per browser store, neither preferred over the other. */
     }
-    <div class={`importer-row flex flex-wrap justify-center gap-3 ${BLOCK}`}>
-      <Cta
-        href={importerChrome}
-        target="_blank"
-        rel="noreferrer"
-        title="OpenFray Importer on the Chrome Web Store"
-      >
-        <DownloadIcon />
-        Get the importer for Chrome
-      </Cta>
-      <Cta
-        href={importerFirefox}
-        target="_blank"
-        rel="noreferrer"
-        title="OpenFray Importer on Firefox Browser Add-ons"
-      >
-        <DownloadIcon />
-        Get the importer for Firefox
-      </Cta>
-    </div>
+    {
+      /* One panel rather than another card grid: this is the page saying what it is,
+        not another feature, and it should not read as one. */
+    }
+    <section class={`wrap-up mt-20 mb-4 ${TEXT_COL} text-left`} aria-labelledby="wrap-up-title">
+      <div class="rounded-2xl border border-border bg-panel px-6 py-8 sm:px-10 sm:py-10">
+        <p class={`${EYEBROW} mb-3`}>Open source</p>
+        <h2
+          id="wrap-up-title"
+          class="mt-0 mb-0 max-w-[22ch] text-[clamp(1.5rem,3vw,2.1rem)] leading-[1.14] font-extrabold tracking-tight"
+        >
+          Free to use, and built in the open
+        </h2>
 
-    <p class="cta-note mt-4 mb-0 max-w-[34rem] text-sm leading-relaxed text-faint">
-      The importer is a free browser extension that turns a D&amp;D&nbsp;Beyond creature page into
-      an OpenFray creature, so you never retype a stat block.
-    </p>
+        <div class="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">In beta</h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              Solid enough to run your table with, and still growing. Everything works in the
+              browser with no account; sign in free and your fights follow you between devices.
+            </p>
+          </div>
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Open all the way down
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              The code is AGPL-3.0 and every line of it is public. The creatures and rules in our
+              own books are Creative Commons;
+            </p>
+          </div>
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Tell us anything
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              A bug, a rule OpenFray gets wrong, or something your table needs and can't find — open
+              an issue and it gets read.
+            </p>
+          </div>
+        </div>
+
+        <ul
+          class="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-border p-0 pt-6 text-sm leading-relaxed"
+        >
+          {
+            wrapUpLinks.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  target={l.href.startsWith('/') ? undefined : '_blank'}
+                  rel={l.href.startsWith('/') ? undefined : 'noreferrer'}
+                  class="font-semibold text-accent no-underline hover:underline"
+                >
+                  {l.label} →
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
   </main>
 
   {
@@ -212,7 +531,7 @@ const features = [
       class="lightbox-track absolute inset-0 grid place-items-center px-4 py-14 pointer-events-none"
     >
       {
-        shots.map((s, i) => (
+        zoomable.map((s, i) => (
           <figure class="lightbox-slide m-0 hidden data-[active]:block" data-index={i}>
             <Picture
               src={s.img}
