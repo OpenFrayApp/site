@@ -4,12 +4,14 @@
 import type { ImageMetadata } from 'astro';
 import { SITE } from './seo.ts';
 
-/** What a post is: a version going out, anything else that changed, or something to run. */
-export type NewsKind = 'release' | 'update' | 'adventure';
+/** What a post is: a version going out, a book of creatures, anything else that
+ *  changed, or something to run. */
+export type NewsKind = 'release' | 'library' | 'update' | 'adventure';
 
 /** The badge each kind carries on its card and above its title. */
 export const KIND_LABEL: Record<NewsKind, string> = {
   release: 'Release',
+  library: 'Library',
   update: 'Update',
   adventure: 'Adventure',
 };

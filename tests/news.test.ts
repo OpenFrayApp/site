@@ -92,9 +92,24 @@ describe('news metadata', () => {
     expect(postUrl('the-tithe-barn')).toBe('https://openfray.app/news/the-tithe-barn/');
   });
 
-  it('labels both kinds', () => {
-    expect(KIND_LABEL.update).toBe('Update');
-    expect(KIND_LABEL.adventure).toBe('Adventure');
+  it('labels every kind, so a new one can’t badge as undefined', () => {
+    expect(KIND_LABEL).toEqual({
+      release: 'Release',
+      library: 'Library',
+      update: 'Update',
+      adventure: 'Adventure',
+    });
+  });
+
+  it('keeps the schema’s kinds and the labels in step', () => {
+    // The badge is looked up by kind, so a member added to one and not the other
+    // renders the word "undefined" on the card rather than failing anywhere.
+    const config = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
+    const declared = config
+      .match(/kind: z\.enum\(\[([^\]]+)\]\)/)?.[1]
+      .match(/'([a-z]+)'/g)
+      ?.map((s) => s.replace(/'/g, ''));
+    expect(declared?.sort()).toEqual(Object.keys(KIND_LABEL).sort());
   });
 });
 
