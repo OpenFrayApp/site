@@ -130,6 +130,22 @@
     border-top: 1px solid var(--border);
   }
 
+  /* The share row's copy button. Copying needs the clipboard API, so the button is
+     hidden until ShareLinks' script claims it with `data-ready` — a button that cannot
+     do its job should not be sitting in the tab order promising it can. The three
+     platform links beside it are ordinary anchors and need none of this.
+
+     `display` is set twice on one element, which is why this is a rule rather than a
+     `data-[ready]:` utility: two utilities for one property resolve by Tailwind's output
+     order, not the order written (AGENTS.md). Two rules in one layer resolve by
+     specificity, always. */
+  .share-copy {
+    display: none;
+  }
+  .share-copy[data-ready] {
+    display: inline-flex;
+  }
+
   /* The reading rail's current section: the accent segment of the rule that runs down
      the list. `aria-current` is what the scroll spy sets, so the styling and the
      accessible state can't drift apart.

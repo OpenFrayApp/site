@@ -1,0 +1,130 @@
+---
+// Share links for a news post. Plain anchors to each site's own compose URL — no
+// embedded widgets, no SDKs, and nothing loaded from a third party until the reader
+// clicks. That is deliberate: the privacy page says OpenFray sets no cookies and needs no
+// consent banner, and an official share button would make both untrue on every page it
+// appeared on.
+interface Props {
+  /** The post's absolute URL — what gets shared. */
+  url: string;
+  /** The post's title, used as the suggested text. */
+  title: string;
+}
+
+const { url, title } = Astro.props;
+
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+// Mastodon is missing on purpose: sharing to it needs the reader's own instance, which
+// nothing on the page can know, and the workarounds all route through a third-party
+// redirector. Copy link covers it, and everywhere else this list doesn't.
+const targets = [
+  {
+    name: 'Bluesky',
+    href: `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title} ${url}`)}`,
+  },
+  { name: 'Reddit', href: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}` },
+  { name: 'X', href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}` },
+  // Facebook's sharer takes the URL and nothing else — it ignores any title or quote
+  // passed to it and scrapes the page's own Open Graph tags instead. Which is why the
+  // per-post og:title, og:description and og:image matter: they are the whole preview.
+  { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+  {
+    name: 'WhatsApp',
+    href: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`,
+  },
+];
+
+const pill =
+  'inline-flex items-center rounded-lg border border-border bg-panel px-3.5 py-2 ' +
+  'text-sm leading-relaxed font-semibold text-text no-underline ' +
+  'transition-[border-color,color] hover:border-accent hover:text-accent';
+---
+
+<div class="mt-14 border-t border-border pt-6">
+  <h2 class="m-0 mb-3 text-xs leading-relaxed font-semibold tracking-[0.14em] text-muted uppercase">
+    Share this post
+  </h2>
+
+  <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
+    {
+      targets.map((target) => (
+        <li class="m-0">
+          {/* aria-label rather than a visible word plus an sr-only sentence: the name is
+              then one attribute that every implementation computes the same way, instead
+              of depending on aria-hidden and a clipped span being handled correctly. It
+              still contains the visible word, which is what WCAG's Label in Name asks. */}
+          <a
+            class={pill}
+            href={target.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Share this post on ${target.name}`}
+          >
+            {target.name}
+          </a>
+        </li>
+      ))
+    }
+    <li class="m-0">
+      {
+        /* Hidden until the script claims it: copying needs the clipboard API, and a
+          button that cannot do its job should not be in the tab order. news.css owns
+          the hiding, the same way it owns the reading rail's current entry. */
+      }
+      {
+        /* The label is the button's accessible name and also its feedback, so it is a
+          live region rather than carrying a fixed aria-label: an aria-label would go
+          stale the moment the text changed to "Link copied", and the result is the one
+          thing a reader who cannot see the button needs told. */
+      }
+      <button class={`share-copy ${pill} cursor-pointer`} type="button" data-url={url}>
+        <span class="share-copy-label" aria-live="polite">Copy link</span>
+      </button>
+    </li>
+  </ul>
+</div>
+
+<script>
+  // Progressive enhancement: without this the copy button never appears, and the three
+  // share links keep working because they are ordinary anchors.
+  //
+  // Every instance on the page is wired, not the first one found. There is one per post
+  // today, but a component that only works once is a trap for whoever reuses it.
+  if (navigator.clipboard) {
+    for (const button of document.querySelectorAll<HTMLButtonElement>('.share-copy')) {
+      const label = button.querySelector<HTMLElement>('.share-copy-label');
+      if (!label) continue;
+
+      button.setAttribute('data-ready', '');
+
+      let revert: ReturnType<typeof setTimeout>;
+      button.addEventListener('click', async () => {
+        const url = button.dataset.url ?? location.href;
+        try {
+          await navigator.clipboard.writeText(url);
+          label.textContent = 'Link copied';
+        } catch {
+          // The clipboard API can be refused — a denied permission, or a click the
+          // browser doesn't count as a user gesture. Fall back to selecting the text and
+          // asking the old API, then report whichever actually happened. Telling someone
+          // to press Ctrl+C with nothing selected would be worse than saying it failed.
+          const field = document.createElement('textarea');
+          field.value = url;
+          field.setAttribute('readonly', '');
+          field.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+          document.body.append(field);
+          field.select();
+          const copied = document.execCommand('copy');
+          field.remove();
+          label.textContent = copied ? 'Link copied' : 'Couldn’t copy';
+        }
+        clearTimeout(revert);
+        revert = setTimeout(() => {
+          label.textContent = 'Copy link';
+        }, 2400);
+      });
+    }
+  }
+</script>

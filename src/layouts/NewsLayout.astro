@@ -2,6 +2,7 @@
 import type { MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
 import Layout from './Layout.astro';
+import ShareLinks from '../components/ShareLinks.astro';
 import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
 import {
   KIND_LABEL,
@@ -139,6 +140,10 @@ const schema = [
         <slot />
       </div>
 
+      <div class="max-w-[44rem]">
+        <ShareLinks url={postUrl(id)} title={data.title} />
+      </div>
+
       <nav
         class="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-sm leading-relaxed"
         aria-label="More news"
@@ -193,7 +198,7 @@ const schema = [
 
       <p class={showToc ? 'mt-6 mb-0 text-sm leading-relaxed' : 'm-0 text-sm leading-relaxed'}>
         <a class="font-semibold text-accent no-underline hover:underline" href="/console/">
-          Try it in the console →
+          Open the console →
         </a>
       </p>
     </aside>
