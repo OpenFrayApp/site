@@ -6,9 +6,7 @@ import { libraries } from '../data/libraries.ts';
 interface Props {
   title: string;
   description?: string;
-  /** Page-specific search terms, layered on top of the site-wide list. */
   keywords?: string[];
-  /** JSON-LD nodes for this page, added to the shared website/publisher graph. */
   schema?: Record<string, unknown>[];
 }
 
@@ -27,10 +25,6 @@ const ogImage = new URL('/og-image.png', Astro.site);
 const keywordList = [...new Set([...keywords, ...baseKeywords])].join(', ');
 const jsonLd = { '@context': 'https://schema.org', '@graph': [...websiteNodes, ...schema] };
 
-// The two icon buttons in the top bar. It carries no `display`: the hamburger is hidden
-// above 640px and this one is not, and two display utilities in one class list resolve
-// by Tailwind's output order, not the order written — `inline-flex` here silently beat
-// the caller's `hidden` and put the hamburger on every width.
 const iconButton =
   'size-9 cursor-pointer items-center justify-center rounded-lg border border-border ' +
   'bg-panel text-muted';
@@ -38,14 +32,11 @@ const iconButton =
 const footerLink = 'inline-flex items-center text-muted no-underline hover:text-text';
 const sep = 'sep mx-2 opacity-50';
 
-// In the hamburger menu there is nothing to hover, so the libraries sit inline under
-// Compendium rather than behind a second layer.
 const submenuLink =
   'block rounded-md px-2.5 py-2 whitespace-nowrap text-muted no-underline ' +
   'transition-[color] leading-relaxed hover:bg-bg hover:text-text max-[640px]:text-sm ' +
   'max-[640px]:font-medium';
 
-// Below 640px the nav becomes a dropdown panel, so its links become full-width rows.
 const navLink =
   'text-muted no-underline transition-[color] hover:text-text ' +
   'max-[640px]:block max-[640px]:w-full max-[640px]:rounded-md max-[640px]:px-3 ' +
@@ -85,10 +76,7 @@ const navLink =
         }
       } catch (e) {}
     </script>
-    {
-      /* Fathom Analytics — privacy-friendly, cookieless. Production builds only, never on
-        the dev server (localhost). */
-    }
+
     {
       import.meta.env.PROD && (
         <script src="https://cdn.usefathom.com/script.js" data-site="CZDKZIAS" defer is:inline />
@@ -135,7 +123,7 @@ const navLink =
         </svg>
         <span><span class="o text-accent">Open</span>Fray</span>
       </a>
-      {/* The hamburger only exists on narrow screens; the nav below is inline above them. */}
+
       <button
         class={`nav-toggle ${iconButton} mr-2 ml-auto hidden hover:text-text max-[640px]:inline-flex`}
         type="button"
@@ -157,10 +145,7 @@ const navLink =
           <line x1="4" y1="17" x2="20" y2="17"></line>
         </svg>
       </button>
-      {
-        /* "Help & Documentation" alone eats most of a phone's top bar, so below 640px the
-          links collapse behind the hamburger and drop out of the bar as a panel. */
-      }
+
       <nav
         class="topnav mr-5 ml-auto flex items-center gap-5 text-sm leading-relaxed font-semibold max-[640px]:absolute max-[640px]:top-full max-[640px]:right-4 max-[640px]:z-20 max-[640px]:m-0 max-[640px]:hidden max-[640px]:min-w-52 max-[640px]:flex-col max-[640px]:items-start max-[640px]:gap-0 max-[640px]:rounded-xl max-[640px]:border max-[640px]:border-border max-[640px]:bg-panel max-[640px]:p-1.5 max-[640px]:shadow-[0_12px_30px_rgb(0_0_0/0.28)] max-[640px]:data-[open]:flex"
         id="topnav"
@@ -168,10 +153,7 @@ const navLink =
       >
         <a class={navLink} href="/console/">Console</a>
         <a class={navLink} href="/docs/">Docs</a>
-        {
-          /* The submenu opens on hover and on focus; the link itself always works, so
-            keyboard and touch users reach /compendium without needing the dropdown. */
-        }
+
         <div class="navmenu group relative flex items-center max-[640px]:block max-[640px]:w-full">
           <a
             class={`${navLink} inline-flex items-center gap-1`}
@@ -191,11 +173,7 @@ const navLink =
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </a>
-          {
-            /* The panel sits 0.4rem below the trigger, and crossing that gap used to drop
-              the hover and close the menu before it could be clicked. The ::before spans
-              the gap so the pointer never leaves .navmenu on the way down. */
-          }
+
           <ul
             class="absolute top-full left-1/2 z-30 mt-1.5 hidden min-w-48 -translate-x-1/2 list-none rounded-lg border border-border bg-panel p-1 shadow-[0_12px_30px_rgb(0_0_0/0.28)] before:absolute before:right-0 before:bottom-full before:left-0 before:h-2.5 before:content-[''] group-hover:block group-focus-within:block max-[640px]:static max-[640px]:m-0 max-[640px]:block max-[640px]:min-w-0 max-[640px]:translate-x-0 max-[640px]:border-0 max-[640px]:bg-transparent max-[640px]:p-0 max-[640px]:pl-3 max-[640px]:shadow-none"
           >
@@ -277,12 +255,6 @@ const navLink =
         ></span
       >
 
-      {
-        /* The trademark notice sits below the links, on its own line. `basis-full` alone
-          doesn't guarantee that: max-width clamps the size flexbox breaks lines on, so
-          the row only wrapped because links + notice happened to exceed the footer by
-          1.4px. This zero-width item takes the break instead. */
-      }
       <span class="basis-full" aria-hidden="true"></span>
       <p class="disclaimer mx-auto mt-4.5 max-w-[44rem] basis-full text-[0.78rem] leading-relaxed">
         Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
@@ -295,11 +267,6 @@ const navLink =
       </p>
     </footer>
 
-    {
-      /* An anchor, not a button: it returns to the top with no JavaScript and moves
-        keyboard focus there, which a scroll handler alone would not. The script only
-        reveals it once there is something to go back up from. */
-    }
     <a
       class="to-top fixed right-5 bottom-5 z-40 flex size-11 items-center justify-center rounded-full border border-border bg-panel text-muted shadow-lg hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent print:hidden max-[560px]:right-3 max-[560px]:bottom-3"
       href="#top"
