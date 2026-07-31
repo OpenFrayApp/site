@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="doc mx-auto max-w-5xl px-6 pt-4 pb-12">
     <h1>Privacy Policy</h1>
-    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">Last updated: 28 July 2026</p>
+    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">Last updated: 31 July 2026</p>
 
     <p class="lead text-[1.05rem] leading-relaxed text-text">
       OpenFray is a free, open-source combat console for tabletop games. This policy explains what
@@ -40,7 +40,8 @@ import Layout from '../layouts/Layout.astro';
     <h2>2. Using OpenFray without an account</h2>
     <p>
       You can use OpenFray fully anonymously. In this mode your encounter is stored only in your own
-      browser (using <code>sessionStorage</code>) and a theme preference in <code>localStorage</code
+      browser (using <code>sessionStorage</code>), along with your theme choice and app settings in <code
+        >localStorage</code
       >. Nothing about your gameplay is sent to or stored on our servers, and we set no advertising
       or analytics cookies. Clearing your browser storage removes this data.
     </p>
@@ -85,6 +86,10 @@ import Layout from '../layouts/Layout.astro';
     </p>
     <ul>
       <li><strong>Theme preference</strong> — light or dark, in <code>localStorage</code>.</li>
+      <li>
+        <strong>App settings</strong> — which content libraries you have turned on, and how the compendium
+        is sorted, in <code>localStorage</code>.
+      </li>
       <li>
         <strong>Anonymous session state</strong> — your in-progress encounter, in <code
           >sessionStorage</code
