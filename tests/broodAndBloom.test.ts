@@ -13,8 +13,8 @@ describe('Brood & Bloom creature lookup', () => {
     expect(() => creature('No Such Creature')).toThrow(/Brood & Bloom: no creature named/);
   });
 
-  it('holds the full 61-creature v2 bestiary under the book’s source id', () => {
-    expect(creatures).toHaveLength(61);
+  it('holds the full 67-creature bestiary under the book’s source id', () => {
+    expect(creatures).toHaveLength(67);
     for (const c of creatures) expect(c.source).toBe('openfray-brood-and-bloom');
   });
 
