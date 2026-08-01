@@ -4,7 +4,7 @@ import ActionList from './ActionList.astro';
 import StatText from './StatText.astro';
 import {
   abilityMod,
-  creatureSlug,
+  entrySlug,
   formatCr,
   formatSenses,
   formatSpeed,
@@ -12,7 +12,9 @@ import {
   proficiencyBonus,
   signed,
   spellName,
+  spellcastingLine,
   titleCase,
+  usageLabel,
 } from '../data/statblock.ts';
 
 interface Props {
@@ -80,9 +82,9 @@ const legendaryNote =
 const row = 'flex min-w-0 gap-2';
 const label = 'flex-none font-bold text-accent';
 const value = 'm-0 text-muted';
-// Deliberately colourless. Two utilities for the same property in one class list are
+// Deliberately colorless. Two utilities for the same property in one class list are
 // resolved by Tailwind's own output order, not by the order they're written — so
-// composing `cell` with a different text colour silently lost the header styling.
+// composing `cell` with a different text color silently lost the header styling.
 const cell = 'border-none px-1.5 py-1 text-center';
 const bodyCell = `${cell} text-muted`;
 const headCell = `${cell} text-xs font-semibold tracking-widest text-faint uppercase`;
@@ -91,7 +93,7 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
 
 <section
   class="statblock scroll-mt-6 rounded-xl border border-border border-t-[3px] border-t-accent bg-panel p-5.5 text-base"
-  id={creatureSlug(c.name)}
+  id={entrySlug(c.name)}
 >
   {
     /* Collapsed to name, type line and lore on the site — a chapter of 16 creatures is
@@ -255,19 +257,11 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
             Spellcasting
           </h4>
           <p class="sb-note m-0 mb-3 text-sm text-faint italic">
-            Spell save DC {c.spellcasting.saveDc}
-            {c.spellcasting.ability ? `, using ${c.spellcasting.ability.toUpperCase()}` : ''}.
+            {spellcastingLine(c.spellcasting)}
           </p>
           {c.spellcasting.groups.map((group) => (
             <p class="sb-entry m-0 mb-2.5 text-muted">
-              <strong class="text-text">
-                {group.usage.type === 'atWill'
-                  ? 'At will'
-                  : group.usage.type === 'perDay'
-                    ? `${group.usage.per}/day each`
-                    : `Level ${group.usage.level}`}
-                :
-              </strong>{' '}
+              <strong class="text-text">{usageLabel(group)}:</strong>{' '}
               {group.spells.map((s) => spellName(s.name)).join(', ')}
             </p>
           ))}

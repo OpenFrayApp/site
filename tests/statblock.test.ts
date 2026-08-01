@@ -120,11 +120,15 @@ describe('StatBlock', () => {
     expect(text).toContain('Snap (Costs 2 Actions).');
   });
 
-  it('prints the spellcasting tiers in compendium casing with the DC line', () => {
+  it('opens Spellcasting with the same line the console prints', () => {
     const text = doc.body.textContent!;
-    expect(text).toContain('Spell save DC 12, using WIS.');
-    expect(text).toContain('At will: Entangle');
-    expect(text).toContain('2/day each: Speak with Plants');
+    expect(text).toContain('Casts using WIS as the spellcasting ability, spell save DC 12.');
+  });
+
+  it('prints the spellcasting tiers the way the console labels them', () => {
+    const text = doc.body.textContent!;
+    expect(text).toContain('At Will: Entangle');
+    expect(text).toContain('2/Day Each: Speak with Plants');
     expect(text).toContain('Casts quietly.');
   });
 });
