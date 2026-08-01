@@ -1,7 +1,7 @@
 ---
 import StatBlock from './StatBlock.astro';
 import { creature as broodAndBloom } from '../data/broodAndBloom.ts';
-import { creatureSlug } from '../data/statblock.ts';
+import { entrySlug } from '../data/statblock.ts';
 import { creature as wakingGarden } from '../data/wakingGarden.ts';
 
 interface Props {
@@ -15,7 +15,7 @@ const { name, book = 'waking-garden' } = Astro.props;
 const c = (book === 'brood-and-bloom' ? broodAndBloom : wakingGarden)(name);
 ---
 
-<article class="entry my-10" id={`c-${creatureSlug(c.name)}`}>
+<article class="entry my-10" id={`c-${entrySlug(c.name)}`}>
   <StatBlock creature={c} />
   {
     /* Regional effects, Running it notes, and the like sit outside the block: the 2024

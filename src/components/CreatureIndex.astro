@@ -6,7 +6,7 @@
 import { getCollection } from 'astro:content';
 import { WAKING_GARDEN, type Book } from '../data/books.ts';
 import { creatures as broodAndBloom } from '../data/broodAndBloom.ts';
-import { creatureSlug, formatCr, titleCase } from '../data/statblock.ts';
+import { entrySlug, formatCr, titleCase } from '../data/statblock.ts';
 import { creatures as wakingGarden } from '../data/wakingGarden.ts';
 
 interface Props {
@@ -28,7 +28,7 @@ for (const chapter of await getCollection(book.collection)) {
 
 /** The link to a creature's stat block: chapter page plus #c- anchor, or the anchor alone. */
 const href = (name: string) => {
-  const anchor = `#c-${creatureSlug(name)}`;
+  const anchor = `#c-${entrySlug(name)}`;
   const chapter = chapterOf.get(name);
   return chapter ? `${book.base}/${chapter}/${anchor}` : anchor;
 };

@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   abilityMod,
   creatureLookup,
-  creatureSlug,
+  entrySlug,
   formatCr,
   formatSenses,
   formatSpeed,
@@ -14,7 +14,9 @@ import {
   rechargeLabel,
   signed,
   spellName,
+  spellcastingLine,
   titleCase,
+  usageLabel,
 } from '../src/data/statblock.ts';
 
 describe('creatureLookup', () => {
@@ -24,10 +26,10 @@ describe('creatureLookup', () => {
   });
 });
 
-describe('creatureSlug', () => {
+describe('entrySlug', () => {
   it('lowercases and hyphenates, trimming edge hyphens', () => {
-    expect(creatureSlug('The Harvest Crown')).toBe('the-harvest-crown');
-    expect(creatureSlug("Winter's Bite!")).toBe('winter-s-bite');
+    expect(entrySlug('The Harvest Crown')).toBe('the-harvest-crown');
+    expect(entrySlug("Winter's Bite!")).toBe('winter-s-bite');
   });
 });
 
@@ -101,5 +103,39 @@ describe('rechargeLabel', () => {
     expect(rechargeLabel({ type: 'dice', value: 6 })).toBe(' (Recharge 6)');
     expect(rechargeLabel({ type: 'perDay', value: 2 })).toBe(' (2/Day)');
     expect(rechargeLabel(undefined)).toBe('');
+  });
+});
+
+describe('usageLabel', () => {
+  const spells = [{ name: 'bless' }, { name: 'daylight' }];
+
+  it('says "Each" when every spell in the tier has its own uses', () => {
+    expect(usageLabel({ usage: { type: 'perDay', per: 2 }, spells })).toBe('2/Day Each');
+  });
+
+  it('drops "Each" for a pool shared between the listed spells', () => {
+    // The Fidele Angel's "1/Day: bless, daylight, hallow, …" is one casting from the list.
+    expect(usageLabel({ usage: { type: 'perDay', per: 1, shared: true }, spells })).toBe('1/Day');
+  });
+
+  it('labels the other two usages the way the console does', () => {
+    expect(usageLabel({ usage: { type: 'atWill' }, spells: [] })).toBe('At Will');
+    expect(usageLabel({ usage: { type: 'slots', level: 3 }, spells: [] })).toBe('3rd Level');
+    expect(usageLabel({ usage: { type: 'slots', level: 9 }, spells: [] })).toBe('9th Level');
+  });
+});
+
+describe('spellcastingLine', () => {
+  it("reads word-for-word like the console's own header", () => {
+    expect(spellcastingLine({ ability: 'int', saveDc: 18, toHit: 10, groups: [] })).toBe(
+      'Casts using INT as the spellcasting ability, spell save DC 18, +10 to hit with spell attacks.',
+    );
+  });
+
+  it('drops each clause the block has no field for', () => {
+    expect(spellcastingLine({ ability: 'wis', saveDc: 12, groups: [] })).toBe(
+      'Casts using WIS as the spellcasting ability, spell save DC 12.',
+    );
+    expect(spellcastingLine({ groups: [] })).toBe('Casts the following spells.');
   });
 });

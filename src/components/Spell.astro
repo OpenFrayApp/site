@@ -1,0 +1,97 @@
+---
+import { renderMarkdown } from '../data/markdown.ts';
+import { spell as broodAndBloom } from '../data/broodAndBloomSpells.ts';
+import { entrySlug } from '../data/statblock.ts';
+
+// A spell entry, rendered from the same compendium JSON the console fetches. Brood &
+// Bloom is the only library that ships spells, so there is no `book` prop yet; a second
+// one becomes an entry in a lookup map here, the way Creature.astro does it.
+
+interface Props {
+  /** Compendium name, e.g. "Bloom Interdict". */
+  name: string;
+}
+
+const { name } = Astro.props;
+const s = broodAndBloom(name);
+
+// The 2024 header line: "Divination Cantrip", "Level 2 Abjuration".
+const typeLine = s.level === 0 ? `${s.school} Cantrip` : `Level ${s.level} ${s.school}`;
+
+const components = [
+  s.components.verbal && 'V',
+  s.components.somatic && 'S',
+  s.components.material && 'M',
+]
+  .filter(Boolean)
+  .join(', ');
+const componentLine =
+  (components || '—') + (s.components.materials ? ` (${s.components.materials})` : '');
+
+const duration = s.concentration ? `Concentration, ${s.duration}` : s.duration;
+
+const details = [
+  ['Casting Time', s.castingTime],
+  ['Range', s.range],
+  ['Components', componentLine],
+  ['Duration', duration],
+] as const;
+
+const html = await renderMarkdown(s.text);
+
+// Shared with StatBlock's own lists so the two can't drift apart.
+const row = 'flex min-w-0 gap-2';
+const label = 'flex-none font-bold text-accent';
+const value = 'm-0 text-muted';
+---
+
+{
+  /* `.statblock` is the print edition's hook as much as a style: print.astro flattens
+    and de-boxes anything carrying it, so a spell prints in the same frame as a creature.
+    The head group is authored here rather than built by groupStatBlockHeads, which looks
+    for a stat block's defenses list and finds none on a spell. */
+}
+<article class="entry my-10" id={`s-${entrySlug(s.name)}`}>
+  <section
+    class="statblock spellblock scroll-mt-6 rounded-xl border border-border border-t-[3px] border-t-accent bg-panel p-5.5 text-base"
+  >
+    <div class="sb-head-group">
+      <h3 class="sb-name m-0 border-none p-0 text-2xl tracking-tight text-text">{s.name}</h3>
+      <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-faint italic">{typeLine}</p>
+
+      <dl class="sb-top m-0 flex flex-wrap gap-x-6.5 gap-y-1.5 border-t border-border py-3">
+        {
+          details.map(([term, detail]) => (
+            <div class={row}>
+              <dt class={label}>{term}</dt>
+              <dd class={value}>{detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="sb-entry sb-entry-block m-0 border-t border-border pt-3 text-muted">
+      <Fragment set:html={html} />
+    </div>
+
+    {
+      s.classes && s.classes.length > 0 && (
+        <p class="sb-note m-0 mt-2.5 text-sm text-faint">Classes: {s.classes.join(', ')}</p>
+      )
+    }
+  </section>
+
+  {
+    /* The origin note — who wrote the spell and where a party finds it — is lore, so it
+      lives in the chapter's own prose rather than in the shipped JSON, exactly like a
+      creature's "Running it". */
+  }
+  {
+    Astro.slots.has('default') && (
+      <div class="entry-extras mt-4 border-l-2 border-border pl-[1.1rem]">
+        <slot />
+      </div>
+    )
+  }
+</article>
