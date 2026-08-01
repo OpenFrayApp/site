@@ -25,6 +25,13 @@ const broodAndBloom = defineCollection({
   schema: chapterSchema,
 });
 
+// On Strong Waters and Potent Simples — the apothecary's book. Not a bestiary: it ships
+// spells and effect presets and no stat blocks at all.
+const strongWaters = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/strong-waters' }),
+  schema: chapterSchema,
+});
+
 // The news section: release notes and short adventures, one file per post. `kind` is
 // what the post is, and it decides both the badge and which half of STYLE.md applies —
 // an update is documentation, an adventure is game content.
@@ -84,5 +91,6 @@ const news = defineCollection({
 export const collections = {
   'waking-garden': wakingGarden,
   'brood-and-bloom': broodAndBloom,
+  'strong-waters': strongWaters,
   news,
 };

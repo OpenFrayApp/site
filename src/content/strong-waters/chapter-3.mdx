@@ -1,0 +1,647 @@
+---
+title: 'Strong waters'
+label: 'Strong waters'
+description: 'The drink of the world from small beer to the things that come off a still, with the rule for capacity, the four degrees of intoxication, and what the morning costs.'
+order: 3
+eyebrow: 'Chapter 3'
+---
+
+import Voice from '../../components/Voice.astro';
+
+Drink is the one preparation in this book that nearly everybody makes and nearly nobody
+calls a preparation. It is fermenting, and then sometimes distilling, and the difference
+between a farmhouse and a still-house is a matter of degree and equipment rather than
+craft.
+
+She catalogs it here for two reasons. It is the base of every tincture in the next chapter,
+so a practitioner needs to know what is in the bottle before working with it. And it is the
+substance her trade saw more of than all the others together.
+
+## What a measure is
+
+Every drink below carries a **Strength**, which is how many measures one ordinary serving
+counts as. A serving is a serving as the house pours it: a tankard of small beer and a
+thimble of brandy are each one serving, and they are not each one measure.
+
+A creature's **capacity** is 2 + its Constitution modifier, to a minimum of 1. Up to its
+capacity in measures, a creature drinks without consequence beyond good spirits.
+
+Past that, every further measure calls a DC 10 Constitution saving throw. The Difficulty
+Class rises by 2 for each saving throw the creature has already made since it began
+drinking. On a failed save, the creature gains 1 level of Intoxication.
+
+## The four degrees
+
+Intoxication has four levels, and the effects of a level include those below it:
+
+- **Level 1, merry.** The creature has Advantage on saving throws against being Frightened,
+  and Disadvantage on Wisdom checks.
+- **Level 2, loose.** The creature has Disadvantage on Dexterity checks, Dexterity saving
+  throws, and Wisdom saving throws.
+- **Level 3, blind.** The creature has the Poisoned condition, and its Speed is reduced by
+  10 feet.
+- **Level 4, insensible.** The creature has the Unconscious condition for 1d4 hours. Damage
+  does not end it. A creature that succeeds on a DC 15 Wisdom (Medicine) check rouses it
+  for 1 minute, after which it drops again.
+
+A creature has one level of Intoxication at a time, never several: a new failed save moves
+it up the list rather than adding a second copy of where it already is.
+
+A Wisdom check made with Disadvantage is any check using Wisdom, so Perception, Insight,
+Survival and the rest are covered by the first level. Saving throws are separate from
+checks, and are named separately above because Disadvantage does not stack with itself —
+at level 3 the Poisoned condition takes over every check the lower levels touched, and the
+saving throws are the only thing those levels still contribute.
+
+Intoxication falls by one level for each hour a creature spends without drinking. Food and
+water halve that hour. A creature that reached level 4 gains 1 Exhaustion level when its
+Intoxication ends, and no amount of water prevents it.
+
+## Beer and ale
+
+Malted grain, water, yeast, and — since the hop arrived — hops. The cheapest drink there
+is, the safest thing to give a child, and the reason most towns have clean-ish water at
+all.
+
+| Drink       | Strength | Serving | Price |
+| ----------- | -------- | ------- | ----- |
+| Small beer  | ½        | Tankard | 1 cp  |
+| Kvass       | ½        | Tankard | 1 cp  |
+| Mild        | 1        | Tankard | 3 cp  |
+| Table ale   | 1        | Tankard | 4 cp  |
+| Gruit ale   | 1        | Tankard | 5 cp  |
+| Porter      | 2        | Tankard | 6 cp  |
+| Stout       | 2        | Tankard | 6 cp  |
+| Sour ale    | 2        | Tankard | 8 cp  |
+| Braggot     | 2        | Tankard | 1 sp  |
+| Barley wine | 4        | Cup     | 2 sp  |
+
+### Small beer
+
+What everyone drinks, including children and the sick, because the water is worse. Pale,
+cloudy, and thin, with almost no head. It smells of wet bread. It tastes of wet bread, and
+faintly sour at the end, and a person can drink it all day and work afterward.
+
+<Voice by="Hesper Aldwine">
+  One will not distil small beer, nor tincture in it, nor keep it above four days. It is food, and
+  one does not tincture in soup.
+</Voice>
+
+### Kvass
+
+Stale rye bread fermented in water for a day or two, which is what a household does rather
+than throw bread away. Brown and cloudy. It smells of sour bread and, faintly, of raisins.
+It tastes tart and bready and barely of drink at all, and it is the cheapest thing in this
+chapter that is not water.
+
+### Mild
+
+Young ale, sold within the week, brewed to be drunk in quantity by people who have worked.
+Light brown, thin head. It smells faintly of malt and of the barrel. It tastes soft and a
+little sweet, with almost no bitterness, and it is the drink of the working afternoon.
+
+### Table ale
+
+Darker than small beer and with something to it, brewed for the evening rather than the
+working day. Brown to amber, a finger of head that goes quickly. It smells of bread and
+malt; it tastes of malt first and then bitter from the hop, and the bitterness is what
+tells a drinker how much they have had, if they are attending.
+
+### Gruit ale
+
+Ale bittered with herbs instead of hops — bog myrtle, yarrow, marsh rosemary — which is how
+it was done before the hop and how it is still done where the hop will not grow. Amber,
+hazy. It smells green and resinous over the malt. It tastes bitter in a different register
+from a hopped ale, more like a tisane, and every gruit is its brewer's own receipt.
+
+<Voice by="Hesper Aldwine">
+  A gruit is a metheglin's cousin and it deserves the same attention. Some of what goes in a gruit
+  is in my fourth chapter, and a brewer who is generous with the myrtle has made something stronger
+  than ale without meaning to.
+</Voice>
+
+### Porter
+
+Dark ale brewed from browned malt and aged in vats until it has lost its rough edge. Deep
+brown, red at the edge against a light. It smells of toast and of the cellar. It tastes
+dry, roasted, and long, and it travels better than anything else on this list.
+
+### Stout
+
+Black, or near enough that a candle behind the glass shows red at the edge and nothing
+else. A thick head that stays. It smells roasted, almost burnt, and of coffee to those who
+have met coffee. It tastes of the same, and sweeter than the smell promises, and it is
+heavy enough that most drinkers stop before the arithmetic catches them.
+
+### Sour ale
+
+Ale left open to whatever is in the air of one particular brewhouse, then aged for a year
+or three. Gold to brown, still or lively. It smells of vinegar, hay and apples. It tastes
+sharply sour and then complicated, and it is either the best thing in this chapter or
+undrinkable, according to who is asked.
+
+### Braggot
+
+Ale and honey fermented together, which is older than either being made separately and is
+the drink of places too far north for grapes. Deep amber, thick, with a head that holds. It
+smells of malt and honey at once. It tastes of malt first and finishes sweet, and it is
+heavier than it drinks.
+
+### Barley wine
+
+Ale brewed as strong as ale can be brewed and then kept for years, until it stops behaving
+like beer. Deep russet, almost still. It smells of dried fruit, of toffee, of sherry. It
+tastes sweet, thick and hot, and it is served in a cup rather than a tankard for reasons
+that become obvious.
+
+## Cider, perry and mead
+
+Fruit and honey, fermented — the drink of orchards and of people who keep bees, and the
+oldest of anything in this chapter.
+
+| Drink     | Strength | Serving | Price |
+| --------- | -------- | ------- | ----- |
+| Cider     | 1        | Tankard | 3 cp  |
+| Hydromel  | 1        | Cup     | 4 cp  |
+| Perry     | 1        | Tankard | 4 cp  |
+| Mead      | 2        | Cup     | 8 cp  |
+| Cyser     | 2        | Cup     | 1 sp  |
+| Melomel   | 2        | Cup     | 1 sp  |
+| Pyment    | 2        | Cup     | 1 sp  |
+| Metheglin | 2        | Cup     | 2 sp  |
+| Sack mead | 3        | Cup     | 3 sp  |
+
+### Cider
+
+Pressed apple, fermented. Straw to deep gold, sometimes still and sometimes lively. It
+smells of apples that have gone a little further than eating apples. It tastes sharp, then
+sweet, then sharp again, and the sweetness is what makes it dangerous — it goes down like
+something weaker than it is.
+
+### Hydromel
+
+Mead made thin, with far more water than honey, and drunk young because it will not keep.
+Pale gold, almost watery. It smells faintly of honey. It tastes light and barely sweet, and
+it is what a household makes when the hive was small.
+
+### Perry
+
+The same made from pears, and the better drink, though it is rarer because the trees take
+a lifetime and the fruit will not keep. Paler than cider, almost colorless. It smells
+faintly of pears and mostly of nothing. It tastes soft, with none of cider's sharpness,
+which is precisely why people who are careful with cider are careless with perry.
+
+### Mead
+
+Honey and water, fermented, which is the oldest of them and the one every people claims to
+have invented. Gold to amber, thick in the glass. It smells of honey and of the flowers the
+bees had. It tastes sweet and then hot, and the heat arrives later than a drinker expects.
+
+<Voice by="Hesper Aldwine">
+  One will keep mead a year before drinking it and five before judging it. What is drunk at a month
+  is not bad mead; it is not yet mead.
+</Voice>
+
+### Cyser
+
+Apples and honey fermented together — cider's rich cousin, and the drink an orchard makes
+when it has bees as well. Deep gold. It smells of apples and honey with something like
+sherry behind them. It tastes sweet and then dry, and it keeps for years and improves for
+most of them.
+
+### Melomel
+
+Mead with fruit other than apples or grapes put in at the fermenting — cherry, raspberry,
+elderberry, whatever the hedge gave that year. Colored by the fruit, from pink to near
+black. It smells of the fruit first. It tastes of honey underneath and the fruit on top,
+and it is the mead most likely to be mistaken for wine by somebody being polite.
+
+### Pyment
+
+Honey and grapes fermented together, which is what a vineyard with bees makes and what
+everybody else calls showing off. Rose to deep gold. It smells of honey and vine flowers.
+It tastes rich and dry at once.
+
+### Metheglin
+
+Mead with the herbs put in — the maker's own receipt, and every maker's is secret and most
+are the same four herbs. Colored by whatever went in, from gold to a startling green. It
+smells of honey underneath and spice on top. It tastes of the spice first and the honey
+after, and a good one is the finest drink in this chapter.
+
+Metheglin is where this chapter and the next touch. Some of what is put in is a kitchen
+herb. Some of it is not, and an entry in the fourth chapter that says _taken in drink_ is
+often taken exactly this way.
+
+### Sack mead
+
+Mead made with so much honey that the yeast gives up before it has eaten it all, leaving a
+drink that is both very strong and frankly sweet. Deep amber, syrupy in the glass. It
+smells of honey, beeswax and dried fruit. It tastes like a dessert and drinks like a
+spirit, which is the trap.
+
+## Wine
+
+Grapes, fermented, and everything a cellar does to them afterward. The range in this
+section is the widest in the book: the same fruit makes both the thinnest drink in the
+chapter and the most expensive.
+
+| Drink        | Strength | Serving | Price |
+| ------------ | -------- | ------- | ----- |
+| Country wine | 1        | Cup     | 3 cp  |
+| Table wine   | 2        | Cup     | 5 cp  |
+| Resined wine | 2        | Cup     | 6 cp  |
+| Claret       | 2        | Cup     | 8 cp  |
+| Sack         | 3        | Cup     | 1 sp  |
+| Canary       | 3        | Cup     | 2 sp  |
+| Malmsey      | 3        | Cup     | 3 sp  |
+| Straw wine   | 3        | Cup     | 5 sp  |
+| Fine wine    | 2        | Cup     | 2 gp  |
+
+### Country wine
+
+Anything but grapes, fermented by somebody's grandmother: elderflower, birch sap,
+dandelion, nettle, cowslip. Colored by whatever it was, from water-pale to a startling
+yellow. It smells of the flower or the sap and of the cellar it sat in. It tastes thin,
+sweet, and faintly of the year it was made, and every house swears by its own and
+disparages the next village's.
+
+### Table wine
+
+Fermented grape, thin and sour and universal. Red or straw, usually cut with water at
+table. It smells of vinegar at the edges when it is old, which is most of the time. It
+tastes sharp and thin, and its virtue is that there is a great deal of it.
+
+### Resined wine
+
+Wine sealed with pine resin, which keeps it from turning and gets into it permanently.
+Pale gold. It smells of pine and turpentine. It tastes of the same, and of wine somewhere
+underneath, and people raised on it prefer it to anything in this section.
+
+### Claret
+
+Light red wine drunk young, shipped in quantity, the ordinary good wine of anywhere with
+money. Clear ruby. It smells of red fruit and a little of the barrel. It tastes bright and
+dry and finishes short, and it is meant to be drunk rather than discussed.
+
+### Sack
+
+Fortified wine — wine with spirit added, so that it keeps at sea and travels. Deep amber.
+It smells of raisins and of wood. It tastes sweet, nutty, and hot, and it is the drink
+most often underestimated by people who think of it as wine.
+
+### Canary
+
+Sack's sweeter cousin from warmer islands, shipped in butts and much admired. Deep gold.
+It smells of honey, apricot and wood. It tastes sweet and hot and rounder than sack, and
+it is the wine most often named in the letters of people complaining about the price.
+
+### Malmsey
+
+The sweetest and heaviest of the fortified wines, dark as treacle and nearly as thick. It
+smells of raisins, burnt sugar and old wood. It tastes intensely sweet and then dry at the
+very end, which is what saves it, and a cup of it is a considerable undertaking.
+
+### Straw wine
+
+Grapes dried on straw mats until they are half raisins, then pressed and fermented, which
+takes a small crop and makes a smaller one. Deep gold to amber. It smells of apricot,
+honey and nuts. It tastes concentrated in every direction at once.
+
+### Fine wine
+
+The same fruit as the table wine and nothing else the same: a named vineyard, a good year,
+and ten or fifteen years in a cellar that somebody paid to keep cool. Deep and clear, and
+it throws a sediment that a careful house decants off. It smells of the fruit it was and
+then of a dozen things that were never in it. It tastes long — the flavor arrives, changes
+twice, and is still there a minute after the mouthful is gone, which is the whole of what
+the money buys.
+
+<Voice by="Hesper Aldwine">
+  One will not tincture in fine wine, nor cook with it, nor give it to a patient. It is ten gold the
+  bottle and it does nothing that two silver of common will not do as well, and I have said so to
+  the faces of men who did not care for hearing it.
+</Voice>
+
+## Spirits
+
+Everything above, put through a still. A spirit is not a different drink so much as the
+same drink with the water taken out, and everything in this section is dangerous in a way
+nothing in the previous three is: a thimble looks like nothing and is four measures.
+
+| Drink          | Strength | Serving | Price |
+| -------------- | -------- | ------- | ----- |
+| Aqua vitae     | 4        | Thimble | 2 sp  |
+| Marc           | 4        | Thimble | 2 sp  |
+| Rum            | 4        | Thimble | 2 sp  |
+| Bread spirit   | 4        | Thimble | 2 sp  |
+| Arrack         | 4        | Thimble | 3 sp  |
+| Brandy         | 4        | Thimble | 3 sp  |
+| Geneva         | 4        | Thimble | 3 sp  |
+| Fruit spirit   | 4        | Thimble | 4 sp  |
+| Usquebaugh     | 4        | Thimble | 4 sp  |
+| Wormwood water | 4        | Thimble | 5 sp  |
+
+### Aqua vitae
+
+The first of the distilled, and the plainest: what comes off a still charged with wine.
+Colorless, oily in the glass. It smells of heat and faintly of the wine it was. It tastes
+of burning, and then of nothing, and then of the wine again a moment later.
+
+<Voice by="Hesper Aldwine">
+  Aqua vitae is the base of near every tincture in the next chapter, and one will want it clean
+  rather than good. What is pleasant to drink carries too much of its own flavor into a preparation,
+  and a tincture is not improved by tasting of grapes.
+</Voice>
+
+### Marc
+
+Distilled from what the wine press left behind — skins, stems and pips, which still hold
+enough to be worth a still. Colorless to faint straw, harsh. It smells green and stalky.
+It tastes rough and hot and unmistakably of the vineyard floor, and it is what the workers
+drink while the good wine goes elsewhere.
+
+### Rum
+
+Distilled from cane sugar or its molasses, which means from somewhere warm, which means it
+arrived by ship. Pale straw to dark brown according to the wood it sat in. It smells sweet
+and slightly burnt, of treacle and hot iron. It tastes sweet, then hot, then of the
+molasses again, and the cheap sort is called kill-devil by the people who drink it and are
+honest about it.
+
+### Bread spirit
+
+Distilled from rye or wheat mash, filtered through charcoal until it smells of nearly
+nothing, and drunk cold. Colorless. It smells faintly of bread and of cold metal. It tastes
+of heat and almost nothing else, which is the entire intention.
+
+### Arrack
+
+Distilled from palm sap or from rice, made east of anywhere this book was written, and
+arriving in small casks at large prices. Colorless to faint gold. It smells sharp, floral,
+and faintly of bread. It tastes hot and then unexpectedly sweet, and it is the base of the
+best punch in this chapter.
+
+### Brandy
+
+Aqua vitae kept in wood until it stops being aqua vitae — the same spirit, the same grape,
+and years of patience between them. Amber to deep russet. It smells of fruit, of wood, and
+of something like flowers. It tastes hot and round and finishes long, and it is the drink
+this book recommends to anybody who wants to understand what wood does to a spirit.
+
+### Geneva
+
+Distilled grain flavored with juniper, made everywhere, made badly nearly everywhere.
+Colorless. It smells of juniper and of pine resin. It tastes of juniper and bitterness, and
+a bad one tastes of turpentine, and there is a great deal of bad one.
+
+<Voice by="Hesper Aldwine">
+  Juniper is in it because juniper covers what the still did not take out. One will remember this
+  when buying cheap geneva, and one will remember what it is covering.
+</Voice>
+
+### Fruit spirit
+
+Cherries, plums, or pears fermented whole and then distilled — a great weight of fruit for
+a small bottle, which is the price. Colorless, however dark the fruit was. It smells
+intensely of the fruit and of its stone. It tastes hot, dry, and of the fruit's kernel
+rather than its flesh, which surprises people expecting something sweet.
+
+### Usquebaugh
+
+Distilled from malted grain and kept in wood for years, which is what gives it the color it
+did not start with. Amber to deep brown. It smells of smoke, of the wood, and of the malt
+beneath both. It tastes hot, then sweet, then dry, and it is the drink in this chapter that
+most rewards drinking slowly and most punishes not.
+
+### Wormwood water
+
+Spirit redistilled over wormwood, anise and fennel, sold green and drunk cut with water,
+which turns it cloudy. It smells of anise and of bitter herbs. It tastes of anise first and
+wormwood a long time afterward.
+
+<Voice by="Hesper Aldwine">
+  Wormwood is in my fourth chapter as well, and one will read that entry before drinking much of
+  this. A little wormwood settles a stomach. A great deal of wormwood is not drink at all, and the
+  people who sell this by the bottle would rather one did not ask how much is in it.
+</Voice>
+
+## Mixtures
+
+Everything above is one thing fermented, and sometimes distilled. Everything below is two
+or more of them put together with heat, spice, eggs, cream, fruit or sugar — which is a
+preparation as much as anything in the fourth chapter is, and is made in the same kitchen
+by the same person on a colder evening.
+
+A mixture's Strength is what went into it, not what it tastes of, and that is the whole
+danger of the section. Sugar, cream and spice hide spirit completely; a punch made of
+arrack tastes of lemon and drinks like four measures, because it is four measures.
+
+| Mixture        | Strength | Serving | Made from                      | Price |
+| -------------- | -------- | ------- | ------------------------------ | ----- |
+| Caudle         | 1        | Cup     | Ale, egg, oatmeal, spice       | 4 cp  |
+| Purl           | 1        | Tankard | Ale, wormwood, ginger          | 5 cp  |
+| Posset         | 1        | Cup     | Milk, ale or sack, spice       | 6 cp  |
+| Negus          | 2        | Cup     | Sack, hot water, lemon, nutmeg | 8 cp  |
+| Syllabub       | 2        | Cup     | Cream, wine or cider, sugar    | 1 sp  |
+| Flip           | 3        | Tankard | Ale, spirit, egg, sugar        | 1 sp  |
+| Shrub          | 3        | Cup     | Fruit, vinegar, sugar, spirit  | 1 sp  |
+| Hippocras      | 3        | Cup     | Wine, honey, spice             | 3 sp  |
+| Punch          | 4        | Cup     | Spirit, citrus, sugar, water   | 4 sp  |
+| Aqua mirabilis | 3        | Thimble | Spirit redistilled with herbs  | 1 gp  |
+
+### Caudle
+
+Ale thickened with egg and oatmeal, spiced, and drunk hot — invalid food more than drink,
+given to the sick, the newly delivered, and anybody who has been out in weather. Pale
+brown, thick enough to coat a spoon. It smells of oats and nutmeg. It tastes bland and
+comforting, and it is the only thing in this chapter a physician will hand you without
+comment.
+
+A creature that drinks a cup of caudle and then rests has that rest count as though it
+were taken warm and fed, which is the whole of what the sick want from it.
+
+### Purl
+
+Ale warmed with wormwood and ginger, bitter as a rebuke, drunk in the morning by people who
+were drinking something else the night before. Brown and cloudy. It smells of bitter herbs
+over malt. It tastes appalling and works.
+
+A creature that drinks a tankard of purl reduces its Intoxication by 1 level, and can
+benefit from purl only once between Long Rests.
+
+<Voice by="Hesper Aldwine">
+  Purl is the only receipt in this book people thank me for and then go on doing the thing that made
+  them want it. I have stopped saying anything and I have raised the price.
+</Voice>
+
+### Posset
+
+Hot milk curdled deliberately with ale or with sack, sweetened and spiced, drunk before
+bed. Ivory, separated into a thick top and a thin under-layer that is the good part. It
+smells of warm milk and nutmeg. It tastes rich and faintly sour where the curdling took,
+and it is the drink most associated with being cared for.
+
+### Negus
+
+Sack, hot water, sugar, lemon and grated nutmeg — a supper drink and a children's-party
+drink both, depending on how much sack goes in and who is watching. Pale amber, steaming.
+It smells of nutmeg and hot lemon. It tastes mild, warm, and much weaker than it is.
+
+### Syllabub
+
+Cream whipped with wine or cider and sugar until it holds — half a drink and half a
+pudding, served in a glass so the separated layers show. White above, amber below. It
+smells of cream and of whatever went in. It tastes sweet and cold and barely of drink at
+all, which is why people have four.
+
+### Flip
+
+Ale, spirit, egg and sugar, mixed and then heated by plunging a red-hot iron into the
+tankard, which makes it froth and gives it a scorched note nothing else has. Deep brown
+under a tall head. It smells burnt and sweet. It tastes of caramel and singed cream, and
+the iron is not optional — a flip mixed cold is merely a bad drink.
+
+### Shrub
+
+Fruit steeped in vinegar and sugar until it gives up everything it has, then cut with
+spirit and kept. Ruby to dark amber, syrupy. It smells sharply of the fruit and then of
+the vinegar behind it. It tastes sour, then sweet, then hot, and it keeps a summer's fruit
+until midwinter, which is the point of it.
+
+### Hippocras
+
+Wine steeped with honey, cinnamon, ginger and grains of paradise, then strained through a
+long conical bag of felt that the trade calls a sleeve. Deep red-brown, and perfectly
+clear if the sleeve was doing its work. It smells of the spice before the wine. It tastes
+sweet and hot and long.
+
+<Voice title="Of the straining" by="Hesper Aldwine">
+  One will hang the sleeve and let it drip, and one will not squeeze it, however late the hour and
+  however many are waiting. A squeezed hippocras is cloudy and bitter both, and the man who squeezed
+  it always says the sleeve was at fault.
+</Voice>
+
+### Punch
+
+Spirit, citrus, sugar, water and spice — five things, which is what the name means, and
+the reason every house makes it differently is that only the proportions are secret. Color
+according to the spirit and the fruit, from pale gold to deep red. It smells of lemon and
+whatever it was built on. It tastes cold, sweet and sharp, and it hides its spirit more
+completely than anything else in this chapter.
+
+<Voice by="Hesper Aldwine">
+  Punch is made in a bowl and drunk in cups, and nobody counts cups. I have been called to more
+  houses for punch than for every simple in the fourth chapter together, and the people who sent for
+  me were always surprised.
+</Voice>
+
+### Aqua mirabilis
+
+The apothecary's own drink: a clean spirit redistilled over herbs — sage, marjoram, mace,
+cloves, lemon peel — until it comes off sweet and green-smelling. Faintly gold, oily.
+It smells of a garden in the sun. It tastes hot, herbal and very slightly sweet, and it
+costs what it costs because a still is expensive and it is charged twice.
+
+A creature that drinks a thimble of aqua mirabilis has Advantage on the next saving throw
+it makes against cold weather or exposure within the hour.
+
+<Voice by="Hesper Aldwine">
+  It is sold as a cure for everything from palsy to grief, and I have made my share of that money.
+  What it is, is a warm drink for a cold road, and I will say so to anybody who asks me plainly.
+</Voice>
+
+## Without drink
+
+Not everything a house puts in a cup is fermented, and some of what is not does more than
+water does. Nothing here counts toward capacity or Intoxication. These are the mild end of
+what the fourth chapter catalogs at strength, and a practitioner who understands why a cup
+of coffee works understands why emberfoot works, and how much further it goes.
+
+| Drink      | Serving | Price | What it does                                     |
+| ---------- | ------- | ----- | ------------------------------------------------ |
+| Broth      | Bowl    | 2 cp  | Counts as a day's food                           |
+| Ginger tea | Cup     | 2 cp  | Advantage against sickness of motion or bad food |
+| Chamomile  | Cup     | 2 cp  | Eases the way into sleep                         |
+| Switchel   | Tankard | 3 cp  | Advantage against heat and exertion              |
+| Willow tea | Cup     | 4 cp  | Dulls pain, and nothing else                     |
+| Tea        | Cup     | 6 cp  | Advantage against sleep for 1 hour               |
+| Coffee     | Cup     | 8 cp  | Advantage against sleep for 2 hours              |
+| Chocolate  | Cup     | 3 sp  | Advantage against sleep for 2 hours, and food    |
+
+### Broth
+
+Bones and trimmings simmered a day and skimmed. Cloudy gold, with fat at the top that a
+careful cook takes off and a hungry one does not. It smells of meat and of the kitchen.
+It tastes of salt and of very little else, and it is the first thing given to anybody who
+has been ill.
+
+A bowl of broth counts as a day's rations for the purpose of going without food.
+
+### Ginger tea
+
+Ginger root, bruised and steeped. Pale yellow, cloudy. It smells hot and green. It tastes
+sharp and warming at the back of the throat.
+
+For 1 hour after drinking it, a creature has Advantage on saving throws against the
+Poisoned condition caused by the motion of a ship or a coach, or by food that has turned.
+
+### Chamomile
+
+The dried flower, steeped. Pale gold. It smells of apples and of hay. It tastes faintly
+bitter and faintly sweet, and it is given to children and to people who cannot settle.
+
+A creature that drinks a cup before resting is not woken by ordinary noise, and wakes on
+its own at the hour it intended.
+
+### Switchel
+
+Water, vinegar, ginger and molasses, drunk cold in quantity by people bringing in a
+harvest. Cloudy brown. It smells sour and gingery. It tastes tart and salty-sweet and is
+far better than it sounds when one has been in a field since dawn.
+
+For 1 hour after drinking a tankard, a creature has Advantage on Constitution saving throws
+made against extreme heat or against exhaustion from a forced march.
+
+### Willow tea
+
+Willow bark, stripped in spring and steeped bitter. Brown, astringent. It smells of wet
+bark. It tastes bitter enough that most people take it with honey.
+
+It dulls an ache for an hour or two. It removes no condition, restores no Hit Points, and
+does nothing whatever about the cause, and she is emphatic that people mistake the second
+for the first.
+
+### Tea
+
+Dried leaves from a great distance away, steeped brief and drunk hot. Amber. It smells
+grassy and faintly smoky. It tastes bitter and clean, and it costs what it costs because of
+where it came from.
+
+For 1 hour after drinking a cup, a creature has Advantage on saving throws made to stay
+awake.
+
+### Coffee
+
+A roasted bean, ground and boiled, drunk black and bitter by people who have work to
+finish. Near black, with a pale crown when fresh. It smells burnt and rich. It tastes
+bitter, and then bitter, and people persist anyway.
+
+For 2 hours after drinking a cup, a creature has Advantage on saving throws made to stay
+awake.
+
+<Voice by="Hesper Aldwine">
+  Coffee is the gentlest thing in my book that does anything at all, and it is where I send people
+  who ask me for emberfoot and do not need it. The one is a cup and two hours. The other is four
+  hours and a debt, and the debt is in the fourth chapter under its own name.
+</Voice>
+
+### Chocolate
+
+The ground bean beaten into hot milk or water with sugar and a little chili, which is how
+it is drunk where it comes from and how it should be drunk everywhere. Dark brown, thick,
+frothed. It smells rich and faintly bitter. It tastes of all three of its parts at once,
+and it is a meal as much as a drink.
+
+For 2 hours after drinking a cup, a creature has Advantage on saving throws made to stay
+awake. A cup also counts as half a day's rations.
