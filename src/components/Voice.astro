@@ -1,0 +1,47 @@
+---
+// The author speaking in her own hand, as against the book describing her work. Reads as
+// a quotation rather than a card: serif italic where the page is upright sans, an opening
+// quotation mark, and a rule down the left. Deliberately unlike Note, which is the book
+// stepping out of the flow to state a rule.
+//
+// figure/figcaption rather than a cite inside the blockquote: the HTML spec puts the
+// attribution outside the quotation, and a screen reader then reads the two as related
+// instead of reading the author's name as part of what she said.
+interface Props {
+  /** What the passage is, e.g. "Of its preparing". Omitted for an unheaded aside. */
+  title?: string;
+  /** Who is speaking. Signs the passage; omitted leaves it unsigned. */
+  by?: string;
+}
+
+const { title, by } = Astro.props;
+---
+
+<figure class="voice my-7">
+  <blockquote
+    class="relative m-0 rounded-r-lg border-l-2 border-l-accent bg-accent/[0.06] py-4 pr-5 pl-9 font-serif text-[1.0625rem] leading-[1.75] text-text italic"
+  >
+    {/* Decorative, and hidden from assistive tech: the blockquote already says it's a quote. */}
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute top-2 left-2.5 font-serif text-4xl leading-none text-accent/45 not-italic select-none"
+    >
+      &ldquo;
+    </span>
+    {
+      title && (
+        <p class="mt-0 mb-2 font-sans text-xs font-semibold tracking-widest text-faint uppercase not-italic">
+          {title}
+        </p>
+      )
+    }
+    <slot />
+  </blockquote>
+  {
+    by && (
+      <figcaption class="mt-2 pr-1 text-right font-sans text-sm text-muted">
+        — <cite class="not-italic">{by}</cite>
+      </figcaption>
+    )
+  }
+</figure>
