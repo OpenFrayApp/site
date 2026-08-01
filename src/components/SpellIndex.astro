@@ -1,0 +1,109 @@
+---
+// Every spell in the book, as a reference table and as a per-class list. Built from the
+// compendium JSON the console fetches, so it cannot disagree with the spell entries.
+// Used by the appendix chapter, which is how the site and the print edition share it —
+// and in print each link becomes a page number, resolved by print.astro.
+import { getCollection } from 'astro:content';
+import { spells } from '../data/broodAndBloomSpells.ts';
+import { entrySlug } from '../data/statblock.ts';
+
+interface Props {
+  by: 'level' | 'class';
+}
+
+const { by } = Astro.props;
+
+// Which chapter holds each spell. Only the MDX knows the book's arrangement, so it is read
+// back out of the <Spell> tags rather than kept as a second list that drifts.
+const chapterOf = new Map<string, string>();
+for (const chapter of await getCollection('brood-and-bloom')) {
+  for (const [, name] of (chapter.body ?? '').matchAll(/<Spell\b[^>]*name="([^"]+)"/g)) {
+    chapterOf.set(name, chapter.id);
+  }
+}
+
+/** The link to a spell's entry: chapter page plus #s- anchor, or the anchor alone. */
+const href = (name: string) => {
+  const anchor = `#s-${entrySlug(name)}`;
+  const chapter = chapterOf.get(name);
+  return chapter ? `/brood-and-bloom/${chapter}/${anchor}` : anchor;
+};
+
+const byLevel = [...spells].sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
+
+/** "Cantrip" or the plain number, the way the book's own list prints it. */
+const levelLabel = (level: number) => (level === 0 ? 'Cantrip' : String(level));
+
+/** The duration as the card shows it, with Concentration folded in. */
+const duration = (s: (typeof spells)[number]) =>
+  s.concentration ? `Concentration, ${s.duration}` : s.duration;
+
+const classes = new Map<string, { name: string; href: string; level: number }[]>();
+for (const s of byLevel) {
+  for (const c of s.classes ?? []) {
+    if (!classes.has(c)) classes.set(c, []);
+    classes.get(c)!.push({ name: s.name, href: href(s.name), level: s.level });
+  }
+}
+const orderedClasses = [...classes.keys()].sort();
+---
+
+{
+  by === 'level' && (
+    <table class="spell-index">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Spell</th>
+          <th>School</th>
+          <th>Casting Time</th>
+          <th>Range</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {byLevel.map((s) => (
+          <tr>
+            <td>{levelLabel(s.level)}</td>
+            <td>
+              <a href={href(s.name)}>{s.name}</a>
+            </td>
+            <td>{s.school}</td>
+            <td>{s.castingTime}</td>
+            <td>{s.range}</td>
+            <td>{duration(s)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+{
+  by === 'class' && (
+    <table class="spell-index">
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Spells</th>
+        </tr>
+      </thead>
+      <tbody>
+        {orderedClasses.map((name) => (
+          <tr>
+            <td>{name}</td>
+            <td>
+              {classes.get(name)!.map((s, i) => (
+                <>
+                  {i > 0 && ', '}
+                  <a href={s.href}>{s.name}</a>
+                  {` (${levelLabel(s.level)})`}
+                </>
+              ))}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}

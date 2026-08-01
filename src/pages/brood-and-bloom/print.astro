@@ -35,14 +35,14 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
       <p class="cover-subtitle">A bestiary of parasites, compatible with 5e and 5.5e.</p>
       <hr class="cover-rule" />
       <p class="cover-lede">
-        Sixty-one creatures whose lives run through other bodies — living, dead, or built — with the
-        rules for what they leave behind in the people, the ground, and the buildings that survive
-        them, and the order of physicians that has been writing all of it down for longer than
-        anyone can remember.
+        Sixty-seven creatures whose lives run through other bodies — living, dead, or built — with
+        the rules for what they leave behind in the people, the ground, and the buildings that
+        survive them, the order of physicians that has been writing all of it down for longer than
+        anyone can remember, and the cult that reads the same files and welcomes what is in them.
       </p>
       <p class="cover-meta">
-        <strong>{creatures.length} creatures</strong> · CR {range} · 3 broods, 10 lines, 7 diseases<br
-        />
+        <strong>{creatures.length} creatures</strong> · CR {range} · 3 broods, 10 lines, 7 diseases ·
+        23 spells<br />
         Built for OpenFray, a free combat console for Game Masters — openfray.app
       </p>
       <p class="cover-legal">
@@ -77,7 +77,7 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
 
       // The count is asserted so a copy edit that changes the web's "library" wording
       // reports rather than silently rewriting a sentence.
-      const EXPECTED_LIBRARY_TERMS = 19;
+      const EXPECTED_LIBRARY_TERMS = 23;
       const hits = replaceLibraryTerms(document.body);
       if (hits !== EXPECTED_LIBRARY_TERMS) {
         console.warn(

@@ -1,293 +1,504 @@
 ---
-title: 'Necrophore'
-label: 'Necrophore'
-description: 'The pupating brood: three lines of moths that lay in the dead, the husk rule, colony territory, and sixteen creatures from the cinder nit to the Lychfield.'
+title: 'Inquiline'
+label: 'Inquiline'
+description: 'The attaching brood: grafts and Depth, the three lines and their diseases, extraction, expulsion, and surgery, and eighteen creatures from the latchling to the Exemplar.'
 order: 4
 eyebrow: 'Chapter 4'
 ---
 
 import Creature from '../../components/BroodCreature.astro';
 import Note from '../../components/Note.astro';
+import PageBreak from '../../components/PageBreak.astro';
 
-The Lazaret classes the pupating brood as Necrophore; common folk call it wakelight,
-for the light its adults carry. It is the only brood that wants nothing from the
-living, and the one a party leaves behind, in its dead. The Lazaret's standing
-instruction for it: **make no light, make no dead.**
+The Lazaret classes these parasites as inquilines, from the old word for a thing that
+lives inside the dwelling of another. Common folk call them latchkin. An inquiline
+feeds on living bodies one at a time, and what it leaves behind travels with the
+victim — this brood is the one a party carries away. The Lazaret's standing instruction
+for it: **the parasite first, then the graft.**
 
-## How a necrophore works
+## How an inquiline works
 
-The brood is three lines of moths on one closed loop: adults lay in fresh corpses,
-larvae climb out and eat the dead, and a larva killed by the wrong damage seals into a
-husk and opens as an adult. Nothing is implanted in the living, nothing infects, and
-nobody catches anything. What the brood needs is bodies, and a party moving through
-its territory produces them faster than anything else in the world.
+An inquiline implants. It latches onto a living creature, feeds every round it can —
+each feeding adds 1 Depth — and stays until it is pulled off or has taken all it can
+hold. Its first feeding roots a **graft** in the host, and parasite and graft then
+grow together: the parasite on the body, riding it and feeding, and the graft inside
+it, beyond the reach of anything but surgery. Growth happens nowhere else. A latchling
+that keeps its host for days becomes its line's next form without ever letting go, and
+the only inquiline that leaves a host willingly is a sated adult, off to lay.
+
+That is what extraction is for, and why the brood is built to resist it: an attached
+inquiline moves with its host (Embedded), relocates against every attempt to remove it
+(Shift Anchor), and an attack that nearly misses it wounds the host instead. An
+attached inquiline is not trying to win the fight — every round attached is a meal,
+and it profits from any fight that lasts.
+
+Each inquiline's **Extraction** trait covers pulling the creature itself off a host.
+Extraction stops the feeding; it never undoes it. The graft is a separate problem, and
+most of this chapter is about it.
+
+## The graft
+
+A graft is a short length of the parasite's own tissue, left rooted in the host by its
+first feeding. It is a cutting in the gardener's sense: an independent copy of its
+parent, already growing, and alive only while it has a body to grow in. Killing or
+removing the parent does not affect it.
+
+### What it looks like
+
+Pale and threadlike at first, an inch or two long, and easy to
+mistake for a vein or a healed cut. It thickens as it grows; by stage 3 it stands up
+under the skin as a raised line, and anyone who has seen one before knows it on sight.
+
+### Which line it belongs to
+
+A graft belongs to its parent's line. A graft left by a
+latchling — which has no line yet — belongs to the line the host's own body sets: a
+physical score (Strength, Dexterity, or Constitution) highest makes it sallow,
+Intelligence makes it chantry, Wisdom or Charisma makes it palimpsest. Each line's
+graft differs:
+
+| Line       | The graft                                 | Where it roots                                         |
+| ---------- | ----------------------------------------- | ------------------------------------------------------ |
+| Sallow     | Wet, pale, and soft, like a length of gut | Along the lymph, toward the deep muscle                |
+| Chantry    | Fine and black, and hard as wire          | Along the nerves, toward wherever the host keeps magic |
+| Palimpsest | Almost transparent, and warm to the touch | Up the spine, toward the base of the skull             |
+
+### Where it is
+
+A sallow or chantry graft has a fixed location. Roll 1d6 or choose:
+
+| 1d6 | Location     |
+| --- | ------------ |
+| 1-2 | Arm          |
+| 3-4 | Leg          |
+| 5   | Torso        |
+| 6   | Head or neck |
+
+A palimpsest graft always roots in the spine, which is why no blade short of the Lazaret's reaches one.
+
+## Depth
+
+**Depth** measures how far a graft has worked into a host. It runs from 0 to 6, and it
+is one of the two counters in this library — the Sporophore's Spore Load in
+[chapter 5](/brood-and-bloom/chapter-5/) runs the same 0-to-6 shape.
+
+### Gaining it
+
+A host gains 1 Depth whenever an inquiline's feeding action resolves
+against it, on a successful saving throw as well as a failed one — the save reduces
+what the feeding takes, never what it leaves. If the host carries no graft from that
+line, the feeding also leaves one. A host also gains 1 Depth at the end of every Long
+Rest taken while it carries a graft: the graft works inward while the body is still.
+
+### One graft per line
+
+A host carries at most one graft from each line. Further
+feedings from that line deepen the graft already there — the 1d4 + 1 latchlings a
+clutch fastens to one character all feed the same graft. Grafts from different lines
+act and progress independently, and their effects stack.
+
+**At 6 Depth** the graft deepens. The host contracts the line's disease at stage 1, or
+advances that disease one stage if it already has it, and Depth resets to 0.
 
 <Note>
-  Nothing a line leaves behind hampers that line. Gravewax is Difficult Terrain for everything
-  except the tallow line that laid it down, and a lychfield — every line's leavings at once — is
-  Difficult Terrain for everything except Necrophores.
+  **Depth never recedes on its own.** Rest does not remove it and distance does not either; the
+  graft has to come out. The treatments below remove it.
 </Note>
 
-### Reproduction
+## Diagnosis
 
-An adult lays in any fresh corpse it can reach. It never gets inside a body — a moth
-the size of a fishing boat could not — so it settles over the corpse and lays through
-its ovipositor, and 1d6 + 2 hours later 1d4 larvae climb out of it:
+A graft announces nothing. Until its disease presents, the only ways to find one are
+magic and a trained eye:
 
-| Adult           | Lays in          | Larvae         |
-| --------------- | ---------------- | -------------- |
-| Emberwing       | Any fresh corpse | Cinder Nits    |
-| Tallow Imago    | Any fresh corpse | Gravewax Grubs |
-| Reliquary Imago | Any fresh corpse | Crypt Instars  |
+- **Detect Poison and Disease** finds every graft in range and names its line.
+- **Examination.** A creature that spends 10 minutes examining a patient makes a DC 13
+  Wisdom (Medicine) check — DC 16 once a disease is at stage 1 or higher. **Success:**
+  The examiner finds the graft and identifies its line by its look and course (see
+  [The graft](#the-graft)). **Failure:** The examiner finds nothing, and further
+  examinations of that patient find nothing until the disease advances a stage.
 
-<Note type="design note">
-  Three hours is short enough that a party resting where they fought wakes to it, and long enough
-  that a party that kills something and keeps walking is gone before it matters. A corpse carried
-  out of a dungeon is usually carried for longer than eight hours, which is the third case.
-</Note>
+Knowing what to do with the find is training, not the check. The Expulsion processes
+are Lazaret teaching, published with the rest of its files: a creature proficient in
+Medicine learned them along with its trade, wherever the order's copies reach. An
+examiner without that training can find and describe a graft and not know what drives
+it out — a lazaret house, an officer, or a file supplies the process.
+
+Identifying the line is the point of diagnosis. The treatments below work on every
+line, but Expulsion differs by line, and a patient sweated for 6 hours over a chantry
+graft has suffered for nothing.
+
+## Treatment
+
+The Lazaret treats a graft in four tiers. Care slows it, Expulsion drives it out,
+surgery and amputation cut it out, and magic works it loose a little at a time:
+
+1. **Care.** A creature that spends 4 hours of downtime tending the patient makes a DC 15
+   Wisdom (Medicine) check. **Success:** The graft stills, and the patient gains no
+   Depth from the next Long Rest it finishes. Spending at least 6 hours tending the patient grants Advantage on the check.
+2. **Expulsion.** A downtime procedure, different per line, that makes the body unfit
+   to live in (see below). It removes the graft outright, at any stage and any Depth.
+3. **Surgery or amputation.** Both remove the graft outright, at any stage and any
+   Depth (see below). Neither reaches a palimpsest graft — only the Lazaret's officers
+   have the knowledge and skills to take one from the spine.
+4. **Magic.** The restoration spells remove Depth, walking the disease back a stage (see below).
+
+However the graft comes out, its disease ends within 1d4 hours of the removal.
+
+### Expulsion
+
+Expulsion removes a graft by denying it, for as long as the line takes to give up,
+whatever that line cannot live without. A completed Expulsion removes the graft
+entirely — sweated out through the skin, passed, or brought up — at whatever stage and
+Depth it had reached.
+
+Expulsion removes the graft, not the parasite. A host who spends 6 hours in a sweat
+house with a fluke still attached walks out clean and is grafted again at the next
+feeding — extraction comes first, always.
+
+<div class="wide">
+
+| Line       | Process                                                                                                                                                           | Why it works                                                   | Cost                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Sallow     | 6 continuous hours in extreme dry heat — a sweat house, a forge floor at full fire, bare rock in high summer                                                      | The graft is water-bound and cannot follow the moisture out    | 3 Exhaustion levels                                                                  |
+| Chantry    | 24 continuous hours with no unexpended spell slot, no magical feature, no spell or magical effect targeting the host, and no magical aura or location around them | The graft feeds on magic in the body and finds none            | 1 Exhaustion level, and a full day of recovery after                                 |
+| Palimpsest | 24 continuous hours spent insensible — heavily drugged, comatose, or deprived of every sense                                                                      | There is nothing coherent to read, so there is nothing to take | 3 Exhaustion levels, a full day of recovery after, and the cost of the insensibility |
+
+</div>
+
+<PageBreak />
+
+### Surgery and amputation
+
+Two procedures take a graft out through the skin:
+
+- **Surgery** takes 30 minutes per stage of the disease (30 minutes if none has
+  presented), a set of tools, and a Wisdom (Medicine) check against a Difficulty Class
+  of 10 + the disease's stage + the graft's Depth, made by someone other than the
+  patient. A trained physician makes the check with Advantage; a Lazaret officer
+  automatically succeeds on the check. **Success:** The graft comes out whole, and the patient takes
+  1d8 Slashing damage per stage of the disease (minimum 1d8). **Failure:** The graft
+  stays, the patient takes the damage anyway, and further attempts on the same graft
+  are made with Disadvantage for the next 3 days.
+- **Amputation.** If the graft is in an arm or a leg, taking the limb takes the graft,
+  with no check. It needs a cutting tool and fire. The patient takes 33 (6d10)
+  Slashing damage and 9 (2d8) Fire damage, gains 4 Exhaustion levels, and has lost the
+  limb. A bone saw and a practiced hand reduce the damage to 11 (3d6) Slashing and the
+  Exhaustion to 2 levels.
+
+Neither procedure reaches a palimpsest graft. It roots in the spine, past any field
+surgery, and for that line the routes are Expulsion, magic, and the Lazaret: spinal
+excision is the surgery the order's officers perform with Excise (see
+[the officers](/brood-and-bloom/chapter-2/#officers)), and they are the only surgeons
+who do it.
+
+Extraction removes the parasite, not the graft. A party that pulls a cyst off a
+friend, binds the wound, and moves on has treated the visible half of the problem.
+
+### Magic
+
+A restoration spell makes the body briefly reject tissue that is not its own, and
+what it does depends on how deeply that tissue is anchored. A parasite grips the
+surface, and the rejection throws it off whole — each stat block's Extraction says
+which spell is enough. A graft is woven into lymph, nerve, or spine, and can only be
+worked loose: the spell removes Depth, and the deeper the graft sits, the less each
+casting moves it. One casting does both at once, detaching the parasite and removing
+Depth:
+
+| Spell               | Depth removed                        |
+| ------------------- | ------------------------------------ |
+| Lesser Restoration  | 1d4, and only below stage 3          |
+| Greater Restoration | 2d4 below stage 3, or 1d4 at stage 3 |
+| Heal                | 3d4 below stage 3, or 2d4 at stage 3 |
+| Mass Heal           | As Heal, for every creature it heals |
 
 <Note>
-  **Adults lay outside a fight as well.** The Reaction on each stat block is the version that
-  happens in front of the party. A colony's territory is full of bodies seeded days ago, and a
-  battlefield, a barrow, or a plague pit inside one has been seeded unless something prevented it.
+  **Magic works against the whole climb.** A graft's hold is one number: 6 Depth for each stage of
+  its disease, plus its current Depth — a graft that has not yet caused a disease is just its
+  current Depth. Restoration magic subtracts from that total, the disease's stage at any moment is
+  the total divided by 6 (rounded down), and at 0 the graft has nothing left to hold with: it comes
+  out, and its disease ends with it.
 </Note>
 
-### Pupation and the husk
+Some examples of the climb a caster has to walk back down:
 
-Three creatures in this chapter pupate: the cinder nit, the gravewax grub, and the
-sepulchre nymph. Each is the last larval stage of its line, and each carries the
-Pupation trait on its stat block. The trait always works the same way: reduced to 0 Hit
-Points by anything except the damage its line cannot survive, the larva seals where it
-stands as a husk, and 1 hour later the husk splits and the adult takes its first turn.
+| Where the host is       | Depth a caster must remove |
+| ----------------------- | -------------------------- |
+| No disease yet, Depth 3 | 3                          |
+| Stage 1, Depth 3        | 9                          |
+| Stage 2, Depth 3        | 15                         |
+| Stage 3, Depth 5        | 23                         |
 
-Each husk has a stat block of its own, at the end of this chapter:
+Expulsion, surgery, and amputation skip all of this; magic is the only treatment that
+walks back down the whole climb. Stage 4 is beyond all four tiers — see
+[Stage 4](/brood-and-bloom/chapter-1/#stage-4) and each disease below.
 
-| Line      | Husk            | Destroyed by    | Opens as        |
-| --------- | --------------- | --------------- | --------------- |
-| Ember     | Cinder Nit      | Cold            | Emberwing       |
-| Tallow    | Gravewax Grub   | Cold or Thunder | Tallow Imago    |
-| Reliquary | Sepulchre Nymph | Radiant         | Reliquary Imago |
+## Death and the graft
 
-Nothing else husks: instars and masses are destroyed at 0 Hit Points like anything
-living, and an adult, once opened, never seals again. During its hour a husk is immune
-to every condition, takes no actions, and keeps its Vulnerability to its line's damage
-the whole time.
+A graft eats what its host provides — flesh, magic, or memory — and two of those die
+with the body.
 
-<Note>
-  **Failed husks.** Not every husk opens. In a rare few the change halts partway, and the light that
-  should have flown stays where it is and roots. What that becomes is the [Lych
-  Lantern](#c-lych-lantern).
-</Note>
+A host that dies while carrying a chantry or palimpsest graft starves
+it: the graft lives 1d4 days on what remains, then dies in place, and the corpse is
+clean. A creature raised inside that window comes back still carrying the graft, at
+the Depth it had; a creature raised afterward comes back clean.
 
-## A colony's territory
+The sallow line is the exception. A sallow graft feeds on flesh, and death does not
+take the flesh anywhere: it stays, it keeps eating, and what comes out of the body at
+the end is a [Quagdam](#c-quagdam) rather than a corpse. That is why only one of the
+three diseases kills — for the sallow line, the host's death is the last step of
+feeding.
 
-A Necrophore colony has no den and no center. Its territory is wherever corpses are.
+A Gentle Repose spell pauses both clocks for its duration: a preserved corpse neither
+starves its graft nor feeds it.
 
-Inside a colony's ground, any corpse that is not a necrophore and dead longer than 3
-hours has been seeded unless something prevented it — burned, frozen, sunk in
-running water, or sealed from the air.
+## Laying grounds
 
-The adults navigate by warmth and by one another's light, and fresh death draws them from miles away.
-When creatures die in a colony's territory, 1d4 adults arrive within 1d6 + 2 hours of the
-first death. They come to lay, and they fight whatever interferes.
+Every sated adult leaves its host to lay, and each line lays where its food will pass.
+The ground an adult chooses is where a clutch waits, where the first feedings happen,
+and where the [lancebills](#c-lancebill) stand.
 
-The interval between death and hatching is the window. Corpses
-burned or frozen inside it produce nothing, and a party willing to spend the hours
-can starve a colony out of a region one battlefield at a time. The Lazaret pays for
-exactly this work, by the field.
+| Line       | Where it lays                                                                       | What the ground looks like                                                              |
+| ---------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Sallow     | Still fresh water — fen pools, flooded fields, the warm mud below a ford            | Clean-picked frogs and fish along the margin, and wading birds that never leave         |
+| Chantry    | Quiet, spell-soaked places — libraries, shrines, reliquaries, a wizard's cold rooms | Nothing. A chantry ground is indistinguishable from the room it was                     |
+| Palimpsest | Where the dead are kept and the living come to remember — crypts, ossuaries         | Mourners who linger too long, and caretakers who have begun to misremember small things |
 
-### Reading the ground
-
-The signs are leavings: split husks beside old bones, runnels
-of grey wax down a stair, scorch-rings in grass nothing ever burned, small carcasses
-wedged into thorn trees at head height — the last being not the brood but the thing
-that hunts it. A creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom
-(Survival) check reads the signs, and the age of the oldest husk dates the colony.
-
-### Resting and light in a colony's ground
-
-Fire after dark in a colony's ground is a beacon, and so is a lantern.
-A party that keeps a cold, dark camp passes the night beneath the colony's notice unless something nearby dies.
+Latchlings die fast away from their ground. A creature that succeeds on a DC 13
+Intelligence (Nature) or Wisdom (Survival) check recognizes a laying ground and the
+line that keeps it, as it does a brooding ground or a colony's territory in the other
+broods' chapters.
 
 ## The diseases
 
-The Necrophore has no disease and no counter: nothing in this chapter infects a living
-creature, and nothing here is cured. Of the spells in
-[What magic does](/brood-and-bloom/chapter-1/#what-magic-does), two have a use against
-this brood:
+Each line's graft causes one disease, and every one of them ends the same way: the
+graft finishes, and something leaves the body. What differs is what it leaves behind.
 
-- Detect Poison and Disease marks every seeded corpse in range.
-- Gentle Repose prevents a corpse from being seeded. An already seeded
-  corpse's clock stops for the spell's duration, and a body can be carried home through
-  the brood's own territory.
+| Line       | Name            | Common name    | At stage 4                                                                 |
+| ---------- | --------------- | -------------- | -------------------------------------------------------------------------- |
+| Sallow     | Sallow Rot      | the wetting    | The host dies. The graft stays in the corpse and matures into a Quagdam    |
+| Chantry    | Chantry Drought | the emptying   | The graft emerges as a Psalter Tick. The host lives on as a Lacuna         |
+| Palimpsest | —               | the Forgetting | The graft emerges as a Palimpsest Wyrm. The host lives on as an Amanuensis |
+
+A graft that reaches stage 4 has eaten a whole person's worth of what it feeds on —
+flesh, magic, or memory — and skips its line's small forms accordingly. The
+[Lacuna](#c-lacuna) and the [Amanuensis](#c-amanuensis) are not the disease; they are
+what is left when the disease is done.
+
+### Sallow Rot
+
+The Lazaret files it as Sallow Rot; common folk call it the wetting. A creature
+contracts it at stage 1 when it reaches 6 Depth from a sallow graft:
+
+| Stage | Effect                                                                                         |
+| ----- | ---------------------------------------------------------------------------------------------- |
+| 1     | The creature's Speed decreases by 5 feet, and it gains no benefit from a Short Rest.           |
+| 2     | The creature's Hit Point maximum decreases by 10, and its Speed decreases by 10 feet.          |
+| 3     | The creature's Hit Point maximum decreases by a further 20, and healing it receives is halved. |
+| 4     | The creature dies. The graft stays with the body and matures, 1d4 days later, into a Quagdam.  |
+
+Hit Point maximum reductions last until the disease ends and do not stack with
+themselves — a creature at stage 3 is down 30, not 30 on top of 10.
+
+<Note type="design note">
+  Sallow Rot is the plainest disease in the library and usually the first a party meets, at low
+  levels, from a cyst picked up in a fen. It teaches the whole system in miniature: something got
+  in, it fed, and days later somebody is slower and does not heal right.
+</Note>
+
+### Chantry Drought
+
+The Lazaret files it as Chantry Drought; common folk call it the emptying. The graft
+feeds on the magic in the host's body, and the body loses the ability to hold magic as
+the graft advances and feeds on it. A creature contracts it at stage 1 when it reaches 6 Depth from a
+chantry graft.
+
+#### Using magic
+
+The graft consumes spells' magic like any other magic in the body. Of the five spells in
+[What magic does](/brood-and-bloom/chapter-1/#what-magic-does), only Detect Poison and Disease is safe to cast on a chantry case.
+
+While a creature carries a chantry graft, it gains 1 Depth whenever it expends a spell slot of level 1 or higher. A Lesser Restoration, Greater Restoration, Heal, or Mass Heal spell cast on a creature carrying a chantry graft adds 1d4
+Depth instead of removing any. A Lesser Restoration spell still detaches a chantry parasite, as each stat block's
+Extraction says, but what would have worked the graft loose feeds it instead: the parasite drops off well fed, and the graft deepens.
+
+| Stage | Effect                                                                                                                                                                                                                                                           |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Casting a spell of level 1 or higher costs the creature 1d6 Necrotic damage per level of the spell. This damage can't be reduced, but Immunity to Necrotic damage prevents it.                                                                                   |
+| 2     | One of the creature's highest-level spell slots can't be recovered on a Long Rest.                                                                                                                                                                               |
+| 3     | The creature's two highest-level spell slots can't be recovered on a Long Rest, and it has Disadvantage on Constitution saving throws made to maintain Concentration.                                                                                            |
+| 4     | The creature loses its spellcasting entirely and has the Incapacitated and Unconscious conditions. It does not die. Over 1d4 days the graft withdraws along the nerves and emerges, swollen with a lifetime of magic, as a Psalter Tick. What wakes is a Lacuna. |
+
+<Note type="design note">
+  Chantry Drought is the only disease in this library a victim can worsen by acting: each leveled
+  spell the host casts moves it closer to stage 4. Stage 4 does not kill. The host survives as a
+  Lacuna, the graft emerges as a Psalter Tick after 1d4 days, and both stat blocks are in this
+  chapter.
+</Note>
+
+### The Forgetting
+
+The only disease in this library the Lazaret has never formally named: the first three
+registrars assigned to write the file each left a different account of what it does,
+and the common name stood by default. A creature contracts it at stage 1 when it
+reaches 6 Depth from a palimpsest graft:
+
+| Stage | Effect                                                                                                                                                                                                                      |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | The creature loses one language, one tool proficiency, or one skill proficiency of the Game Master's choice. It does not know it lost it; it forgets it ever had it.                                                        |
+| 2     | One of the creature's mental ability scores (Intelligence, Wisdom, or Charisma) decreases by 2, and it gains a proficiency belonging to a mind the graft's line has eaten in the past.                                      |
+| 3     | A second mental ability score decreases by 2. The creature can no longer reliably distinguish its own memories from the ones it has been given.                                                                             |
+| 4     | The creature does not die. Over 1d4 days the graft uncoils from the spine and emerges, grown fat on a whole life's recollection, as a Palimpsest Wyrm. What remains — and insists that nothing happened — is an Amanuensis. |
+
+<Note type="design note">
+  The Forgetting takes things from a character without telling the player: stage 1 is written to be
+  tracked silently, and noticed at the table only when the character reaches for what is gone. The
+  stage 2 gain is the counterweight and is meant to be played straight — the character is genuinely
+  better at something they were never taught, and cannot say where it came from.
+</Note>
 
 ## The creatures
 
-### The ember line
+### The shared larva
 
-The ember line runs hot: its larvae hatch warm, its adults carry a banked-coal heat
-instead of a lamp, and its territory smells of ash where nothing ever burned. Cold is
-what it cannot survive:
+Every inquiline begins as a latchling, and a clutch is what a laying adult leaves
+behind:
 
-<Creature name="Cinder Nit">
-  **Running it.** A nit reduced to 0 Hit Points by anything except Cold damage is an emberwing an
-  hour later, somewhere the party is probably no longer standing. The husk is weak, so a single
-  cantrip finishes it. Evidence placed early — a split husk beside old bones — hands the party the
-  cycle before the first husk forms.
+<Creature name="Latchling">
+  **Running it.** The latchling exists to Feed, not to fight: its attack deals 1 damage, and
+  everything it takes goes through Feed. Left attached, it feeds, deepens its graft, and after 1d4 +
+  2 days is a cyst, a louse, or a worm — the encounter ends quickly; what it leaves does not. A
+  single latchling threatens nothing; in groups, Stealth +7 still lands attachments, which is all
+  the encounter requires.
 </Creature>
 
-<Creature name="Cinder Swarm">
-  **Running it.** The swarm is the nit's arithmetic at scale: weapons half-work, its space is the
-  party's space, and killing it without Cold damage converts one problem into 1d4 scheduled ones. A
-  swarm crossing a camp at night is the classic first meeting with this line — loud, survivable, and
-  instructive, provided somebody counts the husks.
+<Creature name="Latchling Clutch">
+  **Running it.** The clutch exists to place latchlings; its damage is low for its Challenge Rating
+  because latchlings are its output. Everywhere at Once means a creature in its space carries at
+  least one latchling out of the encounter even on a successful save. Each latchling then needs its
+  own Extraction check, or one Lesser Restoration spell clears every latchling on one creature.
+  Disperse is unavailable after the clutch takes Fire damage, so fire is the one way to hold it in
+  place.
 </Creature>
 
-<Creature name="Emberwing">
-  **Running it.** The emberwing wants a body on the ground and does not distinguish whose: it breaks
-  off to finish a dying creature rather than press a healthy one, and it seeds whatever falls,
-  including its own. Flit lets it strike and withdraw without Opportunity Attacks, and Heat Shimmer
-  covers it in Bright Light and beside open flame — including fires its own Ash Plume starts.
+### The sallow line
+
+The sallow line holds the wetlands — fens, flooded fields, fords — and it is the only
+line in the brood that can use a corpse. A latchling that
+feeds on a strong, quick, or hardy host becomes a mudspit cyst, then a sallow fluke,
+then something that no longer needs to ride anybody:
+
+<Creature name="Mudspit Cyst">
+  **Running it.** Sap accumulates: each failed save costs the host 5 feet of Speed, the reductions
+  hold until a rest with no cyst attached, and a host that keeps failing ends the fight Prone and
+  unable to stand. Water-Bound bounds where a cyst appears — away from fresh water it has one hour
+  to find a host or die, which is why a lone cyst in dry country attacks at once.
 </Creature>
 
-<Creature name="Pyre Matron">
-  **Running it.** Furnace Body taxes every melee round, and Cinder Storm blinds the ranks that keep
-  back. A matron's presence is information: the region's dying has been steady enough, for long
-  enough, to keep her fed — and removing her without removing the cause leaves the roost open for
-  the next.
+<Creature name="Sallow Fluke">
+  **Running it.** Weapon attacks answer an embedded fluke poorly: it resists all three physical
+  damage types, and Embedded's near-miss clause sends failed attacks into the host. Extraction is
+  the built-in solution and Shift Anchor its counter. Deepen is the first effect in the library that
+  can kill a host outright, and its Hit Point maximum reduction survives the fight until a Long Rest
+  taken without the fluke.
 </Creature>
 
-### The tallow line
-
-The tallow line renders the dead: its larvae turn a corpse's fats into gravewax, its
-adults carry the corpse-light, and everything it holds long enough ends up sheeted in
-grey. Cold cracks it and thunder shakes it apart:
-
-<Creature name="Gravewax Grub">
-  **Running it.** The gap between the grub and its adult is the widest in the library — CR 1/2
-  against CR 5 — so a nest of grubs is costed against what the nest becomes. Slick Hide removes the
-  workaround of grappling one and carrying it somewhere safer, and Wax Spit is most dangerous beside
-  a husk that is about to open.
+<Creature name="Mire Ambulant">
+  **Running it.** An ambulant no longer needs a host and behaves accordingly: it fights at reach,
+  withdraws into water when hurt, and attaches only to a target already down or held. It resists the
+  three physical damage types and swims at 40 feet, so a party without a way to hold it in place
+  fights it more than once.
 </Creature>
 
-<Creature name="Gravewax Mass">
-  **Running it.** The mass is a door problem: slow, unwilling to chase, and never met in the open —
-  it fills the stair down to the crypt the party needs. Killing it with sword or fire converts the
-  door problem into 1d4 grubs at full Hit Points in a confined space. Cold or Thunder damage ends it
-  clean, which is the line's lesson in one creature.
+<Creature name="Quagdam">
+  **Running it.** The quagdam cannot leave the water and never has to: Draw Down reaches 30 feet,
+  heals it for half of what it takes, and is the brood's only feeding that works at range — it
+  grafts a party rather than a person. Gravid means killing it does not end the encounter; a
+  Latchling Clutch emerges when it drops to 0 Hit Points.
 </Creature>
 
-<Creature name="Tallow Font">
-  **Running it.** The font makes fights around it attritional: Waxen Ground slows the party, Scald
-  slows them further, and every Necrophore larva within 30 feet heals 5 Hit Points a round. The
-  intended order of operations — the font first, by Cold or Thunder damage — is backward from the
-  instinct to clear the small things before the large one. A chamber sheeted in grey had a font in
-  it once, or still has one, deeper in.
+### The chantry line
+
+The chantry line grows on casters, and every stage after the first is harder,
+quieter, and better at hiding what it is doing:
+
+<Creature name="Chantry Louse">
+  **Running it.** The louse taxes one caster three ways: Siphon takes a spell slot, Backwash
+  punishes casting, and Arcane Tropism rewards attacking whoever just cast. Siphon takes the lowest
+  unexpended slot first, so the exchange runs for several rounds rather than ending on one save. A
+  Lesser Restoration spell detaches it — the louse drops off unhurt and well fed, and the graft it
+  left is already inside.
 </Creature>
 
-<Creature name="Tallow Imago">
-  **Running it.** Guttering makes Corpse-Light a choice each round: lit to draw a spread-out party
-  into reach, dark when the glow becomes an aiming point — the imago's own Darkvision reaches 120
-  feet either way. Inherited Memory has no mechanical effect: the imago silently acts out the last
-  hour of creatures its larva consumed, one of which can be whoever the party came looking for.
+<Creature name="Psalter Tick">
+  **Running it.** Stolen Slots starts empty: everything the tick can do beyond biting has to be
+  taken from the party first, which makes the opening round the cheapest one. A taken slot can come
+  back as Counterspell or Dispel Magic, and Misty Step is on the list so a sated tick can leave.
 </Creature>
 
-<Creature name="Catafalque Moth">
-  **Running it.** Wing Pall snuffing nonmagical flames is the fight's hinge: torches die, the dark
-  closes, and the only light left in the room is the moth's — the light that charms. A party with
-  magical light or Darkvision fights a Huge monster; a party with torches fights the dark. Somewhere
-  in the crowd of gestures it endlessly performs may be the one death the party came to ask about.
+<Creature name="Choirgall">
+  **Running it.** The choirgall is fed by casting near it: Sympathetic Resonance stacks across a
+  round, and Antiphon and Unmake are each once a day, so its early rounds are Chime and patience. It
+  is the one inquiline that never attaches — its host is already spent — so nothing in this fight is
+  about pulling something off a friend.
 </Creature>
 
-### The reliquary line
+### The palimpsest line
 
-The reliquary line remembers: its young feed slowest and grow largest, its adult
-speaks in the voices of everything it has eaten, and its territory is wherever the
-dead were laid with care. Radiance is the one thing it cannot pass through:
+The palimpsest line feeds on memory. It grows slowest, roots deepest, and is the only
+line whose graft no blade outside the Lazaret reaches:
 
-<Creature name="Crypt Instar">
-  **Running it.** The instar is the reliquary line's only affordable encounter, and affordable on
-  purpose: with no Pupation trait it simply dies when killed. The ground it is fought on is the
-  warning — instars mean an imago laid here, and something in the crypt has been feeding them toward
-  nymphs.
+<Creature name="Gaol Worm">
+  **Running it.** Convulse redirects the party's damage into the host: every hit on an attached worm
+  costs the host a saving throw. Sleepless persists between encounters — the host gains no benefit
+  from a Long Rest until the worm is off — so the worm is an ongoing condition as much as a fight,
+  and either Rasp can attach it to a second target.
 </Creature>
 
-<Creature name="Sepulchre Nymph">
-  **Running it.** Grave-Fed makes a winning nymph progressively harder to finish, and Barrow Breath
-  shuts off healing across a 30-foot Cone. Its husk is the hardest in the library and an hour is
-  long enough to break it only for a party that stays and works at it. A party that leaves has
-  scheduled a Reliquary Imago, on ground of its choosing.
+<Creature name="Palimpsest Wyrm">
+  **Running it.** Written Over works before initiative: an attached wyrm knows everything its host
+  knows and can speak in its voice. Erase suppresses limited-use features across a 30-foot Emanation
+  for a round. It is the only inquiline a Lesser Restoration spell does not detach; removal takes
+  the DC 19 Extraction check or a Greater Restoration spell.
 </Creature>
 
-<Creature name="Reliquary Imago">
-  **Running it.** Reliquary Light walks failed saves into Charnel Shroud's Emanation and Proboscis
-  reach. What it does to a party is subtraction — Hit Point maximums walked down hit by hit — and
-  what it does to everything the fight kills is Seed the Dead: the bodies are the battle it is
-  actually fighting. Inherited Memory speaks fluently in the voices of the dead its larva ate, and a
-  creature that has eaten the right corpse knows things nobody living knows.
+### What is left
+
+Two of the three diseases end with the host still walking. Neither creature below is a
+parasite, and neither has one in it any more:
+
+<Creature name="Lacuna">
+  **Running it.** A lacuna's stat block exists for one moment: Drawn to Casting sends it, without
+  malice, at whoever last cast a spell, past everyone else in the room. Empty Casting deals no
+  damage because nothing happens when a lacuna casts. It cannot be infected and cannot be read, and
+  the Lazaret uses lacunas to carry things through country nobody else will enter. They do not
+  object to anything.
 </Creature>
 
-### The husks
-
-A husk is an hour of work left undone. It does nothing, it cannot be moved, and only its
-line's damage reaches what is sealed inside:
-
-<Creature name="Cinder Nit Husk">
-  **Running it.** The cheapest husk to finish and the easiest to walk away from: 10 Hit Points and
-  Vulnerability to Cold, so one cantrip does it. Six nits killed with steel are six husks, and six
-  emberwings loose in the region by evening.
+<Creature name="Amanuensis">
+  **Running it.** The amanuensis is built as a social encounter with a stat block underneath it.
+  Insists means divination confirms its story, because from the inside the story is true — a Zone of
+  Truth spell clears it. Borrowed Hands is intended as one unexpected competence per scene, and its
+  weapon is the clearest surviving trace of the person it believes it is.
 </Creature>
 
-<Creature name="Gravewax Grub Husk">
-  **Running it.** Two damage types open it, which is the tallow line's whole lesson: a party with
-  Cold or Thunder in reach never meets a Tallow Imago it did not choose to meet.
+### One who hunts them
+
+The lancebill is not an inquiline. It is in this library because a party dealing with
+one will meet it, and because it can remove a graft:
+
+<Creature name="Lancebill">
+  **Running it.** Lance is a cure delivered by something that does not stop at one: it takes a graft
+  out of an unconscious ally, a prisoner, or the party's healer with the same stroke, and keeps
+  hunting afterward because there is usually more than one. Parasite Sense means a grafted party in
+  wet country is already being tracked, and Standing means the tracker is not seen until it moves.
 </Creature>
 
-<Creature name="Sepulchre Nymph Husk">
-  **Running it.** Armor Class 19, 40 Hit Points, and one damage type that touches it, so a party
-  without Radiant damage cannot finish this inside the hour however hard it swings. Leaving is a
-  legitimate choice and a scheduled Reliquary Imago.
-</Creature>
+### The apex
 
-### Strays of the wake
-
-Two creatures belong to no line and to all three. The Lazaret files them under
-malformations, which is accurate for one of them:
-
-<Creature name="Wakelight Wisp">
-  **Running it.** A wisp is intelligence, in both directions: a dim light drifting downwind means a
-  colony is near and hunting; a bright one standing still means it has found something, and where.
-  Swatting wisps blinds a colony a little at a time — and a wisp following the party means the
-  colony has marked them as a source of dead.
-</Creature>
-
-<Creature name="Lych Lantern">
-  **Running it.** Grave Glow works only on the hurt — whole creatures walk past it untouched — so
-  the lantern does nothing until a fight is nearly over, and then it collects the losers. Animals in
-  its territory die around it in rings, and a colony treats an old lantern as a larder that fills
-  itself.
-</Creature>
-
-### Their hunter
-
-The brood has a predator, and the Lazaret's files on it are unusually warm:
-
-<Creature name="Mort Shrike">
-  **Running it.** The shrike is a competitor, not an ally, and its instincts classify a badly
-  wounded party member as a husk that has not sealed yet: it strafes a fight between the party and
-  the brood, taking whichever side is losing. It is also the best guide in this chapter — Wake Sense
-  keeps it oriented on the nearest colony, and its larders date and border the territory. The
-  Lazaret's field manual on it is three instructions long: do not feed it, do not fight it, and go
-  where it goes.
-</Creature>
-
-### The old ground
-
-<Creature name="Lychfield">
-  **Running it.** The lychfield is fought standing on it: the arena is the monster, every square of
-  retreat is within reach of Grave Surge, and anyone dropped to 0 Hit Points is being pulled at by
-  the ground while their friends work. Teeming makes the party's damage types the clock — without
-  Cold, Thunder, or Radiant damage, the field grows back what they cut. A field this old required
-  generations of steady dying in one place, and through Seeded Ground it is the only archive of
-  everyone the place ever took.
+<Creature name="Exemplar">
+  **Running it.** Seed grafts the whole party within three rounds regardless of rolls, so the fight
+  is not the expensive part of this encounter — what the party carries out of it is. Take In and
+  Draw remove up to four characters from the fight while Never Stopped regenerates through
+  everything except Fire and Radiant damage. The First means every graft the party has ever carried
+  descends from this creature, and that it perceives through all of them.
 </Creature>

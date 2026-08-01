@@ -1,12 +1,65 @@
 ---
-title: 'Index: By Type'
-label: 'Index: By Type'
-description: 'Every creature in Brood & Bloom listed by creature type — aberrations, plants, monstrosities, and humanoids.'
-order: 7
+title: 'Index: Alchemy & Magic'
+label: 'Index: Alchemy & Magic'
+description: 'Every preparation and every spell in the library, in one place: what each one costs, what it is made from, and what it does.'
+order: 10
 eyebrow: 'Appendix C'
 ---
 
-import CreatureIndex from '../../components/CreatureIndex.astro';
-import { BROOD_AND_BLOOM } from '../../data/books.ts';
+import SpellIndex from '../../components/SpellIndex.astro';
 
-<CreatureIndex by="type" book={BROOD_AND_BLOOM} />
+Everything in [chapter 7](/brood-and-bloom/chapter-7/) at a glance. The preparations are
+listed with what each one does; the spells are listed twice, once in level order and once
+by the class that can learn them.
+
+<div class="wide">
+
+## Preparations
+
+Nineteen entries, cheapest first within each source. The brood named is the material a
+preparation is rendered from, not the brood it works against:
+
+| Preparation     | Form    | Brood      | Rarity   | Price    | What it does                                                                               |
+| --------------- | ------- | ---------- | -------- | -------- | ------------------------------------------------------------------------------------------ |
+| Compline        | Fume    | Sporophore | Common   | 8 sp     | Driftlings and spore veils will not enter 30 feet, for 8 hours                             |
+| House pitch     | Unguent | Sporophore | Common   | 15 sp    | Advantage on saves against contaminated ground for 1 hour; latchkin attach at Disadvantage |
+| Ablution        | Draught | Sporophore | Common   | 20 gp    | Reduces the drinker's Spore Load by 1d4                                                    |
+| Collyrium       | Unguent | Sporophore | Common   | 25 gp    | Reads grafts and Spore Load within 30 feet for 1 hour                                      |
+| Sounding        | Unguent | Necrophore | Common   | 35 gp    | Shows whether a corpse has been laid in, and roughly how much                              |
+| Vigil           | Draught | Inquiline  | Uncommon | 90 gp    | No Depth from the next Long Rest, and no benefit from it either                            |
+| Lavage          | Draught | Sporophore | Uncommon | 100 gp   | Removes 1d4 Depth within 1 minute of a feeding; 2d6 Acid damage                            |
+| Pastille        | Fume    | Sporophore | Uncommon | 110 gp   | Suppresses a contaminated area in a 20-foot Cube for 1 hour                                |
+| Chrism          | Unguent | Sporophore | Uncommon | 120 gp   | Nothing of the Necrophore lays in the corpse for 10 days                                   |
+| Wakelight taper | Fume    | Necrophore | Uncommon | 130 gp   | Draws Necrophore creatures within 300 feet, for 1 hour                                     |
+| Cerate          | Unguent | Sporophore | Uncommon | 150 gp   | Halves the damage of removing a graft by surgery                                           |
+| Theriac         | Draught | Sporophore | Rare     | 600 gp   | Reduces a Sporophore disease by one stage after a Long Rest                                |
+| Bloom oil       | Poison  | Sporophore | Uncommon | 200 gp   | DC 14 Constitution save or 2d6 Poison damage and 1 Spore Load                              |
+| Ankylotic salt  | Poison  | Sporophore | Uncommon | 250 gp   | DC 15 Constitution save or Speed halved and Disadvantage on Dexterity saves for 8 hours    |
+| Wakelight dust  | Poison  | Necrophore | Uncommon | 300 gp   | Marks a target for 8 hours; draws Necrophores within 300 feet                              |
+| Adipocere       | Poison  | Necrophore | Rare     | 750 gp   | DC 16 Constitution save or 4d6 Poison damage, Poisoned 1 hour, and no healing              |
+| Countenance     | Draught | Inquiline  | Common   | Not sold | Suppresses the drinker's current stage for 24 hours                                        |
+| Kenotic draught | Draught | Inquiline  | Rare     | Not sold | The drinker takes a graft, with no parasite present                                        |
+| Sallow tincture | Poison  | Inquiline  | Rare     | Not sold | A creature carrying a graft gains 1d4 Depth, with no saving throw                          |
+
+</div>
+
+<div class="wide">
+
+## Spells by level
+
+Twenty-three spells. None of them is sold, taught, or learned at a level-up without a
+source in front of the character:
+
+<SpellIndex by="level" />
+
+</div>
+
+<div class="wide">
+
+## Spells by class
+
+The same twenty-three, by the list each one appears on:
+
+<SpellIndex by="class" />
+
+</div>

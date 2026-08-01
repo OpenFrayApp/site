@@ -1,0 +1,293 @@
+---
+title: 'Necrophore'
+label: 'Necrophore'
+description: 'The pupating brood: three lines of moths that lay in the dead, the husk rule, colony territory, and sixteen creatures from the cinder nit to the Lychfield.'
+order: 6
+eyebrow: 'Chapter 6'
+---
+
+import Creature from '../../components/BroodCreature.astro';
+import Note from '../../components/Note.astro';
+
+The Lazaret classes the pupating brood as Necrophore; common folk call it wakelight,
+for the light its adults carry. It is the only brood that wants nothing from the
+living, and the one a party leaves behind, in its dead. The Lazaret's standing
+instruction for it: **make no light, make no dead.**
+
+## How a necrophore works
+
+The brood is three lines of moths on one closed loop: adults lay in fresh corpses,
+larvae climb out and eat the dead, and a larva killed by the wrong damage seals into a
+husk and opens as an adult. Nothing is implanted in the living, nothing infects, and
+nobody catches anything. What the brood needs is bodies, and a party moving through
+its territory produces them faster than anything else in the world.
+
+<Note>
+  Nothing a line leaves behind hampers that line. Gravewax is Difficult Terrain for everything
+  except the tallow line that laid it down, and a lychfield — every line's leavings at once — is
+  Difficult Terrain for everything except Necrophores.
+</Note>
+
+### Reproduction
+
+An adult lays in any fresh corpse it can reach. It never gets inside a body — a moth
+the size of a fishing boat could not — so it settles over the corpse and lays through
+its ovipositor, and 1d6 + 2 hours later 1d4 larvae climb out of it:
+
+| Adult           | Lays in          | Larvae         |
+| --------------- | ---------------- | -------------- |
+| Emberwing       | Any fresh corpse | Cinder Nits    |
+| Tallow Imago    | Any fresh corpse | Gravewax Grubs |
+| Reliquary Imago | Any fresh corpse | Crypt Instars  |
+
+<Note type="design note">
+  Three hours is short enough that a party resting where they fought wakes to it, and long enough
+  that a party that kills something and keeps walking is gone before it matters. A corpse carried
+  out of a dungeon is usually carried for longer than eight hours, which is the third case.
+</Note>
+
+<Note>
+  **Adults lay outside a fight as well.** The Reaction on each stat block is the version that
+  happens in front of the party. A colony's territory is full of bodies seeded days ago, and a
+  battlefield, a barrow, or a plague pit inside one has been seeded unless something prevented it.
+</Note>
+
+### Pupation and the husk
+
+Three creatures in this chapter pupate: the cinder nit, the gravewax grub, and the
+sepulchre nymph. Each is the last larval stage of its line, and each carries the
+Pupation trait on its stat block. The trait always works the same way: reduced to 0 Hit
+Points by anything except the damage its line cannot survive, the larva seals where it
+stands as a husk, and 1 hour later the husk splits and the adult takes its first turn.
+
+Each husk has a stat block of its own, at the end of this chapter:
+
+| Line      | Husk            | Destroyed by    | Opens as        |
+| --------- | --------------- | --------------- | --------------- |
+| Ember     | Cinder Nit      | Cold            | Emberwing       |
+| Tallow    | Gravewax Grub   | Cold or Thunder | Tallow Imago    |
+| Reliquary | Sepulchre Nymph | Radiant         | Reliquary Imago |
+
+Nothing else husks: instars and masses are destroyed at 0 Hit Points like anything
+living, and an adult, once opened, never seals again. During its hour a husk is immune
+to every condition, takes no actions, and keeps its Vulnerability to its line's damage
+the whole time.
+
+<Note>
+  **Failed husks.** Not every husk opens. In a rare few the change halts partway, and the light that
+  should have flown stays where it is and roots. What that becomes is the [Lych
+  Lantern](#c-lych-lantern).
+</Note>
+
+## A colony's territory
+
+A Necrophore colony has no den and no center. Its territory is wherever corpses are.
+
+Inside a colony's ground, any corpse that is not a necrophore and dead longer than 3
+hours has been seeded unless something prevented it — burned, frozen, sunk in
+running water, or sealed from the air.
+
+The adults navigate by warmth and by one another's light, and fresh death draws them from miles away.
+When creatures die in a colony's territory, 1d4 adults arrive within 1d6 + 2 hours of the
+first death. They come to lay, and they fight whatever interferes.
+
+The interval between death and hatching is the window. Corpses
+burned or frozen inside it produce nothing, and a party willing to spend the hours
+can starve a colony out of a region one battlefield at a time. The Lazaret pays for
+exactly this work, by the field.
+
+### Reading the ground
+
+The signs are leavings: split husks beside old bones, runnels
+of gray wax down a stair, scorch-rings in grass nothing ever burned, small carcasses
+wedged into thorn trees at head height — the last being not the brood but the thing
+that hunts it. A creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom
+(Survival) check reads the signs, and the age of the oldest husk dates the colony.
+
+### Resting and light in a colony's ground
+
+Fire after dark in a colony's ground is a beacon, and so is a lantern.
+A party that keeps a cold, dark camp passes the night beneath the colony's notice unless something nearby dies.
+
+## The diseases
+
+The Necrophore has no disease and no counter: nothing in this chapter infects a living
+creature, and nothing here is cured. Of the spells in
+[What magic does](/brood-and-bloom/chapter-1/#what-magic-does), two have a use against
+this brood:
+
+- Detect Poison and Disease marks every seeded corpse in range.
+- Gentle Repose prevents a corpse from being seeded. An already seeded
+  corpse's clock stops for the spell's duration, and a body can be carried home through
+  the brood's own territory.
+
+## The creatures
+
+### The ember line
+
+The ember line runs hot: its larvae hatch warm, its adults carry a banked-coal heat
+instead of a lamp, and its territory smells of ash where nothing ever burned. Cold is
+what it cannot survive:
+
+<Creature name="Cinder Nit">
+  **Running it.** A nit reduced to 0 Hit Points by anything except Cold damage is an emberwing an
+  hour later, somewhere the party is probably no longer standing. The husk is weak, so a single
+  cantrip finishes it. Evidence placed early — a split husk beside old bones — hands the party the
+  cycle before the first husk forms.
+</Creature>
+
+<Creature name="Cinder Swarm">
+  **Running it.** The swarm is the nit's arithmetic at scale: weapons half-work, its space is the
+  party's space, and killing it without Cold damage converts one problem into 1d4 scheduled ones. A
+  swarm crossing a camp at night is the classic first meeting with this line — loud, survivable, and
+  instructive, provided somebody counts the husks.
+</Creature>
+
+<Creature name="Emberwing">
+  **Running it.** The emberwing wants a body on the ground and does not distinguish whose: it breaks
+  off to finish a dying creature rather than press a healthy one, and it seeds whatever falls,
+  including its own. Flit lets it strike and withdraw without Opportunity Attacks, and Heat Shimmer
+  covers it in Bright Light and beside open flame — including fires its own Ash Plume starts.
+</Creature>
+
+<Creature name="Pyre Matron">
+  **Running it.** Furnace Body taxes every melee round, and Cinder Storm blinds the ranks that keep
+  back. A matron's presence is information: the region's dying has been steady enough, for long
+  enough, to keep her fed — and removing her without removing the cause leaves the roost open for
+  the next.
+</Creature>
+
+### The tallow line
+
+The tallow line renders the dead: its larvae turn a corpse's fats into gravewax, its
+adults carry the corpse-light, and everything it holds long enough ends up sheeted in
+gray. Cold cracks it and thunder shakes it apart:
+
+<Creature name="Gravewax Grub">
+  **Running it.** The gap between the grub and its adult is the widest in the library — CR 1/2
+  against CR 5 — so a nest of grubs is costed against what the nest becomes. Slick Hide removes the
+  workaround of grappling one and carrying it somewhere safer, and Wax Spit is most dangerous beside
+  a husk that is about to open.
+</Creature>
+
+<Creature name="Gravewax Mass">
+  **Running it.** The mass is a door problem: slow, unwilling to chase, and never met in the open —
+  it fills the stair down to the crypt the party needs. Killing it with sword or fire converts the
+  door problem into 1d4 grubs at full Hit Points in a confined space. Cold or Thunder damage ends it
+  clean, which is the line's lesson in one creature.
+</Creature>
+
+<Creature name="Tallow Font">
+  **Running it.** The font makes fights around it attritional: Waxen Ground slows the party, Scald
+  slows them further, and every Necrophore larva within 30 feet heals 5 Hit Points a round. The
+  intended order of operations — the font first, by Cold or Thunder damage — is backward from the
+  instinct to clear the small things before the large one. A chamber sheeted in gray had a font in
+  it once, or still has one, deeper in.
+</Creature>
+
+<Creature name="Tallow Imago">
+  **Running it.** Guttering makes Corpse-Light a choice each round: lit to draw a spread-out party
+  into reach, dark when the glow becomes an aiming point — the imago's own Darkvision reaches 120
+  feet either way. Inherited Memory has no mechanical effect: the imago silently acts out the last
+  hour of creatures its larva consumed, one of which can be whoever the party came looking for.
+</Creature>
+
+<Creature name="Catafalque Moth">
+  **Running it.** Wing Pall snuffing nonmagical flames is the fight's hinge: torches die, the dark
+  closes, and the only light left in the room is the moth's — the light that charms. A party with
+  magical light or Darkvision fights a Huge monster; a party with torches fights the dark. Somewhere
+  in the crowd of gestures it endlessly performs may be the one death the party came to ask about.
+</Creature>
+
+### The reliquary line
+
+The reliquary line remembers: its young feed slowest and grow largest, its adult
+speaks in the voices of everything it has eaten, and its territory is wherever the
+dead were laid with care. Radiance is the one thing it cannot pass through:
+
+<Creature name="Crypt Instar">
+  **Running it.** The instar is the reliquary line's only affordable encounter, and affordable on
+  purpose: with no Pupation trait it simply dies when killed. The ground it is fought on is the
+  warning — instars mean an imago laid here, and something in the crypt has been feeding them toward
+  nymphs.
+</Creature>
+
+<Creature name="Sepulchre Nymph">
+  **Running it.** Grave-Fed makes a winning nymph progressively harder to finish, and Barrow Breath
+  shuts off healing across a 30-foot Cone. Its husk is the hardest in the library and an hour is
+  long enough to break it only for a party that stays and works at it. A party that leaves has
+  scheduled a Reliquary Imago, on ground of its choosing.
+</Creature>
+
+<Creature name="Reliquary Imago">
+  **Running it.** Reliquary Light walks failed saves into Charnel Shroud's Emanation and Proboscis
+  reach. What it does to a party is subtraction — Hit Point maximums walked down hit by hit — and
+  what it does to everything the fight kills is Seed the Dead: the bodies are the battle it is
+  actually fighting. Inherited Memory speaks fluently in the voices of the dead its larva ate, and a
+  creature that has eaten the right corpse knows things nobody living knows.
+</Creature>
+
+### The husks
+
+A husk is an hour of work left undone. It does nothing, it cannot be moved, and only its
+line's damage reaches what is sealed inside:
+
+<Creature name="Cinder Nit Husk">
+  **Running it.** The cheapest husk to finish and the easiest to walk away from: 10 Hit Points and
+  Vulnerability to Cold, so one cantrip does it. Six nits killed with steel are six husks, and six
+  emberwings loose in the region by evening.
+</Creature>
+
+<Creature name="Gravewax Grub Husk">
+  **Running it.** Two damage types open it, which is the tallow line's whole lesson: a party with
+  Cold or Thunder in reach never meets a Tallow Imago it did not choose to meet.
+</Creature>
+
+<Creature name="Sepulchre Nymph Husk">
+  **Running it.** Armor Class 19, 40 Hit Points, and one damage type that touches it, so a party
+  without Radiant damage cannot finish this inside the hour however hard it swings. Leaving is a
+  legitimate choice and a scheduled Reliquary Imago.
+</Creature>
+
+### Strays of the wake
+
+Two creatures belong to no line and to all three. The Lazaret files them under
+malformations, which is accurate for one of them:
+
+<Creature name="Wakelight Wisp">
+  **Running it.** A wisp is intelligence, in both directions: a dim light drifting downwind means a
+  colony is near and hunting; a bright one standing still means it has found something, and where.
+  Swatting wisps blinds a colony a little at a time — and a wisp following the party means the
+  colony has marked them as a source of dead.
+</Creature>
+
+<Creature name="Lych Lantern">
+  **Running it.** Grave Glow works only on the hurt — whole creatures walk past it untouched — so
+  the lantern does nothing until a fight is nearly over, and then it collects the losers. Animals in
+  its territory die around it in rings, and a colony treats an old lantern as a larder that fills
+  itself.
+</Creature>
+
+### Their hunter
+
+The brood has a predator, and the Lazaret's files on it are unusually warm:
+
+<Creature name="Mort Shrike">
+  **Running it.** The shrike is a competitor, not an ally, and its instincts classify a badly
+  wounded party member as a husk that has not sealed yet: it strafes a fight between the party and
+  the brood, taking whichever side is losing. It is also the best guide in this chapter — Wake Sense
+  keeps it oriented on the nearest colony, and its larders date and border the territory. The
+  Lazaret's field manual on it is three instructions long: do not feed it, do not fight it, and go
+  where it goes.
+</Creature>
+
+### The old ground
+
+<Creature name="Lychfield">
+  **Running it.** The lychfield is fought standing on it: the arena is the monster, every square of
+  retreat is within reach of Grave Surge, and anyone dropped to 0 Hit Points is being pulled at by
+  the ground while their friends work. Teeming makes the party's damage types the clock — without
+  Cold, Thunder, or Radiant damage, the field grows back what they cut. A field this old required
+  generations of steady dying in one place, and through Seeded Ground it is the only archive of
+  everyone the place ever took.
+</Creature>

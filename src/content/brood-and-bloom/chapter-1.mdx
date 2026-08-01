@@ -1,12 +1,10 @@
 ---
 title: 'The broods'
 label: 'The broods'
-description: 'The order that catalogs the broods: its houses, ranks, and files, the classifications the whole library uses, and the rules for magic and terminal cases.'
+description: 'What a brood parasite is, how each of the three reproduces, what magic does and does not do against them, and the rule for the cases nothing cures.'
 order: 1
 eyebrow: 'Chapter 1'
 ---
-
-import Creature from '../../components/BroodCreature.astro';
 
 All the creatures of the three broods are parasites. A parasite is a living organism.
 In a host, it eats its way through for sustenance and growth.
@@ -19,122 +17,88 @@ The practical consequence is that healing a victim does nothing. A body carrying
 parasite is not wounded; it is inhabited. The organism has to come out — extracted,
 starved, driven off, or burned off the land — and each brood's chapter says how.
 
-## The Lazaret
+## Growth & reproduction
 
-Everything in this library was recorded by the Lazaret, an order of physicians and
-archivists that has been cataloguing the broods for longer than anyone can remember.
-This chapter covers the order itself, the classifications the rest of the library is
-written in, what magic does against the broods, and the rule for the cases nothing
-cures. The terms defined here — the broods, the lines, and the two counters — are used
-by the stat blocks, so this chapter comes first.
+The three broods reproduce in three different ways and on three different clocks. This
+section collects all of it in one place; each brood's own chapter covers the rest.
 
-### Order
+### Inquiline
 
-A lazaret is a house where the sick are kept apart from everyone else. The order took
-its name from one and never stopped being one. It began as a single quarantine house
-during an outbreak that no longer has a name; the house came through it by a method its
-physicians could not repeat, and what they wrote down afterward became the first file.
-That house still stands and is still in use. The order calls it the first house, and
-everything the Lazaret does now grew out of the habit of writing things down.
+A latchling grows where it feeds: after 1d4 + 2 days attached, it becomes the form
+its host's highest ability score sets, and every form after it grows the same way —
+attached and feeding — until a sated adult leaves its host to lay:
 
-The Lazaret does not believe the broods can be destroyed. It believes they can be
-described, and that a thing described accurately enough can be avoided, treated, or
-survived. Its houses take in the infected, its officers travel to find more, and its
-archive keeps what is learned from both. No part of the order is organized around
-killing anything.
+| The host's highest ability score     | First form    | Later stages                         |
+| ------------------------------------ | ------------- | ------------------------------------ |
+| Strength, Dexterity, or Constitution | Mudspit Cyst  | Sallow Fluke, Mire Ambulant, Quagdam |
+| Intelligence                         | Chantry Louse | Psalter Tick, Choirgall              |
+| Wisdom or Charisma                   | Gaol Worm     | Palimpsest Wyrm                      |
 
-What the order learns, it publishes: the marks of each line, the treatment processes,
-the remedy formulas. A file nobody has read protects nobody. Because of this, brood
-medicine is standard teaching wherever the Lazaret's copies reach, and most physicians
-who know it never learn where it came from.
+Every sated adult lays a clutch of latchlings on its line's ground — still fresh water
+for the sallow line, spell-soaked places for the chantry, wherever the dead are kept
+for the palimpsest — and the cycle begins again.
 
-### Houses
+Grafts are the second route. A graft is a cutting of its parent, and one that reaches
+stage 4 of its disease emerges as a full member of its line, skipping the small forms:
+a sallow graft matures in the corpse into a Quagdam, a chantry graft withdraws as a
+Psalter Tick, and a palimpsest graft uncoils as a Palimpsest Wyrm. A graft whose host
+dies earlier starves with it — a chantry or palimpsest graft dies within 1d4 days of
+its host, while a sallow graft keeps eating and matures in the corpse into a Quagdam.
 
-A lazaret house is a hospital, a school, and a records office in one building, usually
-at the edge of a settlement rather than inside it. There are somewhere between forty
-and sixty; nobody is certain, because houses are founded by officers in the field and
-reported afterward, and some are never reported at all. A house treats anyone who
-reaches it and does not turn out a patient it cannot cure.
+### Sporophore
 
-### Ranks
+A driftling that settles undisturbed for 24 hours becomes the stage 2 creature for
+whatever it landed on:
 
-The order has three ranks, and in a small house one person often holds two of them:
+| Substrate        | Line      | Stage 2        |
+| ---------------- | --------- | -------------- |
+| Wet tissue       | Rotgill   | Rotgill Fleece |
+| Burned ground    | Ashcap    | Ashcap Crust   |
+| Stone and timber | Reredos   | Reredos Rind   |
+| A living person  | Orcshroom | Spore-Struck   |
 
-- **Prosector.** The field rank. Prosectors travel alone, arrive uninvited, and perform
-  the surgeries and amputations described in this library. Most of its practical
-  knowledge was first written down by a prosector.
-- **Lector.** Runs a house. Lectors diagnose, teach, and decide who is admitted. A
-  lector who never served as a prosector is rare and not much respected.
-- **Registrar.** Keeps the files. Every house copies its records to the first house
-  twice a year, and the first house copies nothing back unless it is asked.
+From the mat, each line grows on its own ladder — the mats spread, fruiting bodies
+rise out of established mats, and the apexes are not a stage any single creature
+reaches but a thing an old colony becomes:
 
-No lector outranks another, the one in the first house included. The order has a center
-because its records need one, not because anyone rules from it.
+| Line      | Mat            | Fruiting body  | The colony becomes                                                                      |
+| --------- | -------------- | -------------- | --------------------------------------------------------------------------------------- |
+| Rotgill   | Rotgill Fleece | Rotgill Bell   | A Miasm — condensed out of a colony that filled a flooded, sealed place                 |
+| Ashcap    | Ashcap Crust   | Ashcap Censer  | A Burnt Acre — a colony burned over enough times that burning became part of it         |
+| Reredos   | Reredos Rind   | Reredos Corbel | A Nave — a colony that took a whole structure and stopped being distinguishable from it |
+| Orcshroom | —              | —              | A Rootfather — the tribe's eldest, taken root                                           |
 
-### Classifications
+The orcshroom line grows through people rather than places: whelps are born to the
+tribe, Metaplasia recruits everyone else, and the Spore-Struck is the swifter taking of
+a living body by a settled driftling. The intermediate fighting stages of every line —
+stalkers, veils, blightboars, cinderwalks, the chorus, the buttress — are colonists of
+particular bodies and places, described with their stat blocks.
 
-Inquiline, Sporophore, and Necrophore are Lazaret classifications, and so are most of
-the creature names in this library — chantry, reliquary, palimpsest, psalter, censer,
-corbel, reredos. The vocabulary is clerical and archival because the first registrars
-were, and the order does not change a name once it has been filed. What everyone else
-calls these things is shorter, and rarely the same word twice from one valley to the
-next.
+### Necrophore
 
-Two collective terms from the files are used by stat blocks in this library:
+One loop, one method, one clock:
 
-- A **brood creature** is any Inquiline, Sporophore, or Necrophore creature.
-- A **brood disease** is any disease described in this library.
+| Adult           | Lays in          | Larvae             | Time          |
+| --------------- | ---------------- | ------------------ | ------------- |
+| Emberwing       | Any fresh corpse | 1d4 Cinder Nits    | 1d6 + 2 hours |
+| Tallow Imago    | Any fresh corpse | 1d4 Gravewax Grubs | 1d6 + 2 hours |
+| Reliquary Imago | Any fresh corpse | 1d4 Crypt Instars  | 1d6 + 2 hours |
 
-### Doctrine
-
-For each brood, the Lazaret's field instruction is one line long. Each brood's chapter
-explains its instruction in full:
-
-| Brood      | The standing instruction                       |
-| ---------- | ---------------------------------------------- |
-| Inquiline  | The parasite first, then the graft.            |
-| Sporophore | Go at noon, and bring tools for letting it in. |
-| Necrophore | Make no light, make no dead.                   |
-
-### Officers
-
-The three ranks share one piece of training, printed on each stat block as **The
-Trained Eye**: a Lazaret officer reads the broods' marks on sight — grafts, Spore
-Load, disease stages, and seeded corpses alike. Every officer also carries the order's field spells — cleaning, water, records,
-and a Command that holds a panicking patient still. None of it is restoration magic:
-the order teaches none, because an officer's spells must be safe to cast on any case,
-and on a chantry case a restoration spell is a meal. Rank follows the career — every
-lector served as a prosector first, which is why the officer running a house is the
-strongest the order fields.
-
-<Creature name="Lazaret Registrar">
-  **Running it.** The registrar's value is knowledge. The Files makes it a reference the party can
-  question about any brood creature, and Recite and Amend support allies' saving throws against
-  brood effects. Its spells are the field kit plus the archive's tools — Mending, Message,
-  Comprehend Languages, and Identify, for keeping and reading the files. It is not built to fight;
-  the Lancet is for cases that stand up mid-examination.
-</Creature>
-
-<Creature name="Lazaret Prosector">
-  **Running it.** A prosector is built for fieldwork rather than war. Extract removes an attached
-  parasite with no check and no damage, Excise compresses a full surgery into one action once a day,
-  and Steady keeps its Medicine checks reliable while something is still attached to the patient.
-  Command is the closest thing it carries to a weapon spell, and it is mostly cast at patients —
-  Halt keeps a frightened victim still long enough to treat.
-</Creature>
-
-<Creature name="Lazaret Lector">
-  **Running it.** A lector served as a prosector first and keeps the whole field kit — Extract,
-  Excise, the flask — with the house layer on top: Intervene removes the small quantities (1 Depth,
-  1 Spore Load, a Poisoned condition), and Direct hands an ally an immediate, Advantaged Extraction
-  or Medicine check, so treatment can happen twice in a round. It is the strongest officer the order
-  fields, and it rarely leaves its house.
-</Creature>
+A larva reduced to 0 Hit Points by anything but its line's weakness seals into a husk
+and opens as its adult 1 hour later — metamorphosis, not reproduction; no new creature
+is added by it. Two lines carry intermediate growth: a Crypt Instar that feeds on the dead for 30 days
+grows into a Sepulchre Nymph before any pupation, and gravewax grubs in a rich
+larder fuse into a Gravewax Mass or settle into a Tallow Font, either of which spills
+grubs again when broken. The elders — the Pyre Matron and the Catafalque Moth — are
+adults that outlived enough layings, laying on the same schedule as every other adult.
+Wakelight Wisps are shed by adults and grow into nothing. A Lych Lantern is a husk that
+failed, and a Lychfield is what a killing ground becomes when the whole loop runs in
+one place for generations.
 
 ## What magic does
 
 Spells and features that restore Hit Points do nothing against any brood disease. Six
-spells are useful, and what each does differs by brood:
+spells a party is likely to have already are useful, and what each does differs by brood:
 
 | Spell                     | Inquiline                                                           | Sporophore                                                         | Necrophore                                           |
 | ------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------- |
@@ -156,7 +120,35 @@ The exact amounts are in each brood's chapter. Three points apply everywhere:
   more survivable.
 - **One caution.** Against the chantry line of the Inquiline, the four restoration
   spells in the table feed the disease instead of treating it. Only Detect Poison and Disease is safe on a chantry case. The rule is in
-  [chapter 2](/brood-and-bloom/chapter-2/#chantry-drought).
+  [chapter 4](/brood-and-bloom/chapter-4/#chantry-drought).
+
+### Spells written for these creatures
+
+Three groups have written magic of their own about the broods, and none of the three
+publishes: the Lazaret's counter-work, the Hands of the Host's workings, and whatever a
+lone practitioner leaves in a notebook. [Chapter 7](/brood-and-bloom/chapter-7/#magic)
+holds twenty-three of them. None is sold, taught, or learned at a level-up without a source
+in front of the character, so a party has only what a Game Master has placed.
+
+What they add to the table above:
+
+| Brood      | What the workings reach                                                                                                                                          |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| All three  | Anamnesis reads one body; Sequestration seals an area no brood creature can cross; Lazaret Sill closes a doorway to the small ones                               |
+| Inquiline  | Extirpation ends a case outright; Prosector's Purgation buys Depth back at a price; Assumption of the Case moves it onto a willing caster; Countenance hides one |
+| Sporophore | Bloom Interdict suppresses contaminated ground, and Glebe makes more of it                                                                                       |
+| Necrophore | Unction keeps a corpse from being laid in, Discharge ends one, and Brood Inquest counts what a field is already carrying                                         |
+
+Two of them change what the rest of this chapter says. Extirpation is the only thing in
+this library that ends an Inquiline case at any stage short of 4 without a procedure, and
+what it leaves standing in the room is the reason the order has never published it.
+Countenance is why a case can walk through a house unexamined: it suppresses every penalty
+of a stage while the graft goes on deepening underneath, and no Wisdom (Medicine) check
+finds it.
+
+The caution above extends to all of them. A chantry case gains Depth from any spell slot it
+expends, so a grafted caster working through this list is feeding the graft with every
+casting, whichever spell it was.
 
 ## Stage 4
 
@@ -180,3 +172,7 @@ what is left:
   creature, and raising it raises a brood creature. What remains is a Wish spell, the
   direct intervention of a god, or a pact with something powerful enough to overrule
   the outcome.
+
+Nothing in this library reaches into stage 4. One spell walks into it: a caster at stage 3
+who casts [Preferment](/brood-and-bloom/chapter-7/#s-preferment) arrives there deliberately,
+and everything above follows on schedule.

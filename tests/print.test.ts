@@ -109,6 +109,13 @@ describe('insertPageRefPlaceholders', () => {
     // The non-creature link gets no placeholder.
     expect(root.querySelector('a[href="/docs/"]')!.nextElementSibling).toBeNull();
   });
+
+  it('reserves space after a spell cross-reference too', () => {
+    const root = body(
+      '<div class="book-body"><a href="/brood-and-bloom/chapter-5/#s-countenance">Countenance</a></div>',
+    );
+    expect(insertPageRefPlaceholders(root)).toBe(1);
+  });
 });
 
 describe('resolvePageRefs', () => {

@@ -1,575 +1,473 @@
 ---
-title: 'Sporophore'
-label: 'Sporophore'
-description: 'The sporing brood: the shared colony traits, Spore Load, four lines with four diseases, the brooding ground, and twenty-four creatures from the driftling to the Nave.'
+title: 'The Hands of the Host'
+label: 'Hands of the Host'
+description: 'The cult that welcomes the broods: the book it was founded on, the rite it performs once, the grades and offices a graft decides, and six creatures from the almoner to the First Graft.'
 order: 3
 eyebrow: 'Chapter 3'
 ---
 
 import Creature from '../../components/BroodCreature.astro';
-import Note from '../../components/Note.astro';
-
-The Lazaret classes the sporing brood as Sporophore; common folk call it the bloom. It
-does not attach to anything and does not need a host: it grows on ground, on stone, on
-burned timber, and on creatures, and it sheds constantly. Three of its four lines do not hunt — they occupy, and everything that walks
-through them breathes some of it in. The fourth took a creature, and does what a creature
-does: the orcshroom tribes range, raid, and recruit.
-
-Either way, this brood is the one a party walks into, and the Lazaret's standing instruction for it: **go at noon, and
-bring tools for letting it in.**
-
-## How a sporophore works
-
-No single Sporophore is the creature; the colony is, and every creature in this brood
-is part of one.
-
-### Colonies and lines
-
-A **colony** is a family: everything grown from one original growth, however far it has
-spread, held together by Mycelial Chorus.
-
-A **line** is what a growth became — rotgill, ashcap, reredos, or orcshroom — and the
-ground decides it, not the parent. A colony whose spores drift across a flooded cellar,
-a burn scar, and a standing wall grows all three of those lines and remains one colony.
-Kinship follows the colony; form follows the ground. This is why a driftling carries
-the Chorus before it has a line: it is already its parent colony's, and only its
-landing decides what it grows into.
-
-### The shared traits
-
-Three traits carry the colony, printed in full on each stat block:
-
-- **Mycelial Chorus.** The creature knows the direction of, and can communicate
-  wordlessly with, every member of its colony within 1 mile, and it has Advantage on
-  saving throws against being Charmed or Frightened while another member is within 60
-  feet. Mindless growths — mats, larvae, and fruiting bodies — carry a reduced version:
-  the colony can direct them, and nothing more. An apex is the center of its colony,
-  aware of every member within 5 miles, and can speak through any of them.
-- **Sun-Withered.** While in sunlight the creature can't regain Hit Points, the
-  Difficulty Class of its Sporing and its spore actions decreases by 5, and it takes 3
-  (1d6) Radiant damage at the end of each of its turns. The middle clause changes
-  encounters the most: a Sporophore fought in daylight is barely contagious.
-- **Sporing.** Every Sporophore sheds. A creature that ends its turn within the trait's
-  radius makes a Constitution saving throw or gains 1 Spore Load.
-
-Sporing's shape varies by line, because a colonized wall and a colonized orc do not
-release spores the same way:
-
-| Line      | Radius                         | Trigger                                                                               | Spore action                                       |
-| --------- | ------------------------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Orcshroom | 10 feet                        | Always                                                                                | Cone — they exhale it                              |
-| Rotgill   | 10 feet                        | Always                                                                                | Sphere — wet air that hangs where it lands         |
-| Ashcap    | 15 feet, from a 5-foot trigger | Only once disturbed, by approach within 5 feet or by damage — **Sporing (Disturbed)** | Emanation that lingers a round                     |
-| Reredos   | 5 feet                         | Always                                                                                | None — it sheds a burst as a Reaction when damaged |
-
-Apexes shed to 30 feet, because there is more of them shedding.
-
-<Note>
-  A creature makes one Sporing save per turn no matter how many Sporophores it stands among, against
-  the highest Difficulty Class among them, the same way overlapping contaminated areas resolve. The
-  save falls at the end of the creature's own turn.
-</Note>
-
-### Spore actions
-
-Sporing is what a fungal body loses by being open to the air; a
-**spore action** is everything it has packed and stored, thrown at once. Large and
-larger bodies carry 2 uses per day, Medium and smaller carry 1 — except the rank and
-file (the orcshroom warriors, the stalkers, the mats and swarms), which hold nothing in
-reserve and fold a weaker, always-available burst into their turns instead. From
-Challenge Rating 8 upward, a spore action grants 1 Spore Load even on a successful
-saving throw: at that tier, contamination is not avoided by rolling well.
-
-### Variant: running dry
-
-Tables that want spent colonies to feel spent can use this
-rule: while a Sporophore has no uses of its spore action remaining, the Difficulty
-Class of its Sporing decreases by 2. It applies only to creatures whose spore action
-has a daily limit — the rank and file never held anything back — and is best decided
-once for the whole brood.
-
-## Spore Load
-
-Every Sporophore contaminates through one counter. A creature can carry up to 6
-**Spore Load** — the same 0-to-6 shape as the Inquiline's Depth in
-[chapter 2](/brood-and-bloom/chapter-2/), and symptomless like it. Every penalty in
-this brood comes from a disease's stage, never from the load itself: a creature learns
-what it carries from a Lazaret officer's eye, a Detect Poison and Disease spell, or
-the moment the counter fills. What the load changes is how the brood fights it —
-several spore actions bear down harder on a creature carrying 3 or more, and a
-stalker tracks anything carrying 1 or more.
-
-### Colonization
-
-On reaching 6 Spore Load, the counter resets to 0 and the creature contracts the
-disease of the line that gave it the sixth point, at stage 1 — or advances that
-disease one stage if it already has it. That is the only way a Sporophore disease advances: a fungal colony
-does not incubate, it spreads, and it spreads only while a creature keeps breathing it
-in.
-
-### Shedding it
-
-A creature loses 1 Spore Load at the end of a Short Rest and all of it
-at the end of a Long Rest, provided the rest is taken more than 1 mile from a colony. A
-Lesser Restoration spell removes 3. Inside a brooding ground none of that works —
-Spore Load is not lost while the colony is close enough to replace it.
-
-<Note type="mixed exposure">
-  Spore Load is one pool no matter how many lines contributed to it. Only the sixth point decides
-  which disease the creature takes.
-</Note>
-
-## Contaminated ground
-
-Several spore actions leave an area contaminated. A creature that enters a contaminated
-area or ends its turn there repeats the saving throw against that spore action.
-Contaminated areas do not stack: one save per turn, against the highest Difficulty
-Class among the overlapping areas.
-
-## The brooding ground
-
-A **brooding ground** is a colony's territory: everything within 1 mile of any of its
-members. Inside it:
-
-- **Spore Load is not shed.** Rests remove none of it; the colony replaces what the
-  body clears.
-- **Diseases do not recede.** The recovery save below is made only when the Long Rest
-  is taken more than 1 mile from any colony.
-- **The colony knows.** Where a stalker or an apex is present, anything carrying Spore
-  Load is tracked (see Spoor-Reader), and the tracking does not stop at a camp's walls.
-
-### Reading the ground
-
-Every line marks its territory before defending it. A rotgill
-ground sweats — damp walls, standing water that never clears, a smell of wet cellars
-where there is no cellar. An ashcap ground is a burn scar that never greened over, warm
-underfoot, with dust that rises too easily. A reredos ground looks like weathering:
-grey frost-lines along the mortar, brackets nobody built. An orcshroom ground is the
-tribe's — spoor, dust in still air, grey stipple on everything they have handled. A
-creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom (Survival) check
-recognizes the ground and which line holds it.
-
-### Daylight
-
-Sunlight stops a colony healing and blunts its spores, so a colony grows
-away from the sun — under floors, into hillsides, behind shutters — and every opened
-roof, felled wall, and dug trench pushes it back.
-
-## Between colonies
-
-Nothing a Sporophore grows harms its own colony: its contaminated areas, Difficult
-Terrain, Sporing, and spore actions have no effect on a fellow member, whatever line
-either of them belongs to. A rival colony is another matter, and what one colony can
-do to another depends on their lines:
-
-- **Rotgill and ashcap prey on anything with substance to take, including each other.**
-  Rotgill rots what is wet; ashcap dries what is damp and feeds on what is left. Which
-  of them holds a stretch of ground is mostly a question of whether that ground is
-  flooded or burned. Both can also take orcshrooms, which are still flesh under the
-  grey.
-- **Reredos and orcshroom take nothing from the brood.** Reredos wants stone and
-  timber, orcshroom wants people, and neither has a use for a body that is already
-  fungal.
-- **Nothing takes reredos.** A reredos growth is bound into masonry with nothing in it
-  to rot and nothing to dry, so the other three lines cannot touch it.
-
-### When one colony takes another
-
-A Sporophore that reaches 6 Spore Load from a rival colony does not sicken. It dies,
-and a stage 2 creature of the winning colony grows from the remains within 1d4 days. Orcshrooms are the exception, being flesh: one that
-reaches 6 Spore Load contracts that line's disease and runs the stages like anything
-else, which is how a tribe overtaken by rotgill ends as Drowned Choruses still speaking
-Orc. This contest is also why there is no single Sporophore super-colony: the two lines
-that could expand without limit spend most of their effort on each other.
-
-## How they speak
-
-Most of the brood does not. Mycelial Chorus is not speech — it carries direction,
-condition, and attention, no words, and cannot be overheard. An apex speaks through any
-member of its colony that has a mouth, which is how a party usually hears one first:
-the creature speaking is not the creature they can see. The apexes' own voices, where
-their bodies allow one, are described in their entries, and the transformed hosts — the
-Drowned Chorus, the Cinderwalk, the Buttress — kept whatever speech their bodies kept.
-
-## The diseases
-
-Each line's disease advances only through colonization, and recedes only with
-distance:
-
-### Receding
-
-At the end of each Long Rest taken more than 1 mile from any colony, an
-infected creature makes a Constitution saving throw against the Difficulty Class for
-its current stage — 12 at stage 1, 14 at stage 2, 16 at stage 3. **Success:** The
-disease recedes one stage, and receding below stage 1 cures it. **Failure:** No change.
-Stage 4 allows no save.
-
-### Restoration magic
-
-The spells work by stage, identically for all four lines:
-
-| Spell               | Stage 1 | Stage 2            | Stage 3            | Stage 4 |
-| ------------------- | ------- | ------------------ | ------------------ | ------- |
-| Lesser Restoration  | Cures   | Reduces to stage 1 | Nothing            | Nothing |
-| Greater Restoration | Cures   | Cures              | Reduces to stage 2 | Nothing |
-| Heal                | Cures   | Cures              | Reduces to stage 1 | Nothing |
-| Mass Heal           | As Heal | As Heal            | As Heal            | Nothing |
-
-### Treatment
-
-The Lazaret's other tiers, shared by all four lines:
-
-1. **Care.** A creature that spends a day of downtime tending the patient makes a DC 15
-   Wisdom (Medicine) check. **Success:** The patient has Advantage on its next saving
-   throw to recede.
-2. **Remedy.** A preparation rendered from the line's own growth (see
-   [Harvesting](#harvesting)). Taking a line's remedy drops its disease one stage.
-3. **Procedure.** A physical treatment, different per line, listed with each disease
-   below.
-
-Any creature can attempt a procedure. A trained physician makes its Wisdom (Medicine)
-check with Advantage, and a Lazaret officer automatically succeeds on the check —
-compressing these into a day's work is much of what the order's houses are for.
-
-Stage 4 in every case is governed by the library-wide rule in
-[chapter 1](/brood-and-bloom/chapter-1/#stage-4). Two of these diseases kill and two do
-not; each stage table says which.
-
-### Mortification
-
-The Lazaret files the rotgill disease as Mortification; common folk call it wetrot.
-The fungus takes the wet tissue first, and the wet tissue is where a body keeps
-everything it cannot do without:
-
-| Stage | Effect                                                                                                                                |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | Wounds stop closing. The creature gains no benefit from a Short Rest, and takes 3 (1d6) Necrotic damage at the end of each Long Rest. |
-| 2     | The creature's Hit Point maximum decreases by 10, and it has Disadvantage on Constitution saving throws.                              |
-| 3     | The Hit Point maximum decreases by a further 20, healing the creature receives is halved, and it has the Poisoned condition.          |
-| 4     | The creature dies. After 1d4 days it rises as a Drowned Chorus.                                                                       |
-
-The Hit Point maximum reductions last until the disease ends and do not stack with
-themselves. Stage 2's Disadvantage counts twice: the save to recede is itself a
-Constitution save, so a creature at stage 2 is measurably worse at leaving stage 2
-than it was at leaving stage 1, before the Difficulty Class rises.
-
-Its remedy and its procedure:
-
-- **Remedy.** The gills of a rotgill creature, boiled and inhaled.
-- **Procedure — extraction.** An hour of surgery and a DC 18 Wisdom (Medicine) check.
-  **Success:** The disease ends and the patient takes 11 (2d10) Slashing damage.
-  **Failure:** The patient takes 22 (4d10) Slashing damage and the disease is
-  unchanged.
-
-### Calcination
-
-The Lazaret files the ashcap disease as Calcination; common folk call it the drying.
-Where Mortification rots a body, Calcination takes the water out of it:
-
-| Stage | Effect                                                                                                                                                                                                                                                                                                           |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | The creature stops sweating and stops shivering. Weather a healthy creature would call merely warm or merely cool is extreme for it: at the end of each hour spent in such weather without clothing suited to it, the creature makes a DC 10 Constitution saving throw, gaining 1 Exhaustion level on a failure. |
-| 2     | The dried skin splits. The creature has Vulnerability to Fire damage, and its Speed decreases by 10 feet.                                                                                                                                                                                                        |
-| 3     | The creature has Vulnerability to Bludgeoning damage in addition, and its Speed is halved.                                                                                                                                                                                                                       |
-| 4     | The creature dies. The body does not fall. After 1d4 days it walks as a Cinderwalk.                                                                                                                                                                                                                              |
-
-<Note type="design note">
-  The Vulnerability to Fire is not a defense of the fungus — it is preparation. A body with
-  Calcination in it is being dried into fuel, so that whatever eventually burns is full of spores.
-  Stage 1 costs time, attention, and pack space rather than Hit Points: heavy layers against cold,
-  loose cover against heat, changed at every boundary the party crosses.
-</Note>
-
-Its remedy and its procedure:
-
-- **Remedy.** An oil pressed from ashcap growth, worked into the skin over several
-  hours.
-- **Procedure — immersion.** The patient is submerged in fresh water for 8 hours,
-  breathing through a reed, tended by someone who makes a DC 16 Wisdom (Medicine)
-  check. **Success:** The disease ends and the patient gains 3 Exhaustion levels.
-  **Failure:** The disease is unchanged and the patient gains 3 Exhaustion level.
-
-### Ankylosis
-
-The Lazaret files the reredos disease as Ankylosis; common folk call it the settling.
-The joints fuse, the skin plates over, and the victim slows toward a stop. It is the
-only disease in the brood that offers the sufferer something in exchange:
-
-| Stage | Effect                                                                                                                                    |
-| ----- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | The creature's Speed decreases by 5 feet, and it has Resistance to Piercing damage.                                                       |
-| 2     | The creature's Speed decreases by 10 feet, it has Disadvantage on Dexterity saving throws, and its Resistance extends to Slashing damage. |
-| 3     | The creature's Speed decreases by 15 feet, and its Armor Class increases by 2.                                                            |
-| 4     | The creature's Speed is 0 and it can no longer act. It does not die. Over 1d4 days it hardens and stands as a Buttress.                   |
-
-<Note type="design note">
-  The trade is meant to be visible and real: a character at stage 3 has Resistance to two damage
-  types, +2 Armor Class, and 15 feet less Speed, and stage 4 is not a worse version of stage 3 — it
-  is a different outcome, arriving the next time the character reaches 6 Spore Load. The disease
-  never grants Resistance to Bludgeoning, because the fungus does not have one either: a body
-  plating over like masonry inherits masonry's weakness.
-</Note>
-
-Its remedy and its procedure:
-
-- **Remedy.** A draught ground from reredos growth, taken over 3 days.
-- **Procedure — manipulation.** The fused joints are broken and reset by hand over an
-  hour, with a DC 16 Wisdom (Medicine) check. **Success:** The disease ends and the
-  patient takes 13 (3d8) Bludgeoning damage. **Failure:** The disease is unchanged and
-  the patient takes 27 (6d8) Bludgeoning damage. **Success or Failure** the Bludgeoning damage ignores resistances gained by the disease.
-
-### Metaplasia
-
-The Lazaret files the orcshroom disease as Metaplasia; common folk call it the greying.
-Where the other three lines take a place and wait for people to pass through it, this
-one takes the people — not eaten and not killed, but converted, a little at a time,
-into a member of the tribe:
-
-| Stage | Effect                                                                                                                                                                                                                                                                              |
-| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | The fungus eats first. The creature needs twice as much food each day; on any day it goes without the full amount, it gains 1 Exhaustion level.                                                                                                                                     |
-| 2     | The creature is drawn towards the direction of the colony that infected it. At the end of each Long Rest it makes a DC 12 Wisdom saving throw; on a failure, it can't willingly increase its distance from that colony until it finishes another Long Rest with a successful check. |
-| 3     | Grey shows plainly, and the creature's breath carries the colony. It gains the Sporing trait (5 feet, DC 11), and orcshroom creatures don't attack it unless it or its allies attack them first.                                                                                    |
-| 4     | The creature does not die and knows the exact location of the colony that infected it. Over 1d4 days the change completes, and it stands as an Orcshroom, a member of the tribe, under the Game Master's control.                                                                   |
-
-<Note type="design note">
-  Stage 3 puts the victim on both sides at once: still themselves, still fighting, and a hazard to
-  stand beside, while the tribe has stopped treating them as prey. Stage 4 is the only terminal
-  stage in the brood its victim walks away from. A tribe grows two ways — whelps are born colonized,
-  and Metaplasia takes everyone else. The [Spore-Struck](#c-spore-struck) is the swifter route, a
-  settled driftling rather than this disease, and its Not Yet Gone trait belongs to that route alone
-  — an unfinished growth is still a guest the body can be made to reject, which is what that Lesser
-  Restoration spell does (see [Stage 4](/brood-and-bloom/chapter-1/#stage-4)). Metaplasia follows
-  the rules above at every stage.
-</Note>
-
-Its remedy and its procedure:
-
-- **Remedy.** A bitter mash rendered from the grey shelving of the tribe's dead, eaten
-  over a day.
-- **Procedure — starvation.** The fungus eats what the host eats, so the host stops
-  eating: a strict fast of 3 days, tended by someone who makes a DC 16 Wisdom
-  (Medicine) check at its end. **Success:** The disease ends and the patient gains 3
-  Exhaustion levels. **Failure:** The disease is unchanged and the patient gains 3
-  Exhaustion level and takes 13 (3d8) Percing damage, as the fungus eats the creature's flesh.
-
-## Harvesting
-
-Each line's remedy is rendered from its own growth, so treating a Sporophore disease
-means cutting a piece off the thing that caused it. For most of the brood this needs no
-roll: a fruiting body, a crust, a rind, or a colonized limb is solid matter, and taking
-a usable portion is a minute's work with any blade. Two conditions constrain it
-instead — the creature has to be dead, and the piece has to be undamaged. That rules
-out fire, and fire is otherwise the most efficient way to deal with a colony.
-
-The [Rotgill Fleece](#c-rotgill-fleece) is the exception, and its stat block carries
-the rule: a fleece is loose filament, and cutting one cleanly is a check. Metaplasia is
-the other odd case — its line colonizes people, so the remedy comes from the grey
-shelving of the tribe's dead, and a party that wants some has to make some first.
-
-## The creatures
-
-### The two every line begins with
-
-These belong to the colony that made them and to no line at all. Every Sporophore line
-starts here and diverges
-according to what the spore lands on:
-
-<Creature name="Driftling">
-  **Running it.** Taking is the only line in the block that matters, and it resolves off the table
-  over a day: a driftling on a sleeve is a Lesser Restoration spell if anyone notices and a stage 2
-  creature if nobody does. Windborne is also how the brood has always traveled — a Gust of Wind
-  spell clears the chamber and seeds the next valley, and nothing in the encounter says so.
+
+This chapter is what happens when somebody reads the order's files and reaches the opposite
+conclusion. It covers the cult that came out of that reading, the book it was founded on,
+the rite that admits a member, and six creatures who are people first. The alchemy and the
+spells both sides use are in [chapter 7](/brood-and-bloom/chapter-7/).
+
+The Lazaret files the cult as the Apocrypha, after their book rather than after the people,
+because the book came first and the people are an appendix to it. Its author was a lector
+of the order who spent eleven years copying case records in the houses and drew from them
+the opposite of everything the order teaches. He did not steal the files. He published,
+exactly as doctrine requires, and what he published was an argument that a graft is not an
+affliction but an offer. Then he walked out of his house and took a hundred and forty pages
+with him.
+
+His followers call themselves the Hands of the Host, and a member is a hand. Their argument
+is that a body carrying a parasite is not diminished but occupied, that occupation is the
+only company which does not end, and that a body with nothing in it is unfinished.
+
+## The True File
+
+The cult calls it the True File. The Lazaret was founded on a document, and everything the
+order has written in the years since is a copy of that document, a comment on it, or an
+addition to it. The book does not claim to come after it. It claims the order has spent its
+entire existence keeping an accurate record of the wrong conclusion, and that the
+correction was sitting in its own files the whole time, available to anybody willing to
+read them in order.
+
+The Lazaret gives the book a name of its own and will not use the author's. A file naming a
+man invites the question of who else agreed with him, and the order would rather answer
+questions about a document.
+
+A hundred and forty pages in a lector's hand. No illumination, no decoration, ruled
+margins, and a case number beside every record in the first part, because the man who
+copied them out was trained to keep the reference and could not stop doing it. Those
+numbers are the reason the order takes captured copies seriously. Each one leads back to a
+house, a year, and a patient who was admitted, treated, and written up by somebody who
+thought they were helping.
+
+Every copy is made by hand, and copying is the closest thing the cult has to a third rite.
+The work is given to hands whose grade has taken their legs but not their sight. A full
+copy takes one of them most of a year.
+
+| Part | Name             | Contents                                                                   |
+| ---- | ---------------- | -------------------------------------------------------------------------- |
+| I    | The records      | Eleven years of copied Lazaret case files, with their numbers intact       |
+| II   | The argument     | The doctrine drawn from them: emptiness, the assignment, and leaving       |
+| III  | The offices      | How a cell is run, who holds what, and the order of the morning            |
+| IV   | The preparations | Countenance first, then every remedy the order knows, for all three broods |
+| V    | The workings     | The spells                                                                 |
+
+Parts I through III travel together, and a new cell is founded with them. Part IV arrives
+when the cell has held its ground long enough to be worth supplying, which is a judgment
+the First Graft makes personally and slowly. Part V arrives in his own hand or not at all.
+He writes the workings out one at a time, for one cell at a time, and he has never
+explained the criteria.
+
+### Part IV
+
+The preparations run longer than the other four parts together, and almost none of it is
+original. The order publishes what it learns, so its treatments for all three broods sat in
+the case files the author spent eleven years copying. He transcribed them accurately. It is
+the single most useful thing the cult owns, and the reason an almoner's bag holds real
+medicine rather than a prop.
+
+A cell can therefore treat a sporing case competently, work a
+[Spore Load](/brood-and-bloom/chapter-5/#spore-load) down, dress a rotgill wound, and hand
+out the same formulas an officer of the order would hand out, at the same strength, for
+nothing. It does this without hesitation and files it under hygiene rather than charity: a
+brood that offers nothing to any individual is worth curing, and a cell cannot afford to
+lose hands to one on the road.
+
+The inquiline treatments are in part IV as well, transcribed as faithfully as everything
+else and never used. Against each of them, in the author's hand, is a single word:
+_Refused._
+
+### Part V
+
+A hand's spells are rare for reasons that have nothing to do with difficulty. Most cells
+have never seen part V. Cells that have are old, dug in, and have been doing something for
+years that persuaded a careful man in another place to write to them.
+
+The Lazaret holds four copies, all incomplete, none with a part V. The counter-work at the
+first house is built from them.
+
+## What they believe
+
+The True File does not claim the broods are gods. It claims they are the only living things
+that have solved the problem every other living thing dies of, and that they are generous
+with the solution. A hand does not pray to an inquiline: what the book describes is an offer
+of a body, and the cult uses that word for it.
+
+Three doctrines run through the book and appear in every cell, however far apart.
+
+The first is that emptiness is a condition rather than a default. A body with nothing in it
+is unfinished, and the discomfort people feel around the marked is recognition rather than
+disgust.
+
+The second is that the offer cannot be negotiated. What line a graft takes is decided at
+the feeding and not by the one receiving it, so a hand asks for nothing specific and is
+given what the parasite decides to give. The cult calls this the assignment. There is no
+appeal and no second attempt.
+
+The third is that leaving is worse than dying. A graft can be expelled, and the discipline
+that ends one takes a day, which the True File cites as evidence that people do not value
+what they have been given.
+
+## The Kenotics
+
+The rite is called the Kenotics, and it is the only ceremony the cult performs once.
+
+A cell keeps latchkin. This is the practical fact underneath all the liturgy, and it is the
+reason the Lazaret hunts cells the way it hunts colonies. A Kenotics requires a live
+inquiline in a condition to feed, so every cell of any size maintains a
+[clutch](/brood-and-bloom/chapter-4/#c-latchling-clutch), feeds it, and loses members to it
+at a rate no cell records.
+
+The postulant is brought in, held, and fed on once. The officiant is an ostiary. The
+[graft](/brood-and-bloom/chapter-4/#the-graft) is left, the parasite detaches, and the
+assignment is read from the marks over the following days. From that hour the postulant is
+a hand, and the date is kept the way other people keep a birthday. Before the day is out
+they are dosed with Countenance and taught to prepare it, because a hand who cannot be kept
+working is of no use to a cell.
+
+The assignment decides what the rest of a hand's life looks like.
+
+A sallow assignment is fatal, and everyone present knows it when the marks come up. The
+cult calls it being called early, treats the death as selection rather than misfortune, and
+considers it the most complete of the three outcomes. A hand who draws sallow is
+congratulated.
+
+A chantry assignment is the one hands hope for and will not admit to hoping for. Every
+spell the host spends deepens the graft, so a caster advances faster than anyone else in
+the cell, and the discipline that would expel it is a single day spent casting nothing. A
+chantry hand therefore casts daily, without exception, as an act of devotion, which makes
+the cult's spellcasters both its most advanced members and its least stable.
+
+A palimpsest assignment takes memory, a piece at a time, without announcement. The cult
+calls it being unwritten and considers it the cleanest of the three, on the grounds that a
+hand who has forgotten what they were before cannot be argued back into it.
+
+## Ranks and offices
+
+Two ladders run at once. Grade is how deep the graft has gone. Office is what a hand does,
+and most of the offices are work that requires walking, talking, lifting, and being trusted
+near the living, all of which a graft takes away in that order. The exception is the
+sacristan, which can be done sitting down and is therefore the only office a deep grade can
+hold.
+
+Nobody holds an office as a promotion. A hand is given one because they are still able to
+perform it, and loses it the moment they are not.
+
+| Rank            | Ladder | Meaning                                                             |
+| --------------- | ------ | ------------------------------------------------------------------- |
+| Almoner         | Office | Uninfected. Recruits, and buys the Kenotics by bringing one in      |
+| Sexton          | Office | Keeps the ground, and lays out the dead who go into it. Stage 1     |
+| Ostiary         | Office | The doorkeeper. Performs the Kenotics and keeps the clutch. Stage 2 |
+| Sacristan       | Office | Prepares and issues the cell's Countenance. Stage 3                 |
+| Postulant       | Grade  | Stage 1. Has asked and been given, and nothing has moved yet        |
+| Communicant     | Grade  | Stage 2. Has received, and can feel it                              |
+| Ciborium        | Grade  | Stage 3. The vessel that holds the host                             |
+| Translation     | Grade  | Stage 4. Not a rank. What the cult calls the end of a case          |
+| The First Graft | Head   | The author. Above both ladders, and held at stage 3                 |
+
+Every one of them is a person, and a cell is not a warband. Almoners work alone and in the
+open, sextons work at night and at a distance, ostiaries stay with the clutch, and
+sacristans do not leave the room they brew in. Hands fight to protect the clutch and rarely
+for any other reason. They surrender readily, talk freely, and treat capture as an
+opportunity to explain the book.
+
+The cult is written for slow discovery rather than ambush. An almoner met early and liked
+does more for the chapter than any encounter that opens with a drawn weapon, and a party
+that accepts help from one before learning what they are has already been in reach of the
+clutch.
+
+Every hand except the almoner carries a graft and is under Countenance when the party meets
+them, which is why none of these blocks shows the penalties of a stage. An almoner carries
+nothing at all and examines healthy by any means. A hand caught before Matins is a
+different creature, and the Grafted trait on each block says what changes.
+
+### Almoners
+
+Almoners are not hands. An almoner is clean, has never been fed on, and cannot be given the
+Kenotics until they have brought somebody else in first. One delivered candidate buys the
+rite, and nothing else does. The cult treats this as the only loyalty test it needs, on the
+grounds that a person who has handed over a stranger has already accepted the book's
+argument in practice.
+
+They arrive during outbreaks, in bad seasons, and wherever a house is admitting more than
+it can hold. They carry real medicine and real food and give it away without conditions,
+and they do not say who sent them. At a distance a village cannot tell an almoner from an
+officer of the Lazaret. Up close it still cannot, because there is nothing under the skin
+to find. The resemblance is deliberate and carefully maintained, and it is what gets an
+almoner through a gate.
+
+<Creature name="Almoner">
+  **Running it.** An almoner does not fight until there is no version of the conversation left, and
+  nothing in the block is built to hurt anybody. The pressure worth playing is the one they are
+  under: an almoner cannot be given the rite until they have delivered somebody, and a friendly
+  party traveling toward somewhere isolated is the opportunity they have been waiting on. One who
+  succeeds becomes a postulant, and the postulant block is what they are the following week.
 </Creature>
 
-<Creature name="Spore Veil">
-  **Running it.** The veil has no attack roll and cannot be blocked, only outrun or moved: a
-  creature in its space saves against Engulf and a creature within 10 feet saves against Sporing, in
-  the same round. At gale strength it can neither hold a space nor use Engulf, so moving air takes
-  it out of a fight — and delivers it somewhere else. A sealed chamber is where it is most
-  dangerous, and the only place it can be finished.
+### Postulants
+
+A postulant is a hand in their first weeks: fed on once, carrying a graft that has not
+moved, and dosed with Countenance from the day of the rite. The grade is defined by what
+has not happened yet. Nothing shows, nothing hurts, and the assignment read from the marks
+is the only thing about them that has been settled.
+
+Cells give postulants the work that needs a body rather than a judgment — digging,
+carrying, standing at doors, walking a measure out to a sexton at the far edge of the
+ground. They are not trusted with the clutch, they are not told who the sacristan is, and
+they are rarely sent to speak to anyone the cult wants. A postulant recruited by an almoner
+has often not met a second hand yet.
+
+Most of them are still being looked for. The cult treats this as an ordinary risk rather
+than a secret to keep: a postulant writes home in their own hand, saying they have taken
+work and will be some time, and an ostiary reads each letter before it goes.
+
+The grade is also where the cult loses most of the people it takes. A Kenotics that does
+not root leaves a postulant clean, which the book counts as a failure rather than a
+reprieve, and the second offer covers them like any other.
+
+<Creature name="Postulant">
+  **Running it.** Postulants dig, carry, and hold doors, and a party usually meets them doing
+  exactly that. Offer is a plea rather than a spell: it works on people who have not yet decided
+  what the cult is, and a character who has watched a hand die makes the save with Advantage. A
+  postulant met before Matins carries the penalties of stage 1 and knows how long it is until the
+  queue forms.
 </Creature>
 
-### The orcshroom line
+### Sextons
 
-Cave orcs whose tribe was colonized generations ago and has never known otherwise.
-They keep their language, their weapons, and their arguments, and none of them can say
-when the change happened.
+Sextons are the opposite office, and the newest hands hold it. A postulant is given the
+ground before any contact with anyone the cult hopes to recruit, on the reasoning that a
+hand who will be going into that ground eventually should learn it while they can still
+dig. A sexton knows to the hour how long a body stays worth carrying, and treats arriving
+late as a personal failure rather than an accident. The office also carries out the second
+offer, which is why cells give it to hands too new to have made friends.
 
-**The tribe** is what the line's stat blocks coordinate: its orcshrooms, its
-spore-struck, its blightboars, and the rootfather at the center of it. The rest of a
-colony cannot be given orders — mats, crusts, rinds, and fruiting bodies carry only the
-reduced Mycelial Chorus, and a warchief has no more to say to a reredos rind than to a
-wall. Kinship still runs colony-wide; command runs no further than the tribe.
-
-<Creature name="Orcshroom Whelp">
-  **Running it.** Whelps deliver Spore Load rather than damage: a 5-foot Sporing radius fills the
-  gaps larger creatures cannot reach. Pack Tactics makes them work in groups; a single whelp is a
-  rounding error.
+<Creature name="Sexton">
+  **Running it.** A sexton is not trying to kill the party. It is trying to get a body to the ground
+  before the day is out, and it treats a fight as an obstruction. Hook drags a target into reach,
+  Consign takes them off their feet and keeps them there, and Second Offer collects whatever the
+  fight produces. One that has hold of a body does not let go to fight anybody else — it drags, and
+  it heads for the ground it keeps.
 </Creature>
 
-<Creature name="Spore-Struck">
-  **Running it.** Not Yet Gone is the whole creature: everything else about it is ordinary, so the
-  encounter turns on whether a second-level slot is spent on something that is currently attacking.
-  It has no Mycelial Chorus — only the pull — and one that gets away walks toward the tribe for as
-  long as it takes, which is how a village loses people one at a time without ever seeing an
-  orcshroom.
+### Ostiaries
+
+The doorkeeper performs the Kenotics, keeps the clutch fed, and decides who is admitted. In
+a cell of any size the ostiary is also the only hand who knows every other hand by name,
+which makes the office the cult's memory and its weakest point.
+
+When measures run short the ostiary decides who is passed over, and there is no doctrine
+covering the decision. Cells that have gone short more than once are difficult to approach
+and impossible to negotiate with.
+
+<Creature name="Ostiary">
+  **Running it.** An ostiary fights to keep the party out of two rooms and will trade anything else.
+  Bar the Door spends a Lazaret Sill on the approach rather than on the fight, and Assumption of the
+  Case is the tell: an ostiary casting it is pulling Depth off a hand who has gone down, in front of
+  the party and without embarrassment. One who has decided the cell is lost spends their last action
+  opening the clutch rather than closing it.
 </Creature>
 
-<Creature name="Orcshroom Stalker">
-  **Running it.** Spoor-Reader ends a party's ability to disengage: anything carrying Spore Load is
-  tracked for a mile, through stone and in the dark, and Spore Load is not shed inside the colony's
-  ground. The stalker is built to appear first, seen leaving, before the party knows what Spore Load
-  is for.
+### Ciboria and sacristans
+
+A Ciborium is a hand at stage 3, named for the vessel that holds the host. The graft stands
+up under the skin from wrist to collarbone, the legs have mostly stopped being useful, and
+what is left is a person who can still think, still speak, and still work with their hands.
+
+That is the office of sacristan. It requires no walking, no lifting, and no contact with
+anyone outside the cell, so it falls to a Ciborium who has nothing else left to do. They
+keep the clutch, harvest it, brew the day's measures, and count them.
+
+The quarters sit as deep inside a cell's holding as the building allows, behind whatever
+the cell can put between them and a door. At the first house of the cult they adjoin the
+First Graft's own rooms and share a wall.
+
+Who the sacristan is, is not general knowledge. Most hands never learn, and the ones who do
+are the ostiary and whoever carries food in. A sacristan issues measures through a hatch or
+a curtain, robed and hooded, with the hands gloved and the arms covered, so that not even
+the marks are visible to somebody standing a foot away. A cell that loses its sacristan to
+a raid frequently does not know which of its dead it has lost until the following morning.
+
+Taking the sacristy ends a cell faster than fighting it. Every hand in the place is
+symptomatic by the following morning, and stage 4 arrives on schedule regardless.
+
+<Creature name="Ciborium">
+  **Running it.** A ciborium is found in a room, seated, behind whatever the cell could put in the
+  way. Choose the line of its graft when you place it, because Seed hands out that line and nothing
+  else. The Depth count is the fight: Seed and Graft spend it, Vessel and Hold take it back, and it
+  will not cross 5. It opens at 3 Depth, which is one Seed and nothing more, so everything after
+  that has to come off a body standing near it — its own hands are the obvious supply, and a party
+  that has just been seeded is the better one. Cornered at 5 Depth with nobody grafted in reach, it
+  stops spending and works with the cane.
 </Creature>
 
-<Creature name="Orcshroom">
-  **Running it.** Burst Spores is a Cone, and Aggressive exists to put two or three characters
-  inside it on the first round; a warband opens by closing distance and firing cones into the same
-  space. Sporing runs whether the orcshroom acts or not — a wounded one being ignored still costs a
-  save each round.
+### Translation
+
+Translation is the word for what the order would file as a
+[stage 4](/brood-and-bloom/chapter-1/#stage-4) case. In church usage it means both the
+moving of a saint's relics and being taken up without dying, and the cult means both. A
+cell that has produced a Translation does not mourn and does not disband. It moves, because
+whatever the case became is still nearby and still feeding.
+
+## Countenance
+
+Countenance is the cult's only universal possession. Without it a cell would consist of
+people who cannot walk, work, or pass for well, and the True File spends more pages on its
+preparation than on anything the cult believes.
+
+A dose is a measure. It is brewed rather than enchanted, which is the reason the cult
+functions at all: a hand needs no magic to make one, carry one, or take one. A hand who can
+already cast is taught the spell instead and stops queuing for the sacristy, though they do
+not stop attending. Both last 24 hours and both are taken at first light. The rules for the
+measure are under [Draughts](/brood-and-bloom/chapter-7/#draughts) and for the spell under
+[Magic](/brood-and-bloom/chapter-7/#s-countenance).
+
+A hand under Countenance feels well, looks well, works a full day, and passes any
+examination that does not involve magic. Underneath it the graft advances exactly as it
+would in somebody screaming. The Lazaret's catalog files it as symptomatic suppression and
+marks it the most dangerous entry in the book, on the grounds that it does no harm whatever
+and hides everything. No house stocks it and no house will make one.
+
+### Matins
+
+A measure lasts 24 hours and is taken at first light, before food, before work, before
+anything. The cult calls the observance Matins after the first office of the day, and it is
+the only ceremony a hand performs more than once.
+
+The timing is not devotional in origin. A measure taken at first light lapses at first
+light, so every hand in a cell wakes symptomatic and stays that way until they reach the
+front of the queue. The line therefore forms in grade order, deepest first: a Postulant can
+stand and wait for an hour, and a Ciborium cannot.
+
+Matins is a queue rather than a service. The cell forms up at the sacristy, each hand takes
+their measure at the hatch, and each drinks it there and is seen to. Hands who can cast do
+not skip the line. They come to the same place at the same hour and cast in front of the
+sacristan instead of drinking. The observance is a roll call as much as a distribution, and
+a cell learns who is missing before it learns anything else that morning.
+
+Nobody carries their own except almoners on the road and sextons working ground at a
+distance. A hand who has missed a morning cannot hide it, and a hand who has left cannot
+get another.
+
+Hands who never go outside take their measure the same as anyone. The penalties of a stage
+are not a matter of appearances, and a sacristan without a measure cannot hold a pestle.
+The most housebound members of a cell are its most dependent, which includes the sacristan
+and the First Graft.
+
+### The objection
+
+If a graft is a gift, taking something every morning to blunt it is difficult to defend,
+and the True File knows it. The book's answer is that the symptoms are not the gift. They
+are the body's objection to the gift, produced by an organism that has spent its whole life
+alone and cannot be expected to know better. The measure is therefore not a refusal of what
+was given, but a treatment of the complaint about it.
+
+Not every hand accepts this. The ones who refuse the measure are called the Unmeasured, and
+they are the only members of the cult who are unambiguously admired. They also last about
+three weeks and can work for none of them, which is why an ostiary discourages the practice
+without ever saying so, and why a cell with more than one is close to losing the hands it
+has.
+
+## The First Graft
+
+He took his title from the brood rather than from the church he borrowed the rest of the
+vocabulary from, and every hand notices it. The ranks beneath him are liturgical because a
+rite needs liturgy and most people need a rite. His own title is medical, and it names him
+rather than an office.
+
+He has held at stage 3 for decades and has no intention of moving. A graft deepens with
+rest, so holding a stage is not passivity and cannot be achieved by doing nothing. It costs
+him a program of magical care administered in the exact proportion required, and it
+consumes most of what a cell brings him. He has never been Unmeasured. He takes his measure
+every morning at a hatch six feet from where he sleeps, and he takes his restorations
+besides.
+
+The cult's official position is that the First Graft remains where he is so that there is
+somebody left who can still explain the book. A faction of Ciboria hold that the man who
+tells every hand to go all the way has arranged never to arrive. He does not argue with
+them, and he has outlived every faction that has raised it.
+
+He was a lector, so he can run a house, keep a file, and read a case of any of the three
+broods at a glance. Parties who expect a raving heretic meet a tired administrator who asks
+careful questions about their symptoms and is genuinely relieved when the answers are good.
+
+<Creature name="The First Graft">
+  **Running it.** He is a tired administrator rather than a raving heretic, and he asks about the
+  party's symptoms before anything else; the questions are careful, correct, and not a tactic. He
+  does not open a fight, and he will hand over the True File's first three parts to anyone who asks.
+  He will not hand over part V, surrender the sacristan, or be talked out of the argument, and the
+  last of those is what usually ends the conversation. When it ends he fights like a scholar — Wall
+  of Force to shut a corridor, Greater Invisibility to be elsewhere, Counterspell held for the
+  party's caster, and Instar not at all while there is any prospect of the conversation resuming.
 </Creature>
 
-<Creature name="Blightboar">
-  **Running it.** Spore Trail turns the animal into terrain: it crosses the room, and the warband
-  pushes the party back into what it left. Relentless buys one guaranteed extra round, which is why
-  a tribe drives a blightboar at the most dangerous thing on the field rather than the nearest.
-</Creature>
+## Working with the Necrophore
 
-<Creature name="Orcshroom Sporespeaker">
-  **Running it.** Draw from the Sown converts the party's Spore Load into the colony's healing,
-  which changes the target order the moment it is understood. Voice of the Colony uncouples the
-  warband from Mycelial Chorus's positioning. Entangle and Spike Growth both take Concentration, and
-  both need ground that grows something — worked stone disables them, exactly as it does the
-  chieftain's Grasping Hyphae.
-</Creature>
+The cult does not venerate the necrophore. It has an arrangement with one, which the
+Lazaret considers the worse of the two.
 
-<Creature name="Orcshroom Warchief">
-  **Running it.** Drive Them On converts the warchief's Bonus Action into another creature's
-  movement and attack every round, so the biggest thing in the room is rarely the most productive
-  target. The warchief stays within 60 feet of its warband, because Mycelial Chorus's save Advantage
-  ends the moment it is alone.
-</Creature>
+The problem the arrangement solves is waste. A hand who reaches stage 4 becomes something,
+and the cult counts that as the point of everything it does. A hand who dies short of it
+becomes nothing at all, and by the book's own argument has been emptied for no purpose.
 
-<Creature name="Orcshroom Chieftain">
-  **Running it.** Reckless hands out Advantage, and Low Blow collects on the misses that follow it.
-  Grasping Hyphae functions only on soil, timber, or fungal growth — on worked stone the chieftain
-  loses its ground control entirely, which is a real reason to fight the tribe in a hall rather than
-  in its own tunnels.
-</Creature>
+Sallow cases are not the problem, whatever a cell's newer hands assume. A sallow assignment
+runs its course, the host dies of it, and the [Quagdam](/brood-and-bloom/chapter-4/#c-quagdam)
+works its way out over the following days and leaves for standing water. The fluke fed the
+whole way and goes on feeding after the death, so a sallow corpse is spent by the time
+anything else could be laid in it. The cult counts this the most complete Translation of
+the three, which is why a Kenotics that comes up sallow is met with congratulation rather
+than grief.
 
-<Creature name="Orcshroom Bulwark">
-  **Running it.** The bulwark is the one creature in the line that wants to be approached: Living
-  Wall and a 15-foot Sporing radius price the approach, and Brace covers whatever stands behind it.
-  At a Speed of 20 feet it cannot fix a bad angle — where it is placed at the start of the fight is
-  where it fights.
-</Creature>
+The second offer covers the failures instead. Hands killed on the road or in a house. Hands
+whose Kenotics did not take, where the parasite fed and nothing rooted. Hands who expelled
+a graft, deliberately or by accident, and are now as empty as the day they arrived. Hands
+who changed their minds and were brought back.
 
-<Creature name="Rootfather">
-  **Running it.** The fight is about the ring between 30 and 60 feet — outside his lash and his
-  Sporing, inside Call the Tribe's approach corridor. Regrowth stops only for Fire and Radiant
-  damage, and Sun-Withered means digging him out into daylight works. Heart of the Colony is why he
-  is the target rather than the chieftain: his death turns the tribe's save Advantage within a mile
-  into a day of Disadvantage on everything.
-</Creature>
+None of them are executed, and the cult would reject the word. They are given the second
+offer, which is done at the ground, within a day, by a sexton, without ceremony of any
+kind. The True File is explicit that the manner does not matter and freshness does. That is
+the whole of the doctrine on the subject, and it is the passage the Lazaret quotes when it
+is asked why the order treats a cell as a colony.
 
-### The rotgill line
+A necrophore lays in the dead and wants nothing from the living, which makes it the only
+brood the cult can deal with as a supplier rather than as a subject. A body laid in still
+produces. The book calls what comes out the second offer, distinguishes it carefully from
+Translation, and does not claim the two are equal.
 
-The rotgill line holds flooded and standing-water ground, and its disease is the one
-the brood is infamous for:
+A cell of any age therefore keeps ground as well as a clutch: a barrow, a plague pit, a
+field nobody works any more. Bodies go there fresh and they go there quickly, because a
+body is useful for a day and worthless after. Cells that have held the same ground for
+years are dangerous out of all proportion to the number of hands living on them.
 
-<Creature name="Rotgill Fleece">
-  **Running it.** The 10 feet around a fleece are dangerous whether or not it acts, and Gill-Burst
-  contaminates the ground a party wants to stand on next. False Appearance means a flooded cellar
-  with three fleeces in it reads as a flooded cellar. Sessile is why parties come looking for one on
-  purpose — the Mortification remedy is rendered from its gills — and a botched cut contaminates the
-  cutter and regrows the fleece in 1d4 days.
-</Creature>
+## Refusing the Sporophore
 
-<Creature name="Rotgill Bell">
-  **Running it.** Struck is a trap for a party that has learned the brood's weaknesses and reached
-  for the wrong one: Thunder damage refills Toll. The contaminated area is the creature's output — a
-  bell behind a chokepoint denies 30 feet of floor every other round, and walks that denial forward
-  at 10 feet.
-</Creature>
+The First Graft rejects the sporophore, and the rejection is doctrine rather than distaste.
 
-<Creature name="Drowned Chorus">
-  **Running it.** The chorus is what stage 4 of Mortification produces, so its strongest version is
-  one the party caused, and Still Sounds Like Them is the mechanical edge of that. Drowning Song
-  silences speech and Verbal components — the correct weapon for a disease of the lungs — and Many
-  Voices works before initiative: a familiar voice calling for help from somewhere out of sight.
-</Creature>
+A sporophore does not want a person. It wants the ground the person is standing on, and it
+takes a wall or a field or a wood with the same appetite it takes a body. The True File
+argues that a brood offering nothing to any individual has nothing to offer at all, and
+that a hand who kneels to one has mistaken scale for generosity.
 
-<Creature name="Miasm">
-  **Running it.** Bloomfall grants 3 Spore Load on a failed save — half the distance to
-  Mortification in one round — and Choking Presence is where the brood's accumulated Spore Load is
-  finally punished directly. A 30-foot Sporing radius and 10-foot reach leave no safe melee range.
-  Amorphous means no door holds it; Sun-Withered means a door that leads outside does.
-</Creature>
+Hands who disagree exist anyway. Cells near contaminated ground produce them reliably, and
+the cult has no procedure for the problem, because the book never anticipated a heresy
+inside a heresy. What becomes of those hands varies by cell and is never written down.
 
-### The ashcap line
+## The order's position
 
-The ashcap line holds burned ground, and it is quiet until something touches it:
+The Lazaret does not recognize the Kenotics as a rite. Its files record voluntary
+implantation, the date, the line, and nothing else. No house has ever refused to admit a
+hand, because a house does not turn out a patient, and no house has ever cured one, because
+the patient does not want it and a Lazaret officer is taught no restoration magic to press
+on them anyway.
 
-<Creature name="Ashcap Crust">
-  **Running it.** The crust is inert until something comes within 5 feet, and its cloud reaches
-  three times that far, so the character who triggers it is rarely the only one who pays. A room
-  floored with crusts is safe to stand still in and expensive to move through — it prices movement,
-  not presence, which is at its sharpest under a fight the party has to move through.
-</Creature>
-
-<Creature name="Ashcap Censer">
-  **Running it.** Settling Ash makes the kill itself an event: dropping a censer while standing
-  under it costs the save anyway, which rewards range and punishes rushing a stationary target. The
-  censer climbs, and it is built to hang above a fight — a beam, a stairwell, the doorway the party
-  has to come through — rather than stand in one.
-</Creature>
-
-<Creature name="Cinderwalk">
-  **Running it.** Dry Rot is why three weak attacks beat two strong ones: any hit shuts off a
-  target's healing for a round, which removes a healer from the fight without touching them. The
-  cinderwalk is the deliberate opposite of the Drowned Chorus — no voice, never heard coming, and it
-  stops the people who mend rather than the people who speak.
-</Creature>
-
-<Creature name="Burnt Acre">
-  **Running it.** Fire-Sown is the creature's premise: fire is how this line reproduces, so a plan
-  built on burning the colony out feeds it — at half rate, so a round spent on the mistake costs a
-  round, not the fight. Sun-Withered still works; the answer is opening the roof, not lighting the
-  floor. The disturbance clause matters most here: standing still on a burnt acre is genuinely safe,
-  and Ground Itself and Settle exist to make standing still impossible for long.
-</Creature>
-
-### The reredos line
-
-The reredos line wants buildings. It cannot be taken by the other three, and its
-disease is the one people volunteer for:
-
-<Creature name="Reredos Rind">
-  **Running it.** A rind reaches 10 feet and cannot move, so the whole creature is a decision about
-  whether to engage it at all: pass at 11 feet and nothing happens; hit it and Spall sheds into
-  whoever swung. Clearing three rinds off a cellar wall with melee costs four or five Spore Load
-  without one attack that felt like an attack, which is the line's economics in miniature.
-</Creature>
-
-<Creature name="Reredos Corbel">
-  **Running it.** Load-Bearing makes killing a corbel worse than leaving it alive for a round, and
-  lets the line change the floor without anything moving. The corbel climbs and is usually above the
-  fight — on a wall the party has to pass under rather than in the room with them.
-</Creature>
-
-<Creature name="Buttress">
-  **Running it.** Spall grants Spore Load on a successful save — Challenge Rating 8 is where the
-  brood's success rule first lands on a party — so every melee round costs contamination however the
-  dice fall, and Armor Class 18 with Resistance to Piercing and Slashing makes for many melee
-  rounds. Immovable at a Speed of 20 feet means it fights where it stands: a doorway, a stair head,
-  a bridge.
-</Creature>
-
-<Creature name="Nave">
-  **Running it.** The Building Itself makes the structure's interior the creature's body — which is
-  why its Sporing and Shed reach 30 feet: contact contamination, delivered by a wall the target is
-  already inside. Close and Shift carry the encounter: the nave is not trying to kill the party
-  quickly, it is making sure that leaving takes longer than they have. The windows still letting
-  light in is the fight's solution — Sun-Withered is written into the architecture.
-</Creature>
+The book itself is the harder problem. The order publishes what it learns on the principle
+that a file nobody has read protects nobody, and the founding argument of the cult was
+published under that principle by one of its own. The counter-work is kept at the first
+house and copied nowhere. Lectors disagree in writing about whether that is prudence or the
+first crack in the only thing the order has ever been certain of, and the disagreement is
+itself on file.

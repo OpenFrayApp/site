@@ -44,7 +44,7 @@ export function replaceLibraryTerms(
 /**
  * Unfold the site's stat-block accordions. The site collapses a block to name,
  * type line and lore inside a <details>; print wants all of it, flattened back to
- * plain siblings so the head grouping still sees name, lore, stats and defences
+ * plain siblings so the head grouping still sees name, lore, stats and defenses
  * as children of .statblock.
  */
 export function flattenStatBlockFolds(root: ParentNode): void {
@@ -93,15 +93,18 @@ export function bindHeadingsToNext(root: ParentNode): void {
 }
 
 /**
- * Put a " (p. 00)" placeholder after every creature cross-reference, returning
- * how many were inserted. Page numbers only exist after pagination, so the
- * placeholder reserves the space now — growing laid-out text would overflow a
- * page silently. `*=` not `^=`: a link to another chapter is a full site path,
- * and matching only bare fragments skipped most of the book.
+ * Put a " (p. 00)" placeholder after every entry cross-reference — `#c-` for a
+ * creature, `#s-` for a spell — returning how many were inserted. Page numbers
+ * only exist after pagination, so the placeholder reserves the space now —
+ * growing laid-out text would overflow a page silently. `*=` not `^=`: a link to
+ * another chapter is a full site path, and matching only bare fragments skipped
+ * most of the book.
  */
 export function insertPageRefPlaceholders(root: ParentNode): number {
   let count = 0;
-  for (const link of root.querySelectorAll('.book-body a[href*="#c-"]')) {
+  for (const link of root.querySelectorAll(
+    '.book-body a[href*="#c-"], .book-body a[href*="#s-"]',
+  )) {
     const ref = link.ownerDocument!.createElement('span');
     ref.className = 'pageref';
     ref.textContent = ' (p. 00)';

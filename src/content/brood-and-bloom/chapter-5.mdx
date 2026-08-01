@@ -1,0 +1,575 @@
+---
+title: 'Sporophore'
+label: 'Sporophore'
+description: 'The sporing brood: the shared colony traits, Spore Load, four lines with four diseases, the brooding ground, and twenty-four creatures from the driftling to the Nave.'
+order: 5
+eyebrow: 'Chapter 5'
+---
+
+import Creature from '../../components/BroodCreature.astro';
+import Note from '../../components/Note.astro';
+
+The Lazaret classes the sporing brood as Sporophore; common folk call it the bloom. It
+does not attach to anything and does not need a host: it grows on ground, on stone, on
+burned timber, and on creatures, and it sheds constantly. Three of its four lines do not hunt — they occupy, and everything that walks
+through them breathes some of it in. The fourth took a creature, and does what a creature
+does: the orcshroom tribes range, raid, and recruit.
+
+Either way, this brood is the one a party walks into, and the Lazaret's standing instruction for it: **go at noon, and
+bring tools for letting it in.**
+
+## How a sporophore works
+
+No single Sporophore is the creature; the colony is, and every creature in this brood
+is part of one.
+
+### Colonies and lines
+
+A **colony** is a family: everything grown from one original growth, however far it has
+spread, held together by Mycelial Chorus.
+
+A **line** is what a growth became — rotgill, ashcap, reredos, or orcshroom — and the
+ground decides it, not the parent. A colony whose spores drift across a flooded cellar,
+a burn scar, and a standing wall grows all three of those lines and remains one colony.
+Kinship follows the colony; form follows the ground. This is why a driftling carries
+the Chorus before it has a line: it is already its parent colony's, and only its
+landing decides what it grows into.
+
+### The shared traits
+
+Three traits carry the colony, printed in full on each stat block:
+
+- **Mycelial Chorus.** The creature knows the direction of, and can communicate
+  wordlessly with, every member of its colony within 1 mile, and it has Advantage on
+  saving throws against being Charmed or Frightened while another member is within 60
+  feet. Mindless growths — mats, larvae, and fruiting bodies — carry a reduced version:
+  the colony can direct them, and nothing more. An apex is the center of its colony,
+  aware of every member within 5 miles, and can speak through any of them.
+- **Sun-Withered.** While in sunlight the creature can't regain Hit Points, the
+  Difficulty Class of its Sporing and its spore actions decreases by 5, and it takes 3
+  (1d6) Radiant damage at the end of each of its turns. The middle clause changes
+  encounters the most: a Sporophore fought in daylight is barely contagious.
+- **Sporing.** Every Sporophore sheds. A creature that ends its turn within the trait's
+  radius makes a Constitution saving throw or gains 1 Spore Load.
+
+Sporing's shape varies by line, because a colonized wall and a colonized orc do not
+release spores the same way:
+
+| Line      | Radius                         | Trigger                                                                               | Spore action                                       |
+| --------- | ------------------------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Orcshroom | 10 feet                        | Always                                                                                | Cone — they exhale it                              |
+| Rotgill   | 10 feet                        | Always                                                                                | Sphere — wet air that hangs where it lands         |
+| Ashcap    | 15 feet, from a 5-foot trigger | Only once disturbed, by approach within 5 feet or by damage — **Sporing (Disturbed)** | Emanation that lingers a round                     |
+| Reredos   | 5 feet                         | Always                                                                                | None — it sheds a burst as a Reaction when damaged |
+
+Apexes shed to 30 feet, because there is more of them shedding.
+
+<Note>
+  A creature makes one Sporing save per turn no matter how many Sporophores it stands among, against
+  the highest Difficulty Class among them, the same way overlapping contaminated areas resolve. The
+  save falls at the end of the creature's own turn.
+</Note>
+
+### Spore actions
+
+Sporing is what a fungal body loses by being open to the air; a
+**spore action** is everything it has packed and stored, thrown at once. Large and
+larger bodies carry 2 uses per day, Medium and smaller carry 1 — except the rank and
+file (the orcshroom warriors, the stalkers, the mats and swarms), which hold nothing in
+reserve and fold a weaker, always-available burst into their turns instead. From
+Challenge Rating 8 upward, a spore action grants 1 Spore Load even on a successful
+saving throw: at that tier, contamination is not avoided by rolling well.
+
+### Variant: running dry
+
+Tables that want spent colonies to feel spent can use this
+rule: while a Sporophore has no uses of its spore action remaining, the Difficulty
+Class of its Sporing decreases by 2. It applies only to creatures whose spore action
+has a daily limit — the rank and file never held anything back — and is best decided
+once for the whole brood.
+
+## Spore Load
+
+Every Sporophore contaminates through one counter. A creature can carry up to 6
+**Spore Load** — the same 0-to-6 shape as the Inquiline's Depth in
+[chapter 4](/brood-and-bloom/chapter-4/), and symptomless like it. Every penalty in
+this brood comes from a disease's stage, never from the load itself: a creature learns
+what it carries from a Lazaret officer's eye, a Detect Poison and Disease spell, or
+the moment the counter fills. What the load changes is how the brood fights it —
+several spore actions bear down harder on a creature carrying 3 or more, and a
+stalker tracks anything carrying 1 or more.
+
+### Colonization
+
+On reaching 6 Spore Load, the counter resets to 0 and the creature contracts the
+disease of the line that gave it the sixth point, at stage 1 — or advances that
+disease one stage if it already has it. That is the only way a Sporophore disease advances: a fungal colony
+does not incubate, it spreads, and it spreads only while a creature keeps breathing it
+in.
+
+### Shedding it
+
+A creature loses 1 Spore Load at the end of a Short Rest and all of it
+at the end of a Long Rest, provided the rest is taken more than 1 mile from a colony. A
+Lesser Restoration spell removes 3. Inside a brooding ground none of that works —
+Spore Load is not lost while the colony is close enough to replace it.
+
+<Note type="mixed exposure">
+  Spore Load is one pool no matter how many lines contributed to it. Only the sixth point decides
+  which disease the creature takes.
+</Note>
+
+## Contaminated ground
+
+Several spore actions leave an area contaminated. A creature that enters a contaminated
+area or ends its turn there repeats the saving throw against that spore action.
+Contaminated areas do not stack: one save per turn, against the highest Difficulty
+Class among the overlapping areas.
+
+## The brooding ground
+
+A **brooding ground** is a colony's territory: everything within 1 mile of any of its
+members. Inside it:
+
+- **Spore Load is not shed.** Rests remove none of it; the colony replaces what the
+  body clears.
+- **Diseases do not recede.** The recovery save below is made only when the Long Rest
+  is taken more than 1 mile from any colony.
+- **The colony knows.** Where a stalker or an apex is present, anything carrying Spore
+  Load is tracked (see Spoor-Reader), and the tracking does not stop at a camp's walls.
+
+### Reading the ground
+
+Every line marks its territory before defending it. A rotgill
+ground sweats — damp walls, standing water that never clears, a smell of wet cellars
+where there is no cellar. An ashcap ground is a burn scar that never greened over, warm
+underfoot, with dust that rises too easily. A reredos ground looks like weathering:
+gray frost-lines along the mortar, brackets nobody built. An orcshroom ground is the
+tribe's — spoor, dust in still air, gray stipple on everything they have handled. A
+creature that succeeds on a DC 13 Intelligence (Nature) or Wisdom (Survival) check
+recognizes the ground and which line holds it.
+
+### Daylight
+
+Sunlight stops a colony healing and blunts its spores, so a colony grows
+away from the sun — under floors, into hillsides, behind shutters — and every opened
+roof, felled wall, and dug trench pushes it back.
+
+## Between colonies
+
+Nothing a Sporophore grows harms its own colony: its contaminated areas, Difficult
+Terrain, Sporing, and spore actions have no effect on a fellow member, whatever line
+either of them belongs to. A rival colony is another matter, and what one colony can
+do to another depends on their lines:
+
+- **Rotgill and ashcap prey on anything with substance to take, including each other.**
+  Rotgill rots what is wet; ashcap dries what is damp and feeds on what is left. Which
+  of them holds a stretch of ground is mostly a question of whether that ground is
+  flooded or burned. Both can also take orcshrooms, which are still flesh under the
+  gray.
+- **Reredos and orcshroom take nothing from the brood.** Reredos wants stone and
+  timber, orcshroom wants people, and neither has a use for a body that is already
+  fungal.
+- **Nothing takes reredos.** A reredos growth is bound into masonry with nothing in it
+  to rot and nothing to dry, so the other three lines cannot touch it.
+
+### When one colony takes another
+
+A Sporophore that reaches 6 Spore Load from a rival colony does not sicken. It dies,
+and a stage 2 creature of the winning colony grows from the remains within 1d4 days. Orcshrooms are the exception, being flesh: one that
+reaches 6 Spore Load contracts that line's disease and runs the stages like anything
+else, which is how a tribe overtaken by rotgill ends as Drowned Choruses still speaking
+Orc. This contest is also why there is no single Sporophore super-colony: the two lines
+that could expand without limit spend most of their effort on each other.
+
+## How they speak
+
+Most of the brood does not. Mycelial Chorus is not speech — it carries direction,
+condition, and attention, no words, and cannot be overheard. An apex speaks through any
+member of its colony that has a mouth, which is how a party usually hears one first:
+the creature speaking is not the creature they can see. The apexes' own voices, where
+their bodies allow one, are described in their entries, and the transformed hosts — the
+Drowned Chorus, the Cinderwalk, the Buttress — kept whatever speech their bodies kept.
+
+## The diseases
+
+Each line's disease advances only through colonization, and recedes only with
+distance:
+
+### Receding
+
+At the end of each Long Rest taken more than 1 mile from any colony, an
+infected creature makes a Constitution saving throw against the Difficulty Class for
+its current stage — 12 at stage 1, 14 at stage 2, 16 at stage 3. **Success:** The
+disease recedes one stage, and receding below stage 1 cures it. **Failure:** No change.
+Stage 4 allows no save.
+
+### Restoration magic
+
+The spells work by stage, identically for all four lines:
+
+| Spell               | Stage 1 | Stage 2            | Stage 3            | Stage 4 |
+| ------------------- | ------- | ------------------ | ------------------ | ------- |
+| Lesser Restoration  | Cures   | Reduces to stage 1 | Nothing            | Nothing |
+| Greater Restoration | Cures   | Cures              | Reduces to stage 2 | Nothing |
+| Heal                | Cures   | Cures              | Reduces to stage 1 | Nothing |
+| Mass Heal           | As Heal | As Heal            | As Heal            | Nothing |
+
+### Treatment
+
+The Lazaret's other tiers, shared by all four lines:
+
+1. **Care.** A creature that spends a day of downtime tending the patient makes a DC 15
+   Wisdom (Medicine) check. **Success:** The patient has Advantage on its next saving
+   throw to recede.
+2. **Remedy.** A preparation rendered from the line's own growth (see
+   [Harvesting](#harvesting)). Taking a line's remedy drops its disease one stage.
+3. **Procedure.** A physical treatment, different per line, listed with each disease
+   below.
+
+Any creature can attempt a procedure. A trained physician makes its Wisdom (Medicine)
+check with Advantage, and a Lazaret officer automatically succeeds on the check —
+compressing these into a day's work is much of what the order's houses are for.
+
+Stage 4 in every case is governed by the library-wide rule in
+[chapter 1](/brood-and-bloom/chapter-1/#stage-4). Two of these diseases kill and two do
+not; each stage table says which.
+
+### Mortification
+
+The Lazaret files the rotgill disease as Mortification; common folk call it wetrot.
+The fungus takes the wet tissue first, and the wet tissue is where a body keeps
+everything it cannot do without:
+
+| Stage | Effect                                                                                                                                |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Wounds stop closing. The creature gains no benefit from a Short Rest, and takes 3 (1d6) Necrotic damage at the end of each Long Rest. |
+| 2     | The creature's Hit Point maximum decreases by 10, and it has Disadvantage on Constitution saving throws.                              |
+| 3     | The Hit Point maximum decreases by a further 20, healing the creature receives is halved, and it has the Poisoned condition.          |
+| 4     | The creature dies. After 1d4 days it rises as a Drowned Chorus.                                                                       |
+
+The Hit Point maximum reductions last until the disease ends and do not stack with
+themselves. Stage 2's Disadvantage counts twice: the save to recede is itself a
+Constitution save, so a creature at stage 2 is measurably worse at leaving stage 2
+than it was at leaving stage 1, before the Difficulty Class rises.
+
+Its remedy and its procedure:
+
+- **Remedy.** The gills of a rotgill creature, boiled and inhaled.
+- **Procedure — extraction.** An hour of surgery and a DC 18 Wisdom (Medicine) check.
+  **Success:** The disease ends and the patient takes 11 (2d10) Slashing damage.
+  **Failure:** The patient takes 22 (4d10) Slashing damage and the disease is
+  unchanged.
+
+### Calcination
+
+The Lazaret files the ashcap disease as Calcination; common folk call it the drying.
+Where Mortification rots a body, Calcination takes the water out of it:
+
+| Stage | Effect                                                                                                                                                                                                                                                                                                           |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | The creature stops sweating and stops shivering. Weather a healthy creature would call merely warm or merely cool is extreme for it: at the end of each hour spent in such weather without clothing suited to it, the creature makes a DC 10 Constitution saving throw, gaining 1 Exhaustion level on a failure. |
+| 2     | The dried skin splits. The creature has Vulnerability to Fire damage, and its Speed decreases by 10 feet.                                                                                                                                                                                                        |
+| 3     | The creature has Vulnerability to Bludgeoning damage in addition, and its Speed is halved.                                                                                                                                                                                                                       |
+| 4     | The creature dies. The body does not fall. After 1d4 days it walks as a Cinderwalk.                                                                                                                                                                                                                              |
+
+<Note type="design note">
+  The Vulnerability to Fire is not a defense of the fungus — it is preparation. A body with
+  Calcination in it is being dried into fuel, so that whatever eventually burns is full of spores.
+  Stage 1 costs time, attention, and pack space rather than Hit Points: heavy layers against cold,
+  loose cover against heat, changed at every boundary the party crosses.
+</Note>
+
+Its remedy and its procedure:
+
+- **Remedy.** An oil pressed from ashcap growth, worked into the skin over several
+  hours.
+- **Procedure — immersion.** The patient is submerged in fresh water for 8 hours,
+  breathing through a reed, tended by someone who makes a DC 16 Wisdom (Medicine)
+  check. **Success:** The disease ends and the patient gains 3 Exhaustion levels.
+  **Failure:** The disease is unchanged and the patient gains 3 Exhaustion level.
+
+### Ankylosis
+
+The Lazaret files the reredos disease as Ankylosis; common folk call it the settling.
+The joints fuse, the skin plates over, and the victim slows toward a stop. It is the
+only disease in the brood that offers the sufferer something in exchange:
+
+| Stage | Effect                                                                                                                                    |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | The creature's Speed decreases by 5 feet, and it has Resistance to Piercing damage.                                                       |
+| 2     | The creature's Speed decreases by 10 feet, it has Disadvantage on Dexterity saving throws, and its Resistance extends to Slashing damage. |
+| 3     | The creature's Speed decreases by 15 feet, and its Armor Class increases by 2.                                                            |
+| 4     | The creature's Speed is 0 and it can no longer act. It does not die. Over 1d4 days it hardens and stands as a Buttress.                   |
+
+<Note type="design note">
+  The trade is meant to be visible and real: a character at stage 3 has Resistance to two damage
+  types, +2 Armor Class, and 15 feet less Speed, and stage 4 is not a worse version of stage 3 — it
+  is a different outcome, arriving the next time the character reaches 6 Spore Load. The disease
+  never grants Resistance to Bludgeoning, because the fungus does not have one either: a body
+  plating over like masonry inherits masonry's weakness.
+</Note>
+
+Its remedy and its procedure:
+
+- **Remedy.** A draught ground from reredos growth, taken over 3 days.
+- **Procedure — manipulation.** The fused joints are broken and reset by hand over an
+  hour, with a DC 16 Wisdom (Medicine) check. **Success:** The disease ends and the
+  patient takes 13 (3d8) Bludgeoning damage. **Failure:** The disease is unchanged and
+  the patient takes 27 (6d8) Bludgeoning damage. **Success or Failure** the Bludgeoning damage ignores resistances gained by the disease.
+
+### Metaplasia
+
+The Lazaret files the orcshroom disease as Metaplasia; common folk call it the greying.
+Where the other three lines take a place and wait for people to pass through it, this
+one takes the people — not eaten and not killed, but converted, a little at a time,
+into a member of the tribe:
+
+| Stage | Effect                                                                                                                                                                                                                                                                             |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | The fungus eats first. The creature needs twice as much food each day; on any day it goes without the full amount, it gains 1 Exhaustion level.                                                                                                                                    |
+| 2     | The creature is drawn toward the direction of the colony that infected it. At the end of each Long Rest it makes a DC 12 Wisdom saving throw; on a failure, it can't willingly increase its distance from that colony until it finishes another Long Rest with a successful check. |
+| 3     | Gray shows plainly, and the creature's breath carries the colony. It gains the Sporing trait (5 feet, DC 11), and orcshroom creatures don't attack it unless it or its allies attack them first.                                                                                   |
+| 4     | The creature does not die and knows the exact location of the colony that infected it. Over 1d4 days the change completes, and it stands as an Orcshroom, a member of the tribe, under the Game Master's control.                                                                  |
+
+<Note type="design note">
+  Stage 3 puts the victim on both sides at once: still themselves, still fighting, and a hazard to
+  stand beside, while the tribe has stopped treating them as prey. Stage 4 is the only terminal
+  stage in the brood its victim walks away from. A tribe grows two ways — whelps are born colonized,
+  and Metaplasia takes everyone else. The [Spore-Struck](#c-spore-struck) is the swifter route, a
+  settled driftling rather than this disease, and its Not Yet Gone trait belongs to that route alone
+  — an unfinished growth is still a guest the body can be made to reject, which is what that Lesser
+  Restoration spell does (see [Stage 4](/brood-and-bloom/chapter-1/#stage-4)). Metaplasia follows
+  the rules above at every stage.
+</Note>
+
+Its remedy and its procedure:
+
+- **Remedy.** A bitter mash rendered from the gray shelving of the tribe's dead, eaten
+  over a day.
+- **Procedure — starvation.** The fungus eats what the host eats, so the host stops
+  eating: a strict fast of 3 days, tended by someone who makes a DC 16 Wisdom
+  (Medicine) check at its end. **Success:** The disease ends and the patient gains 3
+  Exhaustion levels. **Failure:** The disease is unchanged and the patient gains 3
+  Exhaustion level and takes 13 (3d8) Percing damage, as the fungus eats the creature's flesh.
+
+## Harvesting
+
+Each line's remedy is rendered from its own growth, so treating a Sporophore disease
+means cutting a piece off the thing that caused it. For most of the brood this needs no
+roll: a fruiting body, a crust, a rind, or a colonized limb is solid matter, and taking
+a usable portion is a minute's work with any blade. Two conditions constrain it
+instead — the creature has to be dead, and the piece has to be undamaged. That rules
+out fire, and fire is otherwise the most efficient way to deal with a colony.
+
+The [Rotgill Fleece](#c-rotgill-fleece) is the exception, and its stat block carries
+the rule: a fleece is loose filament, and cutting one cleanly is a check. Metaplasia is
+the other odd case — its line colonizes people, so the remedy comes from the gray
+shelving of the tribe's dead, and a party that wants some has to make some first.
+
+## The creatures
+
+### The two every line begins with
+
+These belong to the colony that made them and to no line at all. Every Sporophore line
+starts here and diverges
+according to what the spore lands on:
+
+<Creature name="Driftling">
+  **Running it.** Taking is the only line in the block that matters, and it resolves off the table
+  over a day: a driftling on a sleeve is a Lesser Restoration spell if anyone notices and a stage 2
+  creature if nobody does. Windborne is also how the brood has always traveled — a Gust of Wind
+  spell clears the chamber and seeds the next valley, and nothing in the encounter says so.
+</Creature>
+
+<Creature name="Spore Veil">
+  **Running it.** The veil has no attack roll and cannot be blocked, only outrun or moved: a
+  creature in its space saves against Engulf and a creature within 10 feet saves against Sporing, in
+  the same round. At gale strength it can neither hold a space nor use Engulf, so moving air takes
+  it out of a fight — and delivers it somewhere else. A sealed chamber is where it is most
+  dangerous, and the only place it can be finished.
+</Creature>
+
+### The orcshroom line
+
+Cave orcs whose tribe was colonized generations ago and has never known otherwise.
+They keep their language, their weapons, and their arguments, and none of them can say
+when the change happened.
+
+**The tribe** is what the line's stat blocks coordinate: its orcshrooms, its
+spore-struck, its blightboars, and the rootfather at the center of it. The rest of a
+colony cannot be given orders — mats, crusts, rinds, and fruiting bodies carry only the
+reduced Mycelial Chorus, and a warchief has no more to say to a reredos rind than to a
+wall. Kinship still runs colony-wide; command runs no further than the tribe.
+
+<Creature name="Orcshroom Whelp">
+  **Running it.** Whelps deliver Spore Load rather than damage: a 5-foot Sporing radius fills the
+  gaps larger creatures cannot reach. Pack Tactics makes them work in groups; a single whelp is a
+  rounding error.
+</Creature>
+
+<Creature name="Spore-Struck">
+  **Running it.** Not Yet Gone is the whole creature: everything else about it is ordinary, so the
+  encounter turns on whether a second-level slot is spent on something that is currently attacking.
+  It has no Mycelial Chorus — only the pull — and one that gets away walks toward the tribe for as
+  long as it takes, which is how a village loses people one at a time without ever seeing an
+  orcshroom.
+</Creature>
+
+<Creature name="Orcshroom Stalker">
+  **Running it.** Spoor-Reader ends a party's ability to disengage: anything carrying Spore Load is
+  tracked for a mile, through stone and in the dark, and Spore Load is not shed inside the colony's
+  ground. The stalker is built to appear first, seen leaving, before the party knows what Spore Load
+  is for.
+</Creature>
+
+<Creature name="Orcshroom">
+  **Running it.** Burst Spores is a Cone, and Aggressive exists to put two or three characters
+  inside it on the first round; a warband opens by closing distance and firing cones into the same
+  space. Sporing runs whether the orcshroom acts or not — a wounded one being ignored still costs a
+  save each round.
+</Creature>
+
+<Creature name="Blightboar">
+  **Running it.** Spore Trail turns the animal into terrain: it crosses the room, and the warband
+  pushes the party back into what it left. Relentless buys one guaranteed extra round, which is why
+  a tribe drives a blightboar at the most dangerous thing on the field rather than the nearest.
+</Creature>
+
+<Creature name="Orcshroom Sporespeaker">
+  **Running it.** Draw from the Sown converts the party's Spore Load into the colony's healing,
+  which changes the target order the moment it is understood. Voice of the Colony uncouples the
+  warband from Mycelial Chorus's positioning. Entangle and Spike Growth both take Concentration, and
+  both need ground that grows something — worked stone disables them, exactly as it does the
+  chieftain's Grasping Hyphae.
+</Creature>
+
+<Creature name="Orcshroom Warchief">
+  **Running it.** Drive Them On converts the warchief's Bonus Action into another creature's
+  movement and attack every round, so the biggest thing in the room is rarely the most productive
+  target. The warchief stays within 60 feet of its warband, because Mycelial Chorus's save Advantage
+  ends the moment it is alone.
+</Creature>
+
+<Creature name="Orcshroom Chieftain">
+  **Running it.** Reckless hands out Advantage, and Low Blow collects on the misses that follow it.
+  Grasping Hyphae functions only on soil, timber, or fungal growth — on worked stone the chieftain
+  loses its ground control entirely, which is a real reason to fight the tribe in a hall rather than
+  in its own tunnels.
+</Creature>
+
+<Creature name="Orcshroom Bulwark">
+  **Running it.** The bulwark is the one creature in the line that wants to be approached: Living
+  Wall and a 15-foot Sporing radius price the approach, and Brace covers whatever stands behind it.
+  At a Speed of 20 feet it cannot fix a bad angle — where it is placed at the start of the fight is
+  where it fights.
+</Creature>
+
+<Creature name="Rootfather">
+  **Running it.** The fight is about the ring between 30 and 60 feet — outside his lash and his
+  Sporing, inside Call the Tribe's approach corridor. Regrowth stops only for Fire and Radiant
+  damage, and Sun-Withered means digging him out into daylight works. Heart of the Colony is why he
+  is the target rather than the chieftain: his death turns the tribe's save Advantage within a mile
+  into a day of Disadvantage on everything.
+</Creature>
+
+### The rotgill line
+
+The rotgill line holds flooded and standing-water ground, and its disease is the one
+the brood is infamous for:
+
+<Creature name="Rotgill Fleece">
+  **Running it.** The 10 feet around a fleece are dangerous whether or not it acts, and Gill-Burst
+  contaminates the ground a party wants to stand on next. False Appearance means a flooded cellar
+  with three fleeces in it reads as a flooded cellar. Sessile is why parties come looking for one on
+  purpose — the Mortification remedy is rendered from its gills — and a botched cut contaminates the
+  cutter and regrows the fleece in 1d4 days.
+</Creature>
+
+<Creature name="Rotgill Bell">
+  **Running it.** Struck is a trap for a party that has learned the brood's weaknesses and reached
+  for the wrong one: Thunder damage refills Toll. The contaminated area is the creature's output — a
+  bell behind a chokepoint denies 30 feet of floor every other round, and walks that denial forward
+  at 10 feet.
+</Creature>
+
+<Creature name="Drowned Chorus">
+  **Running it.** The chorus is what stage 4 of Mortification produces, so its strongest version is
+  one the party caused, and Still Sounds Like Them is the mechanical edge of that. Drowning Song
+  silences speech and Verbal components — the correct weapon for a disease of the lungs — and Many
+  Voices works before initiative: a familiar voice calling for help from somewhere out of sight.
+</Creature>
+
+<Creature name="Miasm">
+  **Running it.** Bloomfall grants 3 Spore Load on a failed save — half the distance to
+  Mortification in one round — and Choking Presence is where the brood's accumulated Spore Load is
+  finally punished directly. A 30-foot Sporing radius and 10-foot reach leave no safe melee range.
+  Amorphous means no door holds it; Sun-Withered means a door that leads outside does.
+</Creature>
+
+### The ashcap line
+
+The ashcap line holds burned ground, and it is quiet until something touches it:
+
+<Creature name="Ashcap Crust">
+  **Running it.** The crust is inert until something comes within 5 feet, and its cloud reaches
+  three times that far, so the character who triggers it is rarely the only one who pays. A room
+  floored with crusts is safe to stand still in and expensive to move through — it prices movement,
+  not presence, which is at its sharpest under a fight the party has to move through.
+</Creature>
+
+<Creature name="Ashcap Censer">
+  **Running it.** Settling Ash makes the kill itself an event: dropping a censer while standing
+  under it costs the save anyway, which rewards range and punishes rushing a stationary target. The
+  censer climbs, and it is built to hang above a fight — a beam, a stairwell, the doorway the party
+  has to come through — rather than stand in one.
+</Creature>
+
+<Creature name="Cinderwalk">
+  **Running it.** Dry Rot is why three weak attacks beat two strong ones: any hit shuts off a
+  target's healing for a round, which removes a healer from the fight without touching them. The
+  cinderwalk is the deliberate opposite of the Drowned Chorus — no voice, never heard coming, and it
+  stops the people who mend rather than the people who speak.
+</Creature>
+
+<Creature name="Burnt Acre">
+  **Running it.** Fire-Sown is the creature's premise: fire is how this line reproduces, so a plan
+  built on burning the colony out feeds it — at half rate, so a round spent on the mistake costs a
+  round, not the fight. Sun-Withered still works; the answer is opening the roof, not lighting the
+  floor. The disturbance clause matters most here: standing still on a burnt acre is genuinely safe,
+  and Ground Itself and Settle exist to make standing still impossible for long.
+</Creature>
+
+### The reredos line
+
+The reredos line wants buildings. It cannot be taken by the other three, and its
+disease is the one people volunteer for:
+
+<Creature name="Reredos Rind">
+  **Running it.** A rind reaches 10 feet and cannot move, so the whole creature is a decision about
+  whether to engage it at all: pass at 11 feet and nothing happens; hit it and Spall sheds into
+  whoever swung. Clearing three rinds off a cellar wall with melee costs four or five Spore Load
+  without one attack that felt like an attack, which is the line's economics in miniature.
+</Creature>
+
+<Creature name="Reredos Corbel">
+  **Running it.** Load-Bearing makes killing a corbel worse than leaving it alive for a round, and
+  lets the line change the floor without anything moving. The corbel climbs and is usually above the
+  fight — on a wall the party has to pass under rather than in the room with them.
+</Creature>
+
+<Creature name="Buttress">
+  **Running it.** Spall grants Spore Load on a successful save — Challenge Rating 8 is where the
+  brood's success rule first lands on a party — so every melee round costs contamination however the
+  dice fall, and Armor Class 18 with Resistance to Piercing and Slashing makes for many melee
+  rounds. Immovable at a Speed of 20 feet means it fights where it stands: a doorway, a stair head,
+  a bridge.
+</Creature>
+
+<Creature name="Nave">
+  **Running it.** The Building Itself makes the structure's interior the creature's body — which is
+  why its Sporing and Shed reach 30 feet: contact contamination, delivered by a wall the target is
+  already inside. Close and Shift carry the encounter: the nave is not trying to kill the party
+  quickly, it is making sure that leaving takes longer than they have. The windows still letting
+  light in is the fight's solution — Sun-Withered is written into the architecture.
+</Creature>

@@ -1,12 +1,12 @@
 ---
-title: 'Index: By Challenge Rating'
-label: 'Index: By CR'
-description: 'Every creature in Brood & Bloom listed by challenge rating, from CR 0 to CR 17.'
-order: 6
+title: 'Index: By Type'
+label: 'Index: By Type'
+description: 'Every creature in Brood & Bloom listed by creature type — aberrations, plants, monstrosities, and humanoids.'
+order: 9
 eyebrow: 'Appendix B'
 ---
 
 import CreatureIndex from '../../components/CreatureIndex.astro';
 import { BROOD_AND_BLOOM } from '../../data/books.ts';
 
-<CreatureIndex by="cr" book={BROOD_AND_BLOOM} />
+<CreatureIndex by="type" book={BROOD_AND_BLOOM} />
