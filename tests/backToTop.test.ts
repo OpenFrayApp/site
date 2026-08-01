@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 OpenFray contributors
 // @vitest-environment node
-// Node, not jsdom: this reads the layout and the stylesheet as text. The behaviour
+// Node, not jsdom: this reads the layout and the stylesheet as text. The behavior
 // itself is exercised in a real browser, where `data-show` and the scroll threshold
 // can actually run.
 

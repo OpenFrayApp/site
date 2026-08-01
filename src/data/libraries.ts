@@ -14,7 +14,7 @@ export interface Library {
 /**
  * The libraries the console ships that we only reference — the SRD sets and the Kobold
  * Press books. Labels match the console's own Settings panel exactly, so a reader
- * ticking them there recognises what they read here.
+ * ticking them there recognizes what they read here.
  */
 export const shippedLibraries: string[] = [
   'Basic Rules 2024 (SRD 5.2.1)',

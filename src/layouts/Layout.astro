@@ -338,7 +338,7 @@ const navLink =
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           e.preventDefault();
           window.scrollTo({ top: 0, behavior: 'smooth' });
-          // Keep the anchor's focus behaviour: the header is the landmark to land on.
+          // Keep the anchor's focus behavior: the header is the landmark to land on.
           document.getElementById('top').setAttribute('tabindex', '-1');
           document.getElementById('top').focus({ preventScroll: true });
         });

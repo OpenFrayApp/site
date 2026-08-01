@@ -177,10 +177,10 @@ const schema = [
             <ul class="m-0 list-none border-l border-border p-0">
               {navHeadings.map((h) => (
                 <li class="m-0">
-                  {/* The current entry's colour is a utility, not a stylesheet rule:
+                  {/* The current entry's color is a utility, not a stylesheet rule:
                       this site wraps its own CSS in @layer components, and utilities
                       beat that layer whatever the specificity — so `text-muted` would
-                      win over a `.post-toc a[aria-current]` colour every time. Same
+                      win over a `.post-toc a[aria-current]` color every time. Same
                       `aria-[…]` variant BookLayout uses for the chapter it is on. */}
                   <a
                     class={`block py-1.5 pr-2 leading-snug text-muted no-underline transition-[color,box-shadow] hover:text-accent aria-[current=true]:font-semibold aria-[current=true]:text-accent ${

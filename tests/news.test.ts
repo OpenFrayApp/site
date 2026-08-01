@@ -241,10 +241,10 @@ describe('the section is reachable', () => {
     expect(css).toContain("aria-current='true'");
   });
 
-  it('colours the current entry with a utility, because the stylesheet would lose', () => {
+  it('colors the current entry with a utility, because the stylesheet would lose', () => {
     // Site CSS lives in @layer components and utilities beat that layer whatever the
-    // specificity, so a colour in news.css loses to the `text-muted` on the same anchor.
-    // This cost the accent its colour once already — the bar showed, the text did not.
+    // specificity, so a color in news.css loses to the `text-muted` on the same anchor.
+    // This cost the accent its color once already — the bar showed, the text did not.
     expect(newsLayout).toContain('aria-[current=true]:text-accent');
     expect(css).not.toMatch(/a\[aria-current='true'\]\s*\{[^}]*color:/);
   });
