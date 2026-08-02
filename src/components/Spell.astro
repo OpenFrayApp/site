@@ -1,19 +1,21 @@
 ---
 import { renderMarkdown } from '../data/markdown.ts';
 import { spell as broodAndBloom } from '../data/broodAndBloomSpells.ts';
+import { spell as strongWaters } from '../data/strongWatersSpells.ts';
 import { entrySlug } from '../data/statblock.ts';
 
-// A spell entry, rendered from the same compendium JSON the console fetches. Brood &
-// Bloom is the only library that ships spells, so there is no `book` prop yet; a second
-// one becomes an entry in a lookup map here, the way Creature.astro does it.
+// A spell entry, rendered from the same compendium JSON the console fetches. Two books
+// ship spells now, so the lookup follows a `book` prop, the way Creature.astro does it.
 
 interface Props {
   /** Compendium name, e.g. "Bloom Interdict". */
   name: string;
+  /** Which book's compendium holds the spell. */
+  book?: 'brood-and-bloom' | 'strong-waters';
 }
 
-const { name } = Astro.props;
-const s = broodAndBloom(name);
+const { name, book = 'brood-and-bloom' } = Astro.props;
+const s = (book === 'strong-waters' ? strongWaters : broodAndBloom)(name);
 
 // The 2024 header line: "Divination Cantrip", "Level 2 Abjuration".
 const typeLine = s.level === 0 ? `${s.school} Cantrip` : `Level ${s.level} ${s.school}`;
