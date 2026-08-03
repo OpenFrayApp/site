@@ -25,5 +25,5 @@ export const BROOD_AND_BLOOM: Book = {
 export const STRONG_WATERS: Book = {
   collection: 'strong-waters',
   base: '/strong-waters',
-  name: 'Strong Waters',
+  name: 'On Strong Waters and Potent Simples',
 };
