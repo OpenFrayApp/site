@@ -10,6 +10,7 @@ import castSpellHero from '../assets/screenshots/cast-spell-hero.png';
 import compendiumHero from '../assets/screenshots/compendium-hero.png';
 import consoleHero from '../assets/screenshots/console-hero.png';
 import groupSaveHero from '../assets/screenshots/group-save-hero.png';
+import playerViewHero from '../assets/screenshots/player-view-hero.png';
 
 const importerChrome =
   'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
@@ -64,6 +65,13 @@ const pairs = [
   },
 ];
 
+// The same fight again, as the table receives it — shot over the real broadcast, so
+// what it shows is what a player's phone actually gets.
+const playerViewShot = {
+  img: playerViewHero,
+  alt: 'The shared player view of the same fight: the party listed with exact hit points and armor class, the foes shown only as Healthy or Hurt, the game log beside them, and a footer noting that nothing is saved.',
+};
+
 const compendiumShot = {
   img: compendiumHero,
   alt: 'The compendium open on the Creatures tab: a searchable list of 853 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
@@ -71,7 +79,7 @@ const compendiumShot = {
 
 // Everything the lightbox can open, in the order its arrows step through. The index
 // into this array is what each figure's button carries.
-const zoomable = [consoleShot, ...pairs, compendiumShot];
+const zoomable = [consoleShot, ...pairs, playerViewShot, compendiumShot];
 
 // The card shared by the three panels beside the compendium shot.
 const CARD = 'rounded-xl border border-border bg-panel px-5 py-4.5';
@@ -271,6 +279,84 @@ const rest = [
         }
       </div>
     </div>
+
+    {
+      /* The same fight one more time, now from the table's side of the screen. The shot
+        leads like the compendium section's, with the choices it proves listed beside it. */
+    }
+    <section class={`player-view mt-20 ${TEXT_COL} text-left`} aria-labelledby="player-view-title">
+      <p class={`${EYEBROW} mb-4`}>For your players</p>
+      <h2
+        id="player-view-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        Share the fight, keep your secrets
+      </h2>
+
+      <div class="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
+        <figure class="m-0">
+          <button
+            type="button"
+            class={`shot-thumb ${zoomTrigger} rounded-xl`}
+            data-index={zoomable.indexOf(playerViewShot)}
+            aria-label={`Enlarge screenshot: ${playerViewShot.alt}`}
+          >
+            <Picture
+              src={playerViewShot.img}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[640, 1280]}
+              sizes="(max-width: 1024px) 94vw, 32rem"
+              alt={playerViewShot.alt}
+              loading="lazy"
+              class="block h-auto w-full"
+            />
+            <span class={zoomOverlay} aria-hidden="true">
+              <span class={zoomBadge}>
+                <ZoomIcon />
+              </span>
+            </span>
+          </button>
+          <figcaption class="mt-5 text-base leading-relaxed text-muted">
+            The same fight as above, the way your table sees it: their own characters in full, your
+            creatures giving away only what you allow.
+          </figcaption>
+        </figure>
+
+        <div class="grid gap-4">
+          <div class={CARD}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              A live view on their own phones
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              Share a link and the turn order, conditions, and game log follow the fight on your
+              players' screens as you run it. It's read-only — there is nothing there to press.
+            </p>
+          </div>
+
+          <div class={CARD}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              You choose what they see
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              A creature's hit points in words — Bloodied, not a number — or exact, or hidden. Armor
+              class held back, rolls with the dice removed, and any creature kept off their screens
+              until you reveal it.
+            </p>
+          </div>
+
+          <div class={CARD}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Nothing stored, nothing to set up
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              It works without an account. The board goes straight to their screens and is kept
+              nowhere — stop sharing and it's gone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class={`libraries mt-20 ${TEXT_COL} text-left`} aria-labelledby="libraries-title">
       <p class={`${EYEBROW} mb-4`}>Your books, your monsters</p>
