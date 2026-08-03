@@ -294,39 +294,10 @@ const rest = [
       </h2>
 
       <div class="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-        <figure class="m-0">
-          <button
-            type="button"
-            class={`shot-thumb ${zoomTrigger} rounded-xl`}
-            data-index={zoomable.indexOf(playerViewShot)}
-            aria-label={`Enlarge screenshot: ${playerViewShot.alt}`}
-          >
-            <Picture
-              src={playerViewShot.img}
-              formats={['avif', 'webp']}
-              fallbackFormat="png"
-              widths={[640, 1280]}
-              sizes="(max-width: 1024px) 94vw, 32rem"
-              alt={playerViewShot.alt}
-              loading="lazy"
-              class="block h-auto w-full"
-            />
-            <span class={zoomOverlay} aria-hidden="true">
-              <span class={zoomBadge}>
-                <ZoomIcon />
-              </span>
-            </span>
-          </button>
-          <figcaption class="mt-5 text-base leading-relaxed text-muted">
-            The same fight as above, the way your table sees it: their own characters in full, your
-            creatures giving away only what you allow.
-          </figcaption>
-        </figure>
-
         <div class="grid gap-4">
           <div class={CARD}>
             <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
-              A live view on their own phones
+              A live view on their own devices
             </h3>
             <p class="m-0 text-sm leading-normal text-muted">
               Share a link and the turn order, conditions, and game log follow the fight on your
@@ -355,6 +326,35 @@ const rest = [
             </p>
           </div>
         </div>
+
+        <figure class="m-0">
+          <button
+            type="button"
+            class={`shot-thumb ${zoomTrigger} rounded-xl`}
+            data-index={zoomable.indexOf(playerViewShot)}
+            aria-label={`Enlarge screenshot: ${playerViewShot.alt}`}
+          >
+            <Picture
+              src={playerViewShot.img}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[640, 1280]}
+              sizes="(max-width: 1024px) 94vw, 32rem"
+              alt={playerViewShot.alt}
+              loading="lazy"
+              class="block h-auto w-full"
+            />
+            <span class={zoomOverlay} aria-hidden="true">
+              <span class={zoomBadge}>
+                <ZoomIcon />
+              </span>
+            </span>
+          </button>
+          <figcaption class="mt-5 text-base leading-relaxed text-muted">
+            The same fight as above, the way your table sees it: their own characters in full, your
+            creatures giving away only what you allow.
+          </figcaption>
+        </figure>
       </div>
     </section>
 
