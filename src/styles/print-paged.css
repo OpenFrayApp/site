@@ -116,6 +116,10 @@ body.print-book::after {
   letter-spacing: -0.025em;
   color: var(--text);
 }
+/* A title of more than a couple of words won't hold the measure at 46pt. */
+.cover-title.is-long {
+  font-size: 34pt;
+}
 .cover-subtitle {
   margin: 0 0 7mm;
   font-size: 15pt;
@@ -336,6 +340,31 @@ tr {
 }
 .chapter-body .note > :last-child {
   margin-bottom: 0;
+}
+
+/* ---------- the author's voice ---------- */
+/* Strong Waters sets the apothecary's own hand as a tinted quotation. On paper the tint
+   only prints a grey panel, so the accent edge carries it alone — the same reason the
+   notes and the stat blocks drop their fill. `!important` because the component styles
+   itself with utilities, which outrank this stylesheet.
+   Deliberately no `break-inside: avoid`: some passages run most of a column, and an
+   unbreakable block that size strands the rest of the page. */
+.chapter-body .voice {
+  margin: 0.7rem 0 !important;
+}
+.chapter-body .voice blockquote {
+  padding: 0.1rem 0 0.1rem 5mm !important;
+  border-radius: 0 !important;
+  background: none !important;
+}
+/* The oversized opening quotation mark is screen furniture: at print scale it collides
+   with the first line and the left rule already marks the quotation. */
+.chapter-body .voice blockquote > [aria-hidden='true'] {
+  display: none;
+}
+.chapter-body .voice figcaption {
+  margin-top: 0.15rem !important;
+  font-size: 0.85rem !important;
 }
 
 /* ---------- creature indexes ---------- */

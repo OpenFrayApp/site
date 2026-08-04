@@ -1,0 +1,76 @@
+---
+// The print edition, LOCAL ONLY — assemble-site.mjs drops this route from dist/ and the
+// sitemap filter hides it. Run `npm run dev -w site`, open /strong-waters/print/, print
+// to PDF. Pagination takes about a minute and the page is blank while it runs.
+//
+// It is a page rather than a generator so the book renders through the site's own
+// components and stylesheet — see the Waking Garden's print.astro, which this mirrors.
+// This book carries no creatures, so its cross-references resolve to spells.
+import { getCollection, render } from 'astro:content';
+import { spells } from '../../data/strongWatersSpells.ts';
+import '../../styles/global.css';
+import '../../styles/book.css';
+
+const chapters = (await getCollection('strong-waters')).sort((a, b) => a.data.order - b.data.order);
+const parts = await Promise.all(
+  chapters.map(async (c) => ({ ...c, Content: (await render(c)).Content })),
+);
+---
+
+<html lang="en" class="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>On Strong Waters and Potent Simples — print edition</title>
+  </head>
+  <body class="print-book">
+    <section class="cover">
+      <p class="cover-kicker">OpenFray · Compendium</p>
+      <h1 class="cover-title is-long">On Strong Waters<br />and Potent Simples</h1>
+      <p class="cover-subtitle">An apothecary’s catalog, compatible with 5.5e and 5e.</p>
+      <hr class="cover-rule" />
+      <p class="cover-lede">
+        Being the collected notes of Hesper Aldwine, apothecary. A working book, not a grimoire:
+        what a plant is, where it grows, what heat does to it, what it does to a body, and what to
+        do when it has done too much. The drink of the world from small beer to the things that come
+        off a still, the herbs that steady a hand or take it, and the rules for the three counts
+        every table ends up improvising.
+      </p>
+      <p class="cover-meta">
+        <strong>{spells.length} spells</strong> · Intoxication, craving, and overdose · 8 chapters and
+        3 appendices<br />
+        Built for OpenFray, a free combat console for Game Masters — openfray.app
+      </p>
+      <p class="cover-legal">
+        Compatible with 5.5e (2024) and 5e (2014). Not affiliated with, endorsed, sponsored, or
+        specifically approved by Wizards of the Coast LLC.
+      </p>
+    </section>
+
+    {
+      parts.map((part) => (
+        <section class="chapter">
+          <header class="chapter-head">
+            {part.data.eyebrow && <p class="chapter-eyebrow">{part.data.eyebrow}</p>}
+            <h1 class="chapter-title">{part.data.title}</h1>
+          </header>
+          <div class="book-body chapter-body">
+            <part.Content />
+          </div>
+        </section>
+      ))
+    }
+
+    <script>
+      import { paginateBook } from '../../lib/paginate.ts';
+
+      // No wording map: this book's one "library" is the console's content toggle, which
+      // is a library in print as much as on the web.
+      paginateBook({
+        name: 'On Strong Waters and Potent Simples',
+        expectedTerms: 0,
+        terms: [],
+      });
+    </script>
+  </body>
+</html>
