@@ -42,4 +42,12 @@ export const libraries: Library[] = [
     edition: '5.5e (2024)',
     available: true,
   },
+  {
+    name: 'On Strong Waters and Potent Simples',
+    href: '/strong-waters/',
+    blurb:
+      'An apothecary’s catalog of the drink of the world and the herbs that change a body, with the rules for intoxication, craving, and overdose.',
+    edition: '5.5e (2024)',
+    available: true,
+  },
 ];

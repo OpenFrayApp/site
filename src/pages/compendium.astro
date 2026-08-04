@@ -3,10 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import { libraries } from '../data/libraries.ts';
 import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
 
-const title = 'Compendium — OpenFray’s own DnD 5e creature libraries';
+const title = 'Compendium — OpenFray’s own DnD 5e libraries';
 const description =
-  'The creature libraries OpenFray writes and publishes in full, free to read: original ' +
-  'Dungeons and Dragons 5e stat blocks you can use at the table or in the console.';
+  'The libraries OpenFray writes and publishes in full, free to read: original ' +
+  'Dungeons and Dragons 5e stat blocks, spells, and rules you can use at the table or in ' +
+  'the console.';
 
 const schema = [
   {
@@ -45,13 +46,14 @@ const published = libraries.filter((library) => library.available);
     <h1>Compendium</h1>
 
     <p class="lead text-[1.05rem] leading-relaxed text-text">
-      The creature libraries OpenFray writes itself, published here in full and free to read.
+      The libraries OpenFray writes itself, published here in full and free to read.
     </p>
 
     <p>
       Each one is built into <a href="/console/">the console</a> as well — turn it on in{' '}
-      <strong>Settings</strong> and its creatures appear in <strong>Add creature</strong>, ready to
-      roll. The console also ships the official Basic Rules and the Tome of Beasts books.
+      <strong>Settings</strong> and what it adds shows up where you need it: creatures in{' '}
+      <strong>Add creature</strong>, spells in <strong>Cast spell</strong>. The console also ships
+      the official Basic Rules and the Tome of Beasts books.
     </p>
 
     <ul
