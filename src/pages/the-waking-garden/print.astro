@@ -43,7 +43,7 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         Built for OpenFray, a free combat console for Game Masters — openfray.app
       </p>
       <p class="cover-legal">
-        Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
+        Compatible with 5.5e (2024) and 5e (2014). Not affiliated with, endorsed, sponsored, or
         specifically approved by Wizards of the Coast LLC.
       </p>
     </section>
@@ -63,111 +63,9 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
     }
 
     <script>
-      import {
-        bindHeadingsToNext,
-        flattenStatBlockFolds,
-        groupStatBlockHeads,
-        insertPageRefPlaceholders,
-        normalizeColumnTops,
-        replaceLibraryTerms,
-        resolvePageRefs,
-      } from '../../lib/print.ts';
+      import { paginateBook } from '../../lib/paginate.ts';
 
-      // The count is asserted so a copy edit that changes the web's "library" wording
-      // reports rather than silently rewriting a sentence.
-      const EXPECTED_LIBRARY_TERMS = 5;
-      const hits = replaceLibraryTerms(document.body);
-      if (hits !== EXPECTED_LIBRARY_TERMS) {
-        console.warn(
-          `Print: replaced ${hits} "library" terms, expected ${EXPECTED_LIBRARY_TERMS}. ` +
-            'Check the result, then update EXPECTED_LIBRARY_TERMS in print.astro.',
-        );
-      }
-
-      flattenStatBlockFolds(document);
-      groupStatBlockHeads(document);
-      bindHeadingsToNext(document);
-      const refCount = insertPageRefPlaceholders(document);
-
-      try {
-        // Only print-paged.css is handed over. Given no stylesheets Paged.js strips and
-        // parses every one with css-tree, which cannot read Tailwind v4's
-        // `@media (width >= 40rem)` and throws on the raw prelude — leaving a blank page.
-        // Its polyfill build also sits behind an export condition Vite will not resolve,
-        // hence driving Previewer directly.
-        const [{ Previewer }, { default: pagedCss }] = await Promise.all([
-          import('pagedjs'),
-          import('../../styles/print-paged.css?raw'),
-          // Chunking measures text, so it has to wait for the serif. Without this the
-          // book paginates against the fallback face and the result varies run to run —
-          // 65 or 66 pages, and the odd cross-reference resolving against a stale page.
-          document.fonts.ready,
-        ]);
-        const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': pagedCss }]);
-
-        // Drop the top margin off whatever opens a page or a column. Paged.js keeps it on
-        // the first column but collapses it in a continuation, so the two columns start
-        // at different heights. It cannot be a `:first-child` rule — Paged.js rebuilds
-        // the ancestor chain per page, so depth and sibling order vary — but the geometry
-        // is reliable: nothing above an element means its gap is exactly its own margin.
-        for (const content of document.querySelectorAll('.pagedjs_page_content')) {
-          const box = content.getBoundingClientRect();
-          const middle = box.left + box.width / 2;
-          const columns = { left: [], right: [] };
-
-          for (const block of content.querySelectorAll('h1, h2, h3, h4, p, ul, ol, dl, table')) {
-            const rect = block.getBoundingClientRect();
-            // A spanning element is not in either column and starts its own flow.
-            if (!rect.height || rect.width > box.width * 0.8) continue;
-            const margin = parseFloat(getComputedStyle(block).marginTop) || 0;
-            columns[rect.left < middle ? 'left' : 'right'].push({
-              block,
-              margin,
-              // Margin-box top: equal for everything that starts a column.
-              edge: rect.top - margin,
-            });
-          }
-
-          for (const items of Object.values(columns)) {
-            if (!items.length) continue;
-            const start = Math.min(...items.map((i) => i.edge));
-            for (const item of items) {
-              if (item.margin && item.edge - start <= 1) item.block.style.marginTop = '0';
-            }
-          }
-        }
-
-        // Resolve against the rendered pages: Paged.js lays out clones and keeps the
-        // source in a <template>, so every creature id exists twice.
-        const area = document.querySelector('.pagedjs_pages');
-        const pageOf = new Map();
-        area.querySelectorAll('.pagedjs_page').forEach((page, i) => pageOf.set(page, i + 1));
-
-        let resolved = 0;
-        for (const ref of area.querySelectorAll('.pageref')) {
-          const href = ref.previousElementSibling?.getAttribute('href');
-          const slug = href?.slice(href.indexOf('#') + 1);
-          const target = slug && area.querySelector(`[id="${CSS.escape(slug)}"]`);
-          const page = target && pageOf.get(target.closest('.pagedjs_page'));
-          if (page) {
-            ref.textContent = ` (p. ${page})`;
-            resolved += 1;
-          } else {
-            ref.remove();
-          }
-        }
-        if (resolved < refCount) {
-          console.warn(`Print: ${refCount - resolved} creature reference(s) found no target.`);
-        }
-
-        console.info(`Paged.js: ${flow.total} pages, ${resolved}/${refCount} refs resolved.`);
-        document.body.dataset.pages = String(flow.total);
-      } catch (error) {
-        // preview() empties the body before chunking, so a failure otherwise leaves a
-        // blank page and no clue why.
-        console.error('Paged.js failed to paginate:', error);
-        document.body.dataset.pages = 'failed';
-      }
+      paginateBook({ name: 'The Waking Garden', expectedTerms: 5 });
     </script>
   </body>
 </html>

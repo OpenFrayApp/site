@@ -46,7 +46,7 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
         Built for OpenFray, a free combat console for Game Masters — openfray.app
       </p>
       <p class="cover-legal">
-        Compatible with 5e (2014) and 5.5e (2024). Not affiliated with, endorsed, sponsored, or
+        Compatible with 5.5e (2024) and 5e (2014). Not affiliated with, endorsed, sponsored, or
         specifically approved by Wizards of the Coast LLC.
       </p>
     </section>
@@ -66,98 +66,9 @@ const range = `${formatCr(Math.min(...crs))}–${formatCr(Math.max(...crs))}`;
     }
 
     <script>
-      import {
-        bindHeadingsToNext,
-        flattenStatBlockFolds,
-        groupStatBlockHeads,
-        insertPageRefPlaceholders,
-        replaceLibraryTerms,
-        resolvePageRefs,
-      } from '../../lib/print.ts';
+      import { paginateBook } from '../../lib/paginate.ts';
 
-      // The count is asserted so a copy edit that changes the web's "library" wording
-      // reports rather than silently rewriting a sentence.
-      const EXPECTED_LIBRARY_TERMS = 23;
-      const hits = replaceLibraryTerms(document.body);
-      if (hits !== EXPECTED_LIBRARY_TERMS) {
-        console.warn(
-          `Print: replaced ${hits} "library" terms, expected ${EXPECTED_LIBRARY_TERMS}. ` +
-            'Check the result, then update EXPECTED_LIBRARY_TERMS in print.astro.',
-        );
-      }
-
-      flattenStatBlockFolds(document);
-      groupStatBlockHeads(document);
-      bindHeadingsToNext(document);
-      const refCount = insertPageRefPlaceholders(document);
-
-      try {
-        // Only print-paged.css is handed over — see the Waking Garden's print.astro for
-        // why. The running footer names the book, so the shared stylesheet's title is
-        // swapped before Paged.js reads it.
-        const [{ Previewer }, { default: pagedCss }] = await Promise.all([
-          import('pagedjs'),
-          import('../../styles/print-paged.css?raw'),
-          document.fonts.ready,
-        ]);
-        const bookCss = pagedCss.replace("'The Waking Garden'", "'Brood & Bloom'");
-        const flow = await new Previewer().preview(undefined, [{ 'print-paged.css': bookCss }]);
-
-        // Drop the top margin off whatever opens a page or a column — see the Waking
-        // Garden's print.astro for the geometry.
-        for (const content of document.querySelectorAll('.pagedjs_page_content')) {
-          const box = content.getBoundingClientRect();
-          const middle = box.left + box.width / 2;
-          const columns = { left: [], right: [] };
-
-          for (const block of content.querySelectorAll('h1, h2, h3, h4, p, ul, ol, dl, table')) {
-            const rect = block.getBoundingClientRect();
-            if (!rect.height || rect.width > box.width * 0.8) continue;
-            const margin = parseFloat(getComputedStyle(block).marginTop) || 0;
-            columns[rect.left < middle ? 'left' : 'right'].push({
-              block,
-              margin,
-              edge: rect.top - margin,
-            });
-          }
-
-          for (const items of Object.values(columns)) {
-            if (!items.length) continue;
-            const start = Math.min(...items.map((i) => i.edge));
-            for (const item of items) {
-              if (item.margin && item.edge - start <= 1) item.block.style.marginTop = '0';
-            }
-          }
-        }
-
-        // Resolve creature references against the rendered pages.
-        const area = document.querySelector('.pagedjs_pages');
-        const pageOf = new Map();
-        area.querySelectorAll('.pagedjs_page').forEach((page, i) => pageOf.set(page, i + 1));
-
-        let resolved = 0;
-        for (const ref of area.querySelectorAll('.pageref')) {
-          const href = ref.previousElementSibling?.getAttribute('href');
-          const slug = href?.slice(href.indexOf('#') + 1);
-          const target = slug && area.querySelector(`[id="${CSS.escape(slug)}"]`);
-          const page = target && pageOf.get(target.closest('.pagedjs_page'));
-          if (page) {
-            ref.textContent = ` (p. ${page})`;
-            resolved += 1;
-          } else {
-            ref.remove();
-          }
-        }
-        if (resolved < refCount) {
-          console.warn(`Print: ${refCount - resolved} creature reference(s) found no target.`);
-        }
-
-        console.info(`Paged.js: ${flow.total} pages, ${resolved}/${refCount} refs resolved.`);
-        document.body.dataset.pages = String(flow.total);
-      } catch (error) {
-        console.error('Paged.js failed to paginate:', error);
-        document.body.dataset.pages = 'failed';
-      }
+      paginateBook({ name: 'Brood & Bloom', expectedTerms: 23 });
     </script>
   </body>
 </html>
