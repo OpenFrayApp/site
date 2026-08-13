@@ -1,0 +1,82 @@
+# OpenFray
+
+> A free, open-source combat console for Game Masters running Dungeons and Dragons 5e. It tracks initiative, creature resources, conditions, concentration, group saving throws, and dice in a browser tab.
+
+OpenFray is compatible with 5.5e (Basic Rules 2024) and 5e (Basic Rules 2014). It runs fully anonymous in the browser with no account and nothing installed. Signing in with Discord or Google saves fights, custom creatures, characters, and campaigns across devices.
+
+One principle shapes every feature: OpenFray is a fast scratchpad, not a system of record. It tracks what happens at the table, plus the reference a Game Master chooses to jot down. It never models the rules engine behind a character, so class features, player spell slots, and character sheets are out of scope by design. A player’s own sheet still owns what a character can do.
+
+openfray.app serves three parts from one deploy. The website is at the root, the combat console is at `/console/`, and the handbook is at `/docs/`. The code is AGPL-3.0. Game content is honored under each source’s own license, preferring CC-BY over ORC over OGL.
+
+## The console
+
+- [OpenFray console](https://openfray.app/console/): The app itself. It is a client-rendered single-page app, so fetching this URL returns the shell rather than readable content. Read the handbook below for what it does.
+- [Home](https://openfray.app/): What the console tracks, who it is for, and how it compares to running a fight on paper.
+
+## Handbook
+
+- [Handbook overview](https://openfray.app/docs/): How OpenFray works, and where each part of the console is documented.
+- [Getting started](https://openfray.app/docs/getting-started/): Open the console, add creatures and players, and run a first fight.
+- [Your account and what’s saved](https://openfray.app/docs/account/): What works signed out, what signing in adds, where data is stored, and how to delete it.
+- [Creatures, players and quick adds](https://openfray.app/docs/fight/combatants/): The three kinds of combatant, what is tracked for each, and how duplicates are named.
+- [The tracker and rows](https://openfray.app/docs/fight/tracker/): The three columns of the console, what a row shows, and how to change hit points.
+- [Death and dying](https://openfray.app/docs/fight/death/): Dropping to 0 hit points, death saving throws, and who counts as down, dead, or stable.
+- [Encounters and initiative](https://openfray.app/docs/fight/encounters/): Ordering the fight, running rounds and turns, and stepping forward or back.
+- [Attacks and damage](https://openfray.app/docs/fight/attacks/): Rolling an attack from a stat block, applying damage, resistances, immunities, and critical hits.
+- [Saving throws](https://openfray.app/docs/fight/saves/): Resolving one save or a whole group at once, with defenses and Evasion applied.
+- [Effects and conditions](https://openfray.app/docs/fight/effects/): Conditions, advantage and disadvantage, modifiers, reminders, counters, and saved presets.
+- [Concentration](https://openfray.app/docs/fight/concentration/): Marking a creature as concentrating, the check when it takes damage, and clearing its effects.
+- [Creature resources](https://openfray.app/docs/fight/resources/): Legendary actions, legendary resistance, recharge abilities, limited uses, spell uses, and reactions.
+- [Spells](https://openfray.app/docs/fight/spells/): Casting a spell, landing its effects as one bundle, and rolling the group’s save.
+- [Rests and clearing the board](https://openfray.app/docs/fight/rests/): What a short rest and a long rest restore, and how to reset between encounters.
+- [The player view](https://openfray.app/docs/fight/player-view/): A read-only second screen your table follows on their own phones, showing only what you give it.
+- [End of the fight](https://openfray.app/docs/fight/recap/): The summary after a fight: outcome, experience points, timings, damage totals, and standout hits.
+- [The compendium](https://openfray.app/docs/library/compendium/): The built-in reference of creatures, spells, characters, and campaigns, and how to switch libraries on.
+- [Build your own creatures and spells](https://openfray.app/docs/library/making-your-own/): Making a creature or spell that is not in the books, and keeping it in your own library.
+- [Campaigns and house rules](https://openfray.app/docs/library/campaigns/): Setting a table’s house rules once so they apply to every fight in that campaign.
+- [The importer](https://openfray.app/docs/library/importer/): A free browser add-on that turns a D&D Beyond creature page into an OpenFray creature.
+- [The stat block](https://openfray.app/docs/reference/stat-block/): Every part of a creature’s stat block, and which parts are clickable during a fight.
+- [Dice and roll formulas](https://openfray.app/docs/reference/dice/): The formulas the roll box understands, and how effects are worked into a roll.
+- [The game log](https://openfray.app/docs/reference/game-log/): The running record of a fight, grouped by round, and how to filter it.
+- [Settings and appearance](https://openfray.app/docs/reference/settings/): Choosing libraries, switching between light and dark, and finding the importer.
+
+## Published libraries
+
+The console ships six third-party libraries (Basic Rules 2024, Basic Rules 2014, Tome of Beasts 1 to 3, and Creature Codex). The three below are OpenFray’s own writing, published here in full and free to read.
+
+- [Compendium](https://openfray.app/compendium/): Index of the libraries OpenFray writes and publishes, all built into the console.
+- [The Waking Garden](https://openfray.app/the-waking-garden/): A bestiary of 67 sentient vegetables across three stages of growth, plus the ecology around them.
+- [Brood & Bloom](https://openfray.app/brood-and-bloom/): A bestiary of 67 parasites in three broods, with the order that catalogs them and the cult that welcomes them.
+- [On Strong Waters and Potent Simples](https://openfray.app/strong-waters/): An apothecary’s catalog of drink and herbs, with rules for intoxication, craving, and overdose. The first library with no creatures in it.
+
+## News
+
+- [News](https://openfray.app/news/): Release notes and library announcements, newest first.
+- [OpenFray 1.0](https://openfray.app/news/openfray-1-0-release/): Out of beta, with the player view, a rebuilt effects flow, a new book, and a fourth library. Published 2026-08-07.
+- [Brood & Bloom: the people, the jars, and the spells](https://openfray.app/news/brood-bloom-hands-of-the-host/): Six more creatures, 19 preparations, and 23 castable spells added to the parasite bestiary. Published 2026-08-01.
+- [OpenFray is in beta](https://openfray.app/news/openfray-beta-release/): What the console ran at the table at 0.2.0, and the one part still to come. Published 2026-07-31.
+- [Brood & Bloom: A free bestiary of parasites](https://openfray.app/news/brood-bloom-free-bestiary/): The parasite bestiary at publication, in three broods. Published 2026-07-30.
+- [The Waking Garden: A free bestiary of crops, pests, and more](https://openfray.app/news/waking-garden-free-bestiary/): The first OpenFray bestiary, 67 vegetables that have woken up. Published 2026-07-28.
+- [OpenFray is in alpha](https://openfray.app/news/openfray-is-in-alpha/): The first public build, open to anyone in a browser tab. Published 2026-06-23.
+
+## The project
+
+- [Source repository](https://github.com/SirDarcanos/openfray): The console, the website, and the handbook, in one repository under AGPL-3.0.
+- [README](https://github.com/SirDarcanos/openfray/blob/main/README.md): What OpenFray is, the scope principle, current status, and how to run it locally.
+- [AGENTS.md](https://github.com/SirDarcanos/openfray/blob/main/AGENTS.md): The source of truth for how the codebase is built: architectural rules, repo layout, tech stack, and code style.
+- [STYLE.md](https://github.com/SirDarcanos/openfray/blob/main/STYLE.md): The writing style guide for every published word, covering the handbook, the website, and in-app copy.
+- [Contributing](https://github.com/SirDarcanos/openfray/blob/main/CONTRIBUTING.md): The scope rule, how to get the project running, and what a good pull request looks like.
+- [Changelog](https://github.com/SirDarcanos/openfray/blob/main/CHANGELOG.md): Every released version of the console, described from a Game Master’s point of view.
+- [Credits and content attribution](https://github.com/SirDarcanos/openfray/blob/main/CREDITS.md): The license and required attribution for every game content source, including the full OGL 1.0a text.
+- [Code of Conduct](https://github.com/SirDarcanos/openfray/blob/main/CODE_OF_CONDUCT.md): Contributor Covenant 2.1, with reporting details.
+- [Privacy Policy](https://openfray.app/privacy): What is stored, who processes it, and what rights you have over it.
+- [Terms of Service](https://openfray.app/terms): The terms for using OpenFray. It is provided as-is, and your content stays yours.
+
+## Optional
+
+- [News feed](https://openfray.app/news/rss.xml): RSS for release notes and library announcements.
+- [Sitemap index](https://openfray.app/sitemap-index.xml): Every indexed page on the website and in the handbook.
+- [openfray-compendium](https://github.com/SirDarcanos/openfray-compendium): The ingest tooling that generates the compendium JSON the console reads.
+- [OpenFray Importer](https://github.com/SirDarcanos/openfray-importer): The browser extension that converts a D&D Beyond creature page into OpenFray JSON.
+- [opendice](https://github.com/SirDarcanos/opendice): The dice package behind every roll, using a cryptographic generator with modulo-bias rejection.
+- [shotlist](https://github.com/SirDarcanos/shotlist): The tool that captures every screenshot in the handbook and on the website.
