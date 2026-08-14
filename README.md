@@ -20,7 +20,16 @@ npm install
 npm run dev
 ```
 
-`npm test` runs the site's Vitest suite.
+`npm test` runs the site's Vitest suite, including the tests for the build checks.
+
+## Checks and tools
+
+`npm run build` runs the site's own gates before Astro: news slugs, the prose
+rules, and CSS specificity. Two heavier tools live in `scripts/` for changes worth
+measuring: `measure-css.mjs` snapshots computed styles before and after a CSS
+change, and `print-check.mjs` verifies a book's print edition still paginates.
+Each has a matching skill in `.claude/skills/`. The print editions themselves live
+under each book's `/print` route and never ship.
 
 ## Before contributing
 
