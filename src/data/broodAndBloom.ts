@@ -1,5 +1,5 @@
 import type { Creature } from '../../../src/schema/creature.ts';
-import creaturesJson from '../../../public/compendium/brood-and-bloom-creatures.json';
+import creaturesJson from '../../../console/public/compendium/brood-and-bloom-creatures.json';
 import { creatureLookup } from './statblock.ts';
 
 // The bestiary renders the same file the console fetches at runtime, so a stat block

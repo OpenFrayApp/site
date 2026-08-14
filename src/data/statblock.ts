@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 import type { Recharge } from '../../../src/schema/action.ts';
 import type { Creature, SpellGroup, Spellcasting } from '../../../src/schema/creature.ts';

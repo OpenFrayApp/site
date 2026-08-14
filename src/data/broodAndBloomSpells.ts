@@ -1,5 +1,5 @@
 import type { Spell } from '../../../src/schema/spell.ts';
-import spellsJson from '../../../public/compendium/brood-and-bloom-spells.json';
+import spellsJson from '../../../console/public/compendium/brood-and-bloom-spells.json';
 import { spellLookup } from './statblock.ts';
 
 // Brood & Bloom is the only library that writes spells of its own, and the chapter that

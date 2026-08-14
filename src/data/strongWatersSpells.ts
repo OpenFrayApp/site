@@ -1,5 +1,5 @@
 import type { Spell } from '../../../src/schema/spell.ts';
-import spellsJson from '../../../public/compendium/strong-waters-spells.json';
+import spellsJson from '../../../console/public/compendium/strong-waters-spells.json';
 import { spellLookup } from './statblock.ts';
 
 // On Strong Waters and Potent Simples ships spells and no creatures, and the chapter

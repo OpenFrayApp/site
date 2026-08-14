@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 // Search metadata for the marketing site, mirroring the handbook's Head.astro so both
 // halves of openfray.app describe themselves the same way. Starlight emits most of this
