@@ -76,7 +76,7 @@ The console ships six third-party libraries (Basic Rules 2024, Basic Rules 2014,
 
 - [News feed](https://openfray.app/news/rss.xml): RSS for release notes and library announcements.
 - [Sitemap index](https://openfray.app/sitemap-index.xml): Every indexed page on the website and in the handbook.
-- [openfray-compendium](https://github.com/SirDarcanos/openfray-compendium): The ingest tooling that generates the compendium JSON the console reads.
-- [OpenFray Importer](https://github.com/SirDarcanos/openfray-importer): The browser extension that converts a D&D Beyond creature page into OpenFray JSON.
+- [compendium](https://github.com/OpenFrayApp/compendium): The ingest tooling that generates the compendium JSON the console reads.
+- [OpenFray Importer](https://github.com/OpenFrayApp/importer): The browser extension that converts a D&D Beyond creature page into OpenFray JSON.
 - [opendice](https://github.com/SirDarcanos/opendice): The dice package behind every roll, using a cryptographic generator with modulo-bias rejection.
 - [shotlist](https://github.com/SirDarcanos/shotlist): The tool that captures every screenshot in the handbook and on the website.
