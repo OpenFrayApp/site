@@ -6,7 +6,7 @@ the three books OpenFray writes and publishes in full: The Waking Garden,
 Brood & Bloom, and On Strong Waters and Potent Simples.
 
 This repo is one part of OpenFray. The console and the handbook live in their own
-repos, and [openfray.app](https://github.com/OpenFrayApp/openfray.app) ties the
+repos, and [openfray](https://github.com/OpenFrayApp/openfray) ties the
 three together into the single deploy that serves the domain. The one thing this repo
 needs from outside: a clone of [console](https://github.com/OpenFrayApp/console)
 sitting beside it (same parent folder, named `console`), because the book pages

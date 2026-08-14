@@ -54,6 +54,6 @@ console shows exactly the `Paged.js:` line above and none of these:
 - Cross-references resolve after pagination against the rendered clones; Paged.js
   keeps source markup in a `<template>`, so every creature id exists twice. Query
   inside `.pagedjs_pages` only.
-- The route is local-only: the openfray.app repo's assemble step deletes it from `dist/` and
+- The route is local-only: the openfray repo's assemble step deletes it from `dist/` and
   the sitemap filter hides it. If it ever appears on the live site, that stripping
   broke.

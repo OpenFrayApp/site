@@ -1,11 +1,11 @@
 Guidance for AI agents (and humans) working on the OpenFray site.
 
 This repo is one of three parts of OpenFray, tied together by the
-[openfray.app](https://github.com/OpenFrayApp/openfray.app) parent repo. The full
+[openfray](https://github.com/OpenFrayApp/openfray) parent repo. The full
 working agreements live in
-[that repo's AGENTS.md](https://github.com/OpenFrayApp/openfray.app/blob/main/AGENTS.md),
+[that repo's AGENTS.md](https://github.com/OpenFrayApp/openfray/blob/main/AGENTS.md),
 and every published word follows
-[STYLE.md](https://github.com/OpenFrayApp/openfray.app/blob/main/STYLE.md) beside it.
+[STYLE.md](https://github.com/OpenFrayApp/openfray/blob/main/STYLE.md) beside it.
 **Read both before working here.**
 
 What is specific to this repo: the Astro site with Tailwind v4, its tests in
