@@ -61,14 +61,18 @@ The console ships six third-party libraries (Basic Rules 2024, Basic Rules 2014,
 
 ## The project
 
-- [Source repository](https://github.com/SirDarcanos/openfray): The console, the website, and the handbook, in one repository under AGPL-3.0.
-- [README](https://github.com/SirDarcanos/openfray/blob/main/README.md): What OpenFray is, the scope principle, current status, and how to run it locally.
-- [AGENTS.md](https://github.com/SirDarcanos/openfray/blob/main/AGENTS.md): The source of truth for how the codebase is built: architectural rules, repo layout, tech stack, and code style.
-- [STYLE.md](https://github.com/SirDarcanos/openfray/blob/main/STYLE.md): The writing style guide for every published word, covering the handbook, the website, and in-app copy.
-- [Contributing](https://github.com/SirDarcanos/openfray/blob/main/CONTRIBUTING.md): The scope rule, how to get the project running, and what a good pull request looks like.
-- [Changelog](https://github.com/SirDarcanos/openfray/blob/main/CHANGELOG.md): Every released version of the console, described from a Game Master’s point of view.
-- [Credits and content attribution](https://github.com/SirDarcanos/openfray/blob/main/CREDITS.md): The license and required attribution for every game content source, including the full OGL 1.0a text.
-- [Code of Conduct](https://github.com/SirDarcanos/openfray/blob/main/CODE_OF_CONDUCT.md): Contributor Covenant 2.1, with reporting details.
+- [OpenFray on GitHub](https://github.com/OpenFrayApp): Every OpenFray repository, under one organization.
+- [openfray.app repository](https://github.com/OpenFrayApp/openfray.app): The parent repository that assembles the console, the website, and the handbook into this one deploy.
+- [console](https://github.com/OpenFrayApp/console): The combat console, under AGPL-3.0.
+- [site](https://github.com/OpenFrayApp/site): This website and the published libraries.
+- [docs](https://github.com/OpenFrayApp/docs): The handbook.
+- [README](https://github.com/OpenFrayApp/openfray.app/blob/main/README.md): What OpenFray is, the scope principle, current status, and how to run it locally.
+- [AGENTS.md](https://github.com/OpenFrayApp/openfray.app/blob/main/AGENTS.md): The source of truth for how the codebase is built: architectural rules, repo layout, tech stack, and code style.
+- [STYLE.md](https://github.com/OpenFrayApp/openfray.app/blob/main/STYLE.md): The writing style guide for every published word, covering the handbook, the website, and in-app copy.
+- [Contributing](https://github.com/OpenFrayApp/openfray.app/blob/main/CONTRIBUTING.md): The scope rule, how to get the project running, and what a good pull request looks like.
+- [Changelog](https://github.com/OpenFrayApp/console/blob/main/CHANGELOG.md): Every released version of the console, described from a Game Master’s point of view.
+- [Credits and content attribution](https://github.com/OpenFrayApp/console/blob/main/CREDITS.md): The license and required attribution for every game content source, including the full OGL 1.0a text.
+- [Code of Conduct](https://github.com/OpenFrayApp/openfray.app/blob/main/CODE_OF_CONDUCT.md): Contributor Covenant 2.1, with reporting details.
 - [Privacy Policy](https://openfray.app/privacy): What is stored, who processes it, and what rights you have over it.
 - [Terms of Service](https://openfray.app/terms): The terms for using OpenFray. It is provided as-is, and your content stays yours.
 
