@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 // @vitest-environment node
 // Node, not jsdom: this is filesystem and child-process work with no DOM in it.
 

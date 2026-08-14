@@ -20,5 +20,10 @@
     "jsdom": "^26.1.0",
     "pagedjs": "^0.4.3",
     "vitest": "^3.2.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenFrayApp/site.git"
+  },
+  "license": "AGPL-3.0-or-later"
 }

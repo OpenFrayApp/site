@@ -1,3 +1,14 @@
 node_modules/
 dist/
 .astro/
+
+.env
+.env.*
+!.env.example
+*.local
+
+.DS_Store
+*.log
+
+# Generated stylesheet for the design-sync tokens bundle
+.ds-css/

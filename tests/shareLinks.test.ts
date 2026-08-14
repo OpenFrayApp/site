@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 // @vitest-environment node
 // Node, not jsdom: the container pulls in esbuild, whose startup invariant trips over
 // jsdom's patched Uint8Array. JSDOM is imported directly for parsing instead.

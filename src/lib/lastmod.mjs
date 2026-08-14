@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 // `lastmod` for the sitemap, taken from the last commit that touched the page's source
 // file. A file's history is the only honest answer to "when did this page last change" —

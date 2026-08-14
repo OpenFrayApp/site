@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 // The browser half of the print edition: loads Paged.js, hands it the paged stylesheet,
 // and runs the DOM transforms around it. Those transforms live in print.ts, where they

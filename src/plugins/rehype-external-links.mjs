@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 // Opens off-site links in a new tab, matching how the footer's links already behave.
 // `rel="noreferrer"` also implies noopener, so the new tab gets no handle on this one.

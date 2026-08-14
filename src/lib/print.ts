@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 // The DOM transforms the print edition applies around Paged.js — extracted from
 // print.astro so they can be unit-tested. Everything here runs against a plain

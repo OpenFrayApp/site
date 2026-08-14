@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 // @vitest-environment node
 // Node, not jsdom: these are pure functions over frontmatter, plus two files read as
 // text to pin the hooks the section depends on.

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (C) 2026 OpenFray contributors
+// Copyright (C) 2026 Nicola Mustone
 
 import { describe, expect, it } from 'vitest';
 import { creature, creatures } from '../src/data/wakingGarden.ts';
