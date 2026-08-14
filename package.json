@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.4",
@@ -19,7 +21,9 @@
   "devDependencies": {
     "jsdom": "^26.1.0",
     "pagedjs": "^0.4.3",
-    "vitest": "^3.2.6"
+    "vitest": "^3.2.6",
+    "prettier": "^3.9.5",
+    "prettier-plugin-astro": "^0.14.1"
   },
   "repository": {
     "type": "git",

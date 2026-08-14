@@ -7,21 +7,20 @@ Brood & Bloom, and On Strong Waters and Potent Simples.
 
 This repo is one part of OpenFray. The console and the handbook live in their own
 repos, and [openfray.app](https://github.com/OpenFrayApp/openfray.app) ties the
-three together into the single deploy that serves the domain. Day-to-day work
-happens from a checkout of that parent repo, where all three parts sit side by
-side — the book pages import the compendium JSON from the `console` sibling at
-build time, so the stat blocks can never drift from what the app ships.
+three together into the single deploy that serves the domain. The one thing this repo
+needs from outside: a clone of [console](https://github.com/OpenFrayApp/console)
+sitting beside it (same parent folder, named `console`), because the book pages
+import its compendium JSON at build time, so the stat blocks can never drift from
+what the app ships.
 
 ## Running it
 
-From a parent-repo checkout:
-
 ```bash
 npm install
-npm run dev -w site
+npm run dev
 ```
 
-`npm test -w site` runs the site's Vitest suite.
+`npm test` runs the site's Vitest suite.
 
 ## Before contributing
 
