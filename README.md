@@ -2,7 +2,7 @@
 
 The marketing site and published libraries served at
 [openfray.app](https://openfray.app): the home page, the news, the legal pages, and
-the three books OpenFray writes and publishes in full — The Waking Garden,
+the three books OpenFray writes and publishes in full: The Waking Garden,
 Brood & Bloom, and On Strong Waters and Potent Simples.
 
 This repo is one part of OpenFray. The console and the handbook live in their own

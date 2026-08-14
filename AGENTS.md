@@ -10,7 +10,7 @@ and every published word follows
 
 What is specific to this repo: the Astro site with Tailwind v4, its tests in
 `tests/`, the book pages (whose stat blocks render from the compendium JSON in the
-`console` sibling — edit the data in the
+`console` sibling: edit the data in the
 [compendium](https://github.com/OpenFrayApp/compendium) repo, never here), and the
 print editions under each book's `/print` route, which never ship. Editing the
 Terms or Privacy pages? Bump the "Last updated" date in the same change.

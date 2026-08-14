@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/check-news-slugs.mjs && node scripts/check-prose.mjs && node scripts/check-css-specificity.mjs && astro build",
     "preview": "astro preview",
     "test": "vitest run",
     "format": "prettier --write .",
@@ -23,7 +23,8 @@
     "pagedjs": "^0.4.3",
     "vitest": "^3.2.6",
     "prettier": "^3.9.5",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "@qain/core": "^0.0.5"
   },
   "repository": {
     "type": "git",
