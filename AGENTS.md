@@ -2,9 +2,9 @@ Guidance for AI agents (and humans) working on the OpenFray site. The cross-repo
 agreements (code style, writing style, committing, working agreements, content
 licensing) live in the
 [openfray repo's AGENTS.md](https://github.com/OpenFrayApp/openfray/blob/main/AGENTS.md),
-and every published word follows
-[STYLE.md](https://github.com/OpenFrayApp/openfray/blob/main/STYLE.md) beside it.
-**Read both before working here.** This file carries what is specific to the site:
+and every published word follows this
+repo's [STYLE.md](./STYLE.md) (the persuading voice, and the books' register),
+built on the shared core in that repo. **Read all three before working here.** This file carries what is specific to the site:
 where the books live, how the print edition is built, and how the site is styled.
 
 ## What this repo is
