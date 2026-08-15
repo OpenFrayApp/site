@@ -31,6 +31,17 @@ magick "$OUT/group-save-hero.png" -crop 1330x500+1136+820 +repage \
   "$SITE/save-rows.png"
 magick "$OUT/cast-spell-hero.png" -crop 1374x1036+1124+481 +repage "$SITE/spell-card.png"
 
+# From the two player-view shots (2160x1560): the foes as each disclosure level
+# shows them — the same rows in words and in exact numbers — and the log as the
+# table receives it, entries without dice. The player-view page's tabs compare them.
+PVBG=$(magick "$OUT/player-view-hero.png" -format '%[pixel:p{40,1400}]' info:)
+magick "$OUT/player-view-hero.png" -crop 990x424+78+664 +repage \
+  -bordercolor "$PVBG" -border 20 "$SITE/pv-words.png"
+magick "$OUT/player-view-exact.png" -crop 990x424+78+664 +repage \
+  -bordercolor "$PVBG" -border 20 "$SITE/pv-exact.png"
+magick "$OUT/player-view-hero.png" -crop 990x586+1092+224 +repage \
+  -bordercolor "$PVBG" -border 20 "$SITE/pv-log.png"
+
 # From apply-effect-hero.png (1080x1910, already clipped to the modal): its four
 # zones, in the order the page tells them.
 magick "$OUT/apply-effect-hero.png" -crop 1020x245+30+375 +repage "$SITE/apply-conditions.png"

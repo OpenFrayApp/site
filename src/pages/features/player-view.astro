@@ -1,33 +1,17 @@
 ---
+// The second-screen page. Its job: show the GM that the table can follow the fight
+// live without being handed anything — no app, no accounts, no leaks — then hand
+// over. The hero is filmed from the players' seat, and no cursor ever appears in
+// it: read-only is the message, and the screen moving by itself is the proof.
 import FeaturePage from '../../components/FeaturePage.astro';
-import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import Split from '../../components/Split.astro';
+import Tabs from '../../components/Tabs.astro';
+import Cards from '../../components/Cards.astro';
+import { EYEBROW, TEXT_COL, DISPLAY_MD } from '../../data/pageStyles.ts';
 import playerViewHero from '../../assets/screenshots/player-view-hero.png';
-
-const shots = [
-  {
-    img: playerViewHero,
-    alt: 'The shared player view: the party listed with exact hit points and armor class, the foes shown only as Healthy or Hurt, the game log beside them, and a footer noting that nothing is saved.',
-  },
-];
-
-const points = [
-  {
-    title: 'Live on their own phones',
-    body: 'Share one link. The turn order, conditions, and game log follow the fight on every screen as you run it, so nobody asks whose turn it is.',
-  },
-  {
-    title: 'Read-only by design',
-    body: "There is nothing on it to press. Players watch the fight; they can't poke it, and there are no player accounts to manage.",
-  },
-  {
-    title: 'You choose what they see',
-    body: "A foe's hit points in words — Bloodied, not a number — or exact, or hidden. Armor class held back. Rolls shown without the dice. A creature kept entirely off their screens until you reveal it.",
-  },
-  {
-    title: 'Nothing stored, nothing to set up',
-    body: "It works without an account, yours or theirs. The board goes straight to their screens over a live channel and is kept nowhere — stop sharing and it's gone.",
-  },
-];
+import pvWords from '../../assets/screenshots/pv-words.png';
+import pvExact from '../../assets/screenshots/pv-exact.png';
+import pvLog from '../../assets/screenshots/pv-log.png';
 ---
 
 <FeaturePage
@@ -35,28 +19,96 @@ const points = [
   description="OpenFray's shared player view: a live, read-only screen for your table on their own phones, showing the turn order, conditions, and log — with you choosing exactly what each creature gives away. Compatible with 5.5e and 5e."
   heading="Share the fight, keep your secrets"
   lede="Your table follows the fight on their own phones: who's up, what's ticking, how hurt that Ogre looks. What each creature gives away is your call, down to the hit points."
-  image={shots[0]}
-  shots={shots}
-  handbook={[{ label: 'The player view', href: '/docs/fight/player-view/' }]}
+  video={{
+    src: '/media/player-screen.mp4',
+    poster: '/media/player-screen.jpg',
+    label:
+      'The shared player view updating on its own: a turn passes, the Ogre goes from Healthy to Bloodied in words, a Prone chip appears, and a hidden Quasit is revealed onto the board.',
+  }}
+  caption="Their screen, left alone: the fight arrives on it — a turn passes, the Ogre worsens in words, and a creature you kept hidden steps out. Nothing on it to press."
+  handbook={[{ label: 'The player view', href: '/docs/guides/player-view/' }]}
   current="/features/player-view/"
 >
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="pv-points-title">
-    <p class={`${EYEBROW} mb-4`}>The second screen</p>
-    <h2
-      id="pv-points-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-    >
-      How the table sees it
+  {
+    /* The disclosure levels, compared on the same rows: the tabs are the claim
+    "you choose what they see" made switchable. */
+  }
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="pv-reveal-title">
+    <p class={`${EYEBROW} mb-4 text-center`}>Your call</p>
+    <h2 id="pv-reveal-title" class={`mx-auto mt-0 mb-5 max-w-[18ch] text-center ${DISPLAY_MD}`}>
+      You choose what they see
     </h2>
-    <div class="grid gap-4 md:grid-cols-2">
-      {
-        points.map((f) => (
-          <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-          </div>
-        ))
-      }
-    </div>
+    <p class="mx-auto mt-0 mb-10 max-w-[44rem] text-center text-lg leading-relaxed text-muted">
+      Every disclosure is a setting, per fight: how hit points read, whether armor class shows,
+      whether the dice travel with the rolls. The same rows, at each level you might pick:
+    </p>
+    <Tabs
+      label="What the table sees"
+      items={[
+        {
+          id: 'pv-tab-words',
+          label: 'In words',
+          title: 'Hurt, Bloodied, Critical',
+          body: 'The default: your creatures give away how the fight is going, never the arithmetic. The Ogre reads Hurt and keeps its 44/68 to itself — and its effect chips still show, because the table saw the spells land.',
+          image: {
+            src: pvWords,
+            alt: 'Foe rows on the player view: the Mage Healthy, the Ogre Hurt with its three effect chips, the Hell Hound Healthy, the Quasit Bloodied.',
+          },
+        },
+        {
+          id: 'pv-tab-exact',
+          label: 'Exact numbers',
+          title: 'The same rows, arithmetic included',
+          body: 'Some tables like the numbers on the table. Flip one setting and the same rows read 44/68 and 58/58 — nothing else changes, and you can flip it back mid-fight.',
+          image: {
+            src: pvExact,
+            alt: 'The same foe rows with exact hit points: the Mage at 81/81, the Ogre at 44/68, the Hell Hound at 58/58.',
+          },
+        },
+        {
+          id: 'pv-tab-log',
+          label: 'The log, kept polite',
+          title: 'Events, not dice',
+          body: 'Their log follows the fight — turns, damage, conditions — without the breakdowns your side keeps. What the table learns is what happened, not what you rolled to make it happen.',
+          image: {
+            src: pvLog,
+            alt: 'The player view’s game log: turns and damage entries, each without the dice behind it.',
+          },
+        },
+      ]}
+    />
+  </section>
+
+  {/* The no-friction claims, stacked beside the whole screen they describe. */}
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="Nothing to hand out"
+      heading="One link, and it's already over"
+      id="pv-setup-title"
+      side="left"
+      image={{
+        src: playerViewHero,
+        alt: 'The full shared player view: the party listed with exact hit points and armor class, the foes in words, the game log beside them, and a footer noting that nothing is saved.',
+      }}
+      caption="The whole of it: their screen, your rules, and a footer that means it."
+    >
+      <Cards
+        layout="stack"
+        items={[
+          {
+            title: 'Live on their own phones',
+            body: 'Share one link. The turn order, conditions, and log follow the fight on every screen as you run it, so nobody asks whose turn it is.',
+          },
+          {
+            title: 'Read-only by design',
+            body: 'There is nothing on it to press. Players watch the fight; they can’t poke it, and there are no player accounts to manage.',
+          },
+          {
+            title: 'Stored nowhere',
+            body: 'It works without an account, yours or theirs. The board goes straight to their screens over a live channel and is kept nowhere — stop sharing and it’s gone.',
+          },
+        ]}
+      />
+    </Split>
   </section>
 </FeaturePage>
