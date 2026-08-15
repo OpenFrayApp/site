@@ -1,16 +1,16 @@
 ---
+// The content page. Its job: show the GM their books are already in the console —
+// and that the shelf is theirs to curate and extend — then hand over to the
+// compendium, the console, or the store pages for the importer. Every section
+// pairs one claim with the picture or loop made to prove it.
 import FeaturePage from '../../components/FeaturePage.astro';
+import Split from '../../components/Split.astro';
+import Band from '../../components/Band.astro';
+import Cards from '../../components/Cards.astro';
 import CheckIcon from '../../components/CheckIcon.astro';
-import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import { EYEBROW, TEXT_COL, CARD, DISPLAY_MD } from '../../data/pageStyles.ts';
 import { libraries, shippedLibraries } from '../../data/libraries.ts';
-import compendiumHero from '../../assets/screenshots/compendium-hero.png';
-
-const shots = [
-  {
-    img: compendiumHero,
-    alt: 'The compendium open on the Creatures tab: a searchable list of 853 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
-  },
-];
+import libraryToggles from '../../assets/screenshots/library-toggles.png';
 
 const importerChrome =
   'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
@@ -27,8 +27,13 @@ const STORE_LINK =
   description="The creature libraries built into OpenFray: Basic Rules 2024 and 2014, Tome of Beasts 1–3, Creature Codex, and three original books free to read — over 2000 creatures, plus a homebrew editor and a D&D Beyond importer. Compatible with 5.5e and 5e."
   heading="Bring the libraries you actually use"
   lede="Over 2000 creatures ship in the compendium, searchable beside the fight. Your table picks which libraries appear, and everything you build or import sits next to them."
-  image={shots[0]}
-  shots={shots}
+  video={{
+    src: '/media/compendium.mp4',
+    poster: '/media/compendium.jpg',
+    label:
+      'The compendium opened mid-fight: a search for “moth” returns six creatures from four different libraries, each wearing its book and rules badges, and a click lands the Catafalque Moth’s full stat block.',
+  }}
+  caption="One search, four shelves: “moth” finds Core, Tome of Beasts, and both of OpenFray's own books — and the stat block is one click away, mid-fight."
   handbook={[
     { label: 'The compendium', href: '/docs/reference/compendium/' },
     { label: 'Build your own', href: '/docs/guides/making-your-own/' },
@@ -37,19 +42,46 @@ const STORE_LINK =
     { label: 'The stat block', href: '/docs/reference/stat-block/' },
   ]}
   current="/features/libraries/"
-  mediaClass="max-w-[26rem] justify-self-center"
 >
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="lib-included-title">
-    <p class={`${EYEBROW} mb-4`}>Included</p>
-    <h2
-      id="lib-included-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+  {
+    /* The curation claim, beside the real switchboard: every shelf with its own
+    toggle, a table mid-choice. */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="Your call"
+      heading="Your table picks the shelf"
+      id="lib-toggles-title"
+      image={{
+        src: libraryToggles,
+        alt: 'The Settings dialog on its Libraries list: Basic Rules 2024 ticked, Brood & Bloom, The Waking Garden, and Tome of Beasts 1 joining it, the rest of the shelves waiting unticked.',
+      }}
+      caption="A table mid-choice: the core rules, two of ours, one Kobold book — and the rest stay off the lists."
+      mediaClass="max-w-[24rem] justify-self-center lg:justify-self-end"
     >
-      What's on the shelf
-    </h2>
-    <div class="grid items-start gap-4 md:grid-cols-2">
-      <div class={CARD}>
-        <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
+      <p class="mt-0 mb-5">
+        Every library is a switch in Settings, per table. What's on feeds the compendium, the Add
+        creature list, and the Cast spell list; what's off stays out of your way. The labels here
+        are the ones the console itself uses, badges and all.
+      </p>
+      <p class="mb-0">
+        Each book is used under its own license and credited in full — and your homebrew is a
+        library too, right in the list.
+      </p>
+    </Split>
+  </section>
+
+  {/* The shelf itself: what ships, and what OpenFray wrote for it. */}
+  <Band
+    eyebrow="Included"
+    heading="What's on the shelf"
+    id="lib-included-title"
+    align="center"
+    class="mt-20"
+  >
+    <div class="grid items-start gap-8 lg:grid-cols-2">
+      <div>
+        <h3 class="mt-0 mb-3 text-base leading-relaxed font-bold text-text">
           Six licensed libraries
         </h3>
         <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
@@ -62,14 +94,9 @@ const STORE_LINK =
             ))
           }
         </ul>
-        <p class="mt-4 mb-0 text-sm leading-relaxed text-muted">
-          Each used under its own license, credited in full, and toggled per table in
-          <strong class="font-semibold text-text">Settings</strong>.
-        </p>
       </div>
-
-      <div class={CARD}>
-        <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
+      <div>
+        <h3 class="mt-0 mb-3 text-base leading-relaxed font-bold text-text">
           Three books of ours, free
         </h3>
         <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
@@ -90,24 +117,22 @@ const STORE_LINK =
         </p>
       </div>
     </div>
-  </section>
+  </Band>
 
   <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="lib-yours-title">
     <p class={`${EYEBROW} mb-4`}>Yours</p>
-    <h2
-      id="lib-yours-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-    >
+    <h2 id="lib-yours-title" class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD}`}>
       Everything your table invents
     </h2>
-    <div class="grid gap-4 md:grid-cols-2">
-      <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-        <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Build your own</h3>
-        <p class="m-0 text-sm leading-normal text-muted">
-          A full editor for homebrew creatures and spells, plus a durable roster for your party and
-          campaigns that carry your house rules into every fight.
-        </p>
-      </div>
+    <Cards
+      accent
+      items={[
+        {
+          title: 'Build your own',
+          body: 'A full editor for homebrew creatures and spells, plus a durable roster for your party and campaigns that carry your house rules into every fight.',
+        },
+      ]}
+    >
       <div class={`feature ${CARD} border-l-2 border-l-accent`}>
         <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
           Never retype a stat block
@@ -136,7 +161,7 @@ const STORE_LINK =
           </a>
         </div>
       </div>
-    </div>
+    </Cards>
 
     <p class="m-0 mt-10">
       <a href="/compendium/" class="font-semibold text-accent no-underline hover:underline">
