@@ -6,7 +6,8 @@
 import FeaturePage from '../../components/FeaturePage.astro';
 import Split from '../../components/Split.astro';
 import Band from '../../components/Band.astro';
-import { TEXT_COL } from '../../data/pageStyles.ts';
+import Hero from '../../components/Hero.astro';
+import { TEXT_COL, DISPLAY_MD } from '../../data/pageStyles.ts';
 import saveRows from '../../assets/screenshots/save-rows.png';
 import spellCard from '../../assets/screenshots/spell-card.png';
 
@@ -56,28 +57,26 @@ const carries = [
     /* The hero's held frame, told slowly: six rows, five different outcomes, and the
     reasons printed beside each one. */
   }
-  <section class={`mt-20 ${TEXT_COL}`}>
-    <Split
+  <Band class="mt-20">
+    <Hero
       eyebrow="Group saves"
       heading="Six rows, every defense applied"
-      id="rolling-saves-title"
+      level="h2"
+      side="left"
+      headingClass={`max-w-[18ch] ${DISPLAY_MD}`}
+      tagline="Every row prints its reasons. The Ogre failed, so 32 waits in its box. The Hell Hound failed too — immunity zeroes it anyway. The Quasit's fail is halved to 16 by its resistance, with the two dice its Magic Resistance rolled sitting right on the row. The made saves take half."
       image={{
         src: saveRows,
         alt: 'The rolled dice and six outcome rows: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed despite failing, the resistant Quasit halved to 16, its two dice from Magic Resistance on the row, and two player rows with Save and Fail buttons.',
       }}
       caption="The eight d6 are listed right above the rows they hit."
     >
-      <p class="mt-0 mb-5">
-        Every row prints its reasons. The Ogre failed, so 32 waits in its box. The Hell Hound failed
-        too — immunity zeroes it anyway. The Quasit's fail is halved to 16 by its resistance, with
-        the two dice its Magic Resistance rolled sitting right on the row. The made saves take half.
-      </p>
-      <p class="mb-0">
+      <p class="mt-5 mb-0 text-base leading-relaxed text-muted">
         Your players roll their own saves at the table. Their rows wait with a Save and a Fail
         button, and the damage follows whichever you press.
       </p>
-    </Split>
-  </section>
+    </Hero>
+  </Band>
 
   {
     /* Casting is where the rolls come from: the card holds the rules text and the
@@ -88,12 +87,11 @@ const carries = [
       eyebrow="Casting"
       heading="The whole spell, one card"
       id="rolling-cast-title"
-      side="left"
       image={{
         src: spellCard,
         alt: 'The Fireball card opened from a stat block: 2 uses left, casting time, range, components, the full rules text, and a Cast button.',
       }}
-      mediaClass="max-w-[26rem] justify-self-center lg:justify-self-start"
+      mediaClass="max-w-[26rem] justify-self-center lg:justify-self-end"
     >
       <p class="mt-0 mb-5">
         Casting from a stat block opens the full card: range, components, duration, and the rules
