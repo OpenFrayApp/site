@@ -13,8 +13,8 @@ import spellCard from '../../assets/screenshots/spell-card.png';
 // The band's four rules: what every roll carries without being asked.
 const carries = [
   {
-    label: "The creature's own numbers",
-    body: 'Click an attack and it rolls with the sheet it belongs to: the bonus, the damage dice, the crit doubling. Nothing is typed twice.',
+    label: "The attacker's own numbers",
+    body: "Click an attack on a creature's stat block and it rolls with that creature's numbers: its attack bonus, its damage dice, the crit applied. Nothing is typed twice.",
   },
   {
     label: 'The effects on the board',
@@ -63,14 +63,14 @@ const carries = [
       id="rolling-saves-title"
       image={{
         src: saveRows,
-        alt: 'The rolled dice and six outcome rows: made saves halving 30 fire to 15, the fire-immune Hell Hound zeroed, the resistant Quasit down to 7, its two dice from Magic Resistance on the row, and two player rows with Save and Fail buttons.',
+        alt: 'The rolled dice and six outcome rows: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed despite failing, the resistant Quasit halved to 16, its two dice from Magic Resistance on the row, and two player rows with Save and Fail buttons.',
       }}
       caption="The eight d6 are listed right above the rows they hit."
     >
       <p class="mt-0 mb-5">
-        Every row prints its reasons. The made saves take half of the 30. The fire-immune Hell Hound
-        reads 0 without you remembering why. The Quasit resists — half, then half again — and its
-        Magic Resistance rolled two dice and kept the better one, right on the row.
+        Every row prints its reasons. The Ogre failed, so 32 waits in its box. The Hell Hound failed
+        too — immunity zeroes it anyway. The Quasit's fail is halved to 16 by its resistance, with
+        the two dice its Magic Resistance rolled sitting right on the row. The made saves take half.
       </p>
       <p class="mb-0">
         Your players roll their own saves at the table. Their rows wait with a Save and a Fail

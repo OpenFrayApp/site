@@ -23,8 +23,13 @@ magick "$OUT/console-hero.png" -crop 780x452+2790+380 +repage "$SITE/applied-eff
 # full damage, halves, the immune zero, the resisted quarter, and the player rows
 # waiting for real dice. From cast-spell-hero.png: the spell card alone, uses
 # counted, Cast button included.
-magick "$OUT/group-save-hero.png" -crop 1330x490+1140+830 +repage "$SITE/save-rows.png"
-magick "$OUT/cast-spell-hero.png" -crop 1318x1008+1152+509 +repage "$SITE/spell-card.png"
+# The rows crop stays inside the dialog and pads with the dialog's own background,
+# right side widest, so the damage inputs get air without dragging the console in.
+BG=$(magick "$OUT/group-save-hero.png" -format '%[pixel:p{1300,1000}]' info:)
+magick "$OUT/group-save-hero.png" -crop 1330x500+1136+820 +repage \
+  -bordercolor "$BG" -border 24 -background "$BG" -gravity East -splice 40x0 \
+  "$SITE/save-rows.png"
+magick "$OUT/cast-spell-hero.png" -crop 1374x1036+1124+481 +repage "$SITE/spell-card.png"
 
 # From apply-effect-hero.png (1080x1910, already clipped to the modal): its four
 # zones, in the order the page tells them.
