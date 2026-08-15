@@ -1,16 +1,16 @@
 ---
-// The scaffold every feature landing page shares: hero, a dominant zoomable
-// screenshot, the page's own sections (slot), handbook links, cross-links to the
-// sibling features, and the closing CTA band. The first entry in `shots` is the
-// hero image; a page's slot can add triggers for the rest by index.
+/** The scaffold every feature landing page shares: a split hero carrying a screenshot
+ *  or a silent loop, the page's own sections (slot), the handbook links, and the
+ *  closing panel with the console CTA and the sibling features. `shots` fills the
+ *  lightbox; a hero image doubles as its first entry, so the split-sized picture
+ *  still opens in full. */
 import Layout from '../layouts/Layout.astro';
+import Hero from './Hero.astro';
+import Panel from './Panel.astro';
 import Cta from './Cta.astro';
 import Lightbox from './Lightbox.astro';
-import ZoomIcon from './ZoomIcon.astro';
-import { Picture } from 'astro:assets';
-import { hero, tagline } from '../data/hero.ts';
+import { hero } from '../data/hero.ts';
 import { features } from '../data/features.ts';
-import { zoomTrigger, zoomOverlay, zoomBadge } from '../data/lightbox.ts';
 import { EYEBROW, TEXT_COL } from '../data/pageStyles.ts';
 
 interface Shot {
@@ -22,54 +22,49 @@ interface Props {
   description: string;
   heading: string;
   lede: string;
-  shots: Shot[];
+  /** The hero's screenshot; also the lightbox's first shot when it is in `shots`. */
+  image?: Shot;
+  /** The hero's silent loop, instead of a screenshot. */
+  video?: { src: string; poster?: string; label: string };
+  shots?: Shot[];
   handbook: { label: string; href: string }[];
   current: string;
   /** Constrains the hero figure; a portrait shot must not fill the column. */
-  heroClass?: string;
+  mediaClass?: string;
 }
 
-const { title, description, heading, lede, shots, handbook, current, heroClass = '' } =
-  Astro.props;
+const {
+  title,
+  description,
+  heading,
+  lede,
+  image,
+  video,
+  shots = [],
+  handbook,
+  current,
+  mediaClass = '',
+} = Astro.props;
 const siblings = features.filter((f) => f.href !== current);
 ---
 
 <Layout title={title} description={description}>
   <main class={`${hero} overflow-x-clip`}>
-    <section class={`${TEXT_COL} text-left`}>
-      <p class={`${EYEBROW} mb-5`}>Features</p>
-      <h1
-        class="mt-0 mb-5 max-w-[20ch] text-[clamp(2.2rem,5.5vw,3.5rem)] leading-[1.06] font-extrabold tracking-tight"
-      >
-        {heading}
-      </h1>
-      <p class={`${tagline} m-0 max-w-[52rem]`}>{lede}</p>
-    </section>
-
-    <section class={`mt-14 ${TEXT_COL} text-left`}>
-      <figure class={`m-0 ${heroClass}`}>
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} rounded-2xl`}
-          data-index="0"
-          aria-label={`Enlarge screenshot: ${shots[0].alt}`}
-        >
-          <Picture
-            src={shots[0].img}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[1024, 1600, 2048]}
-            sizes="(max-width: 1024px) 94vw, 61rem"
-            alt={shots[0].alt}
-            loading="eager"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-      </figure>
-    </section>
+    <div class={TEXT_COL}>
+      <Hero
+        eyebrow="Features"
+        heading={heading}
+        tagline={lede}
+        video={video}
+        image={image ? { src: image.img, alt: image.alt } : undefined}
+        zoomIndex={image ? 0 : undefined}
+        ctas={[
+          { label: 'Open the console →', href: '/console/' },
+          { label: 'Run your first fight', href: '/docs/getting-started/', ghost: true },
+        ]}
+        mediaClass={mediaClass}
+      />
+    </div>
 
     <slot />
 
@@ -88,34 +83,30 @@ const siblings = features.filter((f) => f.href !== current);
       </ul>
     </section>
 
-    <section class={`mt-20 mb-4 ${TEXT_COL} text-left`} aria-label="Keep exploring">
-      <div class="rounded-2xl border border-border bg-panel px-6 py-8 sm:px-10 sm:py-10">
-        <h2
-          class="mt-0 mb-6 max-w-[22ch] text-[clamp(1.5rem,3vw,2.1rem)] leading-[1.14] font-extrabold tracking-tight"
-        >
-          See it hold a real fight
-        </h2>
-        <div class="cta-row flex flex-wrap gap-3">
-          <Cta href="/console/">Open the console →</Cta>
-          <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
+    <div class={`mt-20 mb-4 ${TEXT_COL}`}>
+      <Panel heading="See it hold a real fight">
+        <div slot="footer">
+          <div class="cta-row flex flex-wrap gap-3">
+            <Cta href="/console/">Open the console →</Cta>
+            <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
+          </div>
+          <ul
+            class="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-border p-0 pt-6 text-sm leading-relaxed"
+          >
+            {
+              siblings.map((f) => (
+                <li>
+                  <a href={f.href} class="font-semibold text-accent no-underline hover:underline">
+                    {f.name} →
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-
-        <ul
-          class="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-border p-0 pt-6 text-sm leading-relaxed"
-        >
-          {
-            siblings.map((f) => (
-              <li>
-                <a href={f.href} class="font-semibold text-accent no-underline hover:underline">
-                  {f.name} →
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
+      </Panel>
+    </div>
   </main>
 
-  <Lightbox shots={shots} />
+  {shots.length > 0 && <Lightbox shots={shots} />}
 </Layout>
