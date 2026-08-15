@@ -16,9 +16,10 @@ mkdirSync('public/media', { recursive: true });
 /** Even-number a value, which yuv420p requires of every crop edge and size. */
 const even = (n) => 2 * Math.round(n / 2);
 
-/** Trim, crop, and encode one loop, with a poster from its held ending. */
-function cut(name, { from, to, box }) {
-  const filter = `crop=${even(box.w)}:${even(box.h)}:${even(box.x)}:${even(box.y)},format=yuv420p`;
+/** Trim, crop to `box` if given, scale to `width`, and encode mp4 + poster. */
+function cut(name, { from, to, box, width }) {
+  const crop = box ? `crop=${even(box.w)}:${even(box.h)}:${even(box.x)}:${even(box.y)},` : '';
+  const filter = `${crop}scale=${even(width)}:-2,format=yuv420p`;
   const args = [
     '-loglevel',
     'error',
@@ -64,22 +65,23 @@ function cut(name, { from, to, box }) {
   console.log(`public/media/${name}.mp4`);
 }
 
-// The swing: the attack dialog from the Greatclub click to the held result, cropped
-// to the dialog the recorder measured, with a halo of backdrop around it.
-const d = marks.swingDialog;
+// The swing, filmed: the whole board, a push into the stat block while the swing is
+// rolled with Bane and Prone named under it, a pull back, and a push into the log
+// where the receipt landed. The camera moves are in the footage, so no crop.
 cut('roll-with-effects', {
   from: marks.swingStart - 0.2,
   to: marks.swingEnd,
-  box: { x: d.x - 16, y: d.y - 16, w: d.width + 32, h: d.height + 32 },
+  width: 1440,
 });
 
 // The concentration check, wide enough for cause and effect together: the wizard's
 // pane with her hit points, the controls rail where the DC 10 answer appears, and
-// the click that keeps the spell. The tracking page's hero.
+// the click that keeps the spell.
 cut('concentration-check', {
   from: marks.concStart + 1.2,
   to: marks.concEnd,
   box: { x: 480, y: 76, w: 960, h: 424 },
+  width: 960,
 });
 
 // The clocks: turns advance and every effect's rounds-left counts itself down in
@@ -88,4 +90,5 @@ cut('effect-clocks', {
   from: marks.tickStart + 0.3,
   to: marks.tickEnd,
   box: { x: 1024, y: 76, w: 416, h: 404 },
+  width: 416,
 });

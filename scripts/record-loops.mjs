@@ -35,6 +35,10 @@ const ROLLS = [
 
 const { chromium } = loadPlaywright();
 const browser = await chromium.launch({ channel: 'chrome' });
+// The screencast captures at CSS viewport size whatever the device scale, so the
+// recording matches the viewport 1:1. The camera's punch-ins stay crisp because the
+// browser re-rasters the transformed page live — the zoom is rendered, not scaled
+// in post.
 const context = await browser.newContext({
   viewport: VIEWPORT,
   recordVideo: { dir: outDir, size: VIEWPORT },
@@ -48,9 +52,19 @@ await page.goto(url);
 await page.getByText('Add creature').first().waitFor();
 await page.waitForTimeout(600);
 
-// A visible cursor, or the recording reads as a slideshow: a dot follows the mouse
-// and pulses on press, and the loops move to their targets in eased steps.
+// Two pieces of film kit. A visible cursor, or the recording reads as a slideshow: a
+// dot follows the mouse and pulses on press. And a camera rig: the app is wrapped so
+// it can be scaled and panned with an eased transition, while the dot stays outside
+// the rig, glued to the real pointer. Element positions move with the transform and
+// Playwright reads them post-transform, so interactions keep landing while zoomed.
 await page.evaluate(() => {
+  const rig = document.createElement('div');
+  rig.id = 'camera-rig';
+  rig.style.cssText = 'transform-origin:0 0;transition:transform .95s cubic-bezier(.45,0,.25,1)';
+  while (document.body.firstChild) rig.append(document.body.firstChild);
+  document.body.append(rig);
+  document.documentElement.style.overflow = 'hidden';
+
   const dot = document.createElement('div');
   dot.id = 'fake-cursor';
   dot.style.cssText =
@@ -66,6 +80,26 @@ await page.evaluate(() => {
   addEventListener('mousedown', () => (dot.style.scale = '0.65'));
   addEventListener('mouseup', () => (dot.style.scale = '1'));
 });
+
+/** Move the camera: center the viewport point (cx, cy) at the given scale, eased,
+ *  clamped so the window never slides off the page into black. camera(1) pulls back
+ *  to the whole board. */
+async function camera(scale, cx = VIEWPORT.width / 2, cy = VIEWPORT.height / 2) {
+  const clamp = (v, half, max) => Math.min(Math.max(v, half), max - half);
+  cx = clamp(cx, VIEWPORT.width / scale / 2, VIEWPORT.width);
+  cy = clamp(cy, VIEWPORT.height / scale / 2, VIEWPORT.height);
+  await page.evaluate(
+    ({ scale, cx, cy, vw, vh }) => {
+      const rig = document.getElementById('camera-rig');
+      rig.style.transform =
+        scale === 1
+          ? 'none'
+          : `translate(${vw / 2 - cx * scale}px, ${vh / 2 - cy * scale}px) scale(${scale})`;
+    },
+    { scale, cx, cy, vw: VIEWPORT.width, vh: VIEWPORT.height },
+  );
+  await page.waitForTimeout(1100);
+}
 
 /** Click the way a hand does: glide to the target, settle, press. For the recorded
  *  moments only — the staging before them is trimmed away and clicks plainly. */
@@ -178,23 +212,38 @@ await next();
 await next();
 await page.waitForTimeout(800);
 
-// ── Loop A: the swing ──────────────────────────────────────────────────────
-// Park the cursor mid-board so the loop opens with it gliding to the action line.
+// ── Loop A: the swing, filmed ──────────────────────────────────────────────
+// The whole board first, so the fight is the context; then the camera pushes into
+// the stat block while the swing is rolled and the dialog names what rode it; then
+// it pulls back and pushes into the log, where the receipt landed. Starting and
+// ending on the full board is what lets the loop seam.
 await page.mouse.move(720, 620, { steps: 20 });
 await page.waitForTimeout(400);
 marks.swingStart = at();
-await clickLike(page.getByText('Greatclub.', { exact: false }).first());
-await page.waitForTimeout(900);
-await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
+await page.waitForTimeout(1300);
+const club = page.getByText('Greatclub.', { exact: false }).first();
+const clubBox = await club.boundingBox();
+await camera(1.55, 720, clubBox.y + 30);
+await clickLike(club);
 await page.waitForTimeout(700);
+// The dialog opens centered on the board; re-aim without changing scale, a pan.
+await camera(1.55, 720, 450);
+await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
+await page.waitForTimeout(600);
 await clickLike(dialog().getByRole('button', { name: 'Roll attack' }));
 await page.waitForTimeout(1200);
-marks.swingDialog = await dialog().boundingBox();
-await page.waitForTimeout(2600);
+await page.waitForTimeout(2400);
+await clickLike(dialog().getByRole('button', { name: 'Close' }));
+await page.waitForTimeout(300);
+await camera(1);
+await page.waitForTimeout(700);
+// The other side: the receipt at the top of the log, the cursor resting beside it.
+await camera(2.1, 1240, 290);
+await page.mouse.move(1240, 320, { steps: 26 });
+await page.waitForTimeout(2400);
+await camera(1);
+await page.waitForTimeout(900);
 marks.swingEnd = at();
-const close = dialog().getByRole('button', { name: 'Close' });
-if (await close.count()) await close.click();
-await page.waitForTimeout(600);
 
 // ── Loop B: the concentration prompt ───────────────────────────────────────
 // Elowen holds Faerie Fire; damage lands on her, the board offers the check, and
