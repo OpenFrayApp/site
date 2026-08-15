@@ -1,36 +1,49 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 Nicola Mustone
 
-// Record the site's marketing loops against a running console. One take stages a
-// small fight through the real UI (the spells are actually cast, so every badge on
-// screen has a cause), then performs each choreographed moment; the timestamps and
-// dialog boxes it prints are what scripts/cut-loops.sh trims and crops with.
+// Record one of the site's marketing loops against a running console. A take stages
+// a small fight through the real UI (the spells are actually cast, so every badge on
+// screen has a cause), then films its scene's choreographed moment; the timestamps
+// it prints are what scripts/cut-loops.mjs trims with.
 //
-//   node scripts/record-loops.mjs [console-url] [out-dir]
+//   node scripts/record-loops.mjs [console-url] [out-dir] [scene]
 //
-// Defaults: http://localhost:5199/console/ and screenshots/out. The raw take lands
-// as loops-raw.webm beside a loops-marks.json describing the segments.
+// Scenes: `swing` (the Ogre's Baned, disadvantaged Greatclub — the tracking hero)
+// and `group-save` (the Mage's Fireball at six targets — the rolling hero). Marks
+// land beside the take as loops-<scene>-marks.json.
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadPlaywright } from './lib/playwright.mjs';
 
 const url = process.argv[2] ?? 'http://localhost:5199/console/';
 const outDir = process.argv[3] ?? 'screenshots/out';
+const scene = process.argv[4] ?? 'swing';
+if (!['swing', 'group-save'].includes(scene)) {
+  console.error(`Unknown scene: ${scene}`);
+  process.exit(1);
+}
 
 const VIEWPORT = { width: 1440, height: 900 };
 
-/** The cast, small on purpose: the two spellcasters the badges need, the target, and
- *  the Ogre whose swing is the show. */
+/** The party, small on purpose; each scene brings the foes its moment needs. */
 const PARTY = [
   { name: 'Elowen Vale', ac: 12, hp: 22, init: 3 },
   { name: 'Bram Ironfist', ac: 18, hp: 34, init: 1 },
   { name: 'Sister Mirad', ac: 18, hp: 27, init: 0 },
 ];
+const FOES = {
+  swing: ['Ogre'],
+  'group-save': ['Mage', 'Ogre', 'Hell Hound', 'Quasit', 'Goblin Warrior'],
+};
 const ROLLS = [
   { who: 'Elowen Vale', roll: 23 },
   { who: 'Bram Ironfist', roll: 19 },
   { who: 'Sister Mirad', roll: 2 },
+  { who: 'Mage', roll: 17 },
   { who: 'Ogre', roll: 14 },
+  { who: 'Hell Hound', roll: 11 },
+  { who: 'Quasit', roll: 8 },
+  { who: 'Goblin Warrior', roll: 5 },
 ];
 
 const { chromium } = loadPlaywright();
@@ -180,7 +193,7 @@ async function next() {
 
 // ── Stage ──────────────────────────────────────────────────────────────────
 for (const pc of PARTY) await addPc(pc);
-await addCreature('Ogre');
+for (const foe of FOES[scene]) await addCreature(foe);
 
 await page.getByRole('button', { name: 'Begin' }).click();
 await page.getByText('Roll initiative').waitFor();
@@ -191,82 +204,143 @@ for (const { who, roll } of ROLLS) {
 await page.getByRole('button', { name: 'Start combat' }).click();
 await page.waitForTimeout(500);
 
-// Round 1. Elowen: Faerie Fire on the Ogre.
-await cast('Faerie Fire', 'Ogre');
-await next();
-
-// Bram: the shove — Prone through the Apply effect box.
-await page.getByText('Ogre', { exact: true }).first().click();
-await page.waitForTimeout(300);
-await page.getByRole('button', { name: 'Apply effect' }).click();
-await page.waitForTimeout(400);
-const box = dialog();
-await box.getByRole('button', { name: 'Prone', exact: true }).click();
-await box.getByRole('button', { name: 'Apply', exact: true }).click();
-await page.waitForTimeout(300);
-await next();
-
-// The Ogre holds; Sister Mirad: Bane on it.
-await next();
-await cast('Bane', 'Ogre');
-await next();
-
-// Round 2: the party waits — the loops are the Ogre's turn.
-await next();
-await next();
-await page.waitForTimeout(800);
-
-// ── Loop A: the swing, filmed ──────────────────────────────────────────────
-// The whole board first, so the fight is the context; then the camera pushes into
-// the stat block while the swing is rolled and the dialog names what rode it; then
-// it pulls back and pushes into the log, where the receipt landed. Starting and
-// ending on the full board is what lets the loop seam.
-await page.mouse.move(720, 620, { steps: 20 });
-await page.waitForTimeout(400);
-marks.swingStart = at();
-await page.waitForTimeout(1300);
-const club = page.getByText('Greatclub.', { exact: false }).first();
-const clubBox = await club.boundingBox();
-await camera(1.55, 720, clubBox.y + 30);
-await clickLike(club);
-await page.waitForTimeout(700);
-// The dialog opens centered on the board; re-aim without changing scale, a pan.
-await camera(1.55, 720, 450);
-await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
-await page.waitForTimeout(600);
-await clickLike(dialog().getByRole('button', { name: 'Roll attack' }));
-await page.waitForTimeout(1400);
-// Tight on the roll line itself, aimed at the rendered text rather than a guess: a
-// first-time viewer is told where to look — the two dice, the kept one, and Bane
-// and Prone named right under them, with the cursor resting beside the causes.
-const rollLine = await dialog().getByText('vs AC 18').boundingBox();
-marks.swingDice = await dialog()
-  .getByText(/\[\d+, \d+\]/)
-  .first()
-  .textContent()
-  .catch(() => null);
-await camera(2.7, rollLine.x + rollLine.width / 2 + 40, rollLine.y + 30);
-// The causes' box is measured after the camera settles: the dot lives outside the
-// rig, so it only aligns with what it points at in post-transform coordinates.
-const causes = await dialog().getByText('Prone: disadvantage').boundingBox();
-await page.mouse.move(causes.x - 20, causes.y + causes.height / 2, { steps: 22 });
-await page.waitForTimeout(2600);
-await camera(1);
-await clickLike(dialog().getByRole('button', { name: 'Close' }));
-await page.waitForTimeout(400);
-// The other side: the receipt at the top of the log, the cursor resting beside it.
-await camera(2.1, 1240, 290);
-await page.mouse.move(1240, 320, { steps: 26 });
-await page.waitForTimeout(2400);
-await camera(1);
-await page.waitForTimeout(900);
-marks.swingEnd = at();
+if (scene === 'swing') await filmSwing();
+else await filmGroupSave();
 marks.total = at();
 
 await context.close();
 const video = await page.video().path();
 await browser.close();
 
-writeFileSync(join(outDir, 'loops-marks.json'), JSON.stringify({ video, ...marks }, null, 2));
+writeFileSync(
+  join(outDir, `loops-${scene}-marks.json`),
+  JSON.stringify({ video, ...marks }, null, 2),
+);
 console.log(video);
 console.log(JSON.stringify(marks, null, 2));
+
+// ── The swing, filmed ──────────────────────────────────────────────────────
+// Stage the badges (Faerie Fire, the shove's Prone, Bane) through two rounds, then
+// film: the whole board first, so the fight is the context; the camera pushes into
+// the stat block while the swing is rolled and the dialog names what rode it; then
+// it pulls back and pushes into the log, where the receipt landed. Starting and
+// ending on the full board is what lets the loop seam.
+async function filmSwing() {
+  // Round 1. Elowen: Faerie Fire on the Ogre.
+  await cast('Faerie Fire', 'Ogre');
+  await next();
+
+  // Bram: the shove — Prone through the Apply effect box.
+  await page.getByText('Ogre', { exact: true }).first().click();
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: 'Apply effect' }).click();
+  await page.waitForTimeout(400);
+  const box = dialog();
+  await box.getByRole('button', { name: 'Prone', exact: true }).click();
+  await box.getByRole('button', { name: 'Apply', exact: true }).click();
+  await page.waitForTimeout(300);
+  await next();
+
+  // The Ogre holds; Sister Mirad: Bane on it.
+  await next();
+  await cast('Bane', 'Ogre');
+  await next();
+
+  // Round 2: the party waits — the loop is the Ogre's turn.
+  await next();
+  await next();
+  await page.waitForTimeout(800);
+
+  await page.mouse.move(720, 620, { steps: 20 });
+  await page.waitForTimeout(400);
+  marks.swingStart = at();
+  await page.waitForTimeout(1300);
+  const club = page.getByText('Greatclub.', { exact: false }).first();
+  const clubBox = await club.boundingBox();
+  await camera(1.55, 720, clubBox.y + 30);
+  await clickLike(club);
+  await page.waitForTimeout(700);
+  // The dialog opens centered on the board; re-aim without changing scale, a pan.
+  await camera(1.55, 720, 450);
+  await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
+  await page.waitForTimeout(600);
+  await clickLike(dialog().getByRole('button', { name: 'Roll attack' }));
+  await page.waitForTimeout(1400);
+  // Tight on the roll line itself, aimed at the rendered text rather than a guess: a
+  // first-time viewer is told where to look — the two dice, the kept one, and Bane
+  // and Prone named right under them, with the cursor resting beside the causes.
+  const rollLine = await dialog().getByText('vs AC 18').boundingBox();
+  marks.swingDice = await dialog()
+    .getByText(/\[\d+, \d+\]/)
+    .first()
+    .textContent()
+    .catch(() => null);
+  await camera(2.7, rollLine.x + rollLine.width / 2 + 40, rollLine.y + 30);
+  // The causes' box is measured after the camera settles: the dot lives outside the
+  // rig, so it only aligns with what it points at in post-transform coordinates.
+  const causes = await dialog().getByText('Prone: disadvantage').boundingBox();
+  await page.mouse.move(causes.x - 20, causes.y + causes.height / 2, { steps: 22 });
+  await page.waitForTimeout(2600);
+  await camera(1);
+  await clickLike(dialog().getByRole('button', { name: 'Close' }));
+  await page.waitForTimeout(400);
+  // The other side: the receipt at the top of the log, the cursor resting beside it.
+  await camera(2.1, 1240, 290);
+  await page.mouse.move(1240, 320, { steps: 26 });
+  await page.waitForTimeout(2400);
+  await camera(1);
+  await page.waitForTimeout(900);
+  marks.swingEnd = at();
+}
+
+// ── The group save, filmed ─────────────────────────────────────────────────
+// A fresh fight, and the enemy Mage opens it with a Fireball that does not respect
+// sides: the whole board, the cast, six targets picked one by one, every save
+// rolled at once — then tight on the outcome rows, where immunity zeroes one line,
+// resistance halves another, and the player rows wait for real dice. Nothing is
+// applied; the decision stays the GM's.
+async function filmGroupSave() {
+  await page.waitForTimeout(600);
+  await page.mouse.move(720, 560, { steps: 20 });
+  await page.waitForTimeout(400);
+  marks.groupStart = at();
+  await page.waitForTimeout(1300);
+  await clickLike(page.getByRole('button', { name: 'Cast spell' }));
+  await page.waitForTimeout(600);
+  await page.getByLabel('Caster').selectOption({ label: 'Mage' });
+  await page.waitForTimeout(300);
+  await page.getByPlaceholder('Search spells…').fill('Fireball');
+  await page.waitForTimeout(500);
+  await clickLike(page.getByRole('button', { name: /^Fireball/ }).first());
+  await page.waitForTimeout(900);
+  await camera(1.5, 720, 450);
+  for (const who of [
+    'Bram Ironfist',
+    'Elowen Vale',
+    'Ogre',
+    'Hell Hound',
+    'Quasit',
+    'Goblin Warrior',
+  ]) {
+    await clickLike(dialog().getByRole('button', { name: who }).first());
+    await page.waitForTimeout(120);
+  }
+  await page.waitForTimeout(400);
+  await clickLike(dialog().getByRole('button', { name: 'Roll saves' }));
+  await page.waitForTimeout(1600);
+  // The rolled dice, for the take gate: a fluke where every d20 matches reads as
+  // rigged dice on a page selling honest ones.
+  marks.groupDice = await dialog()
+    .innerText()
+    .then((t) => t.match(/\[[\d, ]+\] → \d+/g))
+    .catch(() => null);
+  // Tight on the outcomes: the immune line is the one worth pointing at.
+  const immune = await dialog().getByText('immune').first().boundingBox();
+  await camera(2.2, 720, immune.y + 40);
+  const immuneNow = await dialog().getByText('immune').first().boundingBox();
+  await page.mouse.move(immuneNow.x - 18, immuneNow.y + immuneNow.height / 2, { steps: 22 });
+  await page.waitForTimeout(2800);
+  await camera(1);
+  await page.waitForTimeout(1000);
+  marks.groupEnd = at();
+}

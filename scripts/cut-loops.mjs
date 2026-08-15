@@ -9,7 +9,7 @@
 import { readFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
-const marksFile = process.argv[2] ?? 'screenshots/out/loops-marks.json';
+const marksFile = process.argv[2] ?? 'screenshots/out/loops-swing-marks.json';
 const marks = JSON.parse(readFileSync(marksFile, 'utf8'));
 mkdirSync('public/media', { recursive: true });
 
@@ -70,8 +70,20 @@ function cut(name, { from, to, box, width }) {
 // The swing, filmed: the whole board, a push into the stat block while the swing is
 // rolled with Bane and Prone named under it, a pull back, and a push into the log
 // where the receipt landed. The camera moves are in the footage, so no crop.
-cut('roll-with-effects', {
-  from: marks.swingStart - 0.2,
-  to: marks.swingEnd,
-  width: 1440,
-});
+if (marks.swingStart != null) {
+  cut('roll-with-effects', {
+    from: marks.swingStart - 0.2,
+    to: marks.swingEnd,
+    width: 1440,
+  });
+}
+
+// The group save, filmed: the Mage's Fireball at six targets, every save rolled at
+// once, held tight on the outcome rows. Same footage-borne camera, so no crop.
+if (marks.groupStart != null) {
+  cut('six-saves', {
+    from: marks.groupStart - 0.2,
+    to: marks.groupEnd,
+    width: 1440,
+  });
+}
