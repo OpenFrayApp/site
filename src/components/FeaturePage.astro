@@ -28,6 +28,8 @@ interface Props {
   video?: { src: string; poster?: string; label: string };
   /** One line under the hero media, guiding the viewer through what it shows. */
   caption?: string;
+  /** Which side the hero media sits on at lg. */
+  heroSide?: 'left' | 'right';
   shots?: Shot[];
   handbook: { label: string; href: string }[];
   current: string;
@@ -43,6 +45,7 @@ const {
   image,
   video,
   caption,
+  heroSide = 'right',
   shots = [],
   handbook,
   current,
@@ -60,6 +63,7 @@ const siblings = features.filter((f) => f.href !== current);
         tagline={lede}
         video={video}
         caption={caption}
+        side={heroSide}
         image={image ? { src: image.img, alt: image.alt } : undefined}
         zoomIndex={image && shots.length > 0 ? 0 : undefined}
         ctas={[

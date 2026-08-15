@@ -266,11 +266,17 @@ async function filmShareLink() {
   await camera(1.9, iconBox.x, iconBox.y + 40);
   await clickLike(icon);
   await page.waitForTimeout(600);
-  // The panel opens below the icon; re-aim around its Start button — the panel
-  // renders without a dialog role, so its own controls are the anchors.
+  // The panel renders without a dialog role, so its own heading and Start button
+  // are the anchors: frame their union, scaled so the whole panel stays in shot.
   const startBtn = page.getByRole('button', { name: 'Start sharing' });
+  const headBox = await page.getByText('Player view', { exact: true }).first().boundingBox();
   const startBox = await startBtn.boundingBox();
-  await camera(1.6, startBox.x + startBox.width / 2, startBox.y);
+  const left = Math.min(headBox.x, startBox.x) - 40;
+  const right = Math.max(headBox.x + headBox.width, startBox.x + startBox.width) + 40;
+  const top = headBox.y - 40;
+  const bottom = startBox.y + startBox.height + 60;
+  const fit = Math.min(1.7, 1440 / (right - left), 900 / (bottom - top));
+  await camera(fit, (left + right) / 2, (top + bottom) / 2);
   await clickLike(startBtn);
   await page.waitForTimeout(1400);
   // Pull wide before the jump, so the cut lands full-frame to full-frame.
