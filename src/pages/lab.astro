@@ -9,6 +9,7 @@ import Band from '../components/Band.astro';
 import Split from '../components/Split.astro';
 import Tabs from '../components/Tabs.astro';
 import Accordion from '../components/Accordion.astro';
+import Slider from '../components/Slider.astro';
 import { hero, tagline } from '../data/hero.ts';
 import { EYEBROW, TEXT_COL } from '../data/pageStyles.ts';
 import consoleHero from '../assets/screenshots/console-hero.png';
@@ -99,6 +100,64 @@ const turn = [
         }}
       />
     </div>
+
+    <div class={`${TEXT_COL}`}>
+      <p class={DEMO}>Hero · slider right</p>
+      <Hero
+        eyebrow="The difference"
+        heading="What the board keeps hold of"
+        level="h2"
+        tagline="Flip through the same fight: the badges on the rows, the roll that carried them, and the bundle that applied them in one click."
+        ctas={[{ label: 'Open the console →', href: '/console/' }]}
+      >
+        <Slider
+          slot="media"
+          label="What the board keeps hold of"
+          slides={[
+            {
+              image: {
+                src: consoleRows,
+                alt: 'Three tracker rows, the Ogre carrying advantage-against, Prone, and Bane chips.',
+              },
+              caption: 'The badges live on the rows.',
+            },
+            {
+              image: {
+                src: greatclubLog,
+                alt: 'The Greatclub log entry: two d20s at disadvantage, the Bane d4 subtracted, a hit for 15.',
+              },
+              caption: 'And every one of them lands in the roll.',
+            },
+            {
+              image: {
+                src: applyName,
+                alt: 'The Apply-as-one field naming a whole effect package Sallow Rot 3.',
+              },
+              caption: 'Bundles apply as one badge and clear together.',
+            },
+          ]}
+        />
+      </Hero>
+    </div>
+
+    <p class={`${TEXT_COL} ${DEMO}`}>Hero · full band, video right with a slight bleed</p>
+    <Band>
+      <Hero
+        eyebrow="A fight in progress"
+        heading="Run it, don't remember it"
+        level="h2"
+        tagline="The board holds round 3 so you don't have to: initiative, the Ogre's three effects, and a log that shows its work."
+        ctas={[
+          { label: 'Open the console →', href: '/console/' },
+          { label: 'Run your first fight', href: '/docs/getting-started/', ghost: true },
+        ]}
+        video={{
+          src: '/lab/loop.mp4',
+          label: 'A slow pan across the console mid-fight, round 3 on the board.',
+        }}
+        bleed
+      />
+    </Band>
 
     <p class={`${TEXT_COL} ${DEMO}`}>Band · full width, panel background</p>
     <Band eyebrow="One turn, held together" heading="What runs by itself" id="lab-band-title">

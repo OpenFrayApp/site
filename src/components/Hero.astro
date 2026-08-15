@@ -23,6 +23,10 @@ interface Props {
   headingClass?: string;
   /** Extra classes for the media column, e.g. a max width for a portrait shot. */
   mediaClass?: string;
+  /** Lets the media run past the column to the viewport edge on its own side, the
+   *  way the app runs past a window. Only at lg, and only for restrained media —
+   *  the text column still owns the layout. */
+  bleed?: boolean;
 }
 
 const {
@@ -36,8 +40,14 @@ const {
   video,
   headingClass = DISPLAY_LG,
   mediaClass = '',
+  bleed = false,
 } = Astro.props;
 const Heading = level;
+const bleedClass = bleed
+  ? side === 'left'
+    ? 'lg:ml-[calc(50%-50vw)]'
+    : 'lg:mr-[calc(50%-50vw)]'
+  : '';
 ---
 
 <section class="hero-split grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
@@ -59,7 +69,7 @@ const Heading = level;
     <slot />
   </div>
 
-  <figure class={`m-0 ${side === 'left' ? 'lg:order-1' : ''} ${mediaClass}`}>
+  <figure class={`m-0 ${side === 'left' ? 'lg:order-1' : ''} ${bleedClass} ${mediaClass}`}>
     <slot name="media">
       {
         image && (
