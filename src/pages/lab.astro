@@ -10,6 +10,10 @@ import Split from '../components/Split.astro';
 import Tabs from '../components/Tabs.astro';
 import Accordion from '../components/Accordion.astro';
 import Slider from '../components/Slider.astro';
+import Cards from '../components/Cards.astro';
+import Panel from '../components/Panel.astro';
+import Cta from '../components/Cta.astro';
+import playerViewHero from '../assets/screenshots/player-view-hero.png';
 import { hero, tagline } from '../data/hero.ts';
 import { EYEBROW, TEXT_COL } from '../data/pageStyles.ts';
 import consoleHero from '../assets/screenshots/console-hero.png';
@@ -270,6 +274,105 @@ const turn = [
           },
         ]}
       />
+
+      <p class={DEMO}>Cards · accent, two columns</p>
+      <Cards
+        accent
+        items={[
+          {
+            title: 'Relationships, not just creatures',
+            body: "Effects have two ends. The barbarian's Reckless Attack grants advantage against them; Vicious Mockery debuffs the goblin's next swing. OpenFray records which end is which and works it into the roll, whichever side is rolling.",
+          },
+          {
+            title: 'A scratchpad, not a second character sheet',
+            body: "OpenFray never asks you to model a player's build. It tracks what just happened and what has to be remembered this round — which is why it stays fast instead of becoming a worse VTT.",
+          },
+        ]}
+      />
+
+      <p class={DEMO}>Cards · plain, auto-fit flow</p>
+      <Cards
+        layout="flow"
+        items={[
+          {
+            title: 'Honest dice, written down',
+            body: 'Every number equally likely, and every roll logged with the dice behind it.',
+          },
+          {
+            title: 'Nothing waits on the network',
+            body: 'The fight lives in the browser and saves in the background. Rolling a die answers instantly.',
+          },
+          {
+            title: 'Sync when you want it',
+            body: 'Sign in free with Discord or Google to pick a fight up on another device.',
+          },
+        ]}
+      />
+
+      <p class={DEMO}>Split · card stack beside media</p>
+      <Split
+        eyebrow="For your players"
+        heading="Share the fight, keep your secrets"
+        id="lab-cards-split"
+        side="right"
+        image={{
+          src: playerViewHero,
+          alt: 'The shared player view: the party in numbers, the foes in words, and a footer noting that nothing is saved.',
+        }}
+        caption="The same fight, the way your table sees it."
+      >
+        <Cards
+          layout="stack"
+          items={[
+            {
+              title: 'A live view on their own devices',
+              body: "Share a link and the turn order, conditions, and game log follow the fight on your players' screens as you run it.",
+            },
+            {
+              title: 'You choose what they see',
+              body: 'Hit points in words — Bloodied, not a number — or exact, or hidden. Armor class held back, rolls with the dice removed.',
+            },
+            {
+              title: 'Nothing stored, nothing to set up',
+              body: "It works without an account. Stop sharing and it's gone.",
+            },
+          ]}
+        />
+      </Split>
+
+      <p class={DEMO}>Panel · the closing box</p>
+      <Panel eyebrow="Open source" heading="Free to use, and built in the open" id="lab-panel">
+        <div class="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Version 1.0</h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              Out of beta, and running tables. Everything works in the browser with no account.
+            </p>
+          </div>
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Open all the way down
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              The code is AGPL-3.0 and every line of it is public. The creatures and rules in our
+              own books are Creative Commons.
+            </p>
+          </div>
+          <div>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Tell us anything
+            </h3>
+            <p class="m-0 text-sm leading-normal text-muted">
+              A bug, a rule OpenFray gets wrong, or something your table needs — open an issue and
+              it gets read.
+            </p>
+          </div>
+        </div>
+        <div slot="footer" class="cta-row flex flex-wrap gap-3">
+          <Cta href="/console/">Open the console →</Cta>
+          <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
+        </div>
+      </Panel>
 
       <p class={DEMO}>Accordion · media right</p>
       <Accordion

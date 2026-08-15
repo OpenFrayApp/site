@@ -1,0 +1,40 @@
+---
+/** The boxed panel: one rounded container for the section that closes a page — the
+ *  wrap-up, the final CTA band. The footer slot lands under a rule, for the CTA row
+ *  and the link list. */
+import { EYEBROW } from '../data/pageStyles.ts';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  id?: string;
+}
+
+const { eyebrow, heading, id } = Astro.props;
+const hasFooter = Astro.slots.has('footer');
+---
+
+<section
+  class="panel-box rounded-2xl border border-border bg-panel px-6 py-8 text-left sm:px-10 sm:py-10"
+  aria-labelledby={heading && id ? id : undefined}
+>
+  {eyebrow && <p class={`${EYEBROW} mb-3`}>{eyebrow}</p>}
+  {
+    heading && (
+      <h2
+        id={id}
+        class="mt-0 mb-0 max-w-[22ch] text-[clamp(1.5rem,3vw,2.1rem)] leading-[1.14] font-extrabold tracking-tight"
+      >
+        {heading}
+      </h2>
+    )
+  }
+  <slot />
+  {
+    hasFooter && (
+      <div class="mt-8 border-t border-border pt-8">
+        <slot name="footer" />
+      </div>
+    )
+  }
+</section>

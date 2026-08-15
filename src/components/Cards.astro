@@ -1,0 +1,38 @@
+---
+/** A grid of claim cards: bold title, short body. `accent` adds the left rail that
+ *  marks the differentiator cards; `stack` is the one-column variant for a card list
+ *  sitting beside media inside a Split. The slot appends custom cards to the grid. */
+import { CARD } from '../data/pageStyles.ts';
+
+interface Item {
+  title: string;
+  body: string;
+}
+interface Props {
+  items: Item[];
+  accent?: boolean;
+  /** Grid shape: two or three columns, an auto-fit flow, or a single stacked column. */
+  layout?: 'two' | 'three' | 'flow' | 'stack';
+}
+
+const { items, accent = false, layout = 'two' } = Astro.props;
+
+const grids = {
+  two: 'md:grid-cols-2',
+  three: 'md:grid-cols-3',
+  flow: 'grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]',
+  stack: '',
+};
+---
+
+<div class={`cards grid gap-4 text-left ${grids[layout]}`}>
+  {
+    items.map((item) => (
+      <div class={`feature ${CARD} ${accent ? 'border-l-2 border-l-accent' : ''}`}>
+        <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{item.title}</h3>
+        <p class="m-0 text-sm leading-normal text-muted">{item.body}</p>
+      </div>
+    ))
+  }
+  <slot />
+</div>
