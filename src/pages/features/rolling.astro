@@ -1,0 +1,120 @@
+---
+import FeaturePage from '../../components/FeaturePage.astro';
+import ZoomIcon from '../../components/ZoomIcon.astro';
+import { Picture } from 'astro:assets';
+import { zoomTrigger, zoomOverlay, zoomBadge } from '../../data/lightbox.ts';
+import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import groupSaveHero from '../../assets/screenshots/group-save-hero.png';
+import castSpellHero from '../../assets/screenshots/cast-spell-hero.png';
+
+const shots = [
+  {
+    img: groupSaveHero,
+    alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — 0 against the fire-immune Hell Hound, 7 against the Quasit that resists it.',
+  },
+  {
+    img: castSpellHero,
+    alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
+  },
+];
+
+const points = [
+  {
+    title: 'Roll from the stat block',
+    body: "Click an attack and it rolls with the creature's own numbers: the bonus, the damage dice, the crit doubling. The target's resistances and immunities are applied when the damage lands.",
+  },
+  {
+    title: 'Advantage, worked in',
+    body: 'Effects carry into rolls. Faerie Fire on the board means every attack roll against those creatures takes the Advantage automatically, turn after turn.',
+  },
+  {
+    title: 'Your result always wins',
+    body: 'Every roll can be typed instead. Real dice at the table stay in charge; OpenFray does the arithmetic around whatever you hand it.',
+  },
+  {
+    title: 'Honest dice, written down',
+    body: 'Rolls use a cryptographic generator with every number equally likely, and the log keeps each roll with the dice behind it. No streak correction, ever.',
+  },
+];
+---
+
+<FeaturePage
+  title="Smart rolling — OpenFray"
+  description="Attacks, saves, and damage in OpenFray: rolled from the stat block with every modifier worked in, group saves resolved in one click, and honest dice with a full roll log. Compatible with 5.5e and 5e."
+  heading="Every roll, already worked out"
+  lede="One spell hits six creatures. OpenFray rolls all six saves, applies each one's defenses, and hands you the damage — one click, done. That moment is why this page exists."
+  shots={shots}
+  handbook={[
+    { label: 'Attacks and damage', href: '/docs/fight/attacks/' },
+    { label: 'Saving throws', href: '/docs/fight/saves/' },
+    { label: 'Spells', href: '/docs/fight/spells/' },
+    { label: 'Dice and roll formulas', href: '/docs/reference/dice/' },
+    { label: 'The game log', href: '/docs/reference/game-log/' },
+  ]}
+  current="/features/rolling/"
+>
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="rolling-points-title">
+    <p class={`${EYEBROW} mb-4`}>The rules, respected</p>
+    <h2
+      id="rolling-points-title"
+      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    >
+      What a roll takes with it
+    </h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        points.map((f) => (
+          <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
+            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="rolling-cast-title">
+    <p class={`${EYEBROW} mb-4`}>Casting</p>
+    <h2
+      id="rolling-cast-title"
+      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    >
+      The whole spell, one card
+    </h2>
+    <div class="grid items-start gap-8 lg:grid-cols-2">
+      <figure class="m-0">
+        <button
+          type="button"
+          class={`shot-thumb ${zoomTrigger} rounded-xl`}
+          data-index="1"
+          aria-label={`Enlarge screenshot: ${shots[1].alt}`}
+        >
+          <Picture
+            src={shots[1].img}
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[720, 1440]}
+            sizes="(max-width: 1024px) 94vw, 30rem"
+            alt={shots[1].alt}
+            loading="lazy"
+            class="block h-auto w-full"
+          />
+          <span class={zoomOverlay} aria-hidden="true"
+            ><span class={zoomBadge}><ZoomIcon /></span></span
+          >
+        </button>
+      </figure>
+      <div class="text-base leading-relaxed text-muted">
+        <p class="mt-0">
+          Casting from a stat block opens the full spell card: range, components, duration, and the
+          rules text, with the creature's remaining uses counted beside it. Cast, and the save rolls
+          for every target at once.
+        </p>
+        <p class="mb-0">
+          The spell's effects land as one bundle — the condition, the reminder, the duration —
+          instead of five separate things to remember to apply.
+        </p>
+      </div>
+    </div>
+  </section>
+</FeaturePage>

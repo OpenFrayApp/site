@@ -1,0 +1,144 @@
+---
+import FeaturePage from '../../components/FeaturePage.astro';
+import CheckIcon from '../../components/CheckIcon.astro';
+import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import { libraries, shippedLibraries } from '../../data/libraries.ts';
+import compendiumHero from '../../assets/screenshots/compendium-hero.png';
+
+const shots = [
+  {
+    img: compendiumHero,
+    alt: 'The compendium open on the Creatures tab: a searchable list of 853 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
+  },
+];
+
+const importerChrome =
+  'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
+const importerFirefox = 'https://addons.mozilla.org/en-US/firefox/addon/openfray-importer/';
+
+const STORE_LINK =
+  'inline-flex flex-1 basis-32 items-center justify-center gap-1.5 rounded-lg border ' +
+  'border-border bg-bg px-4 py-3 text-base font-semibold text-accent no-underline ' +
+  'transition-[border-color,color] hover:border-accent hover:text-text';
+---
+
+<FeaturePage
+  title="Libraries — OpenFray"
+  description="The creature libraries built into OpenFray: Basic Rules 2024 and 2014, Tome of Beasts 1–3, Creature Codex, and three original books free to read — over 2000 creatures, plus a homebrew editor and a D&D Beyond importer. Compatible with 5.5e and 5e."
+  heading="Bring the libraries you actually use"
+  lede="Over 2000 creatures ship in the compendium, searchable beside the fight. Your table picks which libraries appear, and everything you build or import sits next to them."
+  shots={shots}
+  handbook={[
+    { label: 'The compendium', href: '/docs/library/compendium/' },
+    { label: 'Build your own', href: '/docs/library/making-your-own/' },
+    { label: 'Campaigns and house rules', href: '/docs/library/campaigns/' },
+    { label: 'The importer', href: '/docs/library/importer/' },
+    { label: 'The stat block', href: '/docs/reference/stat-block/' },
+  ]}
+  current="/features/libraries/"
+  heroClass="max-w-[36rem]"
+>
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="lib-included-title">
+    <p class={`${EYEBROW} mb-4`}>Included</p>
+    <h2
+      id="lib-included-title"
+      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    >
+      What's on the shelf
+    </h2>
+    <div class="grid items-start gap-4 md:grid-cols-2">
+      <div class={CARD}>
+        <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">Six licensed libraries</h3>
+        <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+          {
+            shippedLibraries.map((name) => (
+              <li class="flex gap-2">
+                <CheckIcon />
+                <span>{name}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 mb-0 text-sm leading-relaxed text-muted">
+          Each used under its own license, credited in full, and toggled per table in
+          <strong class="font-semibold text-text">Settings</strong>.
+        </p>
+      </div>
+
+      <div class={CARD}>
+        <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
+          Three books of ours, free
+        </h3>
+        <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+          {
+            libraries.map((l) => (
+              <li class="flex gap-2">
+                <CheckIcon />
+                <a href={l.href} class="font-semibold text-accent">
+                  {l.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 mb-0 text-sm leading-relaxed text-muted">
+          Written for OpenFray, published in full on this site, and built into the console. The
+          stat blocks are Creative Commons.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="lib-yours-title">
+    <p class={`${EYEBROW} mb-4`}>Yours</p>
+    <h2
+      id="lib-yours-title"
+      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    >
+      Everything your table invents
+    </h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+        <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Build your own</h3>
+        <p class="m-0 text-sm leading-normal text-muted">
+          A full editor for homebrew creatures and spells, plus a durable roster for your party and
+          campaigns that carry your house rules into every fight.
+        </p>
+      </div>
+      <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+        <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+          Never retype a stat block
+        </h3>
+        <p class="m-0 text-sm leading-normal text-muted">
+          The free importer turns a D&amp;D&nbsp;Beyond creature page into an OpenFray creature.
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <a
+            href={importerChrome}
+            target="_blank"
+            rel="noreferrer"
+            class={STORE_LINK}
+            title="OpenFray Importer on the Chrome Web Store"
+          >
+            Chrome →
+          </a>
+          <a
+            href={importerFirefox}
+            target="_blank"
+            rel="noreferrer"
+            class={STORE_LINK}
+            title="OpenFray Importer on Firefox Browser Add-ons"
+          >
+            Firefox →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="m-0 mt-10">
+      <a href="/compendium/" class="font-semibold text-accent no-underline hover:underline">
+        Browse the published libraries →
+      </a>
+    </p>
+  </section>
+</FeaturePage>

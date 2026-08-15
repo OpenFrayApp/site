@@ -1,0 +1,61 @@
+---
+import FeaturePage from '../../components/FeaturePage.astro';
+import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import playerViewHero from '../../assets/screenshots/player-view-hero.png';
+
+const shots = [
+  {
+    img: playerViewHero,
+    alt: 'The shared player view: the party listed with exact hit points and armor class, the foes shown only as Healthy or Hurt, the game log beside them, and a footer noting that nothing is saved.',
+  },
+];
+
+const points = [
+  {
+    title: 'Live on their own phones',
+    body: 'Share one link. The turn order, conditions, and game log follow the fight on every screen as you run it, so nobody asks whose turn it is.',
+  },
+  {
+    title: 'Read-only by design',
+    body: "There is nothing on it to press. Players watch the fight; they can't poke it, and there are no player accounts to manage.",
+  },
+  {
+    title: 'You choose what they see',
+    body: "A foe's hit points in words — Bloodied, not a number — or exact, or hidden. Armor class held back. Rolls shown without the dice. A creature kept entirely off their screens until you reveal it.",
+  },
+  {
+    title: 'Nothing stored, nothing to set up',
+    body: "It works without an account, yours or theirs. The board goes straight to their screens over a live channel and is kept nowhere — stop sharing and it's gone.",
+  },
+];
+---
+
+<FeaturePage
+  title="The player view — OpenFray"
+  description="OpenFray's shared player view: a live, read-only screen for your table on their own phones, showing the turn order, conditions, and log — with you choosing exactly what each creature gives away. Compatible with 5.5e and 5e."
+  heading="Share the fight, keep your secrets"
+  lede="Your table follows the fight on their own phones: who's up, what's ticking, how hurt that Ogre looks. What each creature gives away is your call, down to the hit points."
+  shots={shots}
+  handbook={[{ label: 'The player view', href: '/docs/fight/player-view/' }]}
+  current="/features/player-view/"
+>
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="pv-points-title">
+    <p class={`${EYEBROW} mb-4`}>The second screen</p>
+    <h2
+      id="pv-points-title"
+      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    >
+      How the table sees it
+    </h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        points.map((f) => (
+          <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
+            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</FeaturePage>

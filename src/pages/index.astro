@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Cta from '../components/Cta.astro';
+import Lightbox from '../components/Lightbox.astro';
 import ZoomIcon from '../components/ZoomIcon.astro';
 import CheckIcon from '../components/CheckIcon.astro';
+import { zoomTrigger, zoomOverlay, zoomBadge } from '../data/lightbox.ts';
 import { hero, tagline } from '../data/hero.ts';
 import { libraries, shippedLibraries } from '../data/libraries.ts';
 import { Picture } from 'astro:assets';
@@ -91,33 +93,13 @@ const STORE_LINK =
   'border-border bg-bg px-4 py-3 text-base font-semibold text-accent no-underline ' +
   'transition-[border-color,color] hover:border-accent hover:text-text';
 
-// A screenshot you can open. The magnifier only appears on hover or keyboard focus —
-// at rest the picture is the picture, and the affordance would just be furniture.
-const zoomTrigger =
-  'group relative block w-full cursor-zoom-in overflow-hidden border border-border p-0 ' +
-  'transition-[border-color] hover:border-accent focus-visible:border-accent ' +
-  'focus-visible:outline-none';
-const zoomOverlay =
-  'pointer-events-none absolute inset-0 grid place-items-center bg-bg/75 opacity-0 ' +
-  'transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100';
-const zoomBadge =
-  'grid size-12 place-items-center rounded-full border border-border bg-panel text-text';
-
-const lightboxButton =
-  'absolute z-1 grid cursor-pointer place-items-center rounded-full border border-border ' +
-  'bg-panel leading-none text-text hover:border-accent hover:text-accent';
-// Below 640px the arrows drop to the bottom rather than sitting over the image.
-const lightboxNav =
-  'size-11 pb-0.5 text-3xl top-1/2 -translate-y-1/2 ' +
-  'max-[640px]:top-auto max-[640px]:bottom-4 max-[640px]:translate-y-0';
-
 // What OpenFray holds that a plain initiative list doesn't. Every line here is a claim
 // about our own behavior and checkable in the code — deliberately not a claim about
 // what other trackers do or don't do, which we can't verify and shouldn't assert.
 const differences = [
   {
     title: 'Relationships, not just creatures',
-    body: "Effects have two ends. The barbarian's Reckless Attack grants advantage against him; Vicious Mockery debuffs the goblin's next swing. OpenFray records which end is which and works it into the roll, whichever side is rolling.",
+    body: "Effects have two ends. The barbarian's Reckless Attack grants advantage against them; Vicious Mockery debuffs the goblin's next swing. OpenFray records which end is which and works it into the roll, whichever side is rolling.",
   },
   {
     title: 'Resources that count themselves down',
@@ -153,12 +135,16 @@ const rest = [
     body: 'Save your players once and drop them into any fight — with a free account — plus a quick add for whatever wanders in.',
   },
   {
-    title: 'Local-first speed',
-    body: 'State lives in the browser. Rolling a die never waits on the network.',
+    title: 'Nothing waits on the network',
+    body: 'The fight lives in the browser and saves in the background. Rolling a die answers instantly.',
   },
   {
     title: 'Sync when you want it',
     body: 'Sign in free with Discord or Google to pick a fight up on another device.',
+  },
+  {
+    title: 'Plays beside your other tools',
+    body: 'A paper map on the table, players rolling on D&D Beyond, the fight on OpenFray. It slots in; it never asks to take over.',
   },
 ];
 ---
@@ -174,7 +160,7 @@ const rest = [
       <h1
         class="mt-0 mb-5 max-w-[20ch] text-[clamp(2.5rem,6.5vw,4.25rem)] leading-[1.04] font-extrabold tracking-tight"
       >
-        Your initiative tracker forgets. OpenFray doesn’t.
+        Never lose concentration.
       </h1>
 
       <p class={`${tagline} mb-8`}>
@@ -278,6 +264,13 @@ const rest = [
           ))
         }
       </div>
+
+      {/* The screenshots earn a continuation, not a repeat of the hero's ask. */}
+      <p class="m-0 mt-10">
+        <a href="/features/rolling/" class="font-semibold text-accent no-underline hover:underline">
+          More about smart rolling →
+        </a>
+      </p>
     </div>
 
     {
@@ -356,6 +349,41 @@ const rest = [
           </figcaption>
         </figure>
       </div>
+
+      <p class="m-0 mt-10">
+        <a
+          href="/features/player-view/"
+          class="font-semibold text-accent no-underline hover:underline"
+        >
+          The player view, in detail →
+        </a>
+      </p>
+    </section>
+
+    <section class={`difference mt-20 ${TEXT_COL} text-left`} aria-labelledby="difference-title">
+      <p class={`${EYEBROW} mb-4`}>The difference</p>
+      <h2
+        id="difference-title"
+        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        What OpenFray keeps hold of
+      </h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          differences.map((f) => (
+            <div class={`feature ${CARD} border-l-2 border-l-accent`}>
+              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
+              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="m-0 mt-10">
+        <a href="/features/tracking/" class="font-semibold text-accent no-underline hover:underline">
+          How the tracking works →
+        </a>
+      </p>
     </section>
 
     <section class={`libraries mt-20 ${TEXT_COL} text-left`} aria-labelledby="libraries-title">
@@ -475,26 +503,13 @@ const rest = [
           </div>
         </div>
       </div>
-    </section>
 
-    <section class={`difference mt-20 ${TEXT_COL} text-left`} aria-labelledby="difference-title">
-      <p class={`${EYEBROW} mb-4`}>The difference</p>
-      <h2
-        id="difference-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-      >
-        What OpenFray keeps hold of
-      </h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        {
-          differences.map((f) => (
-            <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-            </div>
-          ))
-        }
-      </div>
+      {/* The content argument continues where the content lives. */}
+      <p class="m-0 mt-10">
+        <a href="/features/libraries/" class="font-semibold text-accent no-underline hover:underline">
+          More about the libraries →
+        </a>
+      </p>
     </section>
 
     <section class={`rest mt-20 ${TEXT_COL} text-left`} aria-labelledby="rest-title">
@@ -518,9 +533,24 @@ const rest = [
     </section>
 
     {
-      /* The importer sits below the feature grid, after the pitch — it's a companion tool,
-        not the way in. One button per browser store, neither preferred over the other. */
+      /* The second conversion, seeded after the value is proven and never gating it:
+        everything above works anonymous, and this section says exactly that first. */
     }
+    <section class={`account mt-20 ${TEXT_COL} text-left`} aria-labelledby="account-title">
+      <p class={`${EYEBROW} mb-4`}>When you're ready</p>
+      <h2
+        id="account-title"
+        class="mt-0 mb-5 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      >
+        Everything works without an account
+      </h2>
+      <p class={`${tagline} m-0 max-w-[52rem]`}>
+        The free account is for keeping. Sign in with Discord or Google and your fights, custom
+        creatures, characters, and campaigns follow you between devices. Everything on this page
+        works before you do.
+      </p>
+    </section>
+
     {
       /* One panel rather than another card grid: this is the page saying what it is,
         not another feature, and it should not read as one. */
@@ -549,7 +579,7 @@ const rest = [
             </h3>
             <p class="m-0 text-sm leading-normal text-muted">
               The code is AGPL-3.0 and every line of it is public. The creatures and rules in our
-              own books are Creative Commons;
+              own books are Creative Commons.
             </p>
           </div>
           <div>
@@ -561,6 +591,11 @@ const rest = [
               an issue and it gets read.
             </p>
           </div>
+        </div>
+
+        <div class="cta-row mt-8 flex flex-wrap gap-3 border-t border-border pt-8">
+          <Cta href="/console/">Open the console →</Cta>
+          <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
         </div>
 
         <ul
@@ -585,100 +620,5 @@ const rest = [
     </section>
   </main>
 
-  {
-    /* One lightbox for the whole gallery; the active slide is swapped in place so the
-      arrows can step through without reopening. */
-  }
-  <dialog
-    class="lightbox h-[100dvh] max-h-[100dvh] w-screen max-w-[100vw] overflow-hidden border-0 bg-transparent p-0"
-    aria-label="Screenshot viewer"
-  >
-    {/* The lightbox-* names are the hooks the inline script selects on — keep them. */}
-    <button
-      type="button"
-      class={`lightbox-close ${lightboxButton} top-4 right-4 size-10 text-2xl`}
-      aria-label="Close">×</button
-    >
-    <button
-      type="button"
-      class={`lightbox-nav lightbox-prev ${lightboxButton} ${lightboxNav} left-4`}
-      aria-label="Previous screenshot">‹</button
-    >
-    <button
-      type="button"
-      class={`lightbox-nav lightbox-next ${lightboxButton} ${lightboxNav} right-4`}
-      aria-label="Next screenshot">›</button
-    >
-    {
-      /* The dialog fills the viewport and the active slide is centerd inside it, so a
-        click anywhere off the image lands on the dialog and closes it. */
-    }
-    <div
-      class="lightbox-track absolute inset-0 grid place-items-center px-4 py-14 pointer-events-none"
-    >
-      {
-        zoomable.map((s, i) => (
-          <figure class="lightbox-slide m-0 hidden data-[active]:block" data-index={i}>
-            <Picture
-              src={s.img}
-              formats={['avif', 'webp']}
-              fallbackFormat="jpg"
-              widths={[900, 1440, 2000]}
-              sizes="(max-width: 1100px) 92vw, 1040px"
-              alt={s.alt}
-              class="pointer-events-auto block h-auto max-h-[min(84vh,84dvh)] w-auto max-w-[min(92vw,1040px)] rounded-xl border border-border shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)]"
-            />
-          </figure>
-        ))
-      }
-    </div>
-  </dialog>
-
-  <script>
-    const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
-    const slides = Array.from(document.querySelectorAll<HTMLElement>('.lightbox-slide'));
-    if (dialog && slides.length) {
-      /** Make slide i active, wrapping past either end, and store the index on the dialog. */
-      const show = (i: number) => {
-        const index = (i + slides.length) % slides.length;
-        slides.forEach((s, n) => s.toggleAttribute('data-active', n === index));
-        dialog.dataset.index = String(index);
-      };
-      /** Open the lightbox on slide i, with the page scroll locked behind it. */
-      const open = (i: number) => {
-        show(i);
-        // Lock the page behind the modal so it can't scroll under the overlay.
-        document.documentElement.style.overflow = 'hidden';
-        dialog.showModal();
-      };
-      // Every close path runs through here so the scroll lock is always lifted (the
-      // dialog `close` event proved unreliable across browsers).
-      const close = () => {
-        document.documentElement.style.overflow = '';
-        dialog.close();
-      };
-      /** Move the lightbox by delta slides from the one on screen. */
-      const step = (delta: number) => show(Number(dialog.dataset.index ?? 0) + delta);
-
-      document.querySelectorAll<HTMLButtonElement>('.shot-thumb').forEach((btn) => {
-        btn.addEventListener('click', () => open(Number(btn.dataset.index)));
-      });
-      dialog.querySelector('.lightbox-prev')?.addEventListener('click', () => step(-1));
-      dialog.querySelector('.lightbox-next')?.addEventListener('click', () => step(1));
-      dialog.querySelector('.lightbox-close')?.addEventListener('click', close);
-      // A click on the dialog itself (its padding / backdrop) closes it.
-      dialog.addEventListener('click', (e) => {
-        if (e.target === dialog) close();
-      });
-      // Escape fires `cancel` first; take it over so it routes through close() too.
-      dialog.addEventListener('cancel', (e) => {
-        e.preventDefault();
-        close();
-      });
-      dialog.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') step(-1);
-        if (e.key === 'ArrowRight') step(1);
-      });
-    }
-  </script>
+  <Lightbox shots={zoomable} />
 </Layout>
