@@ -62,7 +62,8 @@ const carries = [
       eyebrow="Group saves"
       heading="Six rows, every defense applied"
       level="h2"
-      side="left"
+      side="right"
+      bleed
       headingClass={`max-w-[18ch] ${DISPLAY_MD}`}
       tagline="Every row prints its reasons. The Ogre failed, so 32 waits in its box. The Hell Hound failed too — immunity zeroes it anyway. The Quasit's fail is halved to 16 by its resistance, with the two dice its Magic Resistance rolled sitting right on the row. The made saves take half."
       image={{
@@ -87,11 +88,12 @@ const carries = [
       eyebrow="Casting"
       heading="The whole spell, one card"
       id="rolling-cast-title"
+      side="left"
       image={{
         src: spellCard,
         alt: 'The Fireball card opened from a stat block: 2 uses left, casting time, range, components, the full rules text, and a Cast button.',
       }}
-      mediaClass="max-w-[26rem] justify-self-center lg:justify-self-end"
+      mediaClass="max-w-[26rem] justify-self-center lg:justify-self-start"
     >
       <p class="mt-0 mb-5">
         Casting from a stat block opens the full card: range, components, duration, and the rules

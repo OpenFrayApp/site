@@ -51,14 +51,20 @@ const {
   caption,
 } = Astro.props;
 const Heading = level;
+// The bleed extends the media from the container's edge to the viewport's. Percentages
+// on the figure resolve against its own grid area, so the section becomes a size
+// container and the margin is computed from container-query units instead — the one
+// base that makes the extension exact.
 const bleedClass = bleed
   ? side === 'left'
-    ? 'lg:ml-[calc(50%-50vw)]'
-    : 'lg:mr-[calc(50%-50vw)]'
+    ? 'lg:ml-[calc(50cqw-50vw)]'
+    : 'lg:mr-[calc(50cqw-50vw)]'
   : '';
 ---
 
-<section class="hero-split grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+<section
+  class={`hero-split grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14 ${bleed ? '[container-type:inline-size]' : ''}`}
+>
   <div class={`text-left ${side === 'left' ? 'lg:order-2' : ''}`}>
     {eyebrow && <p class={`${EYEBROW} mb-5`}>{eyebrow}</p>}
     <Heading class={`mt-0 mb-5 ${headingClass}`}>{heading}</Heading>
