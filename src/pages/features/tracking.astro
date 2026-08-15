@@ -1,33 +1,34 @@
 ---
+// The tool-switcher's page. Its job: convince a GM whose tracker forgets the
+// relationships that this board remembers them, then hand over — the console, or the
+// handbook. Every section pairs one claim with the picture or loop that proves it.
 import FeaturePage from '../../components/FeaturePage.astro';
+import Split from '../../components/Split.astro';
+import Band from '../../components/Band.astro';
+import Cards from '../../components/Cards.astro';
+import Accordion from '../../components/Accordion.astro';
 import ZoomIcon from '../../components/ZoomIcon.astro';
 import { Picture } from 'astro:assets';
 import { zoomTrigger, zoomOverlay, zoomBadge } from '../../data/lightbox.ts';
-import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
+import { EYEBROW, TEXT_COL, SHOT_FRAME } from '../../data/pageStyles.ts';
 import consoleHero from '../../assets/screenshots/console-hero.png';
-import applyEffectHero from '../../assets/screenshots/apply-effect-hero.png';
 import consoleRows from '../../assets/screenshots/console-rows.png';
-import consoleLog from '../../assets/screenshots/console-log.png';
+import greatclubLog from '../../assets/screenshots/greatclub-log.png';
+import appliedEffects from '../../assets/screenshots/applied-effects.png';
 import applyConditions from '../../assets/screenshots/apply-conditions.png';
-import applyCounter from '../../assets/screenshots/apply-counter.png';
 import applyModifier from '../../assets/screenshots/apply-modifier.png';
+import applyCounter from '../../assets/screenshots/apply-counter.png';
 import applyName from '../../assets/screenshots/apply-name.png';
 
-// The two full screenshots the lightbox holds. Every cropped vignette on the page
-// is a thumb that opens its source in full, so a click always lands in context.
+// The one full-board shot, held by the lightbox: every cropped proof on this page
+// opens into it, so a claim's context is always one click away.
 const shots = [
   {
     img: consoleHero,
-    alt: "The console mid-fight: condition chips on the tracker rows, an Ogre's stat block showing it Prone and Frightened, the applied-effects panel beside it, and the game log recording each change.",
-  },
-  {
-    img: applyEffectHero,
-    alt: 'The Apply effect box holding one preset: a reminder, two conditions, a hidden counter, and a modifier, bundled under one name.',
+    alt: 'The whole console mid-fight: the tracker with the Ogre carrying its three effect chips, its stat block in the middle, and the game log ending on its missed Greatclub swing.',
   },
 ];
 
-// One turn of round three, as the machine runs it. Every step is app behavior,
-// checkable in the code.
 const turn = [
   {
     label: 'The turn starts',
@@ -39,7 +40,7 @@ const turn = [
   },
   {
     label: 'Damage lands',
-    body: 'If the target was concentrating, the check is offered on the spot.',
+    body: 'If the target was concentrating, the check is offered on the spot — DC worked out, both answers one click.',
   },
   {
     label: 'The turn ends',
@@ -47,25 +48,7 @@ const turn = [
   },
   {
     label: 'The log writes it down',
-    body: 'Every change lands in the game log, grouped by round.',
-  },
-];
-
-const CHIP =
-  'inline-flex items-center rounded-md border border-border bg-bg px-2 py-0.5 text-xs font-semibold text-muted';
-
-const remaining = [
-  {
-    title: 'Resources count down',
-    body: "Legendary actions and resistances, recharge abilities, spell slots, limited uses, reactions — all tick as you play, so the mage's last slot is a fact, not a guess.",
-  },
-  {
-    title: 'Reminders, not rulings',
-    body: 'OpenFray surfaces what has to be remembered this round and takes a typed result anywhere. The judgment calls stay yours.',
-  },
-  {
-    title: 'Rests restore the right things',
-    body: 'A short or long rest restores what the rules say, clears what should end, and keeps what should not.',
+    body: 'Every change lands in the game log, grouped by round, with the dice behind it.',
   },
 ];
 ---
@@ -74,7 +57,13 @@ const remaining = [
   title="Tracking — OpenFray"
   description="OpenFray tracks the state other tools leave in your head: effects with two ends, conditions that expire on the right turn, concentration checks when damage lands, and creature resources that count themselves. Compatible with 5.5e and 5e."
   heading="The board that remembers"
-  lede="Round three is where fights slow down: who is concentrating, who has advantage on whom, what ends at the start of whose turn. OpenFray holds all of it, and works it into the rolls."
+  lede="Your tracker knows the Ogre's hit points. Round three is decided by everything else — who is concentrating, who has advantage on whom, what ends at the start of whose turn. OpenFray holds all of it, and works it into the rolls."
+  video={{
+    src: '/media/roll-with-effects.mp4',
+    poster: '/media/roll-with-effects.jpg',
+    label:
+      "The Ogre's Greatclub attack, rolled in the console: two d20s at disadvantage from Prone, the Bane d4 subtracted, a miss against AC 18 — with both causes named under the roll.",
+  }}
   shots={shots}
   handbook={[
     { label: 'Effects and conditions', href: '/docs/fight/effects/' },
@@ -85,168 +74,220 @@ const remaining = [
   ]}
   current="/features/tracking/"
 >
-  {/* The machine beside its receipts: five steps, and the real log they produce. */}
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-turn-title">
-    <div class="rounded-2xl border border-border bg-panel px-6 py-8 sm:px-10 sm:py-10">
-      <p class={`${EYEBROW} mb-3`}>One turn, held together</p>
-      <h2
-        id="tracking-turn-title"
-        class="mt-0 mb-8 max-w-[22ch] text-[clamp(1.5rem,3vw,2.1rem)] leading-[1.14] font-extrabold tracking-tight"
+  {
+    /* The claim the hero's loop already showed, now told slowly: effects have two
+    ends, and the rows carry them. The crop opens into the full board. */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="Two ends"
+      heading="Every effect knows whose roll it touches"
+      id="tracking-ends-title"
+      caption="The badges live on the rows, where the fight is. Click through for the whole board."
+    >
+      <p class="mt-0 mb-5">
+        The cleric drops Bane on the Ogre; the wizard paints it with Faerie Fire. Two badges,
+        straight from the spell cards — and each one fires on the right roll, from its own end.
+      </p>
+      <ul class="m-0 grid list-none gap-3 p-0">
+        <li>
+          <strong class="font-bold text-text">Outgoing.</strong> Bane rides the Ogre's own attack rolls
+          and saving throws, subtracted where it rolls.
+        </li>
+        <li>
+          <strong class="font-bold text-text">Incoming.</strong> Faerie Fire arms everyone who swings
+          at it — the Advantage is theirs, and nobody has to be reminded.
+        </li>
+      </ul>
+      <p class="mt-5 mb-0">
+        <a
+          href="/docs/fight/effects/"
+          class="font-semibold text-accent no-underline hover:underline"
+        >
+          Effects and conditions, in the handbook →
+        </a>
+      </p>
+      <button
+        slot="media"
+        type="button"
+        class={`shot-thumb ${zoomTrigger} rounded-xl`}
+        data-index="0"
+        aria-label="Enlarge: the whole console around these rows"
       >
-        What runs by itself in round three
-      </h2>
-      <div class="grid items-start gap-8 lg:grid-cols-[1fr_16rem]">
-        <ol class="m-0 grid list-none gap-6 p-0">
-          {
-            turn.map((t, i) => (
-              <li class="grid grid-cols-[2.25rem_1fr] gap-4">
-                <span class="grid size-9 place-items-center rounded-full border border-accent text-sm font-bold text-accent">
-                  {i + 1}
-                </span>
-                <span class="pt-1">
-                  <span class="block text-base leading-snug font-bold text-text">{t.label}</span>
-                  <span class="mt-1 block text-sm leading-normal text-muted">{t.body}</span>
-                </span>
-              </li>
-            ))
-          }
-        </ol>
-
-        <figure class="m-0 max-lg:hidden">
-          <button
-            type="button"
-            class={`shot-thumb ${zoomTrigger} rounded-xl`}
-            data-index="0"
-            aria-label="Enlarge screenshot: the full console with the game log"
-          >
-            <Picture
-              src={consoleLog}
-              formats={['avif', 'webp']}
-              fallbackFormat="png"
-              widths={[512, 765]}
-              sizes="16rem"
-              alt="The game log mid-fight: Ogre is Frightened, Ogre is Prone, damage landing, and each creature's initiative, entry by entry."
-              loading="lazy"
-              class="block h-auto w-full"
-            />
-            <span class={zoomOverlay} aria-hidden="true"
-              ><span class={zoomBadge}><ZoomIcon /></span></span
-            >
-          </button>
-          <figcaption class="mt-3 text-xs leading-relaxed text-muted">
-            The receipts, as the log keeps them.
-          </figcaption>
-        </figure>
-      </div>
-    </div>
+        <Picture
+          src={consoleRows}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          widths={[560, 880]}
+          sizes="(max-width: 1024px) 94vw, 29rem"
+          alt="Three tracker rows: the Ogre carrying advantage-against, Prone, and Bane chips between two untouched neighbors."
+          loading="lazy"
+          class={SHOT_FRAME}
+        />
+        <span class={zoomOverlay} aria-hidden="true">
+          <span class={zoomBadge}><ZoomIcon /></span>
+        </span>
+      </button>
+    </Split>
   </section>
 
-  {/* The two-ended effect: the diagram explains, the real rows prove. */}
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-ends-title">
-    <p class={`${EYEBROW} mb-4`}>Two ends</p>
-    <h2
-      id="tracking-ends-title"
-      class="mt-0 mb-5 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+  {
+    /* The hero's swing, kept: the log entry is what remains after the moment passes,
+    and it is why rulings stop being re-litigated. */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="The receipts"
+      heading="The log shows its work"
+      id="tracking-receipts-title"
+      side="left"
     >
-      Every effect knows whose roll it touches
-    </h2>
-    <p class="mt-0 mb-8 max-w-[48rem] text-lg leading-relaxed text-muted">
-      The cleric drops Bane on the Ogre; the wizard paints it with Faerie Fire. Two badges,
-      straight from the spell cards — and each one fires on the right roll, from its own end.
-    </p>
+      <p class="mt-0 mb-5">
+        Every roll is kept with the dice behind it: both d20s and which one counted, the Bane d4
+        coming off, the damage dice under the total. When someone asks how the club connected, the
+        answer is one entry — 16 kept from two dice, minus the Bane, plus 6, against AC 18.
+      </p>
+      <p class="mb-0">
+        Three hours in, nobody re-litigates a ruling. The log remembers who had what, and when it
+        ended.
+      </p>
+      <button
+        slot="media"
+        type="button"
+        class={`shot-thumb ${zoomTrigger} rounded-xl`}
+        data-index="0"
+        aria-label="Enlarge: the whole console around this log entry"
+      >
+        <Picture
+          src={greatclubLog}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          widths={[560, 764]}
+          sizes="(max-width: 1024px) 94vw, 29rem"
+          alt="One log entry: the Ogre's Greatclub swing at Bram — two d20s at disadvantage, the lower kept, the Bane d4 subtracted, a hit for 15 bludgeoning."
+          loading="lazy"
+          class={SHOT_FRAME}
+        />
+        <span class={zoomOverlay} aria-hidden="true">
+          <span class={zoomBadge}><ZoomIcon /></span>
+        </span>
+      </button>
+    </Split>
+  </section>
 
-    <div class="grid items-stretch gap-4 lg:grid-cols-[1fr_auto_1fr]">
-      <div class={`${CARD} flex flex-col justify-center border-l-2 border-l-accent`}>
-        <p class={`${EYEBROW} mb-2`}>Outgoing · Bane</p>
-        <p class="m-0 text-base leading-relaxed text-text">
-          <strong class="font-bold">The Ogre's own rolls suffer.</strong>
-          <span class="text-muted">
-            {' '}Its attack rolls and saving throws take the −1d4, subtracted where it rolls.
-          </span>
-        </p>
-      </div>
-
-      <div class="grid place-items-center px-2 py-1">
-        <div class="grid place-items-center gap-1 text-center">
-          <span class={CHIP}>Bane</span>
-          <span class={CHIP}>Faerie Fire</span>
-          <span class="text-2xl leading-none text-accent" aria-hidden="true">⇄</span>
-          <span class="text-xs leading-relaxed text-muted">two badges, each on its end</span>
-        </div>
-      </div>
-
-      <div class={`${CARD} flex flex-col justify-center border-l-2 border-l-accent`}>
-        <p class={`${EYEBROW} mb-2`}>Incoming · Faerie Fire</p>
-        <p class="m-0 text-base leading-relaxed text-text">
-          <strong class="font-bold">Rolls against the Ogre gain Advantage.</strong>
-          <span class="text-muted">
-            {' '}Anyone at the table attacking it picks that up without being reminded.
-          </span>
-        </p>
-      </div>
-    </div>
-
-    {/* Asymmetric: the prose holds the left column, the rows bleed off the right
-      edge of the viewport, cropped by it the way the app runs past a window. */}
-    <div class="mt-8 lg:grid lg:grid-cols-[minmax(0,24rem)_1fr] lg:items-center lg:gap-12">
-      <div class="text-base leading-relaxed text-muted">
-        <p class="mt-0">
-          The badges live on the rows, where the fight is. The Ogre is Prone and Frightened; the
-          chips say so, the rolls know it, and clearing one is the × beside its name.
-        </p>
-        <p class="mb-0">
-          Whatever a badge touches — the roll, the save, the damage — it touches from the correct
-          end, and it leaves when its condition says so, without a sticky note surviving three
-          rounds past its spell.
-        </p>
-      </div>
-
-      <figure class="m-0 mt-8 lg:mt-0 lg:mr-[calc(50%-50vw)]">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} rounded-xl lg:rounded-r-none lg:border-r-0`}
-          data-index="0"
-          aria-label="Enlarge screenshot: the full console with the tracker rows"
-        >
-          <Picture
-            src={consoleRows}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[640, 858]}
-            sizes="(max-width: 1024px) 90vw, 40vw"
-            alt="Tracker rows mid-fight: the Ogre on its turn carrying Prone and Frightened chips, the Goblin Warrior Prone, hit points colored by how hurt each creature is."
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
+  {
+    /* The register change: the turn as a machine, with the concentration loop proving
+    the one step GMs drop most. */
+  }
+  <Band eyebrow="One turn, held together" heading="What runs by itself" id="tracking-turn-title">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_22rem]">
+      <ol class="m-0 grid list-none gap-6 p-0">
+        {
+          turn.map((t, i) => (
+            <li class="grid grid-cols-[2.25rem_1fr] gap-4">
+              <span class="grid size-9 place-items-center rounded-full border border-accent text-sm font-bold text-accent">
+                {i + 1}
+              </span>
+              <span class="pt-1">
+                <span class="block text-base leading-snug font-bold text-text">{t.label}</span>
+                <span class="mt-1 block text-sm leading-normal text-muted">{t.body}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+      <figure class="m-0 max-lg:hidden">
+        <video
+          class={`motion-loop ${SHOT_FRAME}`}
+          src="/media/concentration-prompt.mp4"
+          poster="/media/concentration-prompt.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="Damage lands on a concentrating wizard, and the console offers the check inline: Concentration, DC 10, Maintained or Broken."
+        ></video>
+        <figcaption class="mt-3 text-xs leading-relaxed text-muted">
+          Step 3, as it happens: the damage lands, and the check is already waiting.
+        </figcaption>
       </figure>
     </div>
+  </Band>
+
+  {
+    /* Durations answer the objection the last section raises: fine, it applies the
+    effects — but does it ever take them off? */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="No sticky notes"
+      heading="Everything on the board says when it leaves"
+      id="tracking-durations-title"
+      caption="The applied-effects panel, mid-fight: every effect with its time left."
+    >
+      <p class="mt-0 mb-5">
+        Bane has 9 rounds left. Faerie Fire has 8. The Prone stays until someone stands up. Every
+        effect on the board carries its own clock, ticks with the turns, and clears itself — no
+        sticky note survives three rounds past its spell.
+      </p>
+      <p class="mb-0">Clearing one early is the button beside it. The board never argues.</p>
+      <button
+        slot="media"
+        type="button"
+        class={`shot-thumb ${zoomTrigger} rounded-xl`}
+        data-index="0"
+        aria-label="Enlarge: the whole console around the applied-effects panel"
+      >
+        <Picture
+          src={appliedEffects}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          widths={[560, 780]}
+          sizes="(max-width: 1024px) 94vw, 29rem"
+          alt="The applied-effects panel: Bane with 9 rounds left on each of its two riders, Faerie Fire with 8, and Prone until removed, each with its own clear button."
+          loading="lazy"
+          class={SHOT_FRAME}
+        />
+        <span class={zoomOverlay} aria-hidden="true">
+          <span class={zoomBadge}><ZoomIcon /></span>
+        </span>
+      </button>
+    </Split>
   </section>
 
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-points-title">
+  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-rest-title">
     <p class={`${EYEBROW} mb-4`}>The rest of the memory</p>
     <h2
-      id="tracking-points-title"
+      id="tracking-rest-title"
       class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
     >
       What else it keeps hold of
     </h2>
-    <div class="grid gap-4 md:grid-cols-3">
-      {
-        remaining.map((f) => (
-          <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-          </div>
-        ))
-      }
-    </div>
+    <Cards
+      accent
+      layout="three"
+      items={[
+        {
+          title: 'Resources count down',
+          body: "Legendary actions and resistances, recharge abilities, spell slots, limited uses, reactions — all tick as you play, so the mage's last slot is a fact, not a guess.",
+        },
+        {
+          title: 'Reminders, not rulings',
+          body: 'OpenFray surfaces what has to be remembered this round and takes a typed result anywhere. The judgment calls stay yours.',
+        },
+        {
+          title: 'Rests restore the right things',
+          body: 'A short or long rest restores what the rules say, clears what should end, and keeps what should not.',
+        },
+      ]}
+    />
   </section>
 
-  {/* The preset, told in its own UI: pick, price, name, bundle. */}
+  {
+    /* The campaign-scale payoff, walked through the real form: the reader who wants
+    this is one step from wanting the account that keeps it. */
+  }
   <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-presets-title">
     <p class={`${EYEBROW} mb-4`}>Presets</p>
     <h2
@@ -256,121 +297,51 @@ const remaining = [
       Your table's effects, bottled
     </h2>
     <p class="mt-0 mb-8 max-w-[48rem] text-lg leading-relaxed text-muted">
-      An effect is rarely alone: the spell that frightens also reminds, carries a counter, and
-      dents a stat. OpenFray stages the whole package and applies it as one badge — and named,
-      it becomes a preset your table reuses for the rest of the campaign. The barbarian's
-      Reckless Attack (Advantage on their own attacks, Advantage to everyone swinging back) is
+      An effect is rarely alone: the spell that frightens also reminds, carries a counter, and dents
+      a stat. OpenFray stages the whole package and applies it as one badge — and named, it becomes
+      a preset your table reuses for the rest of the campaign. The barbarian's Reckless Attack is
       the classic one to save.
     </p>
-
-    <div class="grid gap-4 md:grid-cols-2">
-      <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} block w-full rounded-xl`}
-          data-index="1"
-          aria-label="Enlarge screenshot: the full Apply effect form"
-        >
-          <Picture
-            src={applyConditions}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[640, 1018]}
-            sizes="(max-width: 768px) 94vw, 30rem"
-            alt="The condition picker: Prone and Frightened selected among the full list of conditions."
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-        <figcaption class="mt-3 text-sm leading-relaxed text-muted">
-          <strong class="font-semibold text-text">Pick the conditions.</strong> Prone and
-          Frightened, straight off the rules list.
-        </figcaption>
-      </figure>
-
-      <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} block w-full rounded-xl`}
-          data-index="1"
-          aria-label="Enlarge screenshot: the full Apply effect form"
-        >
-          <Picture
-            src={applyModifier}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[640, 958]}
-            sizes="(max-width: 768px) 94vw, 30rem"
-            alt="A modifier in the same form: Sallow Rot, −30 to the hit point maximum."
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-        <figcaption class="mt-3 text-sm leading-relaxed text-muted">
-          <strong class="font-semibold text-text">Price the damage.</strong> A −30 to the hit
-          point maximum, labeled with its cause.
-        </figcaption>
-      </figure>
-
-      <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} block w-full rounded-xl`}
-          data-index="1"
-          aria-label="Enlarge screenshot: the full Apply effect form"
-        >
-          <Picture
-            src={applyCounter}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[640, 1018]}
-            sizes="(max-width: 768px) 94vw, 30rem"
-            alt="A counter named Depth with Hidden from players ticked."
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-        <figcaption class="mt-3 text-sm leading-relaxed text-muted">
-          <strong class="font-semibold text-text">Keep a secret.</strong> The Depth counter is
-          yours; the player view never sees it.
-        </figcaption>
-      </figure>
-
-      <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} block w-full rounded-xl`}
-          data-index="1"
-          aria-label="Enlarge screenshot: the full Apply effect form"
-        >
-          <Picture
-            src={applyName}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[640, 1018]}
-            sizes="(max-width: 768px) 94vw, 30rem"
-            alt="The Apply as one field, naming the whole package Sallow Rot 3."
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-        <figcaption class="mt-3 text-sm leading-relaxed text-muted">
-          <strong class="font-semibold text-text">Name the bundle.</strong> “Sallow Rot 3” lands
-          as one badge and clears together.
-        </figcaption>
-      </figure>
-    </div>
+    <Accordion
+      name="tracking-presets"
+      items={[
+        {
+          id: 'presets-conditions',
+          title: 'Pick the conditions',
+          body: 'Prone and Frightened, straight off the rules list.',
+          image: {
+            src: applyConditions,
+            alt: 'The condition picker: Prone selected among the full list of conditions.',
+          },
+        },
+        {
+          id: 'presets-modifier',
+          title: 'Price the damage',
+          body: 'A −30 to the hit point maximum, labeled with its cause.',
+          image: {
+            src: applyModifier,
+            alt: 'A modifier in the same form: Sallow Rot, −30 to the hit point maximum.',
+          },
+        },
+        {
+          id: 'presets-counter',
+          title: 'Keep a secret',
+          body: 'The Depth counter is yours; the player view never sees it.',
+          image: {
+            src: applyCounter,
+            alt: 'A counter named Depth with Hidden from players ticked.',
+          },
+        },
+        {
+          id: 'presets-name',
+          title: 'Name the bundle',
+          body: '“Sallow Rot 3” lands as one badge and clears together.',
+          image: {
+            src: applyName,
+            alt: 'The Apply-as-one field naming the whole package Sallow Rot 3.',
+          },
+        },
+      ]}
+    />
   </section>
 </FeaturePage>
