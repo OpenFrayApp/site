@@ -140,7 +140,15 @@ const bleedClass = bleed
       )
     }
     <slot name="media" />
-    {caption && <figcaption class="mt-3 text-sm leading-relaxed text-muted">{caption}</figcaption>}
+    {
+      caption && (
+        <figcaption
+          class={`mt-3 text-sm leading-relaxed text-muted ${bleed ? (side === 'left' ? 'pl-6' : 'pr-6') : ''}`}
+        >
+          {caption}
+        </figcaption>
+      )
+    }
   </figure>
 </section>
 

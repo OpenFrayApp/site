@@ -6,6 +6,7 @@
  *  still opens in full. */
 import Layout from '../layouts/Layout.astro';
 import Hero from './Hero.astro';
+import Band from './Band.astro';
 import Panel from './Panel.astro';
 import Cta from './Cta.astro';
 import Lightbox from './Lightbox.astro';
@@ -30,6 +31,8 @@ interface Props {
   caption?: string;
   /** Which side the hero media sits on at lg. */
   heroSide?: 'left' | 'right';
+  /** Renders the hero as a full-width band, the media bleeding to the viewport edge. */
+  heroBand?: boolean;
   shots?: Shot[];
   handbook: { label: string; href: string }[];
   current: string;
@@ -46,17 +49,20 @@ const {
   video,
   caption,
   heroSide = 'right',
+  heroBand = false,
   shots = [],
   handbook,
   current,
   mediaClass = '',
 } = Astro.props;
 const siblings = features.filter((f) => f.href !== current);
+const HeroWrap = heroBand ? Band : 'div';
+const heroWrapProps = heroBand ? { class: 'mt-2' } : { class: TEXT_COL };
 ---
 
 <Layout title={title} description={description}>
   <main class={`${hero} overflow-x-clip`}>
-    <div class={TEXT_COL}>
+    <HeroWrap {...heroWrapProps}>
       <Hero
         eyebrow="Features"
         heading={heading}
@@ -64,6 +70,7 @@ const siblings = features.filter((f) => f.href !== current);
         video={video}
         caption={caption}
         side={heroSide}
+        bleed={heroBand}
         image={image ? { src: image.img, alt: image.alt } : undefined}
         zoomIndex={image && shots.length > 0 ? 0 : undefined}
         ctas={[
@@ -72,7 +79,7 @@ const siblings = features.filter((f) => f.href !== current);
         ]}
         mediaClass={mediaClass}
       />
-    </div>
+    </HeroWrap>
 
     <slot />
 
