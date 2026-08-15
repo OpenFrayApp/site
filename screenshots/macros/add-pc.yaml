@@ -1,0 +1,13 @@
+# One player character, through the Add PC popover.
+steps:
+  - click: { role: button, name: Add PC, exact: true }
+  - fill: { label: PC name }
+    value: $pc.name
+  - fill: { label: AC, exact: true }
+    value: $pc.ac
+  - fill: { label: Max HP }
+    value: $pc.hp
+  - fill: { label: Initiative modifier }
+    value: $pc.init
+  - click: { role: button, name: Add, exact: true }
+  - wait: 120

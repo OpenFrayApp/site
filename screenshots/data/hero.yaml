@@ -1,0 +1,33 @@
+# The site's cast, in one file: a data file's name is the variable a recipe reads it by,
+# so `hero-party.yaml` could not be referenced — `$hero-party` stops at the hyphen.
+#
+# Named rather than the handbook's Zara/Mira/Tav/Ren, because the home page's pictures are
+# read as somebody's game rather than as a figure to follow. Sample data only — never a
+# real name (STYLE.md).
+party:
+  - { name: Kessa Quick, ac: 15, hp: 26, init: 5 }
+  - { name: Elowen Vale, ac: 12, hp: 22, init: 3 }
+  - { name: Bram Ironfist, ac: 18, hp: 34, init: 1 }
+  - { name: Sister Mirad, ac: 18, hp: 27, init: 0 }
+
+# The Hell Hound is immune to Fire and the Quasit resists it, so one Fireball against this
+# band shows all three outcomes at once — immune, resisted, and full.
+foes:
+  - { name: Ogre, times: [1] }
+  - { name: Mage, times: [1] }
+  - { name: Hell Hound, times: [1] }
+  - { name: Quasit, times: [1] }
+  - { name: Goblin Warrior, times: [1] }
+
+# The creatures are listed alongside the party: the console rolls a creature's initiative
+# when the fight begins, and a board that reorders itself makes two identical shots differ.
+initiative:
+  - { who: Kessa Quick, roll: 25 }
+  - { who: Elowen Vale, roll: 23 }
+  - { who: Bram Ironfist, roll: 19 }
+  - { who: Mage, roll: 17 }
+  - { who: Ogre, roll: 14 }
+  - { who: Hell Hound, roll: 11 }
+  - { who: Quasit, roll: 8 }
+  - { who: Goblin Warrior, roll: 5 }
+  - { who: Sister Mirad, roll: 2 }

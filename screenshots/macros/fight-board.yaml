@@ -1,0 +1,239 @@
+# The site's board, two rounds deep, every condition with a cause in the log: Elowen's
+# Faerie Fire and Sister Mirad's Bane sit on the Ogre (one end each), Bram's shove put it
+# Prone, the Quasit's Scare frightened Kessa, and the Hell Hound's breath explains the
+# burns. Durations are until-removed where a save-ends roll would make two runs disagree.
+steps:
+  - use: seed
+    with: { pcs: $hero.party, monsters: $hero.foes }
+  - use: start
+    with: { rolls: $hero.initiative }
+
+  # ── Round 1 ──────────────────────────────────────────────────────────────
+  # Kessa Quick (25): crossbow into the Goblin Warrior.
+  - use: set-hp
+    with: { who: Goblin Warrior, hp: 6 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # Elowen Vale (23): Faerie Fire over the knot of foes. The Hell Hound slips it.
+  - click: { role: button, name: Cast spell }
+  - wait: 600
+  - fill: { placeholder: Search spells… }
+    value: Faerie Fire
+  - wait: 500
+  - click: { css: button, startsWith: Faerie Fire, pick: first }
+  - wait: 900
+  - each: [Ogre, Goblin Warrior, Hell Hound]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: $who
+          within: { css: '[role=dialog]', pick: last }
+      - wait: 90
+  - click: { role: button, name: Roll saves }
+  - wait: 1100
+  - each: [Ogre, Goblin Warrior]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: Fail
+          within:
+            css: 'div, li'
+            containingAll: [$who, Fail]
+            maxChildren: 12
+            pick: smallest
+            within: { css: '[role=dialog]', pick: last }
+      - wait: 150
+  - click:
+      css: button
+      text: Save
+      within:
+        css: 'div, li'
+        containingAll: [Hell Hound, Fail]
+        maxChildren: 12
+        pick: smallest
+        within: { css: '[role=dialog]', pick: last }
+  - wait: 300
+  - click:
+      css: button
+      startsWith: Apply Faerie Fire
+      within: { css: '[role=dialog]', pick: last }
+  - wait: 500
+  - optional:
+      - click:
+          css: button
+          text: Close
+          within: { css: '[role=dialog]', pick: last }
+  - wait: 400
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # Bram Ironfist (19): shoves the Ogre flat, and the axe follows it down. Bram is
+  # selected first so the Ogre's stat block leaves the center pane: its header reads
+  # as a phantom tracker row to the finders while it is on screen.
+  - click: { text: Bram Ironfist, within: { trackerRow: Bram Ironfist } }
+  - wait: 300
+  - use: set-hp
+    with: { who: Ogre, hp: 55 }
+  - click: { text: Ogre, within: { trackerRow: Ogre } }
+  - wait: 300
+  - click: { role: button, name: Apply effect }
+  - wait: 400
+  - click:
+      css: button
+      text: Prone
+      within: { panel: Apply effect to Ogre }
+  - click:
+      css: button
+      text: Apply
+      within: { panel: Apply effect to Ogre }
+  - wait: 400
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # The Mage (17): Arcane Burst scorches Elowen.
+  - use: set-hp
+    with: { who: Elowen Vale, hp: 12 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # The Ogre (14): the greatclub finds Bram anyway.
+  - use: set-hp
+    with: { who: Bram Ironfist, hp: 22 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # The Hell Hound (11): fire breath washes over Kessa.
+  - use: set-hp
+    with: { who: Kessa Quick, hp: 16 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # The Quasit (8): Scare. Kessa is Frightened.
+  - use: condition
+    with: { who: Kessa Quick, conditions: [Frightened] }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # The Goblin Warrior (5): a spear past Bram's shield.
+  - use: set-hp
+    with: { who: Bram Ironfist, hp: 18 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # Sister Mirad (2): Bane on the Ogre and the Goblin, and she holds it.
+  - click: { role: button, name: Cast spell }
+  - wait: 600
+  - fill: { placeholder: Search spells… }
+    value: Bane
+  - wait: 500
+  - click: { css: button, startsWith: Bane, pick: first }
+  - wait: 900
+  - each: [Ogre, Goblin Warrior]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: $who
+          within: { css: '[role=dialog]', pick: last }
+      - wait: 90
+  - click: { role: button, name: Roll saves }
+  - wait: 1100
+  - each: [Ogre, Goblin Warrior]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: Fail
+          within:
+            css: 'div, li'
+            containingAll: [$who, Fail]
+            maxChildren: 12
+            pick: smallest
+            within: { css: '[role=dialog]', pick: last }
+      - wait: 150
+  - click:
+      css: button
+      startsWith: Apply Bane
+      within: { css: '[role=dialog]', pick: last }
+  - wait: 500
+  - optional:
+      - click:
+          css: button
+          text: Close
+          within: { css: '[role=dialog]', pick: last }
+  - wait: 400
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # ── Round 2 ──────────────────────────────────────────────────────────────
+  # Kessa bolts the Ogre; Elowen's firebolt clips the Quasit; Bram's axe finds the
+  # Goblin. Kessa takes the center pane first (the phantom-row guard).
+  - click: { text: Kessa Quick, within: { trackerRow: Kessa Quick } }
+  - wait: 300
+  - use: set-hp
+    with: { who: Ogre, hp: 49 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - use: set-hp
+    with: { who: Quasit, hp: 18 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - use: set-hp
+    with: { who: Goblin Warrior, hp: 3 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+
+  # The Mage sizes up the line and holds.
+  - click: { role: button, name: Next turn }
+  - wait: 250
+
+  # The Ogre, Prone and Baned, heaves up and catches Bram anyway — set, not
+  # rolled. The one rolled swing lives in console-hero's last step, so every
+  # take of every shot ends on identical numbers, "regains" lines included.
+  - use: set-hp
+    with: { who: Bram Ironfist, hp: 13 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+
+  # The Hell Hound circles; the Quasit cackles from a shelf; the Goblin cowers.
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - click: { role: button, name: Next turn }
+  - wait: 250
+
+  # Sister Mirad: her healing steadies Bram.
+  - use: set-hp
+    with: { who: Bram Ironfist, hp: 24 }
+  - click: { role: button, name: Next turn }
+  - wait: 300
+
+  # ── Round 3 ──────────────────────────────────────────────────────────────
+  # The party works the Ogre and its minders down, and the Mage's Arcane Burst
+  # scorches Bram — set like round 1's attacks, so every take ends on the same
+  # numbers. The board holds on the Ogre's turn with nothing rolled: the swing
+  # itself is console-hero's own last step, so every other shot's log tail reads
+  # identically across takes.
+  - click: { text: Kessa Quick, within: { trackerRow: Kessa Quick } }
+  - wait: 300
+  - use: set-hp
+    with: { who: Ogre, hp: 44 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - use: set-hp
+    with: { who: Quasit, hp: 12 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+  - use: set-hp
+    with: { who: Goblin Warrior, hp: 1 }
+  - click: { role: button, name: Next turn }
+  - wait: 250
+
+  - use: set-hp
+    with: { who: Bram Ironfist, hp: 9 }
+  - click: { role: button, name: Next turn }
+  - wait: 400

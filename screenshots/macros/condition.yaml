@@ -1,0 +1,24 @@
+# Put conditions on a combatant, lasting until removed.
+#
+# The chips are looked up inside the box: a condition already on a tracker row renders a
+# badge carrying the same word, and the two are otherwise ambiguous.
+defaults:
+  who: Ogre
+  conditions: []
+steps:
+  - click: { text: $who }
+  - wait: 250
+  - click: { role: button, name: Apply effect }
+  - wait: 350
+  - each: $conditions
+    as: chip
+    steps:
+      - click:
+          css: button
+          text: $chip
+          within: { panel: Apply effect to $who }
+  - click:
+      css: button
+      text: Apply
+      within: { panel: Apply effect to $who }
+  - wait: 400

@@ -19,12 +19,13 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@qain/core": "^0.0.5",
     "jsdom": "^26.1.0",
     "pagedjs": "^0.4.3",
-    "vitest": "^3.2.6",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
-    "@qain/core": "^0.0.5"
+    "shotlist": "^0.2.3",
+    "vitest": "^3.2.6"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The compendium open on a creature, for the site's libraries section.
+#
+# Shot portrait rather than at the console's usual landscape: it sits in a column beside
+# three cards, and a 16:9 crop there is a third of their height with a hole under it.
+# Taller keeps both the list and the stat block readable at that width.
+name: compendium-hero
+install: site
+viewport: { width: 1280, height: 1500 }
+
+setup:
+  # The checkbox is ticked rather than its label: a first-party library's name inside that
+  # label is a link to the book, so clicking the writing navigates away.
+  - use: open-settings
+  - each: [Tome of Beasts 3, Brood & Bloom, The Waking Garden]
+    as: book
+    steps:
+      - check: { role: checkbox, name: $book }
+      - wait: 150
+  - click: { role: button, name: Done }
+  - click: { role: button, name: Show the compendium }
+  # The libraries just ticked are fetched on demand, and each one that lands re-renders
+  # the list and drops whatever was selected. Waiting a fixed second is a coin toss: it
+  # cost this shot its stat block once already. The count is the signal that they have
+  # all arrived — and if a library changes size, this fails loudly rather than quietly
+  # taking the wrong picture.
+  - wait: { text: 859 creatures }
+  - wait: 300
+  - fill: { placeholder: Search creatures… }
+    value: Aboleth
+  - wait: 500
+  - click: { text: Aboleth }
+  - wait: 900
+  # Cleared so the list shows its full length — the count above it is part of what the
+  # section is claiming.
+  - fill: { placeholder: Search creatures… }
+    value: ''
+  - wait: 600
+
+clip: viewport

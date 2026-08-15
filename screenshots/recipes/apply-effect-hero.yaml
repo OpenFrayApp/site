@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The rebuilt Apply effect box with a preset staged in it: a condition, a modifier, a
+# reminder and a GM-only counter, all waiting under one bundle name. The handbook's
+# apply-effect shot is the numbered anatomy of the same box; this one is unannotated,
+# for the site, and shows the box holding something rather than sitting empty.
+name: apply-effect-hero
+install: site
+# Tall enough that the whole box fits without scrolling inside itself: the bundle name at
+# the bottom is the part 1.0 added, and a clip of a scrolled modal cuts it off.
+viewport: { width: 1800, height: 1700 }
+
+setup:
+  # The Presets row only appears once a library ships presets, and Brood & Bloom does.
+  - use: open-settings
+  - check: { role: checkbox, name: Brood & Bloom }
+  - click: { role: button, name: Done }
+  - wait: 300
+  - use: fight-board
+  - click: { text: Ogre }
+  - wait: 250
+  - click: { role: button, name: Apply effect }
+  - wait: 400
+  - click: { role: button, name: Presets }
+  - wait: 300
+  - click: { text: Sallow Rot 3 }
+  - wait: 400
+
+clip: { panel: Apply effect to Ogre, pad: 14 }

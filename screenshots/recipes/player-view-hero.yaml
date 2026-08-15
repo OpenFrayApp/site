@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The shared player view: the same fight as the console shot, arriving on the table's own
+# screen. This drives the real broadcast — the console starts sharing and a second page
+# opens the link — so the picture is what players actually receive, not a mock. Needs the
+# dev server's Supabase env.
+name: player-view-hero
+install: site
+viewport: { width: 1800, height: 1000 }
+
+setup:
+  - use: fight-board
+  - click: { role: button, name: Share with players }
+  - wait: 400
+  - click: { role: button, name: Start sharing }
+  - wait: 600
+  - readValue: { css: 'input[readonly]' }
+    as: link
+  # Tall enough for the whole turn order and no taller, so the footer's "nothing here is
+  # saved" line sits under the content rather than a screen below it.
+  - openPage: $link
+    as: player
+    viewport: { width: 1080, height: 780 }
+  - wait: { text: Kessa Quick }
+  - wait: 800
+
+clip: viewport
+
+# The bar counts the real seconds the fight has been open, and setup never takes the
+# same time twice.
+check: false

@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The whole console mid-fight, for the site's home page. No callouts — the section around
+# it does the labelling. Shot at 1800 like the handbook's layout capture, so no top-bar
+# button wraps its label onto two lines.
+name: console-hero
+install: site
+viewport: { width: 1800, height: 1000 }
+
+setup:
+  - use: fight-board
+  # The Ogre, Prone and Baned, heaves up and swings at Bram. Rolled, then closed
+  # without applying: the freeze-frame is the roll itself, the decision still the
+  # GM's — the held moment group-save-hero stops at. The breakdown lands at the
+  # top of the log with disadvantage and the Bane d4 in it, whatever the dice do,
+  # so any take is coherent; hit and miss both read.
+  - click: { startsWith: 'Greatclub.', maxChildren: 0, pick: smallest }
+  - wait: 700
+  - click:
+      css: button
+      text: Bram Ironfist
+      within: { css: '[role=dialog]', pick: last }
+  - wait: 300
+  - click: { role: button, name: Roll attack }
+  - wait: 1000
+  - click:
+      css: button
+      text: Close
+      within: { css: '[role=dialog]', pick: last }
+  - wait: 500
+
+clip: viewport
+
+# The bar counts the real seconds the fight has been open, and setup never takes the
+# same time twice.
+check: false

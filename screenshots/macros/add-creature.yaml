@@ -1,0 +1,17 @@
+# One kind of creature from the compendium, once per entry in `times`.
+#
+# The name is anchored to the start of the result: a result reads "Goblin BossCore5.5eCR 1",
+# with the badges running straight onto the name, so there is no word boundary to anchor
+# to. Anchoring the start is what stops "Mage" also matching "Archmage".
+steps:
+  - click: { role: button, name: Add creature, exact: true }
+  - fill: { placeholder: Search creatures… }
+    value: $foe.name
+  - wait: 320
+  - each: $foe.times
+    as: n
+    steps:
+      - click: { role: button, name: $foe.name, matching: '^$foe.name' }
+      - wait: 220
+  - press: Escape
+  - wait: 120

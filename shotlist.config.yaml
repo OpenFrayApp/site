@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=node_modules/shotlist/dist/schema.json
+#
+# The site's marketing captures: the staged fight and the hero shots cut from it. Run
+# the console first (a clean main checkout on its pinned port), then
+# `npx shotlist <name> --install` to re-shoot one. These are marketing pictures, owned
+# here; the handbook's documentation shots live in the docs repo with their own config.
+#
+# STYLE.md governs what a capture may show: the app's default dark theme, at 2×, and
+# sample data only — never a real name.
+
+site:
+  url: http://localhost:5199/console/
+  viewport: { width: 1440, height: 900 }
+  scale: 2
+  theme: dark
+  # The console renders before the compendium arrives, so a selector alone is not enough
+  # to know the board is ready to shoot.
+  ready: 'text=Add creature'
+  settle: 800
+
+paths:
+  recipes: screenshots/recipes
+  macros: screenshots/macros
+  data: screenshots/data
+  out: screenshots/out
+
+install:
+  site: src/assets/screenshots
+
+finders:
+  # The modal card owning a heading. The overlay behind it fills the viewport, so the
+  # climb has to pass through every narrow ancestor to the outermost one — stopping at
+  # the first would frame the heading, not the card.
+  panel:
+    heading: $1
+    ancestor: { narrowerThan: 95vw, pick: outermost }
+
+  # A tracker row: the smallest box holding both a combatant's name and an AC. The
+  # console renders no test hooks here, so the shape is what identifies it.
+  trackerRow:
+    css: 'li, div'
+    contains: $1
+    matching: 'AC\s*\d'
+    maxChildren: 24
+    pick: smallest
+
+  # A dialog that carries a given control, for the ones whose heading is not unique.
+  dialogWith:
+    css: div
+    contains: $1
+    minWidth: 400
+    maxWidth: 90vw
+    minHeight: 300
+    pick: smallest

@@ -1,0 +1,17 @@
+# Fill every initiative, then begin.
+#
+# Each fill is optional because one list covers every recipe, and a recipe's fight holds
+# only some of these combatants.
+defaults:
+  rolls: $initiative
+steps:
+  - click: { role: button, name: Begin }
+  - wait: { text: Roll initiative }
+  - each: $rolls
+    as: row
+    steps:
+      - optional:
+          - fill: { label: Initiative for $row.who }
+            value: $row.roll
+  - click: { role: button, name: Start combat }
+  - wait: 400

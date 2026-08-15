@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The Mage's Fireball opened from its own stat block, card and uses showing.
+name: cast-spell-hero
+install: site
+viewport: { width: 1800, height: 1000 }
+
+setup:
+  - use: fight-board
+  - click: { text: Mage }
+  - wait: 500
+  # Clicking the spell opens its card; the Cast button inside it is what spends a use, so
+  # the heading still reads the full 2 of its 2/Day.
+  - click: { css: button, startsWith: Fireball, pick: first }
+  - wait: 700
+
+clip: viewport
+
+# The bar counts the real seconds the fight has been open, and setup never takes the
+# same time twice.
+check: false

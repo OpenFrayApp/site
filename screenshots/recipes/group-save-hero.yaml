@@ -1,0 +1,69 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# One Fireball rolled against six creatures whose Fire defenses all differ.
+name: group-save-hero
+install: site
+viewport: { width: 1800, height: 1000 }
+
+setup:
+  - use: fight-board
+  # Cast the spell rather than opening Group save by hand: casting brings the spell's own
+  # dice with it, so the numbers on screen are a Fireball's rather than ones typed in.
+  - click: { role: button, name: Cast spell }
+  - wait: 600
+  # Naming the caster takes the save DC from the Mage's own spellcasting rather than the
+  # casterless default.
+  - select: { label: Caster }
+    optionLabel: Mage
+  - wait: 300
+  - fill: { placeholder: Search spells… }
+    value: Fireball
+  - wait: 500
+  - click: { css: button, startsWith: Fireball, pick: first }
+  - wait: 900
+  # Two allies caught in the blast alongside the four foes: the point of listing both
+  # sides is that a Fireball does not respect them. Elowen Vale is left out of it — she is
+  # on 12 of 22, and a home page does not need a dead player character.
+  - each:
+      [Hell Hound, Quasit, Ogre, Goblin Warrior, Bram Ironfist, Kessa Quick]
+    as: who
+    steps:
+      # From inside the box: a target chip is named for the combatant, exactly like its
+      # tracker row. The box is the last dialog rather than the one owning a heading —
+      # cast from a spell, it is headed by the spell and the caster, not by Group save.
+      - click:
+          css: button
+          text: $who
+          within: { css: '[role=dialog]', pick: last }
+      - wait: 90
+  - click: { role: button, name: Roll saves }
+  - wait: 1100
+  # OpenFray never rolls a player's save, so the two of them are recorded by hand. A row
+  # is found by shape — the smallest thing holding a name and the Fail beside it, since
+  # the name is also a target chip a few lines above and a tracker row behind.
+  #
+  # The search is kept inside the dialog, and that is not belt and braces: the dialog is
+  # rendered inside the top bar's own Group save wrapper rather than through a portal, so
+  # that wrapper *contains* every name in it while being drawn two buttons wide. Unscoped,
+  # `smallest` picks the top bar.
+  - each: [Bram Ironfist, Kessa Quick]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: Save
+          within:
+            css: 'div, li'
+            containingAll: [$who, Fail]
+            maxChildren: 12
+            pick: smallest
+            within: { css: '[role=dialog]', pick: last }
+      - wait: 200
+  # Stopped before Apply damage: the picture is the roll, with every result on screen and
+  # the decision still the GM's.
+  - wait: 400
+
+clip: viewport
+
+# Six saves really rolled, so no two runs agree.
+check: false
