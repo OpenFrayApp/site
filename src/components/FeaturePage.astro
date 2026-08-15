@@ -61,7 +61,7 @@ const siblings = features.filter((f) => f.href !== current);
         video={video}
         caption={caption}
         image={image ? { src: image.img, alt: image.alt } : undefined}
-        zoomIndex={image ? 0 : undefined}
+        zoomIndex={image && shots.length > 0 ? 0 : undefined}
         ctas={[
           { label: 'Open the console →', href: '/console/' },
           { label: 'Run your first fight', href: '/docs/getting-started/', ghost: true },
