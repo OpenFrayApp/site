@@ -64,6 +64,10 @@ await page.evaluate(() => {
   while (document.body.firstChild) rig.append(document.body.firstChild);
   document.body.append(rig);
   document.documentElement.style.overflow = 'hidden';
+  // Mid-transition the page's edge can slide into frame; painted console-black, the
+  // exposed sliver reads as motion instead of a gray flicker.
+  document.documentElement.style.background = '#020617';
+  document.body.style.background = '#020617';
 
   const dot = document.createElement('div');
   dot.id = 'fake-cursor';
@@ -257,41 +261,6 @@ await page.waitForTimeout(2400);
 await camera(1);
 await page.waitForTimeout(900);
 marks.swingEnd = at();
-
-// ── Loop B: the concentration prompt ───────────────────────────────────────
-// Elowen holds Faerie Fire; damage lands on her, the board offers the check, and
-// one click answers it. The check is not a dialog: it lands inline in the controls
-// rail and blocks nothing — which is the point the loop makes.
-marks.concStart = at();
-const row = page
-  .locator('li, div')
-  .filter({ hasText: 'Elowen Vale' })
-  .filter({ hasText: /AC\s*\d/ })
-  .last();
-const hp = row.locator('button:not([aria-label])').filter({ hasText: /^\d+$/ }).first();
-await hp.click();
-await page.waitForTimeout(400);
-await page.keyboard.press('ControlOrMeta+a');
-await page.keyboard.type('12', { delay: 90 });
-await page.waitForTimeout(300);
-await page.keyboard.press('Enter');
-await page.waitForTimeout(2200);
-await clickLike(page.getByRole('button', { name: 'Maintained' }));
-await page.waitForTimeout(1600);
-marks.concEnd = at();
-
-// ── Loop C: the clocks tick ────────────────────────────────────────────────
-// Turns advance and the Ogre's effect durations count themselves down. The panel
-// follows the selected combatant, so the Ogre is re-selected after each advance;
-// the reselection happens outside the cropped region.
-marks.tickStart = at();
-for (let i = 0; i < 5; i++) {
-  await page.getByRole('button', { name: 'Next turn' }).click();
-  await page.waitForTimeout(250);
-  await page.getByText('Ogre', { exact: true }).first().click();
-  await page.waitForTimeout(1500);
-}
-marks.tickEnd = at();
 marks.total = at();
 
 await context.close();

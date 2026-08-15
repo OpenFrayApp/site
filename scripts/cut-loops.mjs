@@ -75,22 +75,3 @@ cut('roll-with-effects', {
   to: marks.swingEnd,
   width: 1440,
 });
-
-// The concentration check, wide enough for cause and effect together: the wizard's
-// pane with her hit points, the controls rail where the DC 10 answer appears, and
-// the click that keeps the spell.
-cut('concentration-check', {
-  from: marks.concStart + 1.2,
-  to: marks.concEnd,
-  box: { x: 480, y: 76, w: 960, h: 424 },
-  width: 960,
-});
-
-// The clocks: turns advance and every effect's rounds-left counts itself down in
-// the applied-effects panel, the log's head marching beside it.
-cut('effect-clocks', {
-  from: marks.tickStart + 0.3,
-  to: marks.tickEnd,
-  box: { x: 1024, y: 76, w: 416, h: 404 },
-  width: 416,
-});
