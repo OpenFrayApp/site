@@ -18,7 +18,7 @@ import { loadPlaywright } from './lib/playwright.mjs';
 const url = process.argv[2] ?? 'http://localhost:5199/console/';
 const outDir = process.argv[3] ?? 'screenshots/out';
 const scene = process.argv[4] ?? 'swing';
-if (!['swing', 'group-save', 'player-view'].includes(scene)) {
+if (!['swing', 'group-save', 'share-link'].includes(scene)) {
   console.error(`Unknown scene: ${scene}`);
   process.exit(1);
 }
@@ -34,7 +34,7 @@ const PARTY = [
 const FOES = {
   swing: ['Ogre'],
   'group-save': ['Mage', 'Ogre', 'Hell Hound', 'Quasit', 'Goblin Warrior'],
-  'player-view': ['Ogre', 'Quasit'],
+  'share-link': ['Ogre', 'Quasit'],
 };
 const ROLLS = [
   { who: 'Elowen Vale', roll: 23 },
@@ -205,13 +205,12 @@ for (const { who, roll } of ROLLS) {
 await page.getByRole('button', { name: 'Start combat' }).click();
 await page.waitForTimeout(500);
 
-let videoPage = page;
 if (scene === 'swing') await filmSwing();
 else if (scene === 'group-save') await filmGroupSave();
-else videoPage = await filmPlayerView();
+else await filmShareLink();
 marks.total = at();
 
-const video = await videoPage.video().path();
+const video = await page.video().path();
 await context.close();
 await browser.close();
 
@@ -241,52 +240,53 @@ async function setHp(who, hp) {
   await page.waitForTimeout(250);
 }
 
-// ── The player view, filmed from the table's seat ──────────────────────────
-// The recording is the PLAYER page, and no cursor ever appears on it: read-only is
-// the message, and the screen moving by itself is the proof. The GM works off
-// camera — a turn passes, damage lands and the Ogre's health shifts in words, a
-// condition chip pops in, and the hidden Quasit is revealed onto their board.
-async function filmPlayerView() {
-  // The Quasit starts hidden, so the reveal has something to reveal.
-  await page.getByText('Quasit', { exact: true }).first().click();
-  await page.waitForTimeout(300);
-  await page.getByRole('button', { name: 'Hide from players' }).click();
-  await page.waitForTimeout(300);
-
-  await page.getByRole('button', { name: 'Share with players' }).click();
-  await page.waitForTimeout(400);
-  await page.getByRole('button', { name: 'Start sharing' }).click();
-  await page.waitForTimeout(600);
-  const link = await page.locator('input[readonly]').inputValue();
-  const player = await context.newPage();
-  const tp = Date.now();
-  const atP = () => (Date.now() - tp) / 1000;
-  await player.goto(link);
-  await player.getByText('Elowen Vale').first().waitFor();
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(300);
-
-  marks.pvStart = atP();
-  await player.waitForTimeout(2000);
-  await next();
-  await player.waitForTimeout(1500);
-  await setHp('Ogre', 30);
-  await player.waitForTimeout(1500);
-  await setHp('Ogre', 12);
-  await player.waitForTimeout(1500);
+// ── Sharing, filmed end to end ─────────────────────────────────────────────
+// The whole setup, watched: a lived-in board, the camera pushes to the top-right
+// share icon, the panel opens, sharing starts, and the GM opens the player view —
+// the screen becomes the table's screen. The final beat rides a same-page
+// navigation so the transition stays in frame; the rig does not survive it, which
+// is fine, because the player view is the one screen with nothing to point at.
+async function filmShareLink() {
+  // A little damage and a condition, so the shared board is worth looking at.
+  await setHp('Ogre', 44);
   await page.getByText('Ogre', { exact: true }).first().click();
   await page.waitForTimeout(200);
   await page.getByRole('button', { name: 'Apply effect' }).click();
   await page.waitForTimeout(300);
   await dialog().getByRole('button', { name: 'Prone', exact: true }).click();
   await dialog().getByRole('button', { name: 'Apply', exact: true }).click();
-  await player.waitForTimeout(1800);
-  await page.getByText('Quasit', { exact: true }).first().click();
-  await page.waitForTimeout(200);
-  await page.getByRole('button', { name: 'Show to players' }).click();
-  await player.waitForTimeout(2800);
-  marks.pvEnd = atP();
-  return player;
+  await page.waitForTimeout(400);
+  await page.mouse.move(720, 560, { steps: 20 });
+  await page.waitForTimeout(400);
+
+  marks.shareStart = at();
+  await page.waitForTimeout(1400);
+  const icon = page.getByRole('button', { name: 'Share with players' });
+  const iconBox = await icon.boundingBox();
+  await camera(1.9, iconBox.x, iconBox.y + 40);
+  await clickLike(icon);
+  await page.waitForTimeout(600);
+  // The panel opens below the icon; re-aim around its Start button — the panel
+  // renders without a dialog role, so its own controls are the anchors.
+  const startBtn = page.getByRole('button', { name: 'Start sharing' });
+  const startBox = await startBtn.boundingBox();
+  await camera(1.6, startBox.x + startBox.width / 2, startBox.y);
+  await clickLike(startBtn);
+  await page.waitForTimeout(1400);
+  // Pull wide before the jump, so the cut lands full-frame to full-frame.
+  await camera(1);
+  // The fight lives in the GM's tab and the broadcast dies with it, which is why
+  // the panel's own affordance opens a NEW tab. That tab records its own video;
+  // the cutter splices the two takes at the click, the way a tab switch looks.
+  const playerPromise = context.waitForEvent('page');
+  await clickLike(page.getByRole('link', { name: 'Open the player view in a new tab' }));
+  marks.shareEnd = at() + 0.4;
+  const player = await playerPromise;
+  const tOpen = Date.now();
+  await player.getByText('Elowen Vale').first().waitFor();
+  await player.waitForTimeout(3000);
+  marks.playerHoldEnd = (Date.now() - tOpen) / 1000;
+  marks.playerVideo = await player.video().path();
 }
 
 // ── The swing, filmed ──────────────────────────────────────────────────────
