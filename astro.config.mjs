@@ -27,7 +27,8 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => !page.includes('/print') && !page.endsWith('/rss.xml'),
+      filter: (page) =>
+        !page.includes('/print') && !page.includes('/lab') && !page.endsWith('/rss.xml'),
       serialize: createLastmod(),
     }),
   ],

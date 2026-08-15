@@ -1,0 +1,33 @@
+---
+/** A full-width band: panel background from viewport edge to viewport edge, content at
+ *  the shared reading width. One per page, for the section that changes register — the
+ *  page's <main> needs overflow-x-clip, since w-screen includes the scrollbar gutter. */
+import { EYEBROW, DISPLAY_MD, TEXT_COL } from '../data/pageStyles.ts';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  /** The id the heading anchors, for aria-labelledby from the page. */
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow, heading, id, class: extra = '' } = Astro.props;
+---
+
+<section
+  class={`band w-screen self-center border-y border-border bg-panel ${extra}`}
+  aria-labelledby={heading && id ? id : undefined}
+>
+  <div class={`mx-auto ${TEXT_COL} px-6 py-14 text-left sm:py-16`}>
+    {eyebrow && <p class={`${EYEBROW} mb-3`}>{eyebrow}</p>}
+    {
+      heading && (
+        <h2 id={id} class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD}`}>
+          {heading}
+        </h2>
+      )
+    }
+    <slot />
+  </div>
+</section>

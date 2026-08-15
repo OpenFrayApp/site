@@ -1,0 +1,130 @@
+---
+/** A tabbed switcher: one tab bar, one panel at a time, each panel prose beside its own
+ *  picture. Follows the ARIA tabs pattern — arrow keys move and activate. Item ids must
+ *  be unique on the page, since they wire the tab/panel pairs together. */
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+import { SHOT_FRAME } from '../data/pageStyles.ts';
+
+interface Item {
+  id: string;
+  label: string;
+  title: string;
+  body: string;
+  image?: { src: ImageMetadata; alt: string };
+  link?: { label: string; href: string };
+}
+interface Props {
+  /** Names the tab bar for assistive tech, e.g. “What a roll takes with it”. */
+  label: string;
+  items: Item[];
+}
+
+const { label, items } = Astro.props;
+
+const tabClass =
+  'tab -mb-px cursor-pointer border-0 border-b-2 border-transparent bg-transparent px-1 ' +
+  'pt-0 pb-3 text-base leading-relaxed font-semibold whitespace-nowrap text-muted ' +
+  'transition-[color,border-color] hover:text-text ' +
+  'aria-selected:border-b-accent aria-selected:text-text';
+---
+
+<div class="tabs text-left" data-tabs>
+  <div
+    role="tablist"
+    aria-label={label}
+    class="flex gap-6 overflow-x-auto border-b border-border"
+  >
+    {
+      items.map((item, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${item.id}-tab`}
+          aria-controls={`${item.id}-panel`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          class={tabClass}
+        >
+          {item.label}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    items.map((item, i) => (
+      <div
+        role="tabpanel"
+        id={`${item.id}-panel`}
+        aria-labelledby={`${item.id}-tab`}
+        hidden={i !== 0}
+        class="pt-8"
+      >
+        <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div>
+            <h3 class="mt-0 mb-3 text-xl leading-snug font-bold text-text">{item.title}</h3>
+            <p class="m-0 text-base leading-relaxed text-muted">{item.body}</p>
+            {item.link && (
+              <p class="mt-4 mb-0">
+                <a
+                  href={item.link.href}
+                  class="font-semibold text-accent no-underline hover:underline"
+                >
+                  {item.link.label} →
+                </a>
+              </p>
+            )}
+          </div>
+          {item.image && (
+            <Picture
+              src={item.image.src}
+              formats={['avif', 'webp']}
+              fallbackFormat="png"
+              widths={[560, 1120]}
+              sizes="(max-width: 1024px) 94vw, 29rem"
+              alt={item.image.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              class={SHOT_FRAME}
+            />
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  // The APG tabs pattern with automatic activation: arrows move focus and select in one
+  // step, Home and End jump to the rail's ends, and only the active tab is tabbable.
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+
+    const select = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const active = t === tab;
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+        t.tabIndex = active ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !active;
+      });
+      tab.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        const last = tabs.length - 1;
+        let to = -1;
+        if (e.key === 'ArrowRight') to = i === last ? 0 : i + 1;
+        else if (e.key === 'ArrowLeft') to = i === 0 ? last : i - 1;
+        else if (e.key === 'Home') to = 0;
+        else if (e.key === 'End') to = last;
+        if (to >= 0) {
+          e.preventDefault();
+          select(tabs[to]);
+        }
+      });
+    });
+  });
+</script>

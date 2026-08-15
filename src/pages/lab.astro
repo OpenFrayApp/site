@@ -1,0 +1,259 @@
+---
+// The section components on one page, with the real fight and the real copy, so a
+// layout is judged before a page ships it. A local tool, not a page of the site: the
+// sitemap filter skips /lab and the openfray repo's assemble step drops it from dist/,
+// the same mechanism the print editions use.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Band from '../components/Band.astro';
+import Split from '../components/Split.astro';
+import Tabs from '../components/Tabs.astro';
+import Accordion from '../components/Accordion.astro';
+import { hero, tagline } from '../data/hero.ts';
+import { EYEBROW, TEXT_COL } from '../data/pageStyles.ts';
+import consoleHero from '../assets/screenshots/console-hero.png';
+import consoleRows from '../assets/screenshots/console-rows.png';
+import consoleLog from '../assets/screenshots/console-log.png';
+import greatclubLog from '../assets/screenshots/greatclub-log.png';
+import applyConditions from '../assets/screenshots/apply-conditions.png';
+import applyModifier from '../assets/screenshots/apply-modifier.png';
+import applyCounter from '../assets/screenshots/apply-counter.png';
+import applyName from '../assets/screenshots/apply-name.png';
+
+// A visible label above each demo, so a review names what it critiques.
+const DEMO = `${EYEBROW} mt-20 mb-6 border-t border-border pt-6`;
+
+const turn = [
+  {
+    label: 'The turn starts',
+    body: 'Save-ends effects keyed to the start roll themselves. Recharge rolls. Durations tick.',
+  },
+  {
+    label: 'The creature acts',
+    body: 'Every roll carries the effects that touch it, from either end, automatically.',
+  },
+  {
+    label: 'Damage lands',
+    body: 'If the target was concentrating, the check is offered on the spot.',
+  },
+  {
+    label: 'The turn ends',
+    body: 'End-of-turn saves roll, timed effects count down, expired ones clear.',
+  },
+  {
+    label: 'The log writes it down',
+    body: 'Every change lands in the game log, grouped by round.',
+  },
+];
+---
+
+<Layout title="Lab — OpenFray" description="The section components, demoed. Never published.">
+  <main class={`${hero} overflow-x-clip`}>
+    <section class={`${TEXT_COL} text-left`}>
+      <p class={`${EYEBROW} mb-4`}>Lab</p>
+      <h1 class="mt-0 mb-3 text-3xl leading-tight font-extrabold tracking-tight">
+        The section components
+      </h1>
+      <p class={`${tagline} mb-0`}>
+        Every layout the marketing pages compose from, shown with the real fight. This page never
+        ships: the sitemap skips it and the assemble step removes it.
+      </p>
+    </section>
+
+    <div class={`${TEXT_COL}`}>
+      <p class={DEMO}>Hero · image right</p>
+      <Hero
+        eyebrow="Free · Open source · No account"
+        heading="Never lose concentration."
+        level="h2"
+        tagline="OpenFray holds the whole state of a Dungeons and Dragons encounter — who’s frightened by whom, who has advantage on whom, what every creature has left to spend — so you run it instead of remembering it."
+        ctas={[
+          { label: 'Open the console →', href: '/console/' },
+          { label: 'See it running', href: '#screenshots', ghost: true },
+        ]}
+        image={{
+          src: consoleHero,
+          alt: 'The console mid-fight: initiative order down the left, the Ogre’s stat block in the middle, and the game log ending on its missed Greatclub swing.',
+        }}
+      >
+        <ul
+          class="facts m-0 mt-7 flex list-none flex-wrap gap-x-8 gap-y-1.5 p-0 text-sm leading-relaxed text-muted"
+        >
+          <li>Nothing to install</li>
+          <li>No account needed</li>
+          <li>Compatible with 5.5e and 5e</li>
+        </ul>
+      </Hero>
+
+      <p class={DEMO}>Hero · video left</p>
+      <Hero
+        eyebrow="A fight in progress"
+        heading="The whole encounter on one screen"
+        level="h2"
+        side="left"
+        tagline="Initiative, stat blocks, controls, and the game log, with nothing to reconcile between rounds. The board you see is round 3 of a real fight."
+        ctas={[{ label: 'See it running', href: '/console/', ghost: true }]}
+        video={{
+          src: '/lab/loop.mp4',
+          label: 'A slow pan across the console mid-fight, round 3 on the board.',
+        }}
+      />
+    </div>
+
+    <p class={`${TEXT_COL} ${DEMO}`}>Band · full width, panel background</p>
+    <Band eyebrow="One turn, held together" heading="What runs by itself" id="lab-band-title">
+      <div class="grid items-start gap-10 lg:grid-cols-[1fr_18rem]">
+        <ol class="m-0 grid list-none gap-6 p-0">
+          {
+            turn.map((t, i) => (
+              <li class="grid grid-cols-[2.25rem_1fr] gap-4">
+                <span class="grid size-9 place-items-center rounded-full border border-accent text-sm font-bold text-accent">
+                  {i + 1}
+                </span>
+                <span class="pt-1">
+                  <span class="block text-base leading-snug font-bold text-text">{t.label}</span>
+                  <span class="mt-1 block text-sm leading-normal text-muted">{t.body}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <figure class="m-0 max-lg:hidden">
+          <img
+            src={consoleLog.src}
+            alt="The game log mid-fight, entry by entry, the Greatclub roll at the top."
+            class="block h-auto w-full rounded-xl border border-border"
+          />
+          <figcaption class="mt-3 text-xs leading-relaxed text-muted">
+            The receipts, as the log keeps them.
+          </figcaption>
+        </figure>
+      </div>
+    </Band>
+
+    <div class={`${TEXT_COL}`}>
+      <p class={DEMO}>Split · image right</p>
+      <Split
+        eyebrow="Two ends"
+        heading="Every effect knows whose roll it touches"
+        id="lab-split-right"
+        image={{
+          src: consoleRows,
+          alt: 'Three tracker rows: the Ogre carrying advantage-against, Prone, and Bane chips between two untouched neighbors.',
+        }}
+        caption="The badges live on the rows, where the fight is."
+      >
+        <p class="mt-0">
+          The cleric drops Bane on the Ogre; the wizard paints it with Faerie Fire. Two badges,
+          straight from the spell cards — and each one fires on the right roll, from its own end.
+        </p>
+        <p class="mb-0">
+          Whatever a badge touches — the roll, the save, the damage — it touches from the correct
+          end, and it leaves when its condition says so.
+        </p>
+      </Split>
+
+      <p class={DEMO}>Split · image left</p>
+      <Split
+        eyebrow="The receipts"
+        heading="The log did the arithmetic"
+        id="lab-split-left"
+        side="left"
+        image={{
+          src: greatclubLog,
+          alt: 'One log entry: the Ogre’s Greatclub swing at Bram, two d20s rolled with disadvantage, the lower kept, the Bane d4 subtracted, a hit for 15 bludgeoning.',
+        }}
+      >
+        <p class="mt-0">
+          When the Ogre finally swings back, everything on it is already in the roll: Prone means
+          disadvantage, so 2d20 and the lower die counts. Bane subtracts its d4. The log prints
+          the whole line.
+        </p>
+        <p class="mb-0">You said “the Ogre attacks Bram.” The board did the rest.</p>
+      </Split>
+
+      <p class={DEMO}>Tabs</p>
+      <Tabs
+        label="What the board keeps hold of"
+        items={[
+          {
+            id: 'lab-tab-ends',
+            label: 'Two ends',
+            title: 'Effects fire from their own end',
+            body: 'Bane rides the Ogre’s own rolls; Faerie Fire arms everyone who swings at it. Each badge works its side automatically, turn after turn.',
+            image: {
+              src: consoleRows,
+              alt: 'Three tracker rows, the Ogre carrying its three effect chips.',
+            },
+            link: { label: 'How the tracking works', href: '/features/tracking/' },
+          },
+          {
+            id: 'lab-tab-receipts',
+            label: 'The receipts',
+            title: 'Every roll, written down with its dice',
+            body: 'The Greatclub line keeps the two d20s, the kept die, the Bane d4, and the damage dice. Rulings stop being re-litigated, because the log remembers.',
+            image: {
+              src: greatclubLog,
+              alt: 'The Greatclub log entry with the full roll breakdown.',
+            },
+            link: { label: 'The game log', href: '/docs/reference/game-log/' },
+          },
+          {
+            id: 'lab-tab-presets',
+            label: 'Presets',
+            title: 'Your table’s effects, bottled',
+            body: 'A named bundle lands as one badge and clears together. Sallow Rot 3 is a condition, a reminder, a hidden counter, and a −30 to the hit point maximum, applied in one click.',
+            image: {
+              src: applyName,
+              alt: 'The Apply-as-one field naming the whole package Sallow Rot 3.',
+            },
+            link: { label: 'Effects and conditions', href: '/docs/fight/effects/' },
+          },
+        ]}
+      />
+
+      <p class={DEMO}>Accordion · media right</p>
+      <Accordion
+        name="lab-presets"
+        items={[
+          {
+            id: 'lab-acc-conditions',
+            title: 'Pick the conditions',
+            body: 'Prone and Frightened, straight off the rules list.',
+            image: {
+              src: applyConditions,
+              alt: 'The condition picker with Prone selected among the full list.',
+            },
+          },
+          {
+            id: 'lab-acc-modifier',
+            title: 'Price the damage',
+            body: 'A −30 to the hit point maximum, labeled with its cause.',
+            image: {
+              src: applyModifier,
+              alt: 'A modifier in the form: Sallow Rot, −30 to the hit point maximum.',
+            },
+          },
+          {
+            id: 'lab-acc-counter',
+            title: 'Keep a secret',
+            body: 'The Depth counter is yours; the player view never sees it.',
+            image: {
+              src: applyCounter,
+              alt: 'A counter named Depth with Hidden from players ticked.',
+            },
+          },
+          {
+            id: 'lab-acc-name',
+            title: 'Name the bundle',
+            body: '“Sallow Rot 3” lands as one badge and clears together.',
+            image: {
+              src: applyName,
+              alt: 'The Apply-as-one field naming the whole package Sallow Rot 3.',
+            },
+          },
+        ]}
+      />
+    </div>
+  </main>
+</Layout>
