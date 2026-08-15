@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../node_modules/shotlist/dist/recipe.schema.json
+#
+# The Settings dialog on its libraries list: every shelf the console ships, each with
+# its own toggle — the picture behind "your table picks which libraries appear".
+name: library-toggles
+install: site
+viewport: { width: 1800, height: 1300 }
+
+setup:
+  - use: open-settings
+  # A table mid-choice, not a fresh install: two of ours and a Kobold book joined
+  # the core rules, and the rest wait unticked.
+  - check: { role: checkbox, name: Brood & Bloom }
+  - check: { role: checkbox, name: The Waking Garden }
+  - check: { role: checkbox, name: Tome of Beasts 1 }
+  - wait: 300
+
+clip: { panel: Settings, pad: 14 }

@@ -18,7 +18,7 @@ import { loadPlaywright } from './lib/playwright.mjs';
 const url = process.argv[2] ?? 'http://localhost:5199/console/';
 const outDir = process.argv[3] ?? 'screenshots/out';
 const scene = process.argv[4] ?? 'swing';
-if (!['swing', 'group-save', 'share-link'].includes(scene)) {
+if (!['swing', 'group-save', 'share-link', 'compendium'].includes(scene)) {
   console.error(`Unknown scene: ${scene}`);
   process.exit(1);
 }
@@ -35,6 +35,7 @@ const FOES = {
   swing: ['Ogre'],
   'group-save': ['Mage', 'Ogre', 'Hell Hound', 'Quasit', 'Goblin Warrior'],
   'share-link': ['Ogre', 'Quasit'],
+  compendium: ['Ogre'],
 };
 const ROLLS = [
   { who: 'Elowen Vale', roll: 23 },
@@ -207,7 +208,8 @@ await page.waitForTimeout(500);
 
 if (scene === 'swing') await filmSwing();
 else if (scene === 'group-save') await filmGroupSave();
-else await filmShareLink();
+else if (scene === 'share-link') await filmShareLink();
+else await filmCompendium();
 marks.total = at();
 
 const video = await page.video().path();
@@ -419,4 +421,47 @@ async function filmGroupSave() {
   await camera(1);
   await page.waitForTimeout(1000);
   marks.groupEnd = at();
+}
+
+// ── The compendium, filmed ─────────────────────────────────────────────────
+// The shelf, alive: the extra libraries are enabled off camera, then the film opens
+// the compendium from a lived-in board, types a search, pushes onto the results —
+// where every entry wears its library and rules badges — and lands a stat block.
+async function filmCompendium() {
+  await page.getByRole('button', { name: 'Settings and more' }).click();
+  await page.getByRole('menuitem', { name: 'Settings' }).click();
+  await page.locator('[role=tablist]').waitFor();
+  for (const lib of ['Tome of Beasts 3', 'Brood & Bloom', 'The Waking Garden']) {
+    const box = page.getByRole('checkbox', { name: lib });
+    if (!(await box.isChecked())) await box.check();
+    await page.waitForTimeout(150);
+  }
+  await page.getByRole('button', { name: 'Done' }).click();
+  await page.waitForTimeout(500);
+  await page.mouse.move(720, 560, { steps: 18 });
+  await page.waitForTimeout(400);
+
+  marks.compStart = at();
+  await page.waitForTimeout(1400);
+  await clickLike(page.getByRole('button', { name: 'Show the compendium' }));
+  await page.waitForTimeout(1000);
+  const search = page.getByPlaceholder('Search creatures…').first();
+  await clickLike(search);
+  // One word, four shelves: moth returns Core, Tome of Beasts, and both of
+  // OpenFray's own books, every entry wearing its badges.
+  await page.keyboard.type('moth', { delay: 130 });
+  await page.waitForTimeout(1000);
+  // Push onto the results with the reading pane's edge in frame, so the stat block
+  // fills the void on camera when the click lands.
+  const first = await page
+    .getByRole('button', { name: /^Catafalque Moth/ })
+    .first()
+    .boundingBox();
+  await camera(1.6, first.x + first.width, first.y + 90);
+  await page.waitForTimeout(1700);
+  await clickLike(page.getByRole('button', { name: /^Catafalque Moth/ }).first());
+  await page.waitForTimeout(1100);
+  await camera(1);
+  await page.waitForTimeout(2600);
+  marks.compEnd = at();
 }

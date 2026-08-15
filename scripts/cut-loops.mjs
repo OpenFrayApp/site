@@ -88,6 +88,16 @@ if (marks.groupStart != null) {
   });
 }
 
+// The compendium, filmed: the shelf opens, a search lands, the camera pushes onto
+// the badged results, and a stat block fills the pane. Camera in the footage.
+if (marks.compStart != null) {
+  cut('compendium', {
+    from: marks.compStart - 0.2,
+    to: marks.compEnd,
+    width: 1440,
+  });
+}
+
 // Sharing, end to end: the board, the push to the share icon, the panel, Start
 // sharing — then the cut every tab switch looks like, onto the player view the
 // click just opened. Two takes, spliced: the GM page's and the new tab's own.
