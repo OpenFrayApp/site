@@ -31,5 +31,8 @@
     "type": "git",
     "url": "git+https://github.com/OpenFrayApp/site.git"
   },
-  "license": "AGPL-3.0-or-later"
+  "license": "AGPL-3.0-or-later",
+  "allowScripts": {
+    "sharp@0.35.3": true
+  }
 }
