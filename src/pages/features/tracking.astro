@@ -179,7 +179,13 @@ const turn = [
     /* The register change: the turn as a machine, with the concentration loop proving
     the one step GMs drop most. */
   }
-  <Band eyebrow="One turn, held together" heading="What runs by itself" id="tracking-turn-title">
+  <Band
+    eyebrow="One turn, held together"
+    heading="What runs by itself"
+    id="tracking-turn-title"
+    align="center"
+    class="mt-20"
+  >
     <div class="grid items-center gap-10 lg:grid-cols-[1fr_22rem]">
       <ol class="m-0 grid list-none gap-6 p-0">
         {
@@ -256,11 +262,15 @@ const turn = [
     </Split>
   </section>
 
+  {
+    /* Centered header: the standalone sections change alignment, so the page stops
+    reading as one long left rail. */
+  }
   <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-rest-title">
-    <p class={`${EYEBROW} mb-4`}>The rest of the memory</p>
+    <p class={`${EYEBROW} mb-4 text-center`}>The rest of the memory</p>
     <h2
       id="tracking-rest-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      class="mx-auto mt-0 mb-8 max-w-[18ch] text-center text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
     >
       What else it keeps hold of
     </h2>
@@ -289,14 +299,14 @@ const turn = [
     this is one step from wanting the account that keeps it. */
   }
   <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="tracking-presets-title">
-    <p class={`${EYEBROW} mb-4`}>Presets</p>
+    <p class={`${EYEBROW} mb-4 text-center`}>Presets</p>
     <h2
       id="tracking-presets-title"
-      class="mt-0 mb-5 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      class="mx-auto mt-0 mb-5 max-w-[18ch] text-center text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
     >
       Your table's effects, bottled
     </h2>
-    <p class="mt-0 mb-8 max-w-[48rem] text-lg leading-relaxed text-muted">
+    <p class="mx-auto mt-0 mb-10 max-w-[44rem] text-center text-lg leading-relaxed text-muted">
       An effect is rarely alone: the spell that frightens also reminds, carries a counter, and dents
       a stat. OpenFray stages the whole package and applies it as one badge — and named, it becomes
       a preset your table reuses for the rest of the campaign. The barbarian's Reckless Attack is

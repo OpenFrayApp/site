@@ -9,10 +9,13 @@ interface Props {
   heading?: string;
   /** The id the heading anchors, for aria-labelledby from the page. */
   id?: string;
+  /** Centers the eyebrow and heading; the content below stays its own layout. */
+  align?: 'left' | 'center';
   class?: string;
 }
 
-const { eyebrow, heading, id, class: extra = '' } = Astro.props;
+const { eyebrow, heading, id, align = 'left', class: extra = '' } = Astro.props;
+const centered = align === 'center';
 ---
 
 <section
@@ -20,10 +23,13 @@ const { eyebrow, heading, id, class: extra = '' } = Astro.props;
   aria-labelledby={heading && id ? id : undefined}
 >
   <div class={`mx-auto ${TEXT_COL} px-6 py-14 text-left sm:py-16`}>
-    {eyebrow && <p class={`${EYEBROW} mb-3`}>{eyebrow}</p>}
+    {eyebrow && <p class={`${EYEBROW} mb-3 ${centered ? 'text-center' : ''}`}>{eyebrow}</p>}
     {
       heading && (
-        <h2 id={id} class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD}`}>
+        <h2
+          id={id}
+          class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD} ${centered ? 'mx-auto text-center' : ''}`}
+        >
           {heading}
         </h2>
       )
