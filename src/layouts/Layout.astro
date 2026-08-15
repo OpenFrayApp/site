@@ -428,7 +428,7 @@ const navLink =
         document.querySelectorAll('a[href="/console/"]').forEach(function (a) {
           a.addEventListener('click', send('Site: open console'));
         });
-        document.querySelectorAll('a[href="/docs/"]').forEach(function (a) {
+        document.querySelectorAll('a[href^="/docs/"]').forEach(function (a) {
           a.addEventListener('click', send('Site: open docs'));
         });
         document
