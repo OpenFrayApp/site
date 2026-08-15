@@ -25,5 +25,12 @@ setup:
   - wait: 300
   - click: { text: Sallow Rot 3 }
   - wait: 400
+  # The form stays editable after a preset fills it, and the walkthrough this shot
+  # feeds is about picking — so the GM adds Frightened on top of the bundle.
+  - click:
+      css: button
+      text: Frightened
+      within: { panel: Apply effect to Ogre }
+  - wait: 250
 
 clip: { panel: Apply effect to Ogre, pad: 14 }

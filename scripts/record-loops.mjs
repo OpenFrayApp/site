@@ -48,6 +48,36 @@ await page.goto(url);
 await page.getByText('Add creature').first().waitFor();
 await page.waitForTimeout(600);
 
+// A visible cursor, or the recording reads as a slideshow: a dot follows the mouse
+// and pulses on press, and the loops move to their targets in eased steps.
+await page.evaluate(() => {
+  const dot = document.createElement('div');
+  dot.id = 'fake-cursor';
+  dot.style.cssText =
+    'position:fixed;z-index:999999;width:16px;height:16px;border-radius:50%;' +
+    'pointer-events:none;left:0;top:0;transform:translate(-50%,-50%);' +
+    'background:rgba(255,255,255,.35);border:2px solid rgba(255,255,255,.95);' +
+    'box-shadow:0 1px 6px rgb(0 0 0/.6);transition:scale .12s ease';
+  document.body.append(dot);
+  addEventListener('mousemove', (e) => {
+    dot.style.left = `${e.clientX}px`;
+    dot.style.top = `${e.clientY}px`;
+  });
+  addEventListener('mousedown', () => (dot.style.scale = '0.65'));
+  addEventListener('mouseup', () => (dot.style.scale = '1'));
+});
+
+/** Click the way a hand does: glide to the target, settle, press. For the recorded
+ *  moments only — the staging before them is trimmed away and clicks plainly. */
+async function clickLike(locator) {
+  const box = await locator.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 32 });
+  await page.waitForTimeout(260);
+  await page.mouse.down();
+  await page.waitForTimeout(110);
+  await page.mouse.up();
+}
+
 /** One player character through the Add PC popover. */
 async function addPc({ name, ac, hp, init }) {
   await page.getByRole('button', { name: 'Add PC', exact: true }).click();
@@ -149,12 +179,15 @@ await next();
 await page.waitForTimeout(800);
 
 // ── Loop A: the swing ──────────────────────────────────────────────────────
+// Park the cursor mid-board so the loop opens with it gliding to the action line.
+await page.mouse.move(720, 620, { steps: 20 });
+await page.waitForTimeout(400);
 marks.swingStart = at();
-await page.getByText('Greatclub.', { exact: false }).first().click();
+await clickLike(page.getByText('Greatclub.', { exact: false }).first());
 await page.waitForTimeout(900);
-await dialog().getByRole('button', { name: 'Bram Ironfist' }).first().click();
+await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
 await page.waitForTimeout(700);
-await dialog().getByRole('button', { name: 'Roll attack' }).click();
+await clickLike(dialog().getByRole('button', { name: 'Roll attack' }));
 await page.waitForTimeout(1200);
 marks.swingDialog = await dialog().boundingBox();
 await page.waitForTimeout(2600);
@@ -164,7 +197,9 @@ if (await close.count()) await close.click();
 await page.waitForTimeout(600);
 
 // ── Loop B: the concentration prompt ───────────────────────────────────────
-// Elowen holds Faerie Fire; damage lands on her, and the board offers the check.
+// Elowen holds Faerie Fire; damage lands on her, the board offers the check, and
+// one click answers it. The check is not a dialog: it lands inline in the controls
+// rail and blocks nothing — which is the point the loop makes.
 marks.concStart = at();
 const row = page
   .locator('li, div')
@@ -178,9 +213,9 @@ await page.keyboard.press('ControlOrMeta+a');
 await page.keyboard.type('12', { delay: 90 });
 await page.waitForTimeout(300);
 await page.keyboard.press('Enter');
-// The check is not a dialog: it lands inline in the controls rail, DC and both
-// answers, and blocks nothing — which is the point the loop makes.
-await page.waitForTimeout(3800);
+await page.waitForTimeout(2200);
+await clickLike(page.getByRole('button', { name: 'Maintained' }));
+await page.waitForTimeout(1600);
 marks.concEnd = at();
 marks.total = at();
 

@@ -74,10 +74,10 @@ cut('roll-with-effects', {
 });
 
 // The concentration check: the controls rail and the log's head, where the damage
-// entry lands and the DC 10 answer appears. The region is the console's right rail
-// at the recorder's 1440x900 viewport.
+// entry lands, the DC 10 answer appears, and one click keeps the spell. The region
+// is the console's right rail at the recorder's 1440x900 viewport.
 cut('concentration-prompt', {
   from: marks.concStart + 1.2,
-  to: marks.concStart + 8.2,
+  to: marks.concEnd,
   box: { x: 1024, y: 76, w: 416, h: 384 },
 });
