@@ -19,11 +19,11 @@ magick "$OUT/console-hero.png" -crop 780x994+2800+872 +repage "$SITE/console-log
 magick "$OUT/console-hero.png" -crop 764x290+2798+930 +repage "$SITE/greatclub-log.png"
 magick "$OUT/console-hero.png" -crop 780x452+2790+380 +repage "$SITE/applied-effects.png"
 
-# From apply-effect-hero.png (1080x2058, already clipped to the modal): its four
+# From apply-effect-hero.png (1080x1910, already clipped to the modal): its four
 # zones, in the order the page tells them.
-magick "$OUT/apply-effect-hero.png" -crop 1020x270+30+515 +repage "$SITE/apply-conditions.png"
-magick "$OUT/apply-effect-hero.png" -crop 990x300+45+1290 +repage "$SITE/apply-modifier.png"
-magick "$OUT/apply-effect-hero.png" -crop 1020x250+30+1015 +repage "$SITE/apply-counter.png"
-magick "$OUT/apply-effect-hero.png" -crop 1020x185+30+1700 +repage "$SITE/apply-name.png"
+magick "$OUT/apply-effect-hero.png" -crop 1020x245+30+375 +repage "$SITE/apply-conditions.png"
+magick "$OUT/apply-effect-hero.png" -crop 990x290+45+1160 +repage "$SITE/apply-modifier.png"
+magick "$OUT/apply-effect-hero.png" -crop 1020x215+30+876 +repage "$SITE/apply-counter.png"
+magick "$OUT/apply-effect-hero.png" -crop 1020x175+30+1572 +repage "$SITE/apply-name.png"
 
 echo "vignettes recut into $SITE"

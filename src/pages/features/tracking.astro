@@ -13,6 +13,7 @@ import { zoomTrigger, zoomOverlay, zoomBadge } from '../../data/lightbox.ts';
 import { EYEBROW, TEXT_COL, SHOT_FRAME } from '../../data/pageStyles.ts';
 import consoleHero from '../../assets/screenshots/console-hero.png';
 import consoleRows from '../../assets/screenshots/console-rows.png';
+import consoleLog from '../../assets/screenshots/console-log.png';
 import greatclubLog from '../../assets/screenshots/greatclub-log.png';
 import appliedEffects from '../../assets/screenshots/applied-effects.png';
 import applyConditions from '../../assets/screenshots/apply-conditions.png';
@@ -59,10 +60,10 @@ const turn = [
   heading="The board that remembers"
   lede="Your tracker knows the Ogre's hit points. Round three is decided by everything else — who is concentrating, who has advantage on whom, what ends at the start of whose turn. OpenFray holds all of it, and works it into the rolls."
   video={{
-    src: '/media/roll-with-effects.mp4',
-    poster: '/media/roll-with-effects.jpg',
+    src: '/media/concentration-check.mp4',
+    poster: '/media/concentration-check.jpg',
     label:
-      "The Ogre's Greatclub attack, rolled in the console: two d20s at disadvantage from Prone, the Bane d4 subtracted, a miss against AC 18 — with both causes named under the roll.",
+      'Damage lands on a concentrating wizard: her hit points drop, the board offers the check inline — Concentration, DC 10, Maintained or Broken — and one click keeps the spell.',
   }}
   shots={shots}
   handbook={[
@@ -186,7 +187,7 @@ const turn = [
     align="center"
     class="mt-20"
   >
-    <div class="grid items-center gap-10 lg:grid-cols-[1fr_22rem]">
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_18rem]">
       <ol class="m-0 grid list-none gap-6 p-0">
         {
           turn.map((t, i) => (
@@ -203,19 +204,28 @@ const turn = [
         }
       </ol>
       <figure class="m-0 max-lg:hidden">
-        <video
-          class={`motion-loop ${SHOT_FRAME}`}
-          src="/media/concentration-prompt.mp4"
-          poster="/media/concentration-prompt.jpg"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          aria-label="Damage lands on a concentrating wizard, and the console offers the check inline: Concentration, DC 10, Maintained or Broken."
-        ></video>
+        <button
+          type="button"
+          class={`shot-thumb ${zoomTrigger} rounded-xl`}
+          data-index="0"
+          aria-label="Enlarge: the whole console around the game log"
+        >
+          <Picture
+            src={consoleLog}
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[512, 780]}
+            sizes="18rem"
+            alt="The game log mid-fight: turns, damage, and the Greatclub roll with its dice, entry by entry."
+            loading="lazy"
+            class={SHOT_FRAME}
+          />
+          <span class={zoomOverlay} aria-hidden="true">
+            <span class={zoomBadge}><ZoomIcon /></span>
+          </span>
+        </button>
         <figcaption class="mt-3 text-xs leading-relaxed text-muted">
-          Step 3, as it happens: the damage lands, and the check is already waiting.
+          Step 5's receipts, as the log keeps them.
         </figcaption>
       </figure>
     </div>
@@ -230,7 +240,8 @@ const turn = [
       eyebrow="No sticky notes"
       heading="Everything on the board says when it leaves"
       id="tracking-durations-title"
-      caption="The applied-effects panel, mid-fight: every effect with its time left."
+      caption="The applied-effects panel as the turns pass: the clocks count themselves down."
+      mediaClass="max-w-[22rem] justify-self-center lg:justify-self-end"
     >
       <p class="mt-0 mb-5">
         Bane has 9 rounds left. Faerie Fire has 8. The Prone stays until someone stands up. Every
@@ -238,27 +249,18 @@ const turn = [
         sticky note survives three rounds past its spell.
       </p>
       <p class="mb-0">Clearing one early is the button beside it. The board never argues.</p>
-      <button
+      <video
         slot="media"
-        type="button"
-        class={`shot-thumb ${zoomTrigger} rounded-xl`}
-        data-index="0"
-        aria-label="Enlarge: the whole console around the applied-effects panel"
-      >
-        <Picture
-          src={appliedEffects}
-          formats={['avif', 'webp']}
-          fallbackFormat="png"
-          widths={[560, 780]}
-          sizes="(max-width: 1024px) 94vw, 29rem"
-          alt="The applied-effects panel: Bane with 9 rounds left on each of its two riders, Faerie Fire with 8, and Prone until removed, each with its own clear button."
-          loading="lazy"
-          class={SHOT_FRAME}
-        />
-        <span class={zoomOverlay} aria-hidden="true">
-          <span class={zoomBadge}><ZoomIcon /></span>
-        </span>
-      </button>
+        class={`motion-loop ${SHOT_FRAME}`}
+        src="/media/effect-clocks.mp4"
+        poster="/media/effect-clocks.jpg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Turns advance and the applied-effects panel counts its clocks down: Bane from 9 rounds left to 8, Faerie Fire from 8 to 7, Prone staying until removed."
+      ></video>
     </Split>
   </section>
 
@@ -330,7 +332,7 @@ const turn = [
           body: 'A −30 to the hit point maximum, labeled with its cause.',
           image: {
             src: applyModifier,
-            alt: 'A modifier in the same form: Sallow Rot, −30 to the hit point maximum.',
+            alt: 'A modifier in the same form: Undertow, −30 to the hit point maximum.',
           },
         },
         {
@@ -345,10 +347,10 @@ const turn = [
         {
           id: 'presets-name',
           title: 'Name the bundle',
-          body: '“Sallow Rot 3” lands as one badge and clears together.',
+          body: '“Undertow” lands as one badge and clears together.',
           image: {
             src: applyName,
-            alt: 'The Apply-as-one field naming the whole package Sallow Rot 3.',
+            alt: 'The Apply-as-one field naming the whole package Undertow.',
           },
         },
       ]}

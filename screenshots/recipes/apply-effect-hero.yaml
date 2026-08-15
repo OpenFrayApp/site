@@ -1,36 +1,47 @@
-# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# yaml-language-server: $schema=../node_modules/shotlist/dist/recipe.schema.json
 #
-# The rebuilt Apply effect box with a preset staged in it: a condition, a modifier, a
-# reminder and a GM-only counter, all waiting under one bundle name. The handbook's
-# apply-effect shot is the numbered anatomy of the same box; this one is unannotated,
-# for the site, and shows the box holding something rather than sitting empty.
+# The Apply effect box with a custom bundle staged part by part, the way the tracking
+# page's walkthrough tells it: two conditions, a reminder, a hidden counter, a penalty
+# with its label, and the bundle name. Nothing is filled by a preset — the form is the
+# feature, and the parts belong to a homebrew effect (Undertow) rather than a shipped
+# one.
 name: apply-effect-hero
 install: site
-# Tall enough that the whole box fits without scrolling inside itself: the bundle name at
-# the bottom is the part 1.0 added, and a clip of a scrolled modal cuts it off.
+# Tall enough that the whole box fits without scrolling inside itself: the bundle name
+# at the bottom is the part 1.0 added, and a clip of a scrolled modal cuts it off.
 viewport: { width: 1800, height: 1700 }
 
 setup:
-  # The Presets row only appears once a library ships presets, and Brood & Bloom does.
-  - use: open-settings
-  - check: { role: checkbox, name: Brood & Bloom }
-  - click: { role: button, name: Done }
-  - wait: 300
   - use: fight-board
   - click: { text: Ogre }
   - wait: 250
   - click: { role: button, name: Apply effect }
   - wait: 400
-  - click: { role: button, name: Presets }
-  - wait: 300
-  - click: { text: Sallow Rot 3 }
-  - wait: 400
-  # The form stays editable after a preset fills it, and the walkthrough this shot
-  # feeds is about picking — so the GM adds Frightened on top of the bundle.
+  # The form arrives with the Ogre's own Prone already selected — the board's state
+  # is the form's starting point — so only Frightened is picked here.
   - click:
       css: button
       text: Frightened
       within: { panel: Apply effect to Ogre }
-  - wait: 250
+  - fill: { label: Custom reminder }
+    value: Can't take reactions
+  - click: { role: button, name: Add counter }
+  - wait: 200
+  - fill: { label: Counter 1 name }
+    value: Depth
+  - check: { role: checkbox, name: Hidden from players }
+  - click: { role: button, name: Add a bonus or penalty }
+  - wait: 200
+  - select: { label: Modifier effect }
+    optionLabel: Bonus / penalty
+  - select: { label: Applies to }
+    optionLabel: HP maximum
+  - fill: { label: Amount }
+    value: '-30'
+  - fill: { label: Modifier label }
+    value: Undertow
+  - fill: { label: Bundle name }
+    value: Undertow
+  - wait: 300
 
 clip: { panel: Apply effect to Ogre, pad: 14 }

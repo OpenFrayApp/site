@@ -217,6 +217,19 @@ await page.waitForTimeout(2200);
 await clickLike(page.getByRole('button', { name: 'Maintained' }));
 await page.waitForTimeout(1600);
 marks.concEnd = at();
+
+// ── Loop C: the clocks tick ────────────────────────────────────────────────
+// Turns advance and the Ogre's effect durations count themselves down. The panel
+// follows the selected combatant, so the Ogre is re-selected after each advance;
+// the reselection happens outside the cropped region.
+marks.tickStart = at();
+for (let i = 0; i < 5; i++) {
+  await page.getByRole('button', { name: 'Next turn' }).click();
+  await page.waitForTimeout(250);
+  await page.getByText('Ogre', { exact: true }).first().click();
+  await page.waitForTimeout(1500);
+}
+marks.tickEnd = at();
 marks.total = at();
 
 await context.close();
