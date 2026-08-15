@@ -19,6 +19,13 @@ magick "$OUT/console-hero.png" -crop 780x994+2800+872 +repage "$SITE/console-log
 magick "$OUT/console-hero.png" -crop 764x290+2798+930 +repage "$SITE/greatclub-log.png"
 magick "$OUT/console-hero.png" -crop 780x452+2790+380 +repage "$SITE/applied-effects.png"
 
+# From group-save-hero.png (3600x2000): the dice chip and the six outcome rows —
+# full damage, halves, the immune zero, the resisted quarter, and the player rows
+# waiting for real dice. From cast-spell-hero.png: the spell card alone, uses
+# counted, Cast button included.
+magick "$OUT/group-save-hero.png" -crop 1330x490+1140+830 +repage "$SITE/save-rows.png"
+magick "$OUT/cast-spell-hero.png" -crop 1318x1008+1152+509 +repage "$SITE/spell-card.png"
+
 # From apply-effect-hero.png (1080x1910, already clipped to the modal): its four
 # zones, in the order the page tells them.
 magick "$OUT/apply-effect-hero.png" -crop 1020x245+30+375 +repage "$SITE/apply-conditions.png"

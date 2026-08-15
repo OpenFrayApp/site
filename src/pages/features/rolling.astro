@@ -1,39 +1,32 @@
 ---
+// The crunchy-moments page. Its job: show the GM the click that resolves the moment
+// their evening slows down at — one spell, six saves, every defense applied — then
+// hand over to the console or the handbook. Every section pairs one claim with the
+// picture or loop made to prove it.
 import FeaturePage from '../../components/FeaturePage.astro';
-import ZoomIcon from '../../components/ZoomIcon.astro';
-import { Picture } from 'astro:assets';
-import { zoomTrigger, zoomOverlay, zoomBadge } from '../../data/lightbox.ts';
-import { EYEBROW, TEXT_COL, CARD } from '../../data/pageStyles.ts';
-import groupSaveHero from '../../assets/screenshots/group-save-hero.png';
-import castSpellHero from '../../assets/screenshots/cast-spell-hero.png';
+import Split from '../../components/Split.astro';
+import Band from '../../components/Band.astro';
+import { TEXT_COL } from '../../data/pageStyles.ts';
+import saveRows from '../../assets/screenshots/save-rows.png';
+import spellCard from '../../assets/screenshots/spell-card.png';
 
-const shots = [
+// The band's four rules: what every roll carries without being asked.
+const carries = [
   {
-    img: groupSaveHero,
-    alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — 0 against the fire-immune Hell Hound, 7 against the Quasit that resists it.',
+    label: "The creature's own numbers",
+    body: 'Click an attack and it rolls with the sheet it belongs to: the bonus, the damage dice, the crit doubling. Nothing is typed twice.',
   },
   {
-    img: castSpellHero,
-    alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
-  },
-];
-
-const points = [
-  {
-    title: 'Roll from the stat block',
-    body: "Click an attack and it rolls with the creature's own numbers: the bonus, the damage dice, the crit doubling. The target's resistances and immunities are applied when the damage lands.",
+    label: 'The effects on the board',
+    body: 'Advantage, penalties, and conditions ride into the roll from either end, the way the tracking page tells it. Faerie Fire on a foe arms everyone who swings at it.',
   },
   {
-    title: 'Advantage, worked in',
-    body: 'Effects carry into rolls. Faerie Fire on the board means every attack roll against those creatures takes the Advantage automatically, turn after turn.',
-  },
-  {
-    title: 'Your result always wins',
+    label: 'Your result, if you prefer it',
     body: 'Every roll can be typed instead. Real dice at the table stay in charge; OpenFray does the arithmetic around whatever you hand it.',
   },
   {
-    title: 'Honest dice, written down',
-    body: 'Rolls use a cryptographic generator with every number equally likely, and the log keeps each roll with the dice behind it. No streak correction, ever.',
+    label: 'Honest dice, written down',
+    body: 'A cryptographic generator, every number equally likely, no streak correction ever — and the log keeps each roll with the dice behind it.',
   },
 ];
 ---
@@ -43,8 +36,13 @@ const points = [
   description="Attacks, saves, and damage in OpenFray: rolled from the stat block with every modifier worked in, group saves resolved in one click, and honest dice with a full roll log. Compatible with 5.5e and 5e."
   heading="Every roll, already worked out"
   lede="One spell hits six creatures. OpenFray rolls all six saves, applies each one's defenses, and hands you the damage — one click, done. That moment is why this page exists."
-  image={shots[0]}
-  shots={shots}
+  video={{
+    src: '/media/six-saves.mp4',
+    poster: '/media/six-saves.jpg',
+    label:
+      'A Fireball cast at six targets in the console: the saves roll at once, immunity zeroes one line, resistance halves another, and the player rows wait for their own dice.',
+  }}
+  caption="One Fireball, watched through: six targets picked, every save rolled at once, every defense applied per row — and nothing lands until you say so."
   handbook={[
     { label: 'Attacks and damage', href: '/docs/fight/attacks/' },
     { label: 'Saving throws', href: '/docs/fight/saves/' },
@@ -54,68 +52,86 @@ const points = [
   ]}
   current="/features/rolling/"
 >
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="rolling-points-title">
-    <p class={`${EYEBROW} mb-4`}>The rules, respected</p>
-    <h2
-      id="rolling-points-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+  {
+    /* The hero's held frame, told slowly: six rows, five different outcomes, and the
+    reasons printed beside each one. */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="Group saves"
+      heading="Six rows, every defense applied"
+      id="rolling-saves-title"
+      image={{
+        src: saveRows,
+        alt: 'The rolled dice and six outcome rows: made saves halving 30 fire to 15, the fire-immune Hell Hound zeroed, the resistant Quasit down to 7, its two dice from Magic Resistance on the row, and two player rows with Save and Fail buttons.',
+      }}
+      caption="The eight d6 are listed right above the rows they hit."
     >
-      What a roll takes with it
-    </h2>
-    <div class="grid gap-4 md:grid-cols-2">
-      {
-        points.map((f) => (
-          <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-            <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-          </div>
-        ))
-      }
-    </div>
+      <p class="mt-0 mb-5">
+        Every row prints its reasons. The made saves take half of the 30. The fire-immune Hell Hound
+        reads 0 without you remembering why. The Quasit resists — half, then half again — and its
+        Magic Resistance rolled two dice and kept the better one, right on the row.
+      </p>
+      <p class="mb-0">
+        Your players roll their own saves at the table. Their rows wait with a Save and a Fail
+        button, and the damage follows whichever you press.
+      </p>
+    </Split>
   </section>
 
-  <section class={`mt-20 ${TEXT_COL} text-left`} aria-labelledby="rolling-cast-title">
-    <p class={`${EYEBROW} mb-4`}>Casting</p>
-    <h2
+  {
+    /* Casting is where the rolls come from: the card holds the rules text and the
+    uses, so the book stays on the shelf. */
+  }
+  <section class={`mt-20 ${TEXT_COL}`}>
+    <Split
+      eyebrow="Casting"
+      heading="The whole spell, one card"
       id="rolling-cast-title"
-      class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+      side="left"
+      image={{
+        src: spellCard,
+        alt: 'The Fireball card opened from a stat block: 2 uses left, casting time, range, components, the full rules text, and a Cast button.',
+      }}
+      mediaClass="max-w-[26rem] justify-self-center lg:justify-self-start"
     >
-      The whole spell, one card
-    </h2>
-    <div class="grid items-start gap-8 lg:grid-cols-2">
-      <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} rounded-xl`}
-          data-index="1"
-          aria-label={`Enlarge screenshot: ${shots[1].alt}`}
+      <p class="mt-0 mb-5">
+        Casting from a stat block opens the full card: range, components, duration, and the rules
+        text, with the creature's remaining uses counted beside it. Cast, and the save rolls for
+        every target at once — the group save above is this card, one click later.
+      </p>
+      <p class="mb-0">
+        <a
+          href="/docs/fight/spells/"
+          class="font-semibold text-accent no-underline hover:underline"
         >
-          <Picture
-            src={shots[1].img}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[720, 1440]}
-            sizes="(max-width: 1024px) 94vw, 30rem"
-            alt={shots[1].alt}
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
-      </figure>
-      <div class="text-base leading-relaxed text-muted">
-        <p class="mt-0">
-          Casting from a stat block opens the full spell card: range, components, duration, and the
-          rules text, with the creature's remaining uses counted beside it. Cast, and the save rolls
-          for every target at once.
-        </p>
-        <p class="mb-0">
-          The spell's effects land as one bundle — the condition, the reminder, the duration —
-          instead of five separate things to remember to apply.
-        </p>
-      </div>
-    </div>
+          Spells, in the handbook →
+        </a>
+      </p>
+    </Split>
   </section>
+
+  <Band
+    eyebrow="The rules, respected"
+    heading="What a roll takes with it"
+    id="rolling-carries-title"
+    align="center"
+    class="mt-20"
+  >
+    <ol class="m-0 grid list-none gap-x-14 gap-y-6 p-0 lg:grid-cols-2">
+      {
+        carries.map((c, i) => (
+          <li class="grid grid-cols-[2.25rem_1fr] gap-4">
+            <span class="grid size-9 place-items-center rounded-full border border-accent text-sm font-bold text-accent">
+              {i + 1}
+            </span>
+            <span class="pt-1">
+              <span class="block text-base leading-snug font-bold text-text">{c.label}</span>
+              <span class="mt-1 block text-sm leading-normal text-muted">{c.body}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </Band>
 </FeaturePage>
