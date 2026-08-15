@@ -18,7 +18,7 @@ import { loadPlaywright } from './lib/playwright.mjs';
 const url = process.argv[2] ?? 'http://localhost:5199/console/';
 const outDir = process.argv[3] ?? 'screenshots/out';
 const scene = process.argv[4] ?? 'swing';
-if (!['swing', 'group-save'].includes(scene)) {
+if (!['swing', 'group-save', 'player-view'].includes(scene)) {
   console.error(`Unknown scene: ${scene}`);
   process.exit(1);
 }
@@ -34,6 +34,7 @@ const PARTY = [
 const FOES = {
   swing: ['Ogre'],
   'group-save': ['Mage', 'Ogre', 'Hell Hound', 'Quasit', 'Goblin Warrior'],
+  'player-view': ['Ogre', 'Quasit'],
 };
 const ROLLS = [
   { who: 'Elowen Vale', roll: 23 },
@@ -204,12 +205,14 @@ for (const { who, roll } of ROLLS) {
 await page.getByRole('button', { name: 'Start combat' }).click();
 await page.waitForTimeout(500);
 
+let videoPage = page;
 if (scene === 'swing') await filmSwing();
-else await filmGroupSave();
+else if (scene === 'group-save') await filmGroupSave();
+else videoPage = await filmPlayerView();
 marks.total = at();
 
+const video = await videoPage.video().path();
 await context.close();
-const video = await page.video().path();
 await browser.close();
 
 writeFileSync(
@@ -218,6 +221,73 @@ writeFileSync(
 );
 console.log(video);
 console.log(JSON.stringify(marks, null, 2));
+
+/** Type a new hit-point total into a tracker row, the way the set-hp macro does.
+ *  The row is the innermost div holding the name, an AC, and the unlabeled bare-digit
+ *  HP button — the button's presence is what rules out the stat pane. */
+async function setHp(who, hp) {
+  const hpButton = page.locator('button:not([aria-label])').filter({ hasText: /^\d+$/ });
+  const row = page
+    .locator('div')
+    .filter({ hasText: who })
+    .filter({ hasText: /AC\s*\d/ })
+    .filter({ has: hpButton })
+    .last();
+  await row.locator('button:not([aria-label])').filter({ hasText: /^\d+$/ }).first().click();
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ControlOrMeta+a');
+  await page.keyboard.type(String(hp), { delay: 60 });
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(250);
+}
+
+// ── The player view, filmed from the table's seat ──────────────────────────
+// The recording is the PLAYER page, and no cursor ever appears on it: read-only is
+// the message, and the screen moving by itself is the proof. The GM works off
+// camera — a turn passes, damage lands and the Ogre's health shifts in words, a
+// condition chip pops in, and the hidden Quasit is revealed onto their board.
+async function filmPlayerView() {
+  // The Quasit starts hidden, so the reveal has something to reveal.
+  await page.getByText('Quasit', { exact: true }).first().click();
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: 'Hide from players' }).click();
+  await page.waitForTimeout(300);
+
+  await page.getByRole('button', { name: 'Share with players' }).click();
+  await page.waitForTimeout(400);
+  await page.getByRole('button', { name: 'Start sharing' }).click();
+  await page.waitForTimeout(600);
+  const link = await page.locator('input[readonly]').inputValue();
+  const player = await context.newPage();
+  const tp = Date.now();
+  const atP = () => (Date.now() - tp) / 1000;
+  await player.goto(link);
+  await player.getByText('Elowen Vale').first().waitFor();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+
+  marks.pvStart = atP();
+  await player.waitForTimeout(2000);
+  await next();
+  await player.waitForTimeout(1500);
+  await setHp('Ogre', 30);
+  await player.waitForTimeout(1500);
+  await setHp('Ogre', 12);
+  await player.waitForTimeout(1500);
+  await page.getByText('Ogre', { exact: true }).first().click();
+  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: 'Apply effect' }).click();
+  await page.waitForTimeout(300);
+  await dialog().getByRole('button', { name: 'Prone', exact: true }).click();
+  await dialog().getByRole('button', { name: 'Apply', exact: true }).click();
+  await player.waitForTimeout(1800);
+  await page.getByText('Quasit', { exact: true }).first().click();
+  await page.waitForTimeout(200);
+  await page.getByRole('button', { name: 'Show to players' }).click();
+  await player.waitForTimeout(2800);
+  marks.pvEnd = atP();
+  return player;
+}
 
 // ── The swing, filmed ──────────────────────────────────────────────────────
 // Stage the badges (Faerie Fire, the shove's Prone, Bane) through two rounds, then

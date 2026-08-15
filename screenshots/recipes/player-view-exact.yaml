@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=../node_modules/shotlist/dist/recipe.schema.json
+#
+# The shared player view with creature hit points set to exact numbers: the same
+# fight as player-view-hero, one disclosure level up. The two shots differ only in
+# that setting, which is what the tabs on the player-view page compare.
+name: player-view-exact
+install: site
+viewport: { width: 1800, height: 1000 }
+
+setup:
+  - use: open-settings
+  - click: { role: tab, name: Player view }
+  - wait: 300
+  - select: { label: Creature hit points }
+    optionLabel: Exact number
+  - click: { role: button, name: Done }
+  - wait: 300
+  - use: fight-board
+  - click: { role: button, name: Share with players }
+  - wait: 400
+  - click: { role: button, name: Start sharing }
+  - wait: 600
+  - readValue: { css: 'input[readonly]' }
+    as: link
+  - openPage: $link
+    as: player
+    viewport: { width: 1080, height: 780 }
+  - wait: { text: Kessa Quick }
+  - wait: 800
+
+clip: viewport
+
+# The bar counts the real seconds the fight has been open, and setup never takes the
+# same time twice.
+check: false

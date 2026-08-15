@@ -87,3 +87,16 @@ if (marks.groupStart != null) {
     width: 1440,
   });
 }
+
+// The player view, filmed from the table's seat: no cursor, the screen moving by
+// itself — a turn passes, health shifts in words, a chip pops, a creature is
+// revealed. The take is the player page's own recording.
+if (marks.pvStart != null) {
+  cut('player-screen', {
+    from: Math.max(0, marks.pvStart - 0.2),
+    to: marks.pvEnd,
+    // The shared view is short and the viewport is not: crop to the lived-in top.
+    box: { x: 0, y: 0, w: 1440, h: 500 },
+    width: 1440,
+  });
+}
