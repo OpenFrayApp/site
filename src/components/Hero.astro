@@ -23,6 +23,8 @@ interface Props {
   video?: { src: string; poster?: string; label: string };
   /** Wraps the image in the page's lightbox trigger, opening this shot index. */
   zoomIndex?: number;
+  /** One line under the media saying what it shows — the viewer's guide. */
+  caption?: string;
   /** Extra classes for the heading (the home page passes its larger scale). */
   headingClass?: string;
   /** Extra classes for the media column, e.g. a max width for a portrait shot. */
@@ -46,6 +48,7 @@ const {
   mediaClass = '',
   bleed = false,
   zoomIndex,
+  caption,
 } = Astro.props;
 const Heading = level;
 const bleedClass = bleed
@@ -131,6 +134,7 @@ const bleedClass = bleed
       )
     }
     <slot name="media" />
+    {caption && <figcaption class="mt-3 text-sm leading-relaxed text-muted">{caption}</figcaption>}
   </figure>
 </section>
 

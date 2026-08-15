@@ -26,6 +26,8 @@ interface Props {
   image?: Shot;
   /** The hero's silent loop, instead of a screenshot. */
   video?: { src: string; poster?: string; label: string };
+  /** One line under the hero media, guiding the viewer through what it shows. */
+  caption?: string;
   shots?: Shot[];
   handbook: { label: string; href: string }[];
   current: string;
@@ -40,6 +42,7 @@ const {
   lede,
   image,
   video,
+  caption,
   shots = [],
   handbook,
   current,
@@ -56,6 +59,7 @@ const siblings = features.filter((f) => f.href !== current);
         heading={heading}
         tagline={lede}
         video={video}
+        caption={caption}
         image={image ? { src: image.img, alt: image.alt } : undefined}
         zoomIndex={image ? 0 : undefined}
         ctas={[

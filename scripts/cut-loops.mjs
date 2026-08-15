@@ -46,20 +46,22 @@ function cut(name, { from, to, box, width }) {
     '-an',
     `public/media/${name}.mp4`,
   ]);
+  // The poster comes from the cut loop's own tail: seeking the raw take can land
+  // past its final frame when a segment ends the recording.
   execFileSync('ffmpeg', [
     '-loglevel',
     'error',
     '-y',
-    '-ss',
-    String(to - 0.4),
+    '-sseof',
+    '-0.5',
     '-i',
-    marks.video,
-    '-vf',
-    filter,
+    `public/media/${name}.mp4`,
     '-frames:v',
     '1',
     '-q:v',
     '4',
+    '-update',
+    '1',
     `public/media/${name}.jpg`,
   ]);
   console.log(`public/media/${name}.mp4`);

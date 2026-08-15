@@ -68,10 +68,10 @@ await page.evaluate(() => {
   const dot = document.createElement('div');
   dot.id = 'fake-cursor';
   dot.style.cssText =
-    'position:fixed;z-index:999999;width:16px;height:16px;border-radius:50%;' +
+    'position:fixed;z-index:999999;width:24px;height:24px;border-radius:50%;' +
     'pointer-events:none;left:0;top:0;transform:translate(-50%,-50%);' +
-    'background:rgba(255,255,255,.35);border:2px solid rgba(255,255,255,.95);' +
-    'box-shadow:0 1px 6px rgb(0 0 0/.6);transition:scale .12s ease';
+    'background:rgba(255,255,255,.35);border:2.5px solid rgba(255,255,255,.95);' +
+    'box-shadow:0 1px 8px rgb(0 0 0/.6);transition:scale .12s ease';
   document.body.append(dot);
   addEventListener('mousemove', (e) => {
     dot.style.left = `${e.clientX}px`;
@@ -231,12 +231,25 @@ await camera(1.55, 720, 450);
 await clickLike(dialog().getByRole('button', { name: 'Bram Ironfist' }).first());
 await page.waitForTimeout(600);
 await clickLike(dialog().getByRole('button', { name: 'Roll attack' }));
-await page.waitForTimeout(1200);
-await page.waitForTimeout(2400);
-await clickLike(dialog().getByRole('button', { name: 'Close' }));
-await page.waitForTimeout(300);
+await page.waitForTimeout(1400);
+// Tight on the roll line itself, aimed at the rendered text rather than a guess: a
+// first-time viewer is told where to look — the two dice, the kept one, and Bane
+// and Prone named right under them, with the cursor resting beside the causes.
+const rollLine = await dialog().getByText('vs AC 18').boundingBox();
+marks.swingDice = await dialog()
+  .getByText(/\[\d+, \d+\]/)
+  .first()
+  .textContent()
+  .catch(() => null);
+await camera(2.7, rollLine.x + rollLine.width / 2 + 40, rollLine.y + 30);
+// The causes' box is measured after the camera settles: the dot lives outside the
+// rig, so it only aligns with what it points at in post-transform coordinates.
+const causes = await dialog().getByText('Prone: disadvantage').boundingBox();
+await page.mouse.move(causes.x - 20, causes.y + causes.height / 2, { steps: 22 });
+await page.waitForTimeout(2600);
 await camera(1);
-await page.waitForTimeout(700);
+await clickLike(dialog().getByRole('button', { name: 'Close' }));
+await page.waitForTimeout(400);
 // The other side: the receipt at the top of the log, the cursor resting beside it.
 await camera(2.1, 1240, 290);
 await page.mouse.move(1240, 320, { steps: 26 });
