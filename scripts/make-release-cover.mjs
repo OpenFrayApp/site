@@ -18,34 +18,34 @@
 // Everything else a post might feature is a picture of something real, and belongs in
 // src/assets/news/ as artwork. This is not a general cover generator, and shouldn't grow
 // into one.
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { createRequire } from 'node:module'
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
 
 // sharp arrives with Astro's image service, so this needs nothing extra installed.
-const sharp = createRequire(import.meta.url)('sharp')
+const sharp = createRequire(import.meta.url)('sharp');
 
-const COVERS = 'src/assets/news'
-const WIDTH = 1200
-const HEIGHT = 630
-const MARGIN = 84
+const COVERS = 'src/assets/news';
+const WIDTH = 1200;
+const HEIGHT = 630;
+const MARGIN = 84;
 
 // Inter is what the print edition installs to match the site's own type (see AGENTS.md);
 // the browser resolves the site's stack to SF Pro on a Mac, and the rasteriser here does
 // not, so naming Inter is what keeps a cover looking like the site rather than like
 // Helvetica. --font overrides it if it isn't installed.
-const DEFAULT_FONT = "Inter, 'Helvetica Neue', Arial, sans-serif"
+const DEFAULT_FONT = "Inter, 'Helvetica Neue', Arial, sans-serif";
 
 // The site's dark theme (src/styles/global.css). A cover doesn't follow the
 // light/dark toggle: a link preview is rendered by whoever received it.
-const BG = '#020617'
-const ACCENT = '#818cf8'
-const TEXT = '#e2e8f0'
-const MUTED = '#94a3b8'
+const BG = '#020617';
+const ACCENT = '#818cf8';
+const TEXT = '#e2e8f0';
+const MUTED = '#94a3b8';
 
 // Indigo through violet, the range the site already uses. Nothing outside it, so a
 // cover can't come out looking like it belongs to a different product.
-const PALETTE = ['#6366f1', '#818cf8', '#4f46e5', '#a78bfa', '#7c3aed']
+const PALETTE = ['#6366f1', '#818cf8', '#4f46e5', '#a78bfa', '#7c3aed'];
 
 /** The five characters that would otherwise close a tag or an entity. */
 const esc = (s) =>
@@ -54,28 +54,28 @@ const esc = (s) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
+    .replace(/'/g, '&apos;');
 
 /** FNV-1a over the version string: the seed that makes each release's field its own. */
 function seedOf(text) {
-  let h = 2166136261
+  let h = 2166136261;
   for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i)
-    h = Math.imul(h, 16777619)
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
   }
-  return h >>> 0
+  return h >>> 0;
 }
 
 /** mulberry32 — a small deterministic PRNG, so a version always draws the same field.
  *  Math.random would make the output different on every run and useless to review. */
 function randomFrom(seed) {
-  let a = seed
+  let a = seed;
   return () => {
-    a = (a + 0x6d2b79f5) | 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 /**
@@ -87,8 +87,8 @@ function randomFrom(seed) {
  * SVG that varies between rasterisers, and gradients look the same everywhere.
  */
 function wash(rand) {
-  const defs = []
-  const shapes = []
+  const defs = [];
+  const shapes = [];
 
   // One field per zone, jittered rather than placed at random. Nine overlapping soft
   // fields scattered freely was the first attempt, and they averaged out: enough of
@@ -100,15 +100,15 @@ function wash(rand) {
     [1.08, 0.62],
     [0.16, 0.3],
     [0.92, 1.05],
-  ]
+  ];
 
   for (const [zx, zy] of ZONES) {
-    const id = `w${defs.length}`
-    const cx = (zx + (rand() - 0.5) * 0.22) * WIDTH
-    const cy = (zy + (rand() - 0.5) * 0.22) * HEIGHT
-    const r = 280 + rand() * 300
-    const color = PALETTE[Math.floor(rand() * PALETTE.length)]
-    const opacity = (0.3 + rand() * 0.2).toFixed(3)
+    const id = `w${defs.length}`;
+    const cx = (zx + (rand() - 0.5) * 0.22) * WIDTH;
+    const cy = (zy + (rand() - 0.5) * 0.22) * HEIGHT;
+    const r = 280 + rand() * 300;
+    const color = PALETTE[Math.floor(rand() * PALETTE.length)];
+    const opacity = (0.3 + rand() * 0.2).toFixed(3);
     // Most of the falloff happens in the outer half, so each field keeps a readable
     // core instead of dissolving into its neighbours.
     defs.push(
@@ -117,12 +117,12 @@ function wash(rand) {
         `<stop offset="0.42" stop-color="${color}" stop-opacity="${(Number(opacity) * 0.55).toFixed(3)}"/>` +
         `<stop offset="1" stop-color="${color}" stop-opacity="0"/>` +
         `</radialGradient>`,
-    )
+    );
     shapes.push(
       `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="url(#${id})"/>`,
-    )
+    );
   }
-  return { defs: defs.join(''), shapes: shapes.join('') }
+  return { defs: defs.join(''), shapes: shapes.join('') };
 }
 
 /** A vignette that darkens the corners, so the wash reads as light falling on the page
@@ -133,26 +133,26 @@ function vignette() {
     `<stop offset="0.45" stop-color="${BG}" stop-opacity="0"/>` +
     `<stop offset="1" stop-color="${BG}" stop-opacity="0.75"/>` +
     `</radialGradient>`
-  )
+  );
 }
 
 /** Point size for the version, stepped down so a long one still fits the canvas. */
 function versionSize(version) {
-  if (version.length <= 6) return 208
-  if (version.length <= 9) return 168
-  if (version.length <= 13) return 132
-  return 104
+  if (version.length <= 6) return 208;
+  if (version.length <= 9) return 168;
+  if (version.length <= 13) return 132;
+  return 104;
 }
 
 /** The whole cover as an SVG document. */
 function cover({ version, tagline, font }) {
-  const rand = randomFrom(seedOf(version))
-  const field = wash(rand)
-  const size = versionSize(version)
+  const rand = randomFrom(seedOf(version));
+  const field = wash(rand);
+  const size = versionSize(version);
 
   // The version sits on the optical centre line; the eyebrow above and the tagline
   // below hang off it, so the block stays balanced whether or not a tagline is given.
-  const baseline = tagline ? 372 : 400
+  const baseline = tagline ? 372 : 400;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
   <defs>
@@ -181,7 +181,7 @@ function cover({ version, tagline, font }) {
         : ''
     }
   </g>
-</svg>`
+</svg>`;
 }
 
 const USAGE = [
@@ -194,58 +194,58 @@ const USAGE = [
   '  --force         redraw over an existing file',
   '',
   '  e.g. node scripts/make-release-cover.mjs 0.3.0 --post openfray-0-3-0',
-].join('\n')
+].join('\n');
 
 // Flags that consume the next argument. Anything else starting with -- is a switch, so
 // `--force 0.3.0` still finds the version instead of eating it as a flag's value.
-const VALUED = new Set(['tagline', 'post', 'out', 'font'])
+const VALUED = new Set(['tagline', 'post', 'out', 'font']);
 
 /** Split argv into positionals and options, without pulling in a parser. */
 function parse(argv) {
-  const positional = []
-  const options = {}
+  const positional = [];
+  const options = {};
   for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i]
+    const arg = argv[i];
     if (!arg.startsWith('--')) {
-      positional.push(arg)
-      continue
+      positional.push(arg);
+      continue;
     }
-    const name = arg.slice(2)
+    const name = arg.slice(2);
     if (VALUED.has(name)) {
-      const value = argv[++i]
+      const value = argv[++i];
       if (value === undefined) {
-        console.error(`--${name} needs a value.\n\n${USAGE}`)
-        process.exit(1)
+        console.error(`--${name} needs a value.\n\n${USAGE}`);
+        process.exit(1);
       }
-      options[name] = value
+      options[name] = value;
     } else {
-      options[name] = true
+      options[name] = true;
     }
   }
-  return { positional, options }
+  return { positional, options };
 }
 
-const { positional, options } = parse(process.argv.slice(2))
-const [version, ...extra] = positional
+const { positional, options } = parse(process.argv.slice(2));
+const [version, ...extra] = positional;
 
 if (!version) {
-  console.error(`Missing the version.\n\n${USAGE}`)
-  process.exit(1)
+  console.error(`Missing the version.\n\n${USAGE}`);
+  process.exit(1);
 }
 if (extra.length) {
-  console.error(`Unexpected argument "${extra[0]}". Quote a tagline: --tagline "…"\n\n${USAGE}`)
-  process.exit(1)
+  console.error(`Unexpected argument "${extra[0]}". Quote a tagline: --tagline "…"\n\n${USAGE}`);
+  process.exit(1);
 }
 
-const named = options.post ? `${options.post}.webp` : `release-${version}.webp`
-const out = options.out ?? join(COVERS, named)
+const named = options.post ? `${options.post}.webp` : `release-${version}.webp`;
+const out = options.out ?? join(COVERS, named);
 
 if (existsSync(out) && !options.force) {
-  console.error(`${out} already exists. Pass --force to redraw it.`)
-  process.exit(1)
+  console.error(`${out} already exists. Pass --force to redraw it.`);
+  process.exit(1);
 }
 
-mkdirSync(dirname(out), { recursive: true })
+mkdirSync(dirname(out), { recursive: true });
 
 // density 144 renders at 2x, so Astro has a 2400x1260 source to resize down and the
 // cover stays sharp on a high-density screen.
@@ -253,7 +253,7 @@ const svg = cover({
   version,
   tagline: options.tagline,
   font: options.font ?? DEFAULT_FONT,
-})
+});
 // WebP, not PNG. A cover is a full-canvas gradient with a few large glyphs on it —
 // exactly what lossless compression is worst at, and what a lossy codec is best at. The
 // same image is 984KB as a PNG and 33KB here, and at q92 the difference is not visible
@@ -269,16 +269,16 @@ const svg = cover({
 // came out at 0.09 levels of neighbour difference, which is invisible.
 const image = await sharp(Buffer.from(svg, 'utf8'), { density: 144 })
   .webp({ quality: 92 })
-  .toBuffer()
-writeFileSync(out, image)
+  .toBuffer();
+writeFileSync(out, image);
 
-const { width, height } = await sharp(image).metadata()
-console.log(`Drew ${out}  ${width}x${height}  ${Math.round(image.length / 1024)}KB`)
+const { width, height } = await sharp(image).metadata();
+console.log(`Drew ${out}  ${width}x${height}  ${Math.round(image.length / 1024)}KB`);
 
 // Only offer the frontmatter lines when the file landed where a post can reach it by
 // the relative path they use; --out somewhere else is the caller's business.
 if (!options.out) {
-  console.log('\nAdd to the post’s frontmatter:')
-  console.log(`cover: '../../assets/news/${named}'`)
-  console.log(`coverAlt: 'OpenFray ${version} over an abstract indigo field.'`)
+  console.log('\nAdd to the post’s frontmatter:');
+  console.log(`cover: '../../assets/news/${named}'`);
+  console.log(`coverAlt: 'OpenFray ${version} over an abstract indigo field.'`);
 }

@@ -16,26 +16,26 @@
 //
 // If you need a rule that really should beat components, give it a class of its own
 // rather than relying on a descendant selector's accidental weight.
-import { readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs';
 
-const FILES = ['src/styles/global.css', 'src/styles/book.css', 'src/styles/news.css']
-const CONTAINERS = ['.book-body', '.doc', '.post-body', '.book-sidebar', '.hero']
+const FILES = ['src/styles/global.css', 'src/styles/book.css', 'src/styles/news.css'];
+const CONTAINERS = ['.book-body', '.doc', '.post-body', '.book-sidebar', '.hero'];
 
-const problems = []
+const problems = [];
 
 for (const file of FILES) {
-  const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
+  const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   for (const match of css.matchAll(/([^{}]+)\{/g)) {
-    const selector = match[1].replace(/\s+/g, ' ').trim()
+    const selector = match[1].replace(/\s+/g, ' ').trim();
     for (const part of selector.split(',')) {
-      const sel = part.trim()
-      if (!CONTAINERS.some((c) => sel.startsWith(c))) continue
-      if (sel.includes(':where(')) continue
-      const tokens = sel.split(' ')
-      const tail = tokens.at(-1)
+      const sel = part.trim();
+      if (!CONTAINERS.some((c) => sel.startsWith(c))) continue;
+      if (sel.includes(':where(')) continue;
+      const tokens = sel.split(' ');
+      const tail = tokens.at(-1);
       // A bare type selector at the end — no class, no id, no attribute.
       if (tokens.length > 1 && /^[a-z][a-z0-9]*$/.test(tail)) {
-        problems.push(`${file}: ${sel}`)
+        problems.push(`${file}: ${sel}`);
       }
     }
   }
@@ -44,10 +44,10 @@ for (const file of FILES) {
 if (problems.length) {
   console.error(
     `\nPlain descendant prose rules that out-rank component classes (${problems.length}):\n`,
-  )
-  for (const p of problems) console.error(`  ${p}`)
-  console.error('\nWrap them: `.doc h2 {` becomes `:where(.doc) :where(h2) {`.\n')
-  process.exit(1)
+  );
+  for (const p of problems) console.error(`  ${p}`);
+  console.error('\nWrap them: `.doc h2 {` becomes `:where(.doc) :where(h2) {`.\n');
+  process.exit(1);
 }
 
-console.log('CSS specificity check: prose defaults carry no specificity.')
+console.log('CSS specificity check: prose defaults carry no specificity.');

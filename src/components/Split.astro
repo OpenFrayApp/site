@@ -50,7 +50,11 @@ const { eyebrow, heading, id, side = 'right', image, caption, mediaClass = '' } 
           )
         }
       </slot>
-      {caption && <figcaption class="mt-3 text-sm leading-relaxed text-muted">{caption}</figcaption>}
+      {
+        caption && (
+          <figcaption class="mt-3 text-sm leading-relaxed text-muted">{caption}</figcaption>
+        )
+      }
     </figure>
   </div>
 </section>

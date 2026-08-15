@@ -47,7 +47,9 @@ const lightboxNav =
     /* The dialog fills the viewport and the active slide is centerd inside it, so a
       click anywhere off the image lands on the dialog and closes it. */
   }
-  <div class="lightbox-track absolute inset-0 grid place-items-center px-4 py-14 pointer-events-none">
+  <div
+    class="lightbox-track absolute inset-0 grid place-items-center px-4 py-14 pointer-events-none"
+  >
     {
       shots.map((s, i) => (
         <figure class="lightbox-slide m-0 hidden data-[active]:block" data-index={i}>

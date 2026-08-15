@@ -24,8 +24,7 @@ setup:
   # Two allies caught in the blast alongside the four foes: the point of listing both
   # sides is that a Fireball does not respect them. Elowen Vale is left out of it — she is
   # on 12 of 22, and a home page does not need a dead player character.
-  - each:
-      [Hell Hound, Quasit, Ogre, Goblin Warrior, Bram Ironfist, Kessa Quick]
+  - each: [Hell Hound, Quasit, Ogre, Goblin Warrior, Bram Ironfist, Kessa Quick]
     as: who
     steps:
       # From inside the box: a target chip is named for the combatant, exactly like its

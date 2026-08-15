@@ -25,13 +25,7 @@ const arrowClass =
   'hover:border-accent hover:text-text';
 ---
 
-<div
-  class="slider"
-  data-slider
-  role="group"
-  aria-roledescription="carousel"
-  aria-label={label}
->
+<div class="slider" data-slider role="group" aria-roledescription="carousel" aria-label={label}>
   {
     slides.map((s, i) => (
       <figure
