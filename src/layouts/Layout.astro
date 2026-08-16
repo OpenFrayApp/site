@@ -3,7 +3,6 @@ import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import '../styles/global.css';
 import { baseKeywords, websiteNodes } from '../data/seo.ts';
-import { libraries } from '../data/libraries.ts';
 import { features } from '../data/features.ts';
 import FeatureIcon from '../components/FeatureIcon.astro';
 
@@ -60,11 +59,6 @@ const iconButton =
 
 const footerLink = 'inline-flex items-center text-muted no-underline hover:text-text';
 const sep = 'sep mx-2 opacity-50';
-
-const submenuLink =
-  'block rounded-md px-2.5 py-2 whitespace-nowrap text-muted no-underline ' +
-  'transition-[color] leading-relaxed hover:bg-bg hover:text-text max-[640px]:text-sm ' +
-  'max-[640px]:font-medium';
 
 const navLink =
   'text-muted no-underline transition-[color] hover:text-text ' +
@@ -231,42 +225,7 @@ const navLink =
         <a class={navLink} href="/docs/">Handbook</a>
         <a class={navLink} href="/news/">News</a>
 
-        <div class="navmenu group relative flex items-center max-[640px]:block max-[640px]:w-full">
-          <a
-            class={`${navLink} inline-flex items-center gap-1`}
-            href="/compendium/"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Compendium
-            <svg
-              class="size-[0.85rem] max-[640px]:hidden"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </a>
-
-          <ul
-            class="absolute top-full left-1/2 z-30 mt-1.5 hidden min-w-48 -translate-x-1/2 list-none rounded-lg border border-border bg-panel p-1 shadow-[0_12px_30px_rgb(0_0_0/0.28)] before:absolute before:right-0 before:bottom-full before:left-0 before:h-2.5 before:content-[''] group-hover:block group-focus-within:block max-[640px]:static max-[640px]:m-0 max-[640px]:block max-[640px]:min-w-0 max-[640px]:translate-x-0 max-[640px]:border-0 max-[640px]:bg-transparent max-[640px]:p-0 max-[640px]:pl-3 max-[640px]:shadow-none"
-          >
-            {
-              libraries
-                .filter((library) => library.available)
-                .map((library) => (
-                  <li>
-                    <a class={submenuLink} href={library.href}>
-                      {library.name}
-                    </a>
-                  </li>
-                ))
-            }
-          </ul>
-        </div>
+        <a class={navLink} href="/compendium/">Compendium</a>
       </nav>
       <button
         class={`theme-toggle ${iconButton} inline-flex transition-[color,border-color] hover:border-accent hover:text-text`}
