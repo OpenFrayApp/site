@@ -51,7 +51,11 @@ const groupShot = {
   img: groupSaveHero,
   alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — the failed Ogre owing all 32, the fire-immune Hell Hound at 0, the resistant Quasit at 16.',
 };
-const zoomable = [consoleShot, groupShot];
+const compendiumShot = {
+  img: compendiumHero,
+  alt: 'The compendium open on the Creatures tab: a searchable list of 859 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
+};
+const zoomable = [groupShot, compendiumShot];
 
 // What the reader is looking at, named: the console's three panes, in the words the
 // feature pages keep using.
@@ -169,26 +173,16 @@ const rest = [
       </h2>
 
       <figure class="m-0">
-        <button
-          type="button"
-          class={`shot-thumb ${zoomTrigger} rounded-2xl`}
-          data-index="0"
-          aria-label={`Enlarge screenshot: ${consoleShot.alt}`}
-        >
-          <Picture
-            src={consoleShot.img}
-            formats={['avif', 'webp']}
-            fallbackFormat="png"
-            widths={[1024, 1600, 2048]}
-            sizes="(max-width: 1024px) 94vw, 61rem"
-            alt={consoleShot.alt}
-            loading="lazy"
-            class="block h-auto w-full"
-          />
-          <span class={zoomOverlay} aria-hidden="true"
-            ><span class={zoomBadge}><ZoomIcon /></span></span
-          >
-        </button>
+        <Picture
+          src={consoleShot.img}
+          formats={['avif', 'webp']}
+          fallbackFormat="png"
+          widths={[1024, 1600, 2048]}
+          sizes="(max-width: 1024px) 94vw, 61rem"
+          alt={consoleShot.alt}
+          loading="lazy"
+          class="block h-auto w-full rounded-2xl border border-border"
+        />
       </figure>
 
       <ol class="m-0 mt-6 grid list-none gap-x-8 gap-y-4 p-0 sm:grid-cols-3">
@@ -270,7 +264,7 @@ const rest = [
           src: saveRows,
           alt: 'The rolled dice and six outcome rows of a group save: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed, the resistant Quasit halved to 16, and two player rows with Save and Fail buttons.',
         }}
-        zoomIndex={1}
+        zoomIndex={0}
         caption="Every save rolled at once — and the eight d6 listed right above the rows they hit. Click through for the whole board."
       >
         <p class="mt-6 mb-0">
@@ -334,13 +328,30 @@ const rest = [
         eyebrow="Your books, your monsters"
         heading="Bring the libraries you actually use"
         id="libraries-title"
-        image={{
-          src: compendiumHero,
-          alt: 'The compendium open on the Creatures tab: a searchable list of 859 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
-        }}
-        caption="A searchable compendium of creatures and spells, right next to the fight."
+        caption="A searchable compendium of creatures and spells, right next to the fight. Click through to read it."
         mediaClass="max-w-[26rem] justify-self-center lg:justify-self-end"
       >
+        <button
+          slot="media"
+          type="button"
+          class={`shot-thumb ${zoomTrigger} rounded-xl`}
+          data-index="1"
+          aria-label={`Enlarge screenshot: ${compendiumShot.alt}`}
+        >
+          <Picture
+            src={compendiumShot.img}
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[640, 1280]}
+            sizes="(max-width: 1024px) 94vw, 26rem"
+            alt={compendiumShot.alt}
+            loading="lazy"
+            class="block h-auto w-full"
+          />
+          <span class={zoomOverlay} aria-hidden="true">
+            <span class={zoomBadge}><ZoomIcon /></span>
+          </span>
+        </button>
         <div class={CARD}>
           <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
             Over 2000 creatures included
@@ -373,13 +384,13 @@ const rest = [
         </div>
         <p class="mt-4 mb-0 text-sm leading-normal text-muted">
           Plus a full homebrew editor, and a free importer that turns a D&amp;D&nbsp;Beyond creature
-          page into an OpenFray creature —
+          page into an OpenFray creature —{' '}
           <a
             href={importerChrome}
             target="_blank"
             rel="noreferrer"
             class="font-semibold text-accent">Chrome</a
-          > or
+          >{' '}or{' '}
           <a
             href={importerFirefox}
             target="_blank"
