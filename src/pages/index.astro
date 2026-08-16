@@ -1,18 +1,31 @@
 ---
+// The site's front door, and its one job: get a Game Master to open the console.
+// The hero speaks to the paper-and-pencil GM and never sounds like software; the
+// deeper sections speak to the tool-switcher; the free account is seeded after the
+// value is proven and never gates it. Every section pairs its claim with the proof
+// made for it — the same staged fight throughout — and keeps a click to the
+// console, the handbook, or a feature page within reach.
 import Layout from '../layouts/Layout.astro';
 import Cta from '../components/Cta.astro';
 import Lightbox from '../components/Lightbox.astro';
 import ZoomIcon from '../components/ZoomIcon.astro';
 import CheckIcon from '../components/CheckIcon.astro';
+import Split from '../components/Split.astro';
+import Cards from '../components/Cards.astro';
+import Band from '../components/Band.astro';
+import Panel from '../components/Panel.astro';
 import { zoomTrigger, zoomOverlay, zoomBadge } from '../data/lightbox.ts';
 import { hero, tagline } from '../data/hero.ts';
 import { libraries, shippedLibraries } from '../data/libraries.ts';
+import { EYEBROW, TEXT_COL, CARD, DISPLAY_MD, SHOT_FRAME } from '../data/pageStyles.ts';
 import { Picture } from 'astro:assets';
 import castSpellHero from '../assets/screenshots/cast-spell-hero.png';
 import compendiumHero from '../assets/screenshots/compendium-hero.png';
 import consoleHero from '../assets/screenshots/console-hero.png';
 import groupSaveHero from '../assets/screenshots/group-save-hero.png';
 import playerViewHero from '../assets/screenshots/player-view-hero.png';
+import spellCard from '../assets/screenshots/spell-card.png';
+import saveRows from '../assets/screenshots/save-rows.png';
 
 const importerChrome =
   'https://chromewebstore.google.com/detail/openfray-importer/cjooflanhdpfddpppllaelhlfpdinjfk';
@@ -28,90 +41,75 @@ const wrapUpLinks = [
   { label: 'Read the handbook', href: '/docs/' },
 ];
 
-// The hero's block rhythm: each section after the first sits 3.5rem below what precedes
-// it. The second tagline uses it too, so the paragraph isn't nearer what's above it than
-// what's below — which is what the old `.hero section + .tagline` rule was for.
-const BLOCK = 'mt-14';
-
-// The small tracked caps above a headline. Two sections open this way, so the class
-// list has one home rather than being typed twice with a digit's difference.
-const EYEBROW =
-  'eyebrow m-0 text-xs leading-relaxed font-semibold tracking-[0.18em] text-muted uppercase';
-
-// Text lines up with the header's wordmark. The header is `max-w-5xl` carrying its own
-// `px-6`, while `hero` puts the `px-6` on <main> — so matching that left edge means
-// 64rem less the header's two gutters, not 64rem. Everything on the page sits in it,
-// pictures included.
-const TEXT_COL = 'w-full max-w-[61rem]';
-
+// The lightbox holds the full screenshots. The console shot opens itself larger; the
+// two cropped proofs below it open into the full boards they were cut from — the one
+// question a crop raises that a click should answer.
 const consoleShot = {
   img: consoleHero,
-  alt: "The console mid-fight: initiative order down the left with a wounded party and its foes, an Ogre's stat block in the middle showing it Prone and Frightened, and the game log on the right.",
+  alt: 'The whole console mid-fight: the tracker with the Ogre carrying advantage-against, Prone, and Bane chips, its stat block in the middle, and the game log ending on its Greatclub swing — two d20s at disadvantage, the Bane d4 subtracted, a hit for 15.',
 };
+const castShot = {
+  img: castSpellHero,
+  alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
+};
+const groupShot = {
+  img: groupSaveHero,
+  alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — the failed Ogre owing all 32, the fire-immune Hell Hound at 0, the resistant Quasit at 16.',
+};
+const zoomable = [consoleShot, castShot, groupShot];
 
-// The two-up below the console shot. Both are the same fight as the shot above it, one
-// step further on, so the pair reads as the same session rather than three unrelated
-// apps. The lead sentence is what the picture proves; the rest is how.
-const pairs = [
+// What the reader is looking at, named: the console's three panes, in the words the
+// feature pages keep using.
+const legend = [
   {
-    img: castSpellHero,
-    alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
-    lead: 'Cast straight from the stat block.',
-    rest: "The full spell card and what's left of it, without flipping to a book.",
+    n: 1,
+    label: 'The tracker',
+    body: 'Turn order, hit points, and every condition as a chip on its row.',
   },
   {
-    img: groupSaveHero,
-    alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — the failed Ogre owing all 32, the fire-immune Hell Hound at 0, the resistant Quasit at 16.',
-    lead: 'Six creatures, one Fireball, one click.',
-    rest: 'Allies and foes listed separately, every bonus and immunity already worked in.',
+    n: 2,
+    label: 'The stat block',
+    body: 'The active creature, its actions one click from rolled.',
+  },
+  {
+    n: 3,
+    label: 'The game log',
+    body: 'Every change written down, with the dice behind it.',
   },
 ];
 
-// The same fight again, as the table receives it — shot over the real broadcast, so
-// what it shows is what a player's phone actually gets.
-const playerViewShot = {
-  img: playerViewHero,
-  alt: 'The shared player view of the same fight: the party listed with exact hit points and armor class, the foes shown only as Healthy or Hurt, the game log beside them, and a footer noting that nothing is saved.',
-};
-
-const compendiumShot = {
-  img: compendiumHero,
-  alt: 'The compendium open on the Creatures tab: a searchable list of 853 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
-};
-
-// Everything the lightbox can open, in the order its arrows step through. The index
-// into this array is what each figure's button carries.
-const zoomable = [consoleShot, ...pairs, playerViewShot, compendiumShot];
-
-// The card shared by the three panels beside the compendium shot.
-const CARD = 'rounded-xl border border-border bg-panel px-5 py-4.5';
-
-// The two store links inside the importer card. Sized for a card rather than reusing
-// Cta, whose padding is built for a hero.
-const STORE_LINK =
-  'inline-flex flex-1 basis-32 items-center justify-center gap-1.5 rounded-lg border ' +
-  'border-border bg-bg px-4 py-3 text-base font-semibold text-accent no-underline ' +
-  'transition-[border-color,color] hover:border-accent hover:text-text';
-
-// What OpenFray holds that a plain initiative list doesn't. Every line here is a claim
-// about our own behavior and checkable in the code — deliberately not a claim about
-// what other trackers do or don't do, which we can't verify and shouldn't assert.
-const differences = [
+// The two-up below the console shot: the same fight, one step further on. The lead
+// sentence is what the picture proves; the rest is how.
+const pairs = [
   {
-    title: 'Relationships, not just creatures',
-    body: "Effects have two ends. The barbarian's Reckless Attack grants advantage against them; Vicious Mockery debuffs the goblin's next swing. OpenFray records which end is which and works it into the roll, whichever side is rolling.",
+    img: spellCard,
+    zoom: 1,
+    alt: 'The Fireball card opened from the Mage’s stat block: 2 uses left, casting time, range, components, the full rules text, and a Cast button.',
+    lead: 'Cast straight from the stat block.',
+    rest: 'The whole card — range, components, rules text — with the uses counted beside it.',
   },
   {
-    title: 'Resources that count themselves down',
-    body: "Recharge abilities, legendary actions, legendary resistance, spell slots, concentration, and reactions all tick as you play — so the mage's last slot is a fact, not a guess.",
+    img: saveRows,
+    zoom: 2,
+    alt: 'The rolled dice and six outcome rows of a group save: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed, the resistant Quasit halved to 16, and two player rows with Save and Fail buttons.',
+    lead: 'Six creatures, one Fireball, one click.',
+    rest: 'Every save rolled at once, every defense already worked in — the failed Ogre owes all 32.',
+  },
+];
+
+// Your first fight, in the real buttons' own words.
+const firstFight = [
+  {
+    label: 'Add your party',
+    body: 'The Add PC popover takes a name, an armor class, and hit points. Quick add covers whatever wanders in.',
   },
   {
-    title: 'Conditions that expire on the right turn',
-    body: 'A save-ends effect is rolled at the start or the end of the turn, whichever you chose. Timed effects count themselves down and clear. Concentration is checked the moment the damage lands.',
+    label: 'Pick the foes',
+    body: 'Search over 2000 creatures across the libraries your table enabled, or bring your own homebrew.',
   },
   {
-    title: 'A scratchpad, not a second character sheet',
-    body: "OpenFray never asks you to model a player's build. It tracks what just happened and what has to be remembered this round — which is why it stays fast instead of becoming a worse VTT.",
+    label: 'Begin',
+    body: "Type your players' initiative rolls, the monsters roll their own, and Start combat orders the board.",
   },
 ];
 
@@ -153,7 +151,7 @@ const rest = [
   title="OpenFray — a DnD 5e combat console for GMs"
   description="OpenFray is a free, open-source combat console for running encounters in the world's oldest tabletop roleplaying game. Compatible with 5.5e and 5e: initiative, creature resources, conditions, group saves, and honest dice."
 >
-  <main class={hero}>
+  <main class={`${hero} overflow-x-clip`}>
     <section class={`hero-lede ${TEXT_COL} text-left`}>
       <p class={`${EYEBROW} mb-5`}>Free · Open source · No account</p>
 
@@ -184,9 +182,9 @@ const rest = [
     </section>
 
     {
-      /* The payoff for "See it running": one honest picture of a fight already under way,
-        wounded party and all, rather than an empty board. Wider than the prose blocks
-        because a dense three-column console shrunk to reading width shows nothing. */
+      /* The payoff for "See it running": one honest picture of a fight already under
+      way, at the one width on the whole site where the full console is legible. The
+      numbered legend teaches the three panes in the words the feature pages reuse. */
     }
     <section
       class={`console-shot mt-20 ${TEXT_COL} text-left`}
@@ -194,10 +192,7 @@ const rest = [
       aria-labelledby="console-shot-title"
     >
       <p class={`${EYEBROW} mb-4`}>A fight in progress</p>
-      <h2
-        id="console-shot-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-      >
+      <h2 id="console-shot-title" class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD}`}>
         The whole encounter on one screen
       </h2>
 
@@ -222,23 +217,82 @@ const rest = [
             ><span class={zoomBadge}><ZoomIcon /></span></span
           >
         </button>
-        <figcaption class="mt-6 text-base leading-relaxed text-muted">
-          <strong class="font-semibold text-text">Manage everything from one screen.</strong> Initiative
-          tracker, stat blocks, controls, and game log all on the same screen.<br />No tabs, no
-          digging, nothing to reconcile between rounds.
-        </figcaption>
       </figure>
+
+      <ol class="m-0 mt-6 grid list-none gap-x-8 gap-y-4 p-0 sm:grid-cols-3">
+        {
+          legend.map((l) => (
+            <li class="grid grid-cols-[1.75rem_1fr] gap-3">
+              <span class="grid size-7 place-items-center rounded-full border border-accent text-xs font-bold text-accent">
+                {l.n}
+              </span>
+              <span>
+                <span class="block text-sm leading-snug font-bold text-text">{l.label}</span>
+                <span class="mt-0.5 block text-sm leading-normal text-muted">{l.body}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
     </section>
 
+    {
+      /* The differentiator, moving: the one loop this page carries. Everything else
+      stays a still — the front door should load like one. */
+    }
+    <section class={`mt-20 ${TEXT_COL}`}>
+      <Split
+        eyebrow="The difference"
+        heading="What OpenFray keeps hold of"
+        id="difference-title"
+        caption="One swing, watched through: Prone forces two d20s and the lower die, Bane takes its d4 — named right under the roll — and the log files the receipt."
+      >
+        <p class="mt-0 mb-5">
+          Effects have two ends, and OpenFray records which end is which. The cleric's Bane rides
+          the Ogre's own rolls; the wizard's Faerie Fire arms everyone who swings at it — and when
+          the Ogre finally attacks, all of it is already in the arithmetic.
+        </p>
+        <p class="mb-5">
+          A scratchpad, not a second character sheet: it never asks for a player's build. It tracks
+          what just happened and what has to be remembered this round — which is why it stays fast
+          instead of becoming a worse VTT.
+        </p>
+        <p class="mb-0">
+          <a
+            href="/features/tracking/"
+            class="font-semibold text-accent no-underline hover:underline"
+          >
+            How the tracking works →
+          </a>
+        </p>
+        <video
+          slot="media"
+          class={`motion-loop ${SHOT_FRAME}`}
+          src="/media/roll-with-effects.mp4"
+          poster="/media/roll-with-effects.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="The Ogre's Greatclub swing rolled in the console: the camera closes in as two d20s roll at disadvantage from Prone, the Bane d4 is subtracted with both causes named under the roll, and the log keeps the receipt."
+        ></video>
+      </Split>
+    </section>
+
+    {
+      /* The crunchy moments, as crops sized to their claims; each opens the full
+      board it was cut from. */
+    }
     <div class={`two-up ${TEXT_COL} mt-20 text-left`}>
       <div class="grid gap-x-8 gap-y-12 md:grid-cols-2">
         {
-          pairs.map((p, i) => (
+          pairs.map((p) => (
             <figure class="m-0">
               <button
                 type="button"
                 class={`shot-thumb ${zoomTrigger} rounded-xl`}
-                data-index={i + 1}
+                data-index={p.zoom}
                 aria-label={`Enlarge screenshot: ${p.alt}`}
               >
                 <Picture
@@ -274,283 +328,169 @@ const rest = [
     </div>
 
     {
-      /* The same fight one more time, now from the table's side of the screen. The shot
-        leads like the compendium section's, with the choices it proves listed beside it. */
+      /* The same fight again, from the table's side of the screen: the claims
+      stacked beside the whole screen they describe. */
     }
-    <section class={`player-view mt-20 ${TEXT_COL} text-left`} aria-labelledby="player-view-title">
-      <p class={`${EYEBROW} mb-4`}>For your players</p>
-      <h2
+    <section class={`player-view mt-20 ${TEXT_COL}`}>
+      <Split
+        eyebrow="For your players"
+        heading="Share the fight, keep your secrets"
         id="player-view-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+        side="left"
+        image={{
+          src: playerViewHero,
+          alt: 'The shared player view of the same fight: the party listed with exact hit points, the foes in words with their effect chips, the game log beside them, and a footer noting that nothing is saved.',
+        }}
+        caption="The same fight as above, the way your table sees it."
       >
-        Share the fight, keep your secrets
-      </h2>
-
-      <div class="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-        <div class="grid gap-4">
-          <div class={CARD}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
-              A live view on their own devices
-            </h3>
-            <p class="m-0 text-sm leading-normal text-muted">
-              Share a link and the turn order, conditions, and game log follow the fight on your
-              players' screens as you run it. It's read-only — there is nothing there to press.
-            </p>
-          </div>
-
-          <div class={CARD}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
-              You choose what they see
-            </h3>
-            <p class="m-0 text-sm leading-normal text-muted">
-              A creature's hit points in words — Bloodied, not a number — or exact, or hidden. Armor
-              class held back, rolls with the dice removed, and any creature kept off their screens
-              until you reveal it.
-            </p>
-          </div>
-
-          <div class={CARD}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
-              Nothing stored, nothing to set up
-            </h3>
-            <p class="m-0 text-sm leading-normal text-muted">
-              It works without an account. The board goes straight to their screens and is kept
-              nowhere — stop sharing and it's gone.
-            </p>
-          </div>
-        </div>
-
-        <figure class="m-0">
-          <button
-            type="button"
-            class={`shot-thumb ${zoomTrigger} rounded-xl`}
-            data-index={zoomable.indexOf(playerViewShot)}
-            aria-label={`Enlarge screenshot: ${playerViewShot.alt}`}
+        <Cards
+          layout="stack"
+          items={[
+            {
+              title: 'A live view on their own devices',
+              body: "Share a link and the turn order, conditions, and game log follow the fight on your players' screens as you run it. It's read-only — there is nothing there to press.",
+            },
+            {
+              title: 'You choose what they see',
+              body: 'Hit points in words — Bloodied, not a number — or exact, or hidden. Armor class held back, rolls without the dice, any creature kept off their screens until you reveal it.',
+            },
+            {
+              title: 'Nothing stored, nothing to set up',
+              body: "It works without an account. The board goes straight to their screens and is kept nowhere — stop sharing and it's gone.",
+            },
+          ]}
+        />
+        <p class="mt-6 mb-0">
+          <a
+            href="/features/player-view/"
+            class="font-semibold text-accent no-underline hover:underline"
           >
-            <Picture
-              src={playerViewShot.img}
-              formats={['avif', 'webp']}
-              fallbackFormat="png"
-              widths={[640, 1280]}
-              sizes="(max-width: 1024px) 94vw, 32rem"
-              alt={playerViewShot.alt}
-              loading="lazy"
-              class="block h-auto w-full"
-            />
-            <span class={zoomOverlay} aria-hidden="true">
-              <span class={zoomBadge}>
-                <ZoomIcon />
-              </span>
-            </span>
-          </button>
-          <figcaption class="mt-5 text-base leading-relaxed text-muted">
-            The same fight as above, the way your table sees it: their own characters in full, your
-            creatures giving away only what you allow.
-          </figcaption>
-        </figure>
-      </div>
-
-      <p class="m-0 mt-10">
-        <a
-          href="/features/player-view/"
-          class="font-semibold text-accent no-underline hover:underline"
-        >
-          The player view, in detail →
-        </a>
-      </p>
+            The player view, in detail →
+          </a>
+        </p>
+      </Split>
     </section>
 
-    <section class={`difference mt-20 ${TEXT_COL} text-left`} aria-labelledby="difference-title">
-      <p class={`${EYEBROW} mb-4`}>The difference</p>
-      <h2
-        id="difference-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
+    {/* The shelf, and everything a table adds to it. */}
+    <section class={`libraries mt-20 ${TEXT_COL}`}>
+      <Split
+        eyebrow="Your books, your monsters"
+        heading="Bring the libraries you actually use"
+        id="libraries-title"
+        image={{
+          src: compendiumHero,
+          alt: 'The compendium open on the Creatures tab: a searchable list of 859 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
+        }}
+        caption="A searchable compendium of creatures and spells, right next to the fight."
+        mediaClass="max-w-[26rem] justify-self-center lg:justify-self-end"
       >
-        What OpenFray keeps hold of
-      </h2>
-      <div class="grid gap-4 md:grid-cols-2">
+        <div class={CARD}>
+          <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
+            Over 2000 creatures included
+          </h3>
+          <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+            {
+              shippedLibraries.map((name) => (
+                <li class="flex gap-2">
+                  <CheckIcon />
+                  <span>{name}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-4 mb-2 text-sm leading-relaxed text-muted">
+            And OpenFray's own, free to read and use:
+          </p>
+          <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
+            {
+              libraries.map((l) => (
+                <li class="flex gap-2">
+                  <CheckIcon />
+                  <a href={l.href} class="font-semibold text-accent">
+                    {l.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <p class="mt-4 mb-0 text-sm leading-normal text-muted">
+          Plus a full homebrew editor, and a free importer that turns a D&amp;D&nbsp;Beyond creature
+          page into an OpenFray creature —
+          <a
+            href={importerChrome}
+            target="_blank"
+            rel="noreferrer"
+            class="font-semibold text-accent">Chrome</a
+          > or
+          <a
+            href={importerFirefox}
+            target="_blank"
+            rel="noreferrer"
+            class="font-semibold text-accent">Firefox</a
+          >.
+        </p>
+        <p class="mt-4 mb-0">
+          <a
+            href="/features/libraries/"
+            class="font-semibold text-accent no-underline hover:underline"
+          >
+            More about the libraries →
+          </a>
+        </p>
+      </Split>
+    </section>
+
+    {
+      /* Teaching into conversion: the first fight in the real buttons' own words,
+      with the ask right underneath. */
+    }
+    <Band
+      eyebrow="Start here"
+      heading="Your first fight, in three steps"
+      id="first-fight-title"
+      align="center"
+      class="mt-20"
+    >
+      <ol class="m-0 grid list-none gap-x-10 gap-y-6 p-0 lg:grid-cols-3">
         {
-          differences.map((f) => (
-            <div class={`feature ${CARD} border-l-2 border-l-accent`}>
-              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-            </div>
+          firstFight.map((s, i) => (
+            <li class="grid grid-cols-[2.25rem_1fr] gap-4">
+              <span class="grid size-9 place-items-center rounded-full border border-accent text-sm font-bold text-accent">
+                {i + 1}
+              </span>
+              <span class="pt-1">
+                <span class="block text-base leading-snug font-bold text-text">{s.label}</span>
+                <span class="mt-1 block text-sm leading-normal text-muted">{s.body}</span>
+              </span>
+            </li>
           ))
         }
+      </ol>
+      <div class="cta-row mt-10 flex flex-wrap justify-center gap-3">
+        <Cta href="/console/">Open the console →</Cta>
+        <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
       </div>
-
-      <p class="m-0 mt-10">
-        <a
-          href="/features/tracking/"
-          class="font-semibold text-accent no-underline hover:underline"
-        >
-          How the tracking works →
-        </a>
-      </p>
-    </section>
-
-    <section class={`libraries mt-20 ${TEXT_COL} text-left`} aria-labelledby="libraries-title">
-      <p class={`${EYEBROW} mb-4`}>Your books, your monsters</p>
-      <h2
-        id="libraries-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-      >
-        Bring the libraries you actually use
-      </h2>
-
-      {
-        /* The shot leads and the cards sit beside it: at this width the compendium is
-          still readable, and the three panels stack to roughly its height. Below `lg`
-          they fall under it rather than squeezing either. */
-      }
-      <div class="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-        <figure class="m-0">
-          <button
-            type="button"
-            class={`shot-thumb ${zoomTrigger} rounded-xl`}
-            data-index={zoomable.indexOf(compendiumShot)}
-            aria-label={`Enlarge screenshot: ${compendiumShot.alt}`}
-          >
-            <Picture
-              src={compendiumShot.img}
-              formats={['avif', 'webp']}
-              fallbackFormat="png"
-              widths={[640, 1280]}
-              sizes="(max-width: 1024px) 94vw, 32rem"
-              alt={compendiumShot.alt}
-              loading="lazy"
-              class="block h-auto w-full"
-            />
-            <span class={zoomOverlay} aria-hidden="true">
-              <span class={zoomBadge}>
-                <ZoomIcon />
-              </span>
-            </span>
-          </button>
-          <figcaption class="mt-5 text-base leading-relaxed text-muted">
-            A searchable compendium of creatures, spells, player characters, and campaigns, right
-            next to the fight.
-          </figcaption>
-        </figure>
-
-        <div class="grid gap-4">
-          <div class={CARD}>
-            <h3 class="m-0 mb-3 text-base leading-relaxed font-bold text-text">
-              Over 2000 creatures included
-            </h3>
-            <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
-              {
-                shippedLibraries.map((name) => (
-                  <li class="flex gap-2">
-                    <CheckIcon />
-                    <span>{name}</span>
-                  </li>
-                ))
-              }
-            </ul>
-            <p class="mt-4 mb-2 text-sm leading-relaxed text-muted">
-              And OpenFray's own, free to read and use:
-            </p>
-            <ul class="m-0 grid list-none gap-1.5 p-0 text-sm leading-relaxed text-muted">
-              {
-                libraries.map((l) => (
-                  <li class="flex gap-2">
-                    <CheckIcon />
-                    <a href={l.href} class="font-semibold text-accent">
-                      {l.name}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-
-          <div class={CARD}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Build your own</h3>
-            <p class="m-0 text-sm leading-normal text-muted">
-              A full editor for your homebrew creatures and spells. Save your player characters and
-              your campaigns and reuse them every session.
-            </p>
-          </div>
-
-          <div class={CARD}>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
-              Never retype a stat block
-            </h3>
-            <p class="m-0 text-sm leading-normal text-muted">
-              The free importer turns a D&amp;D&nbsp;Beyond creature page into an OpenFray creature.
-            </p>
-            <p class="mt-3 mb-2 text-sm leading-normal text-muted">
-              Add the extension to your browser:
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <a
-                href={importerChrome}
-                target="_blank"
-                rel="noreferrer"
-                class={STORE_LINK}
-                title="OpenFray Importer on the Chrome Web Store"
-              >
-                Chrome →
-              </a>
-              <a
-                href={importerFirefox}
-                target="_blank"
-                rel="noreferrer"
-                class={STORE_LINK}
-                title="OpenFray Importer on Firefox Browser Add-ons"
-              >
-                Firefox →
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* The content argument continues where the content lives. */}
-      <p class="m-0 mt-10">
-        <a
-          href="/features/libraries/"
-          class="font-semibold text-accent no-underline hover:underline"
-        >
-          More about the libraries →
-        </a>
-      </p>
-    </section>
+    </Band>
 
     <section class={`rest mt-20 ${TEXT_COL} text-left`} aria-labelledby="rest-title">
-      <p class={`${EYEBROW} mb-4`}>The rest of the table</p>
-      <h2
-        id="rest-title"
-        class="mt-0 mb-8 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-      >
+      <p class={`${EYEBROW} mb-4 text-center`}>The rest of the table</p>
+      <h2 id="rest-title" class={`mx-auto mt-0 mb-8 max-w-[18ch] text-center ${DISPLAY_MD}`}>
         Everything else you'd expect
       </h2>
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4">
-        {
-          rest.map((f) => (
-            <div class={`feature ${CARD}`}>
-              <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">{f.title}</h3>
-              <p class="m-0 text-sm leading-normal text-muted">{f.body}</p>
-            </div>
-          ))
-        }
-      </div>
+      <Cards layout="flow" items={rest} />
     </section>
 
     {
       /* The second conversion, seeded after the value is proven and never gating it:
-        everything above works anonymous, and this section says exactly that first. */
+      everything above works anonymous, and this section says exactly that first. */
     }
-    <section class={`account mt-20 ${TEXT_COL} text-left`} aria-labelledby="account-title">
+    <section class={`account mt-20 ${TEXT_COL} text-center`} aria-labelledby="account-title">
       <p class={`${EYEBROW} mb-4`}>When you're ready</p>
-      <h2
-        id="account-title"
-        class="mt-0 mb-5 max-w-[18ch] text-[clamp(1.9rem,4.2vw,3rem)] leading-[1.08] font-extrabold tracking-tight"
-      >
+      <h2 id="account-title" class={`mx-auto mt-0 mb-5 max-w-[18ch] ${DISPLAY_MD}`}>
         Everything works without an account
       </h2>
-      <p class={`${tagline} m-0 max-w-[52rem]`}>
+      <p class={`${tagline} mx-auto max-w-[52rem]`}>
         The free account is for keeping. Sign in with Discord or Google and your fights, custom
         creatures, characters, and campaigns follow you between devices. Everything on this page
         works before you do.
@@ -559,18 +499,10 @@ const rest = [
 
     {
       /* One panel rather than another card grid: this is the page saying what it is,
-        not another feature, and it should not read as one. */
+      not another feature, and it should not read as one. */
     }
-    <section class={`wrap-up mt-20 mb-4 ${TEXT_COL} text-left`} aria-labelledby="wrap-up-title">
-      <div class="rounded-2xl border border-border bg-panel px-6 py-8 sm:px-10 sm:py-10">
-        <p class={`${EYEBROW} mb-3`}>Open source</p>
-        <h2
-          id="wrap-up-title"
-          class="mt-0 mb-0 max-w-[22ch] text-[clamp(1.5rem,3vw,2.1rem)] leading-[1.14] font-extrabold tracking-tight"
-        >
-          Free to use, and built in the open
-        </h2>
-
+    <div class={`wrap-up mt-20 mb-4 ${TEXT_COL}`}>
+      <Panel eyebrow="Open source" heading="Free to use, and built in the open" id="wrap-up-title">
         <div class="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
           <div>
             <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Version 1.0</h3>
@@ -598,32 +530,32 @@ const rest = [
             </p>
           </div>
         </div>
-
-        <div class="cta-row mt-8 flex flex-wrap gap-3 border-t border-border pt-8">
-          <Cta href="/console/">Open the console →</Cta>
-          <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
+        <div slot="footer">
+          <div class="cta-row flex flex-wrap gap-3">
+            <Cta href="/console/">Open the console →</Cta>
+            <Cta href="/docs/getting-started/" variant="ghost">Run your first fight</Cta>
+          </div>
+          <ul
+            class="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-border p-0 pt-6 text-sm leading-relaxed"
+          >
+            {
+              wrapUpLinks.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    target={l.href.startsWith('/') ? undefined : '_blank'}
+                    rel={l.href.startsWith('/') ? undefined : 'noreferrer'}
+                    class="font-semibold text-accent no-underline hover:underline"
+                  >
+                    {l.label} →
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-
-        <ul
-          class="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-border p-0 pt-6 text-sm leading-relaxed"
-        >
-          {
-            wrapUpLinks.map((l) => (
-              <li>
-                <a
-                  href={l.href}
-                  target={l.href.startsWith('/') ? undefined : '_blank'}
-                  rel={l.href.startsWith('/') ? undefined : 'noreferrer'}
-                  class="font-semibold text-accent no-underline hover:underline"
-                >
-                  {l.label} →
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
+      </Panel>
+    </div>
   </main>
 
   <Lightbox shots={zoomable} />
