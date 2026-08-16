@@ -33,6 +33,10 @@ interface Props {
    *  way the app runs past a window. Only at lg, and only for restrained media —
    *  the text column still owns the layout. */
   bleed?: boolean;
+  /** With `bleed`, pulls the media this far past the viewport edge, so it reads as
+   *  cut by the screen rather than resting on it. Give the image enough baked-in
+   *  padding on that side to spend. */
+  overhang?: string;
 }
 
 const {
@@ -47,6 +51,7 @@ const {
   headingClass = DISPLAY_LG,
   mediaClass = '',
   bleed = false,
+  overhang,
   zoomIndex,
   caption,
 } = Astro.props;
@@ -54,12 +59,14 @@ const Heading = level;
 // The bleed extends the media from the container's edge to the viewport's. Percentages
 // on the figure resolve against its own grid area, so the section becomes a size
 // container and the margin is computed from container-query units instead — the one
-// base that makes the extension exact.
+// base that makes the extension exact. The overhang variable pulls further, past the
+// edge.
 const bleedClass = bleed
   ? side === 'left'
-    ? 'lg:ml-[calc(50cqw-50vw)]'
-    : 'lg:mr-[calc(50cqw-50vw)]'
+    ? 'lg:ml-[calc(50cqw-50vw-var(--bleed-overhang,0px))]'
+    : 'lg:mr-[calc(50cqw-50vw-var(--bleed-overhang,0px))]'
   : '';
+const figureStyle = bleed && overhang ? `--bleed-overhang: ${overhang}` : undefined;
 ---
 
 <section
@@ -83,7 +90,10 @@ const bleedClass = bleed
     <slot />
   </div>
 
-  <figure class={`m-0 ${side === 'left' ? 'lg:order-1' : ''} ${bleedClass} ${mediaClass}`}>
+  <figure
+    class={`m-0 ${side === 'left' ? 'lg:order-1' : ''} ${bleedClass} ${mediaClass}`}
+    style={figureStyle}
+  >
     {
       image && zoomIndex === undefined && (
         <Picture
@@ -143,7 +153,13 @@ const bleedClass = bleed
     {
       caption && (
         <figcaption
-          class={`mt-3 text-sm leading-relaxed text-muted ${bleed ? (side === 'left' ? 'pl-6' : 'pr-6') : ''}`}
+          class={`mt-3 text-sm leading-relaxed text-muted ${
+            bleed
+              ? side === 'left'
+                ? 'pl-[calc(var(--bleed-overhang,0px)+1.5rem)]'
+                : 'pr-[calc(var(--bleed-overhang,0px)+1.5rem)]'
+              : ''
+          }`}
         >
           {caption}
         </figcaption>

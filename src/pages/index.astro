@@ -116,10 +116,6 @@ const rest = [
     title: 'Sync when you want it',
     body: 'Sign in free with Discord or Google to pick a fight up on another device.',
   },
-  {
-    title: 'Plays beside your other tools',
-    body: 'A paper map on the table, players rolling on D&D Beyond, the fight on OpenFray. It slots in; it never asks to take over.',
-  },
 ];
 ---
 
@@ -267,6 +263,7 @@ const rest = [
         level="h2"
         side="left"
         bleed
+        overhang="2.5rem"
         headingClass={`max-w-[16ch] ${DISPLAY_MD}`}
         tagline="One spell hits six creatures, and OpenFray rolls every save at once with each one's defenses applied — the failed Ogre owes all 32, the fire-immune Hell Hound reads 0, the resistant Quasit takes 16. Cast straight from the stat block, and the whole spell card comes with it."
         image={{
@@ -439,6 +436,19 @@ const rest = [
         Everything else you'd expect
       </h2>
       <Cards layout="flow" items={rest} />
+      {
+        /* The positioning line stands apart from the checklist: it is how OpenFray
+        sits at the table, not another feature. */
+      }
+      <div class="mx-auto mt-12 max-w-[44rem] text-center">
+        <h3 class="m-0 mb-2 text-base leading-relaxed font-bold text-text">
+          Plays beside your other tools
+        </h3>
+        <p class="m-0 text-base leading-relaxed text-muted">
+          A paper map on the table, players rolling on D&amp;D&nbsp;Beyond, the fight on OpenFray.
+          It slots in; it never asks to take over.
+        </p>
+      </div>
     </section>
 
     {

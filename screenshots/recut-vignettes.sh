@@ -28,6 +28,7 @@ magick "$OUT/console-hero.png" -crop 780x452+2790+380 +repage "$SITE/applied-eff
 BG=$(magick "$OUT/group-save-hero.png" -format '%[pixel:p{1300,1000}]' info:)
 magick "$OUT/group-save-hero.png" -crop 1330x500+1136+820 +repage \
   -bordercolor "$BG" -border 24 -background "$BG" -gravity East -splice 40x0 \
+  -gravity West -splice 40x0 \
   "$SITE/save-rows.png"
 magick "$OUT/cast-spell-hero.png" -crop 1374x1036+1124+481 +repage "$SITE/spell-card.png"
 
