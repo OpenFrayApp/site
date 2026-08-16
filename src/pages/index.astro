@@ -13,18 +13,17 @@ import CheckIcon from '../components/CheckIcon.astro';
 import Split from '../components/Split.astro';
 import Cards from '../components/Cards.astro';
 import Band from '../components/Band.astro';
+import Hero from '../components/Hero.astro';
 import Panel from '../components/Panel.astro';
 import { zoomTrigger, zoomOverlay, zoomBadge } from '../data/lightbox.ts';
 import { hero, tagline } from '../data/hero.ts';
 import { libraries, shippedLibraries } from '../data/libraries.ts';
 import { EYEBROW, TEXT_COL, CARD, DISPLAY_MD, SHOT_FRAME } from '../data/pageStyles.ts';
 import { Picture } from 'astro:assets';
-import castSpellHero from '../assets/screenshots/cast-spell-hero.png';
 import compendiumHero from '../assets/screenshots/compendium-hero.png';
 import consoleHero from '../assets/screenshots/console-hero.png';
 import groupSaveHero from '../assets/screenshots/group-save-hero.png';
 import playerViewHero from '../assets/screenshots/player-view-hero.png';
-import spellCard from '../assets/screenshots/spell-card.png';
 import saveRows from '../assets/screenshots/save-rows.png';
 
 const importerChrome =
@@ -48,15 +47,11 @@ const consoleShot = {
   img: consoleHero,
   alt: 'The whole console mid-fight: the tracker with the Ogre carrying advantage-against, Prone, and Bane chips, its stat block in the middle, and the game log ending on its Greatclub swing — two d20s at disadvantage, the Bane d4 subtracted, a hit for 15.',
 };
-const castShot = {
-  img: castSpellHero,
-  alt: "The Mage's stat block with the Fireball card open over it, showing range, components, duration, the full rules text, and a Cast button.",
-};
 const groupShot = {
   img: groupSaveHero,
   alt: 'A Fireball rolled against six creatures at once, each row showing its save and the damage waiting to be applied — the failed Ogre owing all 32, the fire-immune Hell Hound at 0, the resistant Quasit at 16.',
 };
-const zoomable = [consoleShot, castShot, groupShot];
+const zoomable = [consoleShot, groupShot];
 
 // What the reader is looking at, named: the console's three panes, in the words the
 // feature pages keep using.
@@ -75,25 +70,6 @@ const legend = [
     n: 3,
     label: 'The game log',
     body: 'Every change written down, with the dice behind it.',
-  },
-];
-
-// The two-up below the console shot: the same fight, one step further on. The lead
-// sentence is what the picture proves; the rest is how.
-const pairs = [
-  {
-    img: spellCard,
-    zoom: 1,
-    alt: 'The Fireball card opened from the Mage’s stat block: 2 uses left, casting time, range, components, the full rules text, and a Cast button.',
-    lead: 'Cast straight from the stat block.',
-    rest: 'The whole card — range, components, rules text — with the uses counted beside it.',
-  },
-  {
-    img: saveRows,
-    zoom: 2,
-    alt: 'The rolled dice and six outcome rows of a group save: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed, the resistant Quasit halved to 16, and two player rows with Save and Fail buttons.',
-    lead: 'Six creatures, one Fireball, one click.',
-    rest: 'Every save rolled at once, every defense already worked in — the failed Ogre owes all 32.',
   },
 ];
 
@@ -281,51 +257,35 @@ const rest = [
     </section>
 
     {
-      /* The crunchy moments, as crops sized to their claims; each opens the full
-      board it was cut from. */
+      /* The crunchy moment, full width: the page's most quoted line as a heading,
+      its proof bleeding off the left edge, and the click into the full board. */
     }
-    <div class={`two-up ${TEXT_COL} mt-20 text-left`}>
-      <div class="grid gap-x-8 gap-y-12 md:grid-cols-2">
-        {
-          pairs.map((p) => (
-            <figure class="m-0">
-              <button
-                type="button"
-                class={`shot-thumb ${zoomTrigger} rounded-xl`}
-                data-index={p.zoom}
-                aria-label={`Enlarge screenshot: ${p.alt}`}
-              >
-                <Picture
-                  src={p.img}
-                  formats={['avif', 'webp']}
-                  fallbackFormat="png"
-                  widths={[560, 1120]}
-                  sizes="(max-width: 768px) 94vw, 30rem"
-                  alt={p.alt}
-                  loading="lazy"
-                  class="block h-auto w-full"
-                />
-                <span class={zoomOverlay} aria-hidden="true">
-                  <span class={zoomBadge}>
-                    <ZoomIcon />
-                  </span>
-                </span>
-              </button>
-              <figcaption class="mt-5 text-base leading-relaxed text-muted">
-                <strong class="font-semibold text-text">{p.lead}</strong> {p.rest}
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-
-      {/* The screenshots earn a continuation, not a repeat of the hero's ask. */}
-      <p class="m-0 mt-10">
-        <a href="/features/rolling/" class="font-semibold text-accent no-underline hover:underline">
-          More about smart rolling →
-        </a>
-      </p>
-    </div>
+    <Band class="mt-20">
+      <Hero
+        eyebrow="The crunchy moments"
+        heading="Six creatures, one Fireball, one click"
+        level="h2"
+        side="left"
+        bleed
+        headingClass={`max-w-[16ch] ${DISPLAY_MD}`}
+        tagline="One spell hits six creatures, and OpenFray rolls every save at once with each one's defenses applied — the failed Ogre owes all 32, the fire-immune Hell Hound reads 0, the resistant Quasit takes 16. Cast straight from the stat block, and the whole spell card comes with it."
+        image={{
+          src: saveRows,
+          alt: 'The rolled dice and six outcome rows of a group save: the failed Ogre owing all 32 fire, the fire-immune Hell Hound zeroed, the resistant Quasit halved to 16, and two player rows with Save and Fail buttons.',
+        }}
+        zoomIndex={1}
+        caption="Every save rolled at once — and the eight d6 listed right above the rows they hit. Click through for the whole board."
+      >
+        <p class="mt-6 mb-0">
+          <a
+            href="/features/rolling/"
+            class="font-semibold text-accent no-underline hover:underline"
+          >
+            More about smart rolling →
+          </a>
+        </p>
+      </Hero>
+    </Band>
 
     {
       /* The same fight again, from the table's side of the screen: the claims
