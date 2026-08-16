@@ -149,7 +149,10 @@ behind each change and folding away the nodes that merely moved with it. It wrap
 - **Legal pages:** any change to `src/pages/privacy.astro` or `terms.astro`
   must **also bump the `Last updated:` date** (`<p class="updated">`) to the current
   date, in the same edit. Never alter the legal copy without updating that date.
-- The screenshots on the home page and in the news are installed by the docs repo's
-  shotlist recipes; re-shoot them there, never edit them by hand.
+- The marketing screenshots and video loops (the home page and the feature pages) are
+  shot by this repo's own pipeline. Recipes live in `screenshots/`, the loops in
+  `scripts/record-loops.mjs`, and the crops in `screenshots/recut-vignettes.sh`. Shoot
+  against a clean console `main` on port 5199 (`.claude/launch.json` starts it); never
+  edit an installed image by hand.
 - Commit subjects use the `Site:`, `Print:`, `Style:`, and `Copy:` areas; the full
   committing and PR agreements are in the parent repo's AGENTS.md.
