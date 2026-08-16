@@ -55,7 +55,11 @@ const compendiumShot = {
   img: compendiumHero,
   alt: 'The compendium open on the Creatures tab: a searchable list of 859 creatures from four libraries, each badged with its book and rules version, and the Aboleth stat block in the reading pane.',
 };
-const zoomable = [groupShot, compendiumShot];
+const playerViewShot = {
+  img: playerViewHero,
+  alt: 'The shared player view of the same fight: the party listed with exact hit points, the foes in words with their effect chips, the game log beside them, and a footer noting that nothing is saved.',
+};
+const zoomable = [groupShot, compendiumShot, playerViewShot];
 
 // What the reader is looking at, named: the console's three panes, in the words the
 // feature pages keep using.
@@ -288,12 +292,29 @@ const rest = [
         heading="Share the fight, keep your secrets"
         id="player-view-title"
         side="left"
-        image={{
-          src: playerViewHero,
-          alt: 'The shared player view of the same fight: the party listed with exact hit points, the foes in words with their effect chips, the game log beside them, and a footer noting that nothing is saved.',
-        }}
-        caption="The same fight as above, the way your table sees it."
+        caption="The same fight as above, the way your table sees it. Click through for the whole screen."
       >
+        <button
+          slot="media"
+          type="button"
+          class={`shot-thumb ${zoomTrigger} rounded-xl`}
+          data-index="2"
+          aria-label={`Enlarge screenshot: ${playerViewShot.alt}`}
+        >
+          <Picture
+            src={playerViewShot.img}
+            formats={['avif', 'webp']}
+            fallbackFormat="png"
+            widths={[640, 1280]}
+            sizes="(max-width: 1024px) 94vw, 29rem"
+            alt={playerViewShot.alt}
+            loading="lazy"
+            class="block h-auto w-full"
+          />
+          <span class={zoomOverlay} aria-hidden="true">
+            <span class={zoomBadge}><ZoomIcon /></span>
+          </span>
+        </button>
         <Cards
           layout="stack"
           items={[
