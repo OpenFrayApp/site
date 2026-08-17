@@ -1,0 +1,102 @@
+---
+title: 'OpenFray 1.1'
+description: 'The combat console runs on a phone, answers to the keyboard, and ends effects at the moment the rules say. Compatible with 5.5e and 5e.'
+date: 2026-08-17
+slug: 'openfray-1-1-release'
+kind: 'release'
+cover: '../../assets/news/openfray-1-1.webp'
+coverAlt: 'The version number 1.1.0, large and pale over a dark indigo wash, under the word RELEASE and above the line "On a phone, and on the keyboard".'
+---
+
+Version 1.1.0 is out. [The console](/console/) now runs on a phone or tablet properly, answers to the
+keyboard, and knows when an effect ends. It is still a browser tab, it still needs no
+account, and your fight still lives where you left it.
+
+## The console in your pocket
+
+On a phone, the console is three screens you swipe between: the tracker, the stat block,
+and the controls. A bottom bar jumps straight to any of them, and tapping a creature in
+the tracker slides over to its stat block. The header's panels open as sheets, and the
+three add buttons collapse into one.
+
+Every control has a finger-sized target on a touch screen. A mouse keeps the dense
+layout it had, and form fields take a size iOS Safari will not zoom the page for.
+
+A tablet held portrait gets the phone's layout whole, iPad Pro included. A small tablet
+held landscape puts the tracker beside the stat block, with the controls and the log
+below. From a laptop's width up, the three-column console is unchanged.
+
+## Run it from the keyboard
+
+The other half of this release stays at the desk. The console can now be run from the
+keyboard: `N` advances the turn, `J` and `K` walk the tracker, `D` lands in the selected
+creature's hit points, `E` applies an effect, `G` rolls a group save, `C` casts a spell.
+`A`, `Shift+A`, and `Ctrl+A` cover the three adds, and `Enter` applies whatever dialog
+is open.
+
+Press `Shift+/` for the full list, or find it behind the gear. Every shortcut is
+rebindable in **Settings**, under **Keyboard**. A key another command holds is refused
+by name, and the keys the browser needs stay off limits.
+
+![The keyboard cheat sheet open over a running fight: every command grouped under Turn and fight, Selection, The selected creature, and Add and open, each with its key beside it.](../../assets/screenshots/keyboard-overlay.png)
+
+## Effects end when the rules say
+
+An effect can now be hung on a turn: the start or the end of one, on any creature on the
+board. "Charmed until the start of its next turn" is something the **Apply effect** box
+can say, and it clears itself at the right moment.
+
+**or its next roll** rides on top of any duration and ends the effect on the first roll
+it changes. It replaces "This turn / next attack", which read like a turn and never
+cleared for a player's own rolls. An effect saved with the old option still works.
+
+Rolls now spend what they should everywhere. Group saves, concentration checks, and a
+creature's own stat-block rolls used to leave a spent effect sitting on the row.
+Vicious Mockery, Latchwork, Guiding Bolt, Guidance, and Resistance carry the bounds the
+rules give them, re-read against both editions.
+
+Effects, durations, and the box that stages them are written up in
+[the handbook](/docs/guides/effects/).
+
+## Casting
+
+A spell resolved by an attack roll applies its effect. Guiding Bolt left nothing on the
+target it hit; Flame Blade, Spiritual Weapon, Arcane Hand, Arcane Sword, and Vampiric
+Touch left no reminder on the caster. All six land now.
+
+A saved character's spell attack bonus and spell save DC are filled in from the class,
+level, and ability scores you transcribed. A multiclass caster, a subclass caster, and
+an anonymous character leave the field to you, as before. Casting has
+[its own handbook page](/docs/guides/spells/).
+
+## Campaign notes
+
+A campaign now carries notes: markdown, private to you, for the threads and hooks that
+are not house rules. They sit in the campaign form and on the campaign card, where you
+can write them without opening the form. Click, type, click away. Characters have had
+notes like these; now the game itself does. Campaigns are written up in
+[the handbook](/docs/guides/campaigns/).
+
+## In the books
+
+[_Brood & Bloom_](/brood-and-bloom/)'s **Reliquary Imago** and **Tallow Imago** now say where their size
+comes from. Both open from a husk built around a much smaller larva: the case holds the
+body, and the wings come out folded and open as the moth rises. The sizes themselves
+are unchanged.
+
+## Smaller things
+
+- A condition chip in a resolver reads as a state: lit when the target has it, and
+  tapping a lit one clears it.
+- A picker says what it just added.
+- [The compendium](/docs/reference/compendium/) follows the same layout switch as the
+  fight.
+
+## Where to start
+
+If you have never opened it, [getting started](/docs/getting-started/) runs one fight
+from an empty board to the summary at the end. If you already run OpenFray, open
+[the console](/console/) on your phone and swipe.
+
+Every version so far, and what each one changed, is in the
+[changelog](https://github.com/OpenFrayApp/console/blob/main/CHANGELOG.md).

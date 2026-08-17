@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The keyboard cheat sheet over the staged fight, for the 1.1 release post: every
+# command with its chord, the board dimmed behind it. Shot at the console's usual
+# landscape so the overlay sits centered with the fight visible around it.
+name: keyboard-overlay
+install: site
+
+setup:
+  - use: fight-board
+  - press: '?'
+  - wait: 400
+
+clip: viewport
