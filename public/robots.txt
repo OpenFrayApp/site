@@ -1,3 +1,8 @@
+# The console renders client-side from a code in the URL, so a crawler finds an empty
+# shell. The two shared surfaces under /s/ and /p/ are refused by header instead, with
+# `X-Robots-Tag: noindex` in public/_headers: a rule here would refuse the fetch, and a
+# crawler that never fetches the page never reads the header that actually forbids the
+# index. Allowing the crawl is what makes the refusal work.
 User-agent: *
 Allow: /
 Disallow: /console
