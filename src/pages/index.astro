@@ -498,6 +498,24 @@ const rest = [
         creatures, characters, and campaigns follow you between devices. Everything on this page
         works before you do.
       </p>
+      {
+        /* The two things an account is actually for, named rather than left to
+        "your fights follow you": one is why a session that ends mid-fight is fine,
+        and the other is the only thing here that leaves your browser. */
+      }
+      <p class={`${tagline} mx-auto mt-5 max-w-[52rem]`}>
+        It is also what lets you <strong class="font-semibold text-text">save a fight</strong> as it stands
+        and pick it up next session, and{' '}
+        <strong class="font-semibold text-text">publish an encounter</strong> to a link another Game Master
+        can open and run. You decide what a published page says and you can take it down again, at any
+        time.{' '}
+        <a
+          class="underline decoration-border underline-offset-4 hover:text-text"
+          href="/docs/guides/publishing/"
+        >
+          How publishing works →
+        </a>
+      </p>
     </section>
 
     {
@@ -508,10 +526,10 @@ const rest = [
       <Panel eyebrow="Open source" heading="Free to use, and built in the open" id="wrap-up-title">
         <div class="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
           <div>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Version 1.0</h3>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Version 1.2</h3>
             <p class="m-0 text-sm leading-normal text-muted">
-              Out of beta, and running tables. The console is free and ad-free, with no paid tier
-              — this is the whole product, signed in or not.
+              Out of beta, and running tables. The console is free and ad-free, with no paid tier —
+              this is the whole product, signed in or not.
             </p>
           </div>
           <div>
