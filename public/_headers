@@ -39,3 +39,9 @@
   Cache-Control: public, max-age=604800
 /og-image.png
   Cache-Control: public, max-age=604800
+
+# The mark in both accents, 48px square and drawn at 24. The admin dashboard's mail loads
+# these: it sits behind Cloudflare Access, which would answer a login page to a mail client
+# asking for an image, so the one place they can live is here.
+/brand/*
+  Cache-Control: public, max-age=604800
