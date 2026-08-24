@@ -12,3 +12,6 @@ dist/
 
 # Generated stylesheet for the design-sync tokens bundle
 .ds-css/
+
+# `shotlist --login` writes a live signed-in session here. Never commit one.
+.shotlist/

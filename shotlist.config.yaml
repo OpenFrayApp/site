@@ -18,6 +18,14 @@ site:
   ready: 'text=Add creature'
   settle: 800
 
+  # The player view's signed-in shots (the campaign and Game Master name on its header)
+  # need an account. `npx shotlist --login gm` writes the session; the docs repo already
+  # has one for the same fixture account, copied in rather than logged in twice.
+  sessions:
+    gm:
+      path: .shotlist/gm.json
+      verify: 'button[aria-label="Account menu"]'
+
 paths:
   recipes: screenshots/recipes
   macros: screenshots/macros

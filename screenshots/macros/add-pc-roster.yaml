@@ -1,0 +1,17 @@
+# One player character, through the signed-in Add PC popover: a picker over the
+# account's saved roster rather than the anonymous quick-add fields. The popover stays
+# open after a pick (closeOnPick: false, upstream) — closed here rather than left for
+# the next call, because a second `click: Add PC` on an already-open popover toggles
+# it shut instead of reopening it, unlike `add-creature`'s own trigger.
+steps:
+  - click: { role: button, name: Add PC, exact: true }
+  # The roster loads from the account on first open; the anonymous Add creature
+  # search has no such round trip, which is why its own macro needs no wait here.
+  - wait: 600
+  - fill: { placeholder: Search your characters… }
+    value: $pc.name
+  - wait: 250
+  - click: { role: button, name: $pc.name, exact: true }
+  - wait: 150
+  - press: Escape
+  - wait: 120

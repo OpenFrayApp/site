@@ -1,0 +1,14 @@
+# Put a signed-in board together: a party from the account's saved roster, then the
+# foes. Needs the party's PCs already saved to the `gm` session's roster — `seed`'s
+# anonymous quick-add fields don't exist once signed in, which replaces Add PC with a
+# roster picker.
+defaults:
+  pcs: $party
+  monsters: $foes
+steps:
+  - each: $pcs
+    as: pc
+    steps: [{ use: add-pc-roster }]
+  - each: $monsters
+    as: foe
+    steps: [{ use: add-creature }]
