@@ -2,23 +2,54 @@
 #
 # The shared player view: the same fight as the console shot, arriving on the table's own
 # screen. This drives the real broadcast — the console starts sharing and a second page
-# opens the link — so the picture is what players actually receive, not a mock. Needs the
-# dev server's Supabase env.
+# opens the link — so the picture is what players actually receive, not a mock. Signed in
+# through the `gm` session so the header can show a campaign and a Game Master name, and
+# a backdrop set behind the board.
 name: player-view-hero
 install: site
+session: gm
 viewport: { width: 1800, height: 1000 }
 
 setup:
-  - use: fight-board
+  # `fight-board-signed` clears the board before it seeds one, which also drops the
+  # active campaign (App.tsx resets it alongside a clear) — so the campaign is picked
+  # after staging the fight, not before it.
+  - use: fight-board-signed
+
+  - select: { css: 'select[aria-label="Active campaign"]' }
+    optionLabel: The Trials of Vaelthorn
+  - wait: 300
+  - click: { role: button, name: Settings and more }
+  - click: { role: menuitem, name: Settings }
+  - wait: { css: '[role=tablist]' }
+  - click: { role: tab, name: Player view }
+  - wait: 300
+  - select: { css: '#player-view-campaign-name' }
+    optionLabel: Shown
+  - select: { css: '#player-view-gm-name' }
+    optionLabel: Shown
+  - click: { role: button, name: Done }
+  - wait: 300
+
   - click: { role: button, name: Share with players }
-  - wait: 400
+  - wait: 500
+  # `role: radio, name:` is ambiguous here — a campaign's own default-backdrop picker
+  # renders the same labels once one is active, and the role query hangs on it rather
+  # than the visible swatch. The exact button is unambiguous.
+  - click: { css: 'button[role=radio][aria-label="Mountain fortress"]' }
+  - wait: 300
   - click: { role: button, name: Start sharing }
   - wait: 600
-  - readValue: { css: 'input[readonly]' }
-    as: link
+  # Signed in, the link field is a rename box for the share code (`onClaim`), not the
+  # anonymous flow's read-only full URL — so the code is read and the URL rebuilt by
+  # hand. `playerViewUrl` roots it at `/p/<code>` for production, where Cloudflare
+  # rewrites that path to the console; the dev server has no such rewrite and serves
+  # the console at `/console/` instead, so the local address carries that prefix.
+  - readValue: { css: '#share-code' }
+    as: code
   # Tall enough for the whole turn order and no taller, so the footer's "nothing here is
   # saved" line sits under the content rather than a screen below it.
-  - openPage: $link
+  - openPage: http://localhost:5199/console/p/$code
     as: player
     viewport: { width: 1080, height: 780 }
   - wait: { text: Kessa Quick }

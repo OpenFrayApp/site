@@ -1,28 +1,54 @@
-# yaml-language-server: $schema=../node_modules/shotlist/dist/recipe.schema.json
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
 #
 # The shared player view with creature hit points set to exact numbers: the same
 # fight as player-view-hero, one disclosure level up. The two shots differ only in
-# that setting, which is what the tabs on the player-view page compare.
+# that setting, which is what the tabs on the player-view page compare. Signed in
+# through the `gm` session, matching player-view-hero, so the two stay comparable.
 name: player-view-exact
 install: site
+session: gm
 viewport: { width: 1800, height: 1000 }
 
 setup:
-  - use: open-settings
+  # `fight-board-signed` clears the board before it seeds one, which also drops the
+  # active campaign (App.tsx resets it alongside a clear) — so the campaign is picked
+  # after staging the fight, not before it.
+  - use: fight-board-signed
+
+  - select: { css: 'select[aria-label="Active campaign"]' }
+    optionLabel: The Trials of Vaelthorn
+  - wait: 300
+  - click: { role: button, name: Settings and more }
+  - click: { role: menuitem, name: Settings }
+  - wait: { css: '[role=tablist]' }
   - click: { role: tab, name: Player view }
   - wait: 300
   - select: { label: Creature hit points }
     optionLabel: Exact number
+  - select: { css: '#player-view-campaign-name' }
+    optionLabel: Shown
+  - select: { css: '#player-view-gm-name' }
+    optionLabel: Shown
   - click: { role: button, name: Done }
   - wait: 300
-  - use: fight-board
+
   - click: { role: button, name: Share with players }
-  - wait: 400
+  - wait: 500
+  # `role: radio, name:` is ambiguous here — a campaign's own default-backdrop picker
+  # renders the same labels once one is active, and the role query hangs on it rather
+  # than the visible swatch. The exact button is unambiguous.
+  - click: { css: 'button[role=radio][aria-label="Mountain fortress"]' }
+  - wait: 300
   - click: { role: button, name: Start sharing }
   - wait: 600
-  - readValue: { css: 'input[readonly]' }
-    as: link
-  - openPage: $link
+  # Signed in, the link field is a rename box for the share code (`onClaim`), not the
+  # anonymous flow's read-only full URL — so the code is read and the URL rebuilt by
+  # hand. `playerViewUrl` roots it at `/p/<code>` for production, where Cloudflare
+  # rewrites that path to the console; the dev server has no such rewrite and serves
+  # the console at `/console/` instead, so the local address carries that prefix.
+  - readValue: { css: '#share-code' }
+    as: code
+  - openPage: http://localhost:5199/console/p/$code
     as: player
     viewport: { width: 1080, height: 780 }
   - wait: { text: Kessa Quick }

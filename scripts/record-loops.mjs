@@ -268,6 +268,15 @@ async function filmShareLink() {
   await camera(1.9, iconBox.x, iconBox.y + 40);
   await clickLike(icon);
   await page.waitForTimeout(600);
+  // Pulled back to the plain 1440x900 frame for the pick: the backdrop row runs
+  // wider than the icon's own 1.9x push shows, and a click at a point the zoom
+  // has carried outside the visible frame lands as an outside click and closes
+  // the popover instead of picking a swatch.
+  await camera(1);
+  await page.waitForTimeout(300);
+  const backdrop = page.locator('button[role=radio][aria-label="Mountain fortress"]');
+  await clickLike(backdrop);
+  await page.waitForTimeout(700);
   // The panel renders without a dialog role, so its own heading and Start button
   // are the anchors: frame their union, scaled so the whole panel stays in shot.
   const startBtn = page.getByRole('button', { name: 'Start sharing' });
@@ -281,15 +290,26 @@ async function filmShareLink() {
   await camera(fit, (left + right) / 2, (top + bottom) / 2);
   await clickLike(startBtn);
   await page.waitForTimeout(1400);
+  // Anonymous, the link is plain text beside its prefix, not a form control — so
+  // the code is lifted from the row's own text rather than an input's value, the
+  // way the signed-in shotlist recipes read `#share-code` instead.
+  const prefixSpan = page.getByText(`${new URL(url).origin}/p/`, { exact: false }).first();
+  const rowText = await prefixSpan.locator('xpath=..').innerText();
+  const code = rowText.replace(/^https?:\/\/[^/]+\/p\//, '').trim();
+
   // Pull wide before the jump, so the cut lands full-frame to full-frame.
   await camera(1);
   // The fight lives in the GM's tab and the broadcast dies with it, which is why
-  // the panel's own affordance opens a NEW tab. That tab records its own video;
-  // the cutter splices the two takes at the click, the way a tab switch looks.
-  const playerPromise = context.waitForEvent('page');
+  // the panel's own affordance opens a NEW tab — clicked here for the beat, though
+  // the dev server can't follow it: the link carries the production `/p/<code>`
+  // address, which only Cloudflare rewrites to the app; here it 404s past the
+  // console's own `/console/` base. The take's second half opens the same code
+  // under that base directly, in a page on the same context, so it still records.
   await clickLike(page.getByRole('link', { name: 'Open the player view in a new tab' }));
   marks.shareEnd = at() + 0.4;
-  const player = await playerPromise;
+  const player = await context.newPage();
+  await player.setViewportSize(VIEWPORT);
+  await player.goto(`${new URL(url).origin}/console/p/${code}`);
   const tOpen = Date.now();
   await player.getByText('Elowen Vale').first().waitFor();
   await player.waitForTimeout(3000);

@@ -35,12 +35,16 @@ magick "$OUT/cast-spell-hero.png" -crop 1374x1036+1124+481 +repage "$SITE/spell-
 # From the two player-view shots (2160x1560): the foes as each disclosure level
 # shows them — the same rows in words and in exact numbers — and the log as the
 # table receives it, entries without dice. The player-view page's tabs compare them.
-PVBG=$(magick "$OUT/player-view-hero.png" -format '%[pixel:p{40,1400}]' info:)
-magick "$OUT/player-view-hero.png" -crop 990x424+78+664 +repage \
+# Both shots now carry the campaign/GM header and a backdrop (the signed-in `gm`
+# session) behind the tracker, which paints over the corner pixel the old anonymous
+# shot sampled — the header bar is the one place still guaranteed flat, so the
+# border color is sampled from inside it instead.
+PVBG=$(magick "$OUT/player-view-hero.png" -format '%[pixel:p{20,20}]' info:)
+magick "$OUT/player-view-hero.png" -crop 990x424+78+654 +repage \
   -bordercolor "$PVBG" -border 20 "$SITE/pv-words.png"
-magick "$OUT/player-view-exact.png" -crop 990x424+78+664 +repage \
+magick "$OUT/player-view-exact.png" -crop 990x424+78+654 +repage \
   -bordercolor "$PVBG" -border 20 "$SITE/pv-exact.png"
-magick "$OUT/player-view-hero.png" -crop 990x586+1092+224 +repage \
+magick "$OUT/player-view-hero.png" -crop 990x586+1092+214 +repage \
   -bordercolor "$PVBG" -border 20 "$SITE/pv-log.png"
 
 # The Settings clip rides a viewport-tall wrapper; trim it to the dialog itself.
