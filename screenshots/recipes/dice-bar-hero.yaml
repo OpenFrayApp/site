@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The free-roll dice bar: the formula box, Adv picked on the segmented control, and
+# every die through d100. Anonymous — the bar needs no account or board.
+name: dice-bar-hero
+install: site
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - click: { role: radio, name: Advantage }
+  - wait: 300
+
+clip:
+  span:
+    - { css: button, text: Roll, exact: true, pick: last }
+    - { css: button, text: d4, exact: true, pick: last }
+  pad: 10

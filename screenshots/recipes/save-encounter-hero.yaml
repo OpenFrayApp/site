@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# A saved encounter, reopened from the compendium: the cast grouped, and the two ways
+# back in — Restore for the whole board, Add creatures for just its foes. Signed in
+# through the `gm` session, since saving is account-only.
+name: save-encounter-hero
+install: site
+session: gm
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - use: fight-board-signed
+
+  - click: { css: 'button[aria-label="Save this encounter"]', pick: last }
+  - wait: 500
+  - fill: { css: '#save-fight-name' }
+    value: The Ambush on the Vaelthorn Road
+  - click: { css: button, text: Save, exact: true, pick: last }
+  - wait: 1200
+  - press: Escape
+  - wait: 300
+
+  - click: { css: 'button[aria-label="Show the compendium"]', pick: last }
+  - wait: 300
+  - click: { css: button, text: Encounters, pick: last }
+  - wait: { text: The Ambush on the Vaelthorn Road }
+  - click: { text: The Ambush on the Vaelthorn Road, pick: last }
+  - wait: 500
+
+clip:
+  span:
+    - { text: The Ambush on the Vaelthorn Road, pick: last }
+    - { css: p, startsWith: 'Restore', pick: last }
+  pad: 24
+check: false

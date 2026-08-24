@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The share-encounter form, filled in but never submitted, so nothing is published
+# from this run. Signed in through the `gm` session — publishing needs an account, and
+# the byline prefills from it.
+name: publish-encounter-hero
+install: site
+session: gm
+viewport: { width: 1440, height: 1300 }
+
+setup:
+  - use: fight-board-signed
+
+  - click: { css: 'button[aria-label="Share this encounter"]', pick: last }
+  - wait: { css: '#share-name' }
+  - fill: { css: '#share-name' }
+    value: The Ambush on the Vaelthorn Road
+  - fill: { css: '#share-note' }
+    value: The road narrows at the old bridge, and the Ogre has had all week to bait it.
+  - optional:
+      - blur: { css: ':focus' }
+  - wait: 400
+
+# A third point sets the width: the heading and the Publish button are both narrow, so
+# a span of just the two comes out only as wide as whichever is widest, clipping the
+# dialog. The note textarea is the full-width element between them.
+clip:
+  span:
+    - { text: Share this encounter, exact: true }
+    - { css: '#share-note' }
+    - { css: button, text: Publish, exact: true, pick: last }
+  pad: 20

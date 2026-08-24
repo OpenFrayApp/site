@@ -1,7 +1,7 @@
 ---
 title: 'OpenFray 1.2'
-description: 'Save a fight and pick it up next session, and publish an encounter or a creature to a link anyone can open. Compatible with 5.5e and 5e.'
-date: 2026-08-20
+description: 'Save a fight and pick it up next session, prep the next one early, and publish an encounter or a creature to a link anyone can open. Compatible with 5.5e and 5e.'
+date: 2026-08-24
 slug: 'openfray-1-2-release'
 kind: 'release'
 cover: '../../assets/news/openfray-1-2.webp'
@@ -19,9 +19,15 @@ Sessions rarely end on a clean round. **Save** keeps the board exactly as it sta
 creatures, the party, hit points, effects, conditions, initiative, the round you are on,
 and the log. Next week you open it and carry on.
 
+It works the other way round too. Build the fight on a Tuesday, save it, and it is
+waiting on Saturday with the cast already assembled. Prep a month of them if you like.
+Save as many as you want, as often as you want.
+
 Saved fights live in the compendium under **Encounters**. Each card shows what was on the
 board, grouped and counted, so you can tell one goblin ambush from another without opening
 either.
+
+![A saved encounter open in the compendium: the name "The Ambush on the Vaelthorn Road" over the date and the round it was saved on, its creatures and party listed under separate headings, and the Restore, Add creatures and Delete buttons below them.](../../assets/screenshots/save-encounter-hero.png)
 
 There are two ways back in, and the difference is the useful part. **Restore** brings the
 whole encounter back, party and hit points included. **Add creatures** drops only its
@@ -34,8 +40,14 @@ run next week's game from.
 ## Hand an encounter to somebody else
 
 **Publish** puts an encounter, or one creature, at a link anyone can open. They read it in
-the browser, and add it to their own board with one click. It is how you send a fight to
-the Game Master who asked for it, put one under a blog post, or share a creature you wrote.
+the browser, and add it to their own board with one click.
+
+That link is the point. Send a fight to the Game Master who asked how you ran it. Put one
+under the blog post that describes it, or in a video's description, so the people watching
+can load the thing they just watched instead of rebuilding it from a pause button. Publish
+a creature you wrote and let other tables use it.
+
+![The share dialog filled in but not yet published: a name, a note about how the fight opens, the byline, the license the encounter is offered under, and the line confirming who holds the rights, above the Publish button.](../../assets/screenshots/publish-encounter-hero.png)
 
 What travels is the cast, a name, a note, your byline and a license. What does not: your
 player characters, hit points, effects, initiative, or the log. A published encounter is
@@ -55,14 +67,17 @@ A creature nobody licensed for reuse can be read on the page and stays behind wh
 adds the encounter, and the app says which ones and why before it adds anything. Stating no
 license is the default, and it is not a grant.
 
-A creature can also say where it came from, and the stat block shows it.
+A creature can also say where it came from, and the stat block shows it. A creature brought
+in with the OpenFray Importer cannot be published at all: those stat blocks are Wizards of
+the Coast's.
 
 ### Everything you have up, in one place
 
 **Shared links**, under your account, lists what you have published: copy a link again, open
 it to see what a reader sees, or unpublish it. Unpublishing is immediate and final.
 
-Nothing expires. A link published today still works next year unless you take it down.
+Nothing expires. A link published today still works next year unless you take it down. An
+account holds up to 200 published pages, and unpublishing makes room.
 
 ## Reading somebody else's link
 
@@ -71,10 +86,43 @@ byline, and every stat block. **Use this encounter** puts the creatures on your 
 
 Every published page carries **Report this**. Anyone can use it, nobody is asked who they
 are, and an address is optional. Reports reach a person. A page that breaks the
-[terms](/terms) is removed, and whoever published it is told.
+[terms](/terms) is removed, and whoever published it is told. A page that was taken down
+says so, rather than reading like a code somebody mistyped.
 
 A stranger's stat block is held to what the console can actually run, and a stranger's note
 renders bold, italic, quotes, lists and headings, and nothing that navigates or fetches.
+
+## Casting to the table
+
+The [player view](/features/player-view/) grew three things this release, and the share
+control wears a cast icon now, because casting the board to a screen is what it does.
+
+A shared link can be **locked behind a four-digit PIN**. The popover sets it, and a viewer
+types the same four before the board shows. A wrong PIN gets silence rather than an error
+that gives anything away.
+
+![The player view panel with a PIN set: four boxes reading 4, 8, 2, 1, and a Remove control beside them.](../../assets/screenshots/pin-lock-hero.png)
+
+A campaign can set a **backdrop** for the table's screen, picked from a bundled set: a
+mountain fortress, a desert ruin, an elven city, a frozen lake, a morning harbor, a valley
+road, a magical forest, and more. Each is treated for light or dark and shows at full
+strength, and the theme toggle stands down while one is up, because the art has already
+chosen.
+
+The screen can also head itself with the **campaign's name and yours** as the Game Master
+running it. Each is its own setting under Player view, both off by default, and neither
+travels on an anonymous link.
+
+![The shared player view over a mountain-fortress backdrop, headed with a campaign name and the Game Master running it: the party listed with hit points and armor class, the foes in words with their effect chips, and the game log beside them.](../../assets/screenshots/player-view-hero.png)
+
+## The dice bar
+
+The bar rolls a **d100** now, alongside the rest. A **roll mode** sits beside the dice as
+one control: Regular, Adv, Dis, applying to whichever die you press next. It works on any
+die, not just the d20, and a d20 rolled at advantage logs as advantage instead of a keep
+rule spelled out.
+
+![The dice bar with Adv lit on the Regular, Adv, Dis control, and every die from d100 down to d4 beside it.](../../assets/screenshots/dice-bar-hero.png)
 
 ## Smaller things
 
@@ -82,6 +130,16 @@ renders bold, italic, quotes, lists and headings, and nothing that navigates or 
   `openfray.app/s/`. Both sit at the root of the domain, because they get pasted where
   somebody who has never seen the console will read them.
 - Neither is counted by its code: analytics sees `/s/` and `/p/` and nothing after them.
+- Signing out hands a shared link back to an anonymous one, so a device that no longer owns
+  your name stops broadcasting under it.
+- **Rests**, **Group save** and **Cast spell** hold their place in the header on an empty
+  board and grey out, instead of vanishing. **Save** greys out the same way sharing already
+  did.
+- A condition named in a spell's rules text, or in the **Applied effects** list, explains
+  itself on hover, the way one in the tracker already did.
+- A field's description sits behind the **?** beside its label, so what stays visible is
+  state or consequence rather than boilerplate.
+- The short-rest tally sits in the campfire button's corner, off the artwork.
 - The compendium's tabs lay out three by three.
 - The app says **encounter** where it used to say fight.
 
@@ -89,6 +147,8 @@ renders bold, italic, quotes, lists and headings, and nothing that navigates or 
 
 Two new handbook pages cover both halves: [save a fight for
 later](/docs/guides/saving/) and [publish an encounter](/docs/guides/publishing/).
+[Share the player view](/docs/guides/player-view/) covers the PIN, the backdrop, and the
+names on its header.
 
 If you have never opened it, [getting started](/docs/getting-started/) runs one fight from
 an empty board to the summary at the end.

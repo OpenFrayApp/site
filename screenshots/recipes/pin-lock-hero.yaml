@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The share popover with a PIN set: the four boxes filled, and the confirmation line
+# that says what it now takes to open the view. Anonymous — the PIN itself needs no
+# account, so this is the plain console, no fixture session required.
+name: pin-lock-hero
+install: site
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - click: { role: button, name: Share with players }
+  - wait: 400
+  - fill: { css: 'input[aria-label="PIN digit 1"]' }
+    value: '4'
+  - fill: { css: 'input[aria-label="PIN digit 2"]' }
+    value: '8'
+  - fill: { css: 'input[aria-label="PIN digit 3"]' }
+    value: '2'
+  - fill: { css: 'input[aria-label="PIN digit 4"]' }
+    value: '1'
+  - wait: { text: 'PIN set. Viewers type it before the board shows.' }
+  - wait: 300
+
+# The panel's own heading down through the PIN row and its confirmation line —
+# the backdrop row below stays out of frame, since that claim gets its own shot.
+# The panel's own heading down through the PIN row and its Remove control, full
+# width off the subtitle paragraph — the backdrop row sits further down and stays
+# out of frame, since that claim already has its own shot (player-view-hero.png).
+clip:
+  span:
+    - { text: Player view, exact: true }
+    - { css: p, startsWith: 'A read-only screen' }
+    - { css: button, text: Remove, exact: true }
+  pad: 24
