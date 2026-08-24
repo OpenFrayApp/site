@@ -24,7 +24,7 @@
     "pagedjs": "^0.4.3",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
-    "shotlist": "^0.2.3",
+    "shotlist": "^0.5.0",
     "vitest": "^3.2.6"
   },
   "repository": {
