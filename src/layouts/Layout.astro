@@ -76,6 +76,13 @@ const navLink =
     <meta name="keywords" content={keywordList} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" />
+    {
+      /* The home-screen icon. A page saved to a phone's home screen shows the mark
+    instead of a thumbnail of itself: iOS reads the link, Android reads the manifest.
+    Both are the brand icon from the parent repo's brand/, resized. */
+    }
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title="OpenFray news" href="/news/rss.xml" />
     <meta name="theme-color" content="#020617" />
     <meta property="og:title" content={title} />
