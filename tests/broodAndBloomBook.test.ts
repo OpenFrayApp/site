@@ -428,6 +428,20 @@ describe('Brood & Bloom book integrity', () => {
     expect(preparations.every(({ rule, summary }) => rule.length > summary.length)).toBe(true);
   });
 
+  it('uses complete game terms and explicit outcomes in the preparation catalog', () => {
+    const bloomOil = preparations.find(({ name }) => name === 'Bloom oil')!;
+    const ankyloticSalt = preparations.find(({ name }) => name === 'Ankylotic salt')!;
+    const wakelightDust = preparations.find(({ name }) => name === 'Wakelight dust')!;
+    const adipocere = preparations.find(({ name }) => name === 'Adipocere')!;
+
+    for (const preparation of [bloomOil, ankyloticSalt, adipocere]) {
+      expect(preparation.summary).toContain('Constitution saving throw');
+      expect(preparation.summary).not.toContain('Constitution save;');
+    }
+    expect(ankyloticSalt.rule).toContain('On a successful saving throw, the poison has no effect.');
+    expect(wakelightDust.rule).toContain('Washing it off with water takes 10 minutes.');
+  });
+
   it('defines preparation crafting, thrown use, and consensual Lavage', async () => {
     const alchemy = normalized((await chapters()).get('chapter-7')!);
 
