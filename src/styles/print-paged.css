@@ -367,7 +367,6 @@ tr {
   font-size: 0.85rem !important;
 }
 
-/* ---------- preparation index ---------- */
 /* Seven columns make the preparation appendix dense. Compact cells keep every row in
    the paginated table while leaving the detailed entries at the book's normal scale. */
 .preparation-table {
