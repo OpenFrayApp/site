@@ -65,8 +65,8 @@ describe('Brood & Bloom book integrity', () => {
   it('matches declared brood counts, stat-block placements, and the verified total', async () => {
     const entries = await chapters();
     const declaredCounts = new Map([
-      ['chapter-2', { count: 3 }],
-      ['chapter-3', { count: 6 }],
+      ['chapter-2', { count: 3, declaration: 'three officers' }],
+      ['chapter-3', { count: 6, declaration: 'six creatures' }],
       ['chapter-4', { count: 15, declaration: 'fifteen creatures' }],
       ['chapter-5', { count: 24, declaration: 'twenty-four creatures' }],
       ['chapter-6', { count: 19, declaration: 'nineteen creatures' }],
@@ -88,6 +88,13 @@ describe('Brood & Bloom book integrity', () => {
 
   it('sends readers from the overview to every prerequisite, brood, and appendix lookup', async () => {
     const overview = (await chapters()).get('overview')!;
+
+    expect(overview).toContain(
+      '**[Chapter 3](/brood-and-bloom/chapter-3/)** is the people. It covers the cult',
+    );
+    expect(overview).toContain(
+      '**[Chapter 7](/brood-and-bloom/chapter-7/)** holds the alchemy and the',
+    );
 
     for (const destination of [
       '/brood-and-bloom/chapter-1/',
