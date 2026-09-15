@@ -114,8 +114,6 @@
   }
 
   /* ---------- creature indexes (the two appendices) ---------- */
-  /* Layout only — the band heading keeps the site's own h3 style. The filled bar is a
-     print device and lives in print-paged.css. */
   .creature-index {
     columns: 16rem;
     gap: 1.5rem;
@@ -129,6 +127,9 @@
      column and not the next, so the columns start at different heights. */
   .index-band-head {
     margin: 0 0 0.5rem;
+    padding: 0;
+    border: 0;
+    font-size: 1.12rem;
   }
   .index-list {
     margin: 0;
