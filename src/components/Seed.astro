@@ -10,7 +10,8 @@ interface Props {
 const { level } = Astro.props;
 
 // The three column headings share one look; named so they can't drift apart.
-const heading = 'm-0 mb-1.5 text-xs font-bold tracking-widest text-faint uppercase';
+const heading =
+  'm-0 mb-1.5 text-xs font-bold tracking-widest text-[var(--book-secondary)] uppercase';
 ---
 
 <div class="seed mb-10">

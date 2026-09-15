@@ -260,13 +260,65 @@ describe('CreatureIndex', () => {
   });
 });
 
+/** Read a hexadecimal custom-property color from one CSS selector block. */
+function cssColor(css: string, selector: string, property: string): string {
+  const blockStart = css.indexOf(`${selector} {`);
+  const block = blockStart >= 0 ? css.slice(blockStart, css.indexOf('}', blockStart)) : '';
+  const value = block.match(new RegExp(`${property}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1];
+  if (!value) throw new Error(`Missing ${property} in ${selector}`);
+  return value;
+}
+
+/** Convert a hexadecimal color to WCAG linear-light luminance. */
+function luminance(hex: string): number {
+  const channels = hex
+    .slice(1)
+    .match(/../g)!
+    .map((channel) => Number.parseInt(channel, 16) / 255)
+    .map((channel) => (channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+/** Calculate the WCAG contrast ratio between two hexadecimal colors. */
+function contrast(first: string, second: string): number {
+  const [lighter, darker] = [luminance(first), luminance(second)].sort((a, b) => b - a);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 describe('book index styles', () => {
   const bookCss = readFileSync(new URL('../src/styles/book.css', import.meta.url), 'utf8');
+  const globalCss = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
   const printCss = readFileSync(new URL('../src/styles/print-paged.css', import.meta.url), 'utf8');
 
   it('keeps web jump layout in component utilities and hides it from print', () => {
     expect(bookCss).not.toMatch(/\.index-jumps\s*\{/);
     expect(printCss).toMatch(/\.index-jumps\s*\{\s*display:\s*none;/);
+  });
+
+  it('gives book secondary text AA contrast without changing the site-wide faint token', () => {
+    const darkSecondary = cssColor(bookCss, '.book', '--book-secondary');
+    const lightSecondary = cssColor(bookCss, ':root.light .book', '--book-secondary');
+
+    expect(contrast(darkSecondary, cssColor(globalCss, ':root', '--panel'))).toBeGreaterThanOrEqual(
+      4.5,
+    );
+    expect(
+      contrast(lightSecondary, cssColor(globalCss, ':root.light', '--panel')),
+    ).toBeGreaterThanOrEqual(4.5);
+    expect(cssColor(globalCss, ':root', '--faint')).toBe('#64748b');
+    expect(cssColor(globalCss, ':root.light', '--faint')).toBe('#94a3b8');
+  });
+
+  it('applies the book token to navigation and rules labels', () => {
+    const sources = [
+      '../src/layouts/BookLayout.astro',
+      '../src/components/Note.astro',
+      '../src/components/StatBlock.astro',
+      '../src/pages/brood-and-bloom/index.astro',
+    ].map((path) => readFileSync(new URL(path, import.meta.url), 'utf8'));
+
+    expect(sources.every((source) => source.includes('book-secondary'))).toBe(true);
+    expect(sources.join('\n')).not.toContain('text-faint');
   });
 });
 

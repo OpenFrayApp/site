@@ -59,7 +59,7 @@ const value = 'm-0 text-muted';
   >
     <div class="sb-head-group">
       <h3 class="sb-name m-0 border-none p-0 text-2xl tracking-tight text-text">{s.name}</h3>
-      <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-faint italic">{typeLine}</p>
+      <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-[var(--book-secondary)] italic">{typeLine}</p>
 
       <dl class="sb-top m-0 flex flex-wrap gap-x-6.5 gap-y-1.5 border-t border-border py-3">
         {
@@ -79,7 +79,9 @@ const value = 'm-0 text-muted';
 
     {
       s.classes && s.classes.length > 0 && (
-        <p class="sb-note m-0 mt-2.5 text-sm text-faint">Classes: {s.classes.join(', ')}</p>
+        <p class="sb-note m-0 mt-2.5 text-sm text-[var(--book-secondary)]">
+          Classes: {s.classes.join(', ')}
+        </p>
       )
     }
   </section>
