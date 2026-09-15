@@ -39,14 +39,15 @@ describe('replaceLibraryTerms', () => {
 });
 
 describe('flattenStatBlockFolds', () => {
-  it('unwraps details and summary, keeping every child in order', () => {
+  it('unwraps details and summary, keeping content in order and omitting the site toggle', () => {
     const root = body(
-      '<section class="statblock"><details><summary><h3>Name</h3><p class="lore">Lore</p></summary><dl class="sb-top"></dl></details></section>',
+      '<section class="statblock"><details><summary><h3>Name</h3><span class="sb-toggle-label">See more</span><p class="lore">Lore</p></summary><dl class="sb-top"></dl></details></section>',
     );
     flattenStatBlockFolds(root);
     const block = root.querySelector('.statblock')!;
     expect(block.querySelector('details')).toBeNull();
     expect(block.querySelector('summary')).toBeNull();
+    expect(block.textContent).not.toContain('See more');
     expect([...block.children].map((el) => el.tagName)).toEqual(['H3', 'P', 'DL']);
   });
 });
