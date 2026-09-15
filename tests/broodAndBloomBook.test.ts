@@ -123,12 +123,6 @@ describe('Brood & Bloom book integrity', () => {
     expect(sharedRules).toContain(
       'If the highest scores tie across rows, the Game Master chooses which tied score sets the line.',
     );
-    expect(sharedRules).toContain(
-      '| Lesser Restoration | Detaches a lesser parasite, and removes 1d4 Depth at stages 0–2',
-    );
-    expect(sharedRules).toContain(
-      '| Greater Restoration | Removes 2d4 Depth at stages 0–2, or 1d4 at stage 3',
-    );
     expect(sharedRules).toContain('| Heal | Removes 3d4 Depth at stages 0–2, or 2d4 at stage 3');
     expect(sharedRules).toContain(
       '| Lesser Restoration | Detaches a lesser parasite, and removes 1d4 Depth at stages 0–2 | Removes 3 Spore Load, and cures stage 1 or reduces stage 2 to stage 1',
