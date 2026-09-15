@@ -7,9 +7,11 @@ import { JSDOM } from 'jsdom';
 import { beforeAll, describe, expect, it } from 'vitest';
 import BookActions from '../src/components/BookActions.astro';
 import BookNavigation from '../src/components/BookNavigation.astro';
+import Creature from '../src/components/Creature.astro';
 import SpellIndex from '../src/components/SpellIndex.astro';
 import { BROOD_AND_BLOOM } from '../src/data/books.ts';
 import { setupReadingRail } from '../src/scripts/readingRail.ts';
+import { setupTargetedStatBlock } from '../src/scripts/targetedStatBlock.ts';
 
 const chapters = [
   { id: 'chapter-1', data: { eyebrow: 'Chapter 1', label: 'The broods' } },
@@ -125,6 +127,42 @@ describe('BookNavigation', () => {
 
     expect(sidebar.scrollTop).toBe(50);
     expect(dom.window.scrollY).toBe(0);
+  });
+});
+
+describe('targeted stat blocks', () => {
+  it('opens the creature fold named by the initial fragment on a rendered book entry', async () => {
+    const url = 'https://openfray.app/brood-and-bloom/chapter-4/#c-latchling';
+    const html = await container.renderToString(Creature, {
+      props: { name: 'Latchling', book: 'brood-and-bloom' },
+    });
+    const dom = new JSDOM(html, { url });
+    const target = dom.window.document.getElementById('c-latchling')!;
+
+    setupTargetedStatBlock(dom.window.document);
+
+    expect(target.matches('article.entry')).toBe(true);
+    expect(target.querySelector('details')?.open).toBe(true);
+    expect(dom.window.location.hash).toBe('#c-latchling');
+  });
+
+  it('opens later fragment targets without changing unrelated folds or native toggles', () => {
+    const dom = new JSDOM(
+      [
+        '<article id="c-latchling"><section class="statblock"><details><summary>Latchling</summary></details></section></article>',
+        '<article id="c-quagdam"><section class="statblock"><details><summary>Quagdam</summary></details></section></article>',
+        '<article id="c-lacuna"><section class="statblock"><details open><summary>Lacuna</summary></details></section></article>',
+      ].join(''),
+      { url: 'https://openfray.app/brood-and-bloom/chapter-4/#c-latchling' },
+    );
+    const folds = [...dom.window.document.querySelectorAll<HTMLDetailsElement>('details')];
+
+    setupTargetedStatBlock(dom.window.document);
+    folds[0].querySelector('summary')?.click();
+    dom.window.location.hash = '#c-quagdam';
+    dom.window.dispatchEvent(new dom.window.HashChangeEvent('hashchange'));
+
+    expect(folds.map((fold) => fold.open)).toEqual([false, true, true]);
   });
 });
 
