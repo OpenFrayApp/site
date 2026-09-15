@@ -5,6 +5,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { creatures } from '../src/data/broodAndBloom.ts';
+import { spells } from '../src/data/broodAndBloomSpells.ts';
+import { entrySlug } from '../src/data/statblock.ts';
 
 const contentDirectory = resolve('src/content/brood-and-bloom');
 
@@ -420,5 +422,71 @@ describe('Brood & Bloom book integrity', () => {
       'Prosectors carry two and offer one immediately, leaving the patient to decide whether to drink it.',
     );
     expect(alchemy).not.toContain('use them without asking');
+  });
+
+  it('makes a rare spell source permission rather than automatic acquisition', async () => {
+    const magic = normalized((await chapters()).get('chapter-7')!);
+
+    expect(magic).toContain(
+      'Finding a source makes its spell available under a class’s normal spell rules; it does not teach or prepare the spell by itself.',
+    );
+    expect(magic).toContain(
+      'A Cleric, Druid, or Paladin can prepare a listed spell after finding its source; cantrips still follow the class’s cantrip rules.',
+    );
+    expect(magic).toContain(
+      'A Wizard can copy a listed spell from the source into a spellbook, then prepare it normally.',
+    );
+    expect(magic).toContain(
+      'A Sorcerer or Warlock can choose a listed spell when a class feature lets them learn or replace a spell.',
+    );
+  });
+
+  it('distinguishes graft requirements, transfers, and Depth costs from stage 4', async () => {
+    const magic = normalized((await chapters()).get('chapter-7')!);
+
+    expect(magic).toContain(
+      '[Instar](#s-instar), [Preferment](#s-preferment), and [Second Assignment](#s-second-assignment) require the caster to carry a graft before casting.',
+    );
+    expect(magic).toContain(
+      '[Assumption of the Case](#s-assumption-of-the-case) transfers Depth to the caster and gives them a graft if they do not have one; Second Assignment transfers an existing graft between creatures.',
+    );
+    expect(magic).toContain(
+      'Instar adds 1 Depth after using an existing graft, while Preferment advances an existing case by one full stage.',
+    );
+    expect(magic).toContain('Preferment is the only listed spell that reaches stage 4 directly.');
+  });
+
+  it('links every name in the level-based spell list to its detailed entry', async () => {
+    const magic = (await chapters()).get('chapter-7')!;
+    const levelList = magic.match(/### The spell list([\s\S]*?)### The cantrips/)?.[1] ?? '';
+
+    for (const listedSpell of spells) {
+      expect(levelList).toContain(`[${listedSpell.name}](#s-${entrySlug(listedSpell.name)})`);
+      expect(magic).toContain(`<Spell name="${listedSpell.name}">`);
+    }
+  });
+
+  it('keeps origin notes concrete about scarcity and discovery', async () => {
+    const magic = normalized((await chapters()).get('chapter-7')!);
+
+    expect(magic).toContain(
+      'The remaining spells are held in the counter-work at the first house, whose catalog has never left the building.',
+    );
+    expect(magic).toContain(
+      'The True File reaches a cell only as a copy in the founder’s hand, and most cells have never seen one.',
+    );
+    expect(magic).toContain(
+      'A practitioner’s spell survives in a private notebook or spellbook, often wherever its writer last worked.',
+    );
+    for (const prediction of [
+      'a party earns access',
+      'most likely to find',
+      'least likely to understand',
+      'will spend cantrips',
+      'nobody casts it',
+      'ended their usefulness',
+    ]) {
+      expect(magic).not.toContain(prediction);
+    }
   });
 });
