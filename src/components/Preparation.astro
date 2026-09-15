@@ -1,0 +1,24 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+/** Render one preparation and its canonical rule at a stable destination. */
+import { preparation, preparationAnchor } from '../data/broodAndBloomPreparations.ts';
+import { renderMarkdown } from '../data/markdown.ts';
+
+interface Props {
+  /** Canonical preparation name, e.g. "Lavage". */
+  name: string;
+}
+
+const item = preparation(Astro.props.name);
+const metadata = `${item.form}, ${item.rarity.toLowerCase()}. ${item.brood}. ${item.price}.`;
+const rule = await renderMarkdown(item.rule);
+---
+
+<section class="preparation scroll-mt-6" id={preparationAnchor(item.name)}>
+  <h4>{item.name}</h4>
+  <p class="preparation-meta text-[var(--book-secondary)] italic">{metadata}</p>
+  <slot />
+  <div class="preparation-rule" set:html={rule} />
+</section>

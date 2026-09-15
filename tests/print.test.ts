@@ -111,11 +111,11 @@ describe('insertPageRefPlaceholders', () => {
     expect(root.querySelector('a[href="/docs/"]')!.nextElementSibling).toBeNull();
   });
 
-  it('reserves space after a spell cross-reference too', () => {
+  it('reserves space after spell and preparation cross-references too', () => {
     const root = body(
-      '<div class="book-body"><a href="/brood-and-bloom/chapter-5/#s-countenance">Countenance</a></div>',
+      '<div class="book-body"><a href="/brood-and-bloom/chapter-5/#s-countenance">Countenance spell</a><a href="/brood-and-bloom/chapter-7/#p-countenance">Countenance preparation</a></div>',
     );
-    expect(insertPageRefPlaceholders(root)).toBe(1);
+    expect(insertPageRefPlaceholders(root)).toBe(2);
   });
 });
 

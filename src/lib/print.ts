@@ -94,8 +94,8 @@ export function bindHeadingsToNext(root: ParentNode): void {
 }
 
 /**
- * Put a " (p. 00)" placeholder after every entry cross-reference — `#c-` for a
- * creature, `#s-` for a spell — returning how many were inserted. Page numbers
+ * Put a " (p. 00)" placeholder after every entry cross-reference: `#c-` for a
+ * creature, `#s-` for a spell, or `#p-` for a preparation. Returns how many were inserted. Page numbers
  * only exist after pagination, so the placeholder reserves the space now —
  * growing laid-out text would overflow a page silently. `*=` not `^=`: a link to
  * another chapter is a full site path, and matching only bare fragments skipped
@@ -104,7 +104,7 @@ export function bindHeadingsToNext(root: ParentNode): void {
 export function insertPageRefPlaceholders(root: ParentNode): number {
   let count = 0;
   for (const link of root.querySelectorAll(
-    '.book-body a[href*="#c-"], .book-body a[href*="#s-"]',
+    '.book-body a[href*="#c-"], .book-body a[href*="#s-"], .book-body a[href*="#p-"]',
   )) {
     const ref = link.ownerDocument!.createElement('span');
     ref.className = 'pageref';

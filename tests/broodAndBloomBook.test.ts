@@ -5,6 +5,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { creatures } from '../src/data/broodAndBloom.ts';
+import { preparations, preparationAnchor } from '../src/data/broodAndBloomPreparations.ts';
 import { spells } from '../src/data/broodAndBloomSpells.ts';
 import { entrySlug } from '../src/data/statblock.ts';
 
@@ -401,6 +402,30 @@ describe('Brood & Bloom book integrity', () => {
     expect(entries.get('chapter-5')).toContain(
       '[harvesting rules](/brood-and-bloom/chapter-7/#materials)',
     );
+  });
+
+  it('keeps every detailed preparation and appendix synopsis in one canonical catalog', async () => {
+    const entries = await chapters();
+    const alchemy = normalized(entries.get('chapter-7')!);
+    const appendix = entries.get('appendix-c')!;
+    const detailedNames = [...alchemy.matchAll(/<Preparation name="([^"]+)">/g)].map(
+      ([, name]) => name,
+    );
+
+    expect(preparations).toHaveLength(19);
+    expect(new Set(preparations.map(({ name }) => preparationAnchor(name))).size).toBe(19);
+    expect(detailedNames).toHaveLength(preparations.length);
+    expect(new Set(detailedNames)).toEqual(new Set(preparations.map(({ name }) => name)));
+    expect(appendix).toContain('<PreparationTable view="index" />');
+    expect(appendix).not.toMatch(/^\| Preparation/m);
+    const lavage = preparations.find(({ name }) => name === 'Lavage');
+    expect(lavage?.summary).toBe(
+      'Removes 1d4 Depth when taken within 1 minute of gaining a graft; always deals 2d6 Acid damage',
+    );
+    expect(lavage?.rule).toBe(
+      'A creature that drinks a lavage within 1 minute of gaining a graft removes 1d4 Depth and takes 2d6 Acid damage that cannot be reduced or prevented. A lavage taken later than that does the damage and nothing else.',
+    );
+    expect(preparations.every(({ rule, summary }) => rule.length > summary.length)).toBe(true);
   });
 
   it('defines preparation crafting, thrown use, and consensual Lavage', async () => {

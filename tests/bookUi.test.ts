@@ -11,6 +11,8 @@ import BookActions from '../src/components/BookActions.astro';
 import BookNavigation from '../src/components/BookNavigation.astro';
 import Creature from '../src/components/Creature.astro';
 import CreatureIndex from '../src/components/CreatureIndex.astro';
+import Preparation from '../src/components/Preparation.astro';
+import PreparationTable from '../src/components/PreparationTable.astro';
 import SpellIndex from '../src/components/SpellIndex.astro';
 import { BROOD_AND_BLOOM } from '../src/data/books.ts';
 import { setupReadingRail } from '../src/scripts/readingRail.ts';
@@ -21,6 +23,14 @@ const chapters = [
   { id: 'chapter-5', data: { eyebrow: 'Chapter 5', label: 'Sporophore' } },
 ];
 let container: AstroContainer;
+let siteBuilt = false;
+
+/** Build the production site once for tests that inspect complete routes. */
+function buildSite() {
+  if (siteBuilt) return;
+  execFileSync('npm', ['run', 'build'], { stdio: 'pipe' });
+  siteBuilt = true;
+}
 
 beforeAll(async () => {
   container = await AstroContainer.create();
@@ -225,7 +235,7 @@ describe('CreatureIndex', () => {
   );
 
   it('resolves every generated jump on the built appendix pages', () => {
-    execFileSync('npm', ['run', 'build'], { stdio: 'pipe' });
+    buildSite();
 
     for (const [chapterId, bandCount] of [
       ['appendix-a', 20],
@@ -295,6 +305,13 @@ describe('book index styles', () => {
     expect(printCss).toMatch(/\.index-jumps\s*\{\s*display:\s*none;/);
   });
 
+  it('compacts the seven-column preparation index for print', () => {
+    expect(printCss).toMatch(/\.preparation-table\s*\{\s*font-size:\s*0\.78rem;/);
+    expect(printCss).toMatch(
+      /\.preparation-table th,\s*\.preparation-table td\s*\{\s*padding:\s*0\.3rem 0\.35rem;/,
+    );
+  });
+
   it('gives book secondary text AA contrast without changing the site-wide faint token', () => {
     const darkSecondary = cssColor(bookCss, '.book', '--book-secondary');
     const lightSecondary = cssColor(bookCss, ':root.light .book', '--book-secondary');
@@ -319,6 +336,63 @@ describe('book index styles', () => {
 
     expect(sources.every((source) => source.includes('book-secondary'))).toBe(true);
     expect(sources.join('\n')).not.toContain('text-faint');
+  });
+});
+
+describe('preparation catalog', () => {
+  it('gives a detailed preparation its stable destination and canonical metadata', async () => {
+    const html = await container.renderToString(Preparation, {
+      props: { name: 'Lavage' },
+    });
+    const entry = new JSDOM(html).window.document.querySelector<HTMLElement>('.preparation')!;
+
+    expect(entry.id).toBe('p-lavage');
+    expect(entry.querySelector('h4')?.textContent).toBe('Lavage');
+    expect(entry.querySelector('.preparation-meta')?.textContent).toContain(
+      'Draught, uncommon. Sporophore. 100 gp.',
+    );
+    expect(entry.querySelector('.preparation-rule')?.textContent).toContain(
+      'A lavage taken later than that does the damage and nothing else.',
+    );
+  });
+
+  it('links every appendix row to one unique detailed destination and shows its source', async () => {
+    const html = await container.renderToString(PreparationTable, {
+      props: { view: 'index' },
+    });
+    const page = new JSDOM(html, { url: 'https://openfray.app/' }).window.document;
+    const headers = [...page.querySelectorAll('th')].map((header) => header.textContent?.trim());
+    const links = [...page.querySelectorAll<HTMLAnchorElement>('tbody a')];
+
+    expect(headers).toEqual([
+      'Preparation',
+      'Form',
+      'Brood',
+      'Rarity',
+      'Price',
+      'Source',
+      'What it does',
+    ]);
+    expect(links).toHaveLength(19);
+    expect(new Set(links.map((link) => link.href)).size).toBe(19);
+    expect(links.map((link) => link.getAttribute('href'))).toContain(
+      '/brood-and-bloom/chapter-7/#p-lavage',
+    );
+  });
+
+  it('resolves every preparation index link on the built detailed chapter', () => {
+    buildSite();
+    const detail = new JSDOM(readFileSync('dist/brood-and-bloom/chapter-7/index.html', 'utf8'))
+      .window.document;
+    const appendix = new JSDOM(readFileSync('dist/brood-and-bloom/appendix-c/index.html', 'utf8'), {
+      url: 'https://openfray.app/brood-and-bloom/appendix-c/',
+    }).window.document;
+    const links = [...appendix.querySelectorAll<HTMLAnchorElement>('.preparation-table a')];
+
+    expect(links).toHaveLength(19);
+    expect(links.every((link) => detail.getElementById(new URL(link.href).hash.slice(1)))).toBe(
+      true,
+    );
   });
 });
 
