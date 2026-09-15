@@ -1,0 +1,14 @@
+{
+  "name": "OpenFray",
+  "short_name": "OpenFray",
+  "description": "A DnD 5e combat console for Game Masters.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "theme_color": "#020617",
+  "background_color": "#020617",
+  "icons": [
+    { "src": "/brand/openfray-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/brand/openfray-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

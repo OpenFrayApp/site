@@ -158,3 +158,17 @@ behind each change and folding away the nodes that merely moved with it. It wrap
   edit an installed image by hand.
 - Commit subjects use the `Site:`, `Print:`, `Style:`, and `Copy:` areas; the full
   committing and PR agreements are in the parent repo's AGENTS.md.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Triage uses the five canonical label names. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Domain documentation uses the single-context layout. See `docs/agents/domain.md`.
