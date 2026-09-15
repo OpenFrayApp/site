@@ -362,4 +362,63 @@ describe('Brood & Bloom book integrity', () => {
       expect(necrophore).toMatch(new RegExp(`\\| [^|]+ \\| ${husk} \\|`));
     }
   });
+
+  it('defines every brood harvest on the canonical alchemy surface', async () => {
+    const entries = await chapters();
+    const alchemy = normalized(entries.get('chapter-7')!);
+
+    expect(alchemy).toContain(
+      'An Inquiline harvest is tissue cut from one living Inquiline. The material can be carried, but remains workable only until 1 hour after it is cut.',
+    );
+    expect(alchemy).toContain(
+      'A Sporophore harvest is one usable portion cut from one dead Sporophore whose body was not damaged by Fire.',
+    );
+    expect(alchemy).toContain(
+      'A living Rotgill Fleece is the exception to the death requirement and the usual harvesting procedure.',
+    );
+    expect(alchemy).toContain(
+      'The severed portion provides one harvest whether the check succeeds or fails.',
+    );
+    expect(alchemy).toContain(
+      'A Necrophore harvest is wax, tallow, or wakelight taken from one dead Necrophore within 24 hours of its death.',
+    );
+    expect(alchemy).toContain(
+      'The brood named in a recipe is the harvest it consumes under Materials.',
+    );
+    expect(alchemy).toContain(
+      'Every harvest must still be workable when crafting begins; once the work begins, it remains usable through the listed crafting time.',
+    );
+    expect(alchemy).toContain('| Rarity | Time | DC | Materials | Yield |');
+    expect(alchemy).not.toContain('Yield per harvest');
+    expect(alchemy).toContain('A full day of reduction from three harvested portions');
+    expect(alchemy).not.toContain('Four days of reduction from a full fleece');
+
+    for (const id of ['chapter-4', 'chapter-5', 'chapter-6']) {
+      expect(entries.get(id)).not.toMatch(/^## Harvesting$/m);
+    }
+    expect(entries.get('chapter-5')).toContain(
+      '[harvesting rules](/brood-and-bloom/chapter-7/#materials)',
+    );
+  });
+
+  it('defines preparation crafting, thrown use, and consensual Lavage', async () => {
+    const alchemy = normalized((await chapters()).get('chapter-7')!);
+
+    expect(alchemy).toContain(
+      'The character must use alchemist’s supplies or a herbalism kit, but need not be proficient with the chosen tool.',
+    );
+    expect(alchemy).toContain(
+      'The check adds the character’s Intelligence modifier and, if the character is proficient with the chosen tool, their Proficiency Bonus.',
+    );
+    expect(alchemy).toContain(
+      'Treat a thrown preparation as an improvised weapon with a normal range of 20 feet and a long range of 60 feet.',
+    );
+    expect(alchemy).toContain(
+      'Make a ranged weapon attack using Dexterity, adding the attacker’s Proficiency Bonus only if they are proficient with improvised weapons.',
+    );
+    expect(alchemy).toContain(
+      'Prosectors carry two and offer one immediately, leaving the patient to decide whether to drink it.',
+    );
+    expect(alchemy).not.toContain('use them without asking');
+  });
 });
