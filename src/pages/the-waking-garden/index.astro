@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BookLayout from '../../layouts/BookLayout.astro';
-import Cta from '../../components/Cta.astro';
+import BookActions from '../../components/BookActions.astro';
 import { formatCr } from '../../data/statblock.ts';
 import { creatures } from '../../data/wakingGarden.ts';
 
@@ -35,10 +35,7 @@ const description =
     <li><strong class="text-text">19</strong> ready-to-run encounters from level 1 to 20</li>
   </ul>
 
-  <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
-    <Cta href="/console/">Open the console</Cta>
-    <Cta href={`/the-waking-garden/${chapters[0].id}/`} variant="ghost">Start reading</Cta>
-  </p>
+  <BookActions readingHref={`/the-waking-garden/${chapters[0].id}/`} />
 
   <h2>Contents</h2>
 

@@ -1,0 +1,18 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+// Render the shared reading-first action pair for a book landing page.
+import Cta from './Cta.astro';
+
+interface Props {
+  readingHref: string;
+}
+
+const { readingHref } = Astro.props;
+---
+
+<p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
+  <Cta href={readingHref}>Start reading</Cta>
+  <Cta href="/console/" variant="ghost">Open the console</Cta>
+</p>

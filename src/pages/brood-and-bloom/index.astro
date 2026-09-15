@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import Cta from '../../components/Cta.astro';
+import BookActions from '../../components/BookActions.astro';
 import { BROOD_AND_BLOOM } from '../../data/books.ts';
 import { creatures } from '../../data/broodAndBloom.ts';
 import { formatCr } from '../../data/statblock.ts';
@@ -50,10 +50,7 @@ const description =
     <li><strong class="text-text">19</strong> items</li>
   </ul>
 
-  <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
-    <Cta href="/console/">Open the console</Cta>
-    <Cta href={`/brood-and-bloom/${chapters[0].id}/`} variant="ghost">Start reading</Cta>
-  </p>
+  <BookActions readingHref={`/brood-and-bloom/${chapters[0].id}/`} />
 
   <h2>Contents</h2>
 
