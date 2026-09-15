@@ -114,28 +114,6 @@
   }
 
   /* ---------- creature indexes (the two appendices) ---------- */
-  .index-jumps {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem 0.75rem;
-    margin: 0 0 1.5rem;
-  }
-  .index-jumps-lead {
-    flex: none;
-    color: var(--text);
-    font-weight: 600;
-  }
-  .index-jumps ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.2rem 0.75rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .index-jumps li {
-    margin: 0;
-  }
   .creature-index {
     columns: 16rem;
     gap: 1.5rem;

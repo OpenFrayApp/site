@@ -57,9 +57,21 @@ for (const c of [...creatures].sort((a, b) => a.name.localeCompare(b.name))) {
   groups.get(key)!.entries.push({ name: c.name, href: href(c.name) });
 }
 
+const mode = {
+  cr: {
+    anchorPrefix: 'cr',
+    jumpLead: 'Challenge Rating',
+    formatKey: (key: string | number) => formatCr(Number(key)),
+  },
+  type: {
+    anchorPrefix: 'type',
+    jumpLead: 'Creature type',
+    formatKey: (key: string | number) => String(key),
+  },
+}[by];
+
 /** A stable destination for one generated challenge-rating or creature-type band. */
-const bandId = (key: string | number) =>
-  by === 'cr' ? `cr-${entrySlug(formatCr(Number(key)))}` : `type-${entrySlug(String(key))}`;
+const bandId = (key: string | number) => `${mode.anchorPrefix}-${entrySlug(mode.formatKey(key))}`;
 
 const ordered = [...groups.keys()]
   .sort((a, b) =>
@@ -68,18 +80,17 @@ const ordered = [...groups.keys()]
   .map((key) => ({
     ...groups.get(key)!,
     id: bandId(key),
-    jumpLabel: by === 'cr' ? formatCr(Number(key)) : String(key),
+    jumpLabel: mode.formatKey(key),
   }));
-const jumpLead = by === 'cr' ? 'Challenge Rating' : 'Creature type';
-const jumpLabel = `${jumpLead} bands`;
+const jumpLabel = `${mode.jumpLead} bands`;
 ---
 
-<nav class="index-jumps" aria-label={jumpLabel}>
-  <span class="index-jumps-lead">{jumpLead}:</span>
-  <ul>
+<nav class="index-jumps mb-6 flex items-baseline gap-x-3 gap-y-[0.4rem]" aria-label={jumpLabel}>
+  <span class="shrink-0 font-semibold text-text">{mode.jumpLead}:</span>
+  <ul class="m-0 flex list-none flex-wrap gap-x-3 gap-y-[0.2rem] p-0">
     {
       ordered.map((group) => (
-        <li>
+        <li class="m-0">
           <a href={`#${group.id}`}>{group.jumpLabel}</a>
         </li>
       ))

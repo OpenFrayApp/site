@@ -3,6 +3,8 @@
 // @vitest-environment node
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 import { beforeAll, describe, expect, it } from 'vitest';
 import BookActions from '../src/components/BookActions.astro';
@@ -184,6 +186,26 @@ describe('CreatureIndex', () => {
     },
   );
 
+  it('resolves every generated jump on the built appendix pages', () => {
+    execFileSync('npm', ['run', 'build'], { stdio: 'pipe' });
+
+    for (const [chapterId, bandCount] of [
+      ['appendix-a', 20],
+      ['appendix-b', 4],
+    ] as const) {
+      const html = readFileSync(`dist/brood-and-bloom/${chapterId}/index.html`, 'utf8');
+      const page = new JSDOM(html, {
+        url: `https://openfray.app/brood-and-bloom/${chapterId}/`,
+      }).window.document;
+      const links = [...page.querySelectorAll<HTMLAnchorElement>('.index-jumps a')];
+      const destinations = links.map((link) => page.getElementById(link.hash.slice(1)));
+
+      expect(links).toHaveLength(bandCount);
+      expect(destinations.every(Boolean)).toBe(true);
+      expect(new Set(destinations).size).toBe(bandCount);
+    }
+  });
+
   it('keeps creature destinations in the responsive multi-column index', async () => {
     const html = await container.renderToString(CreatureIndex, {
       props: { by: 'type', book: BROOD_AND_BLOOM },
@@ -197,6 +219,16 @@ describe('CreatureIndex', () => {
     expect(
       creatureLinks.find((link) => link.textContent === 'Latchling')?.getAttribute('href'),
     ).toBe('/brood-and-bloom/chapter-4/#c-latchling');
+  });
+});
+
+describe('book index styles', () => {
+  const bookCss = readFileSync(new URL('../src/styles/book.css', import.meta.url), 'utf8');
+  const printCss = readFileSync(new URL('../src/styles/print-paged.css', import.meta.url), 'utf8');
+
+  it('keeps web jump layout in component utilities and hides it from print', () => {
+    expect(bookCss).not.toMatch(/\.index-jumps\s*\{/);
+    expect(printCss).toMatch(/\.index-jumps\s*\{\s*display:\s*none;/);
   });
 });
 
