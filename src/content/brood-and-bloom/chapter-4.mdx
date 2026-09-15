@@ -363,22 +363,9 @@ reaches 6 Depth from a palimpsest graft:
 Every inquiline begins as a latchling, and a clutch is what a laying adult leaves
 behind:
 
-<Creature name="Latchling">
-  **Running it.** The latchling exists to Feed, not to fight: its attack deals 1 damage, and
-  everything it takes goes through Feed. Left attached, it feeds, deepens its graft, and after 1d4 +
-  2 days is a cyst, a louse, or a worm — the encounter ends quickly; what it leaves does not. A
-  single latchling threatens nothing; in groups, Stealth +7 still lands attachments, which is all
-  the encounter requires.
-</Creature>
+<Creature name="Latchling" />
 
-<Creature name="Latchling Clutch">
-  **Running it.** The clutch exists to place latchlings; its damage is low for its Challenge Rating
-  because latchlings are its output. Everywhere at Once means a creature in its space carries at
-  least one latchling out of the encounter even on a successful save. Each latchling then needs its
-  own Extraction check, or one Lesser Restoration spell clears every latchling on one creature.
-  Disperse is unavailable after the clutch takes Fire damage, so fire is the one way to hold it in
-  place.
-</Creature>
+<Creature name="Latchling Clutch" />
 
 ### The sallow line
 
@@ -387,118 +374,50 @@ line in the brood that can use a corpse. A latchling that
 feeds on a strong, quick, or hardy host becomes a mudspit cyst, then a sallow fluke,
 then something that no longer needs to ride anybody:
 
-<Creature name="Mudspit Cyst">
-  **Running it.** Sap accumulates: each failed save costs the host 5 feet of Speed, the reductions
-  hold until a rest with no cyst attached, and a host that keeps failing ends the fight Prone and
-  unable to stand. Water-Bound bounds where a cyst appears — away from fresh water it has one hour
-  to find a host or die, which is why a lone cyst in dry country attacks at once.
-</Creature>
+<Creature name="Mudspit Cyst" />
 
-<Creature name="Sallow Fluke">
-  **Running it.** Weapon attacks answer an embedded fluke poorly: it resists all three physical
-  damage types, and Embedded's near-miss clause sends failed attacks into the host. Extraction is
-  the built-in solution and Shift Anchor its counter. Deepen is the first effect in the library that
-  can kill a host outright, and its Hit Point maximum reduction survives the fight until a Long Rest
-  taken without the fluke.
-</Creature>
+<Creature name="Sallow Fluke" />
 
-<Creature name="Mire Ambulant">
-  **Running it.** An ambulant no longer needs a host and behaves accordingly: it fights at reach,
-  withdraws into water when hurt, and attaches only to a target already down or held. It resists the
-  three physical damage types and swims at 40 feet, so a party without a way to hold it in place
-  fights it more than once.
-</Creature>
+<Creature name="Mire Ambulant" />
 
-<Creature name="Quagdam">
-  **Running it.** The quagdam cannot leave the water and never has to: Draw Down reaches 30 feet,
-  heals it for half of what it takes, and is the brood's only feeding that works at range — it
-  grafts a party rather than a person. Gravid means killing it does not end the encounter; a
-  Latchling Clutch emerges when it drops to 0 Hit Points.
-</Creature>
+<Creature name="Quagdam" />
 
 ### The chantry line
 
 The chantry line grows on casters, and every stage after the first is harder,
 quieter, and better at hiding what it is doing:
 
-<Creature name="Chantry Louse">
-  **Running it.** The louse taxes one caster three ways: Siphon takes a spell slot, Backwash
-  punishes casting, and Arcane Tropism rewards attacking whoever just cast. Siphon takes the lowest
-  unexpended slot first, so the exchange runs for several rounds rather than ending on one save. A
-  Lesser Restoration spell detaches it — the louse drops off unhurt and well fed, and the graft it
-  left is already inside.
-</Creature>
+<Creature name="Chantry Louse" />
 
-<Creature name="Psalter Tick">
-  **Running it.** Stolen Slots starts empty: everything the tick can do beyond biting has to be
-  taken from the party first, which makes the opening round the cheapest one. A taken slot can come
-  back as Counterspell or Dispel Magic, and Misty Step is on the list so a sated tick can leave.
-</Creature>
+<Creature name="Psalter Tick" />
 
-<Creature name="Choirgall">
-  **Running it.** The choirgall is fed by casting near it: Sympathetic Resonance stacks across a
-  round, and Antiphon and Unmake are each once a day, so its early rounds are Chime and patience. It
-  is the one inquiline that never attaches — its host is already spent — so nothing in this fight is
-  about pulling something off a friend.
-</Creature>
+<Creature name="Choirgall" />
 
 ### The palimpsest line
 
 The palimpsest line feeds on memory. It grows slowest, roots deepest, and is the only
 line whose graft no blade outside the Lazaret reaches:
 
-<Creature name="Gaol Worm">
-  **Running it.** Convulse redirects the party's damage into the host: every hit on an attached worm
-  costs the host a saving throw. Sleepless persists between encounters — the host gains no benefit
-  from a Long Rest until the worm is off — so the worm is an ongoing condition as much as a fight,
-  and either Rasp can attach it to a second target.
-</Creature>
+<Creature name="Gaol Worm" />
 
-<Creature name="Palimpsest Wyrm">
-  **Running it.** Written Over works before initiative: an attached wyrm knows everything its host
-  knows and can speak in its voice. Erase suppresses limited-use features across a 30-foot Emanation
-  for a round. It is the only inquiline a Lesser Restoration spell does not detach; removal takes
-  the DC 19 Extraction check or a Greater Restoration spell.
-</Creature>
+<Creature name="Palimpsest Wyrm" />
 
 ### What is left
 
 Two of the three diseases end with the host still walking. Neither creature below is a
 parasite, and neither has one in it any more:
 
-<Creature name="Lacuna">
-  **Running it.** A lacuna's stat block exists for one moment: Drawn to Casting sends it, without
-  malice, at whoever last cast a spell, past everyone else in the room. Empty Casting deals no
-  damage because nothing happens when a lacuna casts. It cannot be infected and cannot be read, and
-  the Lazaret uses lacunas to carry things through country nobody else will enter. They do not
-  object to anything.
-</Creature>
+<Creature name="Lacuna" />
 
-<Creature name="Amanuensis">
-  **Running it.** The amanuensis is built as a social encounter with a stat block underneath it.
-  Insists means divination confirms its story, because from the inside the story is true — a Zone of
-  Truth spell clears it. Borrowed Hands is intended as one unexpected competence per scene, and its
-  weapon is the clearest surviving trace of the person it believes it is.
-</Creature>
+<Creature name="Amanuensis" />
 
 ### One who hunts them
 
 The lancebill is not an inquiline. It is in this library because a party dealing with
 one will meet it, and because it can remove a graft:
 
-<Creature name="Lancebill">
-  **Running it.** Lance is a cure delivered by something that does not stop at one: it takes a graft
-  out of an unconscious ally, a prisoner, or the party's healer with the same stroke, and keeps
-  hunting afterward because there is usually more than one. Parasite Sense means a grafted party in
-  wet country is already being tracked, and Standing means the tracker is not seen until it moves.
-</Creature>
+<Creature name="Lancebill" />
 
 ### The apex
 
-<Creature name="Exemplar">
-  **Running it.** Seed grafts the whole party within three rounds regardless of rolls, so the fight
-  is not the expensive part of this encounter — what the party carries out of it is. Take In and
-  Draw remove up to four characters from the fight while Never Stopped regenerates through
-  everything except Fire and Radiant damage. The First means every graft the party has ever carried
-  descends from this creature, and that it perceives through all of them.
-</Creature>
+<Creature name="Exemplar" />
