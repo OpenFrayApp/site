@@ -164,4 +164,63 @@ describe('Brood & Bloom book integrity', () => {
     expect(inquiline).not.toContain('beyond the reach of anything but surgery');
     expect(inquiline).not.toContain('extraction comes first, always');
   });
+
+  it('keeps Sporophore classification and lifecycle terms distinct from disease stages', async () => {
+    const entries = await chapters();
+    const sharedRules = normalized(entries.get('chapter-1')!);
+    const sporophore = normalized(entries.get('chapter-5')!);
+
+    for (const source of entries.values()) {
+      expect(source).not.toMatch(/\bsporophore\b/);
+    }
+    expect(sharedRules).toContain(
+      'A driftling that settles undisturbed for 24 hours becomes the first settled form for whatever it landed on:',
+    );
+    expect(sporophore).toContain(
+      'a first settled form of the winning colony grows from the remains within 1d4 days',
+    );
+    expect(sharedRules).not.toContain('stage 2 creature');
+    expect(sporophore).not.toContain('stage 2 creature');
+  });
+
+  it('places the Challenge Rating 8 contamination rule beside spore actions', async () => {
+    const sporophore = normalized((await chapters()).get('chapter-5')!);
+
+    expect(sporophore).toMatch(
+      /### Spore actions .*?<Note type="Challenge Rating 8">.*?a spore action grants 1 Spore Load even on a successful saving throw.*?<\/Note>.*?### Variant: running dry/,
+    );
+  });
+
+  it('defines Sporophore recession, treatment, and physician qualification', async () => {
+    const sporophore = normalized((await chapters()).get('chapter-5')!);
+
+    expect(sporophore).toContain(
+      'Recession is the Long Rest save above. Restoration magic and remedies reduce a disease directly, while a successful procedure ends it; none of these treatments count as recession.',
+    );
+    expect(sporophore).toContain(
+      'In this chapter, a trained physician is a creature proficient in Medicine.',
+    );
+  });
+
+  it('defines the Calcination threshold and one fixed Metaplasia reference point', async () => {
+    const sporophore = normalized((await chapters()).get('chapter-5')!);
+
+    expect(sporophore).toContain(
+      'The Game Master determines whether the current weather is warm or cool enough to trigger this effect, and that determination remains fixed until the weather or the creature’s shelter changes.',
+    );
+    expect(sporophore).toContain(
+      'record the location where it received the sixth point as its colony reference point',
+    );
+    expect(sporophore).toContain(
+      'Metaplasia measures direction and distance from that fixed point, even if the growth there moves or is destroyed.',
+    );
+  });
+
+  it('keeps Sporophore guidance concrete', async () => {
+    const sporophore = normalized((await chapters()).get('chapter-5')!);
+
+    expect(sporophore).not.toContain('**Running it.**');
+    expect(sporophore).not.toContain('barely contagious');
+    expect(sporophore).not.toContain('best decided');
+  });
 });
