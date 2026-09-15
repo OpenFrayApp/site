@@ -438,6 +438,7 @@ describe('Brood & Bloom book integrity', () => {
       expect(preparation.summary).toContain('Constitution saving throw');
       expect(preparation.summary).not.toContain('Constitution save;');
     }
+    expect(ankyloticSalt.summary).toContain('Dexterity saving throws');
     expect(ankyloticSalt.rule).toContain('On a successful saving throw, the poison has no effect.');
     expect(wakelightDust.rule).toContain('Washing it off with water takes 10 minutes.');
   });
