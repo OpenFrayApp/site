@@ -55,7 +55,7 @@ export function setupReadingRail({
   if (!links.length || !targets.length) return;
 
   /** Mark one link as the reader's current location. */
-  const mark = (id: string) => {
+  const markCurrentLink = (id: string) => {
     for (const link of links) {
       const current = targetId(link) === id;
       if (current) {
@@ -68,15 +68,15 @@ export function setupReadingRail({
   };
 
   /** Select the last heading that has reached the reading line. */
-  const sync = () => {
+  const syncCurrentSection = () => {
     let current = targets[0];
     for (const target of targets) {
       if (target.getBoundingClientRect().top <= 120) current = target;
     }
-    mark(current.id);
+    markCurrentLink(current.id);
   };
 
-  sync();
-  root.defaultView?.addEventListener('scroll', sync, { passive: true });
-  root.defaultView?.addEventListener('resize', sync, { passive: true });
+  syncCurrentSection();
+  root.defaultView?.addEventListener('scroll', syncCurrentSection, { passive: true });
+  root.defaultView?.addEventListener('resize', syncCurrentSection, { passive: true });
 }
