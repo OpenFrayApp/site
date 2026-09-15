@@ -205,6 +205,10 @@ describe('the section is reachable', () => {
   );
   const css = readFileSync(new URL('../src/styles/news.css', import.meta.url), 'utf8');
   const global = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  const readingRail = readFileSync(
+    new URL('../src/scripts/readingRail.ts', import.meta.url),
+    'utf8',
+  );
 
   it('has a nav entry, so the posts are not orphans', () => {
     expect(layout).toContain('href="/news/"');
@@ -237,7 +241,8 @@ describe('the section is reachable', () => {
 
   it('keys the reading rail’s highlight off aria-current, not a class', () => {
     // The stylesheet and the accessibility tree then cannot drift apart.
-    expect(newsLayout).toContain("setAttribute('aria-current', 'true')");
+    expect(newsLayout).toContain("linkSelector: '.post-toc a'");
+    expect(readingRail).toContain("setAttribute('aria-current', 'true')");
     expect(css).toContain("aria-current='true'");
   });
 

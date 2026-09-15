@@ -139,4 +139,13 @@ const schema = current
       </nav>
     </main>
   </div>
+  <script>
+    import { setupReadingRail } from '../scripts/readingRail.ts';
+
+    setupReadingRail({
+      linkSelector: '.book-headings a',
+      scrollContainerSelector: '.book-sidebar',
+      closeToggleSelector: '#book-nav-state',
+    });
+  </script>
 </Layout>

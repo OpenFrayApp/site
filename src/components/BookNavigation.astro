@@ -91,7 +91,7 @@ const chapterLink =
                     {navHeadings.map((heading) => (
                       <li class={`depth-${heading.depth} m-0`}>
                         <a
-                          class={`block py-1 leading-snug text-muted no-underline hover:text-accent ${
+                          class={`block py-1 leading-snug text-muted no-underline hover:text-accent aria-[current=true]:font-semibold aria-[current=true]:text-accent ${
                             heading.depth === 3 ? 'pl-3 text-[0.78rem]' : 'text-[0.82rem]'
                           }`}
                           href={`#${heading.slug}`}
