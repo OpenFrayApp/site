@@ -22,7 +22,8 @@ An inquiline implants. It latches onto a living creature, feeds every round it c
 each feeding adds 1 Depth — and stays until it is pulled off or has taken all it can
 hold. Its first feeding roots a **graft** in the host, and parasite and graft then
 grow together: the parasite on the body, riding it and feeding, and the graft inside
-it, beyond the reach of anything but surgery. Growth happens nowhere else. A latchling
+the host, beyond the reach of extraction. A latchling grows only while attached and
+feeding. A latchling
 that keeps its host for days becomes its line's next form without ever letting go, and
 the only inquiline that leaves a host willingly is a sated adult, off to lay.
 
@@ -54,8 +55,9 @@ under the skin as a raised line, and anyone who has seen one before knows it on 
 A graft belongs to its parent's line. A graft left by a
 latchling — which has no line yet — belongs to the line the host's own body sets: a
 physical score (Strength, Dexterity, or Constitution) highest makes it sallow,
-Intelligence makes it chantry, Wisdom or Charisma makes it palimpsest. Each line's
-graft differs:
+Intelligence makes it chantry, Wisdom or Charisma makes it palimpsest. If the highest
+scores tie across lines, the Game Master chooses which tied score sets the line. Each
+line's graft differs:
 
 | Line       | The graft                                 | Where it roots                                         |
 | ---------- | ----------------------------------------- | ------------------------------------------------------ |
@@ -107,21 +109,23 @@ advances that disease one stage if it already has it, and Depth resets to 0.
 
 ## Diagnosis
 
-A graft announces nothing. Until its disease presents, the only ways to find one are
-magic and a trained eye:
+A graft announces nothing. Until its disease presents, magic or an examination can
+find it:
 
 - **Detect Poison and Disease** finds every graft in range and names its line.
 - **Examination.** A creature that spends 10 minutes examining a patient makes a DC 13
   Wisdom (Medicine) check — DC 16 once a disease is at stage 1 or higher. **Success:**
   The examiner finds the graft and identifies its line by its look and course (see
   [The graft](#the-graft)). **Failure:** The examiner finds nothing, and further
-  examinations of that patient find nothing until the disease advances a stage.
+  examinations of that patient find nothing until the disease advances a stage. Any
+  creature can make this check; proficiency in Medicine is not required.
 
-Knowing what to do with the find is training, not the check. The Expulsion processes
-are Lazaret teaching, published with the rest of its files: a creature proficient in
-Medicine learned them along with its trade, wherever the order's copies reach. An
-examiner without that training can find and describe a graft and not know what drives
-it out — a lazaret house, an officer, or a file supplies the process.
+Knowing what to do with the find requires training. In this chapter, a trained
+physician is a creature proficient in Medicine. The Expulsion processes are Lazaret
+teaching, published with the rest of its files, and that proficiency includes knowing
+them wherever the order's copies reach. An examiner without proficiency can find and
+describe a graft without knowing what drives it out. A lazaret house, an officer, or a
+file supplies the process.
 
 Identifying the line is the point of diagnosis. The treatments below work on every
 line, but Expulsion differs by line, and a patient sweated for 6 hours over a chantry
@@ -153,17 +157,24 @@ Depth it had reached.
 
 Expulsion removes the graft, not the parasite. A host who spends 6 hours in a sweat
 house with a fluke still attached walks out clean and is grafted again at the next
-feeding — extraction comes first, always.
+feeding. Extracting the parasite first prevents that immediate regrafting.
 
 <div class="wide">
 
-| Line       | Process                                                                                                                                                           | Why it works                                                   | Cost                                                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Sallow     | 6 continuous hours in extreme dry heat — a sweat house, a forge floor at full fire, bare rock in high summer                                                      | The graft is water-bound and cannot follow the moisture out    | 3 Exhaustion levels                                                                  |
-| Chantry    | 24 continuous hours with no unexpended spell slot, no magical feature, no spell or magical effect targeting the host, and no magical aura or location around them | The graft feeds on magic in the body and finds none            | 1 Exhaustion level, and a full day of recovery after                                 |
-| Palimpsest | 24 continuous hours spent insensible — heavily drugged, comatose, or deprived of every sense                                                                      | There is nothing coherent to read, so there is nothing to take | 3 Exhaustion levels, a full day of recovery after, and the cost of the insensibility |
+| Line       | Process                                                                                                      | Why it works                                                   | Cost                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Sallow     | 6 continuous hours in extreme dry heat — a sweat house, a forge floor at full fire, bare rock in high summer | The graft is water-bound and cannot follow the moisture out    | 3 Exhaustion levels                                                                  |
+| Chantry    | 24 continuous hours after every spell slot is expended, subject to the interruptions below                   | The graft feeds on magic in the body and finds none            | 1 Exhaustion level, and a full day of recovery after                                 |
+| Palimpsest | 24 continuous hours spent insensible — heavily drugged, comatose, or deprived of every sense                 | There is nothing coherent to read, so there is nothing to take | 3 Exhaustion levels, a full day of recovery after, and the cost of the insensibility |
 
 </div>
+
+Chantry Expulsion cannot begin while the host has an unexpended spell slot, is affected
+by ongoing magic, or occupies a magical aura or location. Once begun, it restarts when
+the host regains a spell slot; casts a spell; uses a feature whose rules describe it as
+magical; activates a magic item; becomes the target of a spell or other effect described
+as magical; or enters a magical aura or location. Carrying an unused magic item or having
+an unused magical feature does not restart the process.
 
 <PageBreak />
 
@@ -174,11 +185,12 @@ Two procedures take a graft out through the skin:
 - **Surgery** takes 30 minutes per stage of the disease (30 minutes if none has
   presented), a set of tools, and a Wisdom (Medicine) check against a Difficulty Class
   of 10 + the disease's stage + the graft's Depth, made by someone other than the
-  patient. A trained physician makes the check with Advantage; a Lazaret officer
-  automatically succeeds on the check. **Success:** The graft comes out whole, and the patient takes
-  1d8 Slashing damage per stage of the disease (minimum 1d8). **Failure:** The graft
-  stays, the patient takes the damage anyway, and further attempts on the same graft
-  are made with Disadvantage for the next 3 days.
+  patient. Treat a graft with no presented disease as stage 0 when calculating this
+  Difficulty Class. A trained physician makes the check with Advantage; a Lazaret
+  officer automatically succeeds on the check. **Success:** The graft comes out whole,
+  and the patient takes 1d8 Slashing damage per stage of the disease (minimum 1d8).
+  **Failure:** The graft stays, the patient takes the damage anyway, and further
+  attempts on the same graft are made with Disadvantage for the next 3 days.
 - **Amputation.** If the graft is in an arm or a leg, taking the limb takes the graft,
   with no check. It needs a cutting tool and fire. The patient takes 33 (6d10)
   Slashing damage and 9 (2d8) Fire damage, gains 4 Exhaustion levels, and has lost the
@@ -238,7 +250,7 @@ A graft eats what its host provides — flesh, magic, or memory — and two of t
 with the body.
 
 A host that dies while carrying a chantry or palimpsest graft starves
-it: the graft lives 1d4 days on what remains, then dies in place, and the corpse is
+the graft: it lives 1d4 days on what remains, then dies in place, and the corpse is
 clean. A creature raised inside that window comes back still carrying the graft, at
 the Depth it had; a creature raised afterward comes back clean.
 
@@ -272,6 +284,9 @@ broods' chapters.
 
 Each line's graft causes one disease, and every one of them ends the same way: the
 graft finishes, and something leaves the body. What differs is what it leaves behind.
+Disease-stage effects are cumulative unless a later stage explicitly replaces an earlier
+value. A later stage that states a new total for the same statistic replaces the earlier
+value; a change described as “further” adds to it.
 
 | Line       | Name            | Common name    | At stage 4                                                                 |
 | ---------- | --------------- | -------------- | -------------------------------------------------------------------------- |
@@ -325,7 +340,7 @@ Extraction says, but what would have worked the graft loose feeds it instead: th
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1     | Casting a spell of level 1 or higher costs the creature 1d6 Necrotic damage per level of the spell. This damage can't be reduced, but Immunity to Necrotic damage prevents it.                                                                                   |
 | 2     | One of the creature's highest-level spell slots can't be recovered on a Long Rest.                                                                                                                                                                               |
-| 3     | The creature's two highest-level spell slots can't be recovered on a Long Rest, and it has Disadvantage on Constitution saving throws made to maintain Concentration.                                                                                            |
+| 3     | The creature's two highest-level spell slots can't be recovered on a Long Rest, replacing stage 2's one slot, and it has Disadvantage on Constitution saving throws made to maintain Concentration.                                                              |
 | 4     | The creature loses its spellcasting entirely and has the Incapacitated and Unconscious conditions. It does not die. Over 1d4 days the graft withdraws along the nerves and emerges, swollen with a lifetime of magic, as a Psalter Tick. What wakes is a Lacuna. |
 
 <Note type="design note">
@@ -410,6 +425,11 @@ parasite, and neither has one in it any more:
 <Creature name="Lacuna" />
 
 <Creature name="Amanuensis" />
+
+Zone of Truth tests whether an Amanuensis speaks sincerely, not whether its account is
+factually accurate. It believes its borrowed identity and history. Inside the spell's
+area, it can repeat those falsehoods sincerely, while deliberate lies remain subject to
+the spell as normal.
 
 ### One who hunts them
 

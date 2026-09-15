@@ -31,6 +31,11 @@ function creatureNames(source: string) {
   return [...source.matchAll(/<Creature\b[^>]*name="([^"]+)"/g)].map(([, name]) => name);
 }
 
+/** Collapse authored line wrapping so prose contracts read as sentences. */
+function normalized(source: string) {
+  return source.replace(/\s+/g, ' ');
+}
+
 describe('Brood & Bloom book integrity', () => {
   it('keeps the overview, chapters, and appendices in one unique contiguous reading order', async () => {
     const entries = await chapters();
@@ -110,5 +115,53 @@ describe('Brood & Bloom book integrity', () => {
     ]) {
       expect(overview).toContain(`](${destination})`);
     }
+  });
+
+  it('resolves tied Inquiline lines and names exact stages in shared magic guidance', async () => {
+    const sharedRules = normalized((await chapters()).get('chapter-1')!);
+
+    expect(sharedRules).toContain(
+      'If the highest scores tie across rows, the Game Master chooses which tied score sets the line.',
+    );
+    expect(sharedRules).toContain('| Heal | Removes 3d4 Depth at stages 0–2, or 2d4 at stage 3');
+    expect(sharedRules).toContain(
+      '| Lesser Restoration | Detaches a lesser parasite, and removes 1d4 Depth at stages 0–2 | Removes 3 Spore Load, and cures stage 1 or reduces stage 2 to stage 1',
+    );
+    expect(sharedRules).toContain(
+      '| Greater Restoration | Removes 2d4 Depth at stages 0–2, or 1d4 at stage 3 | Cures stages 1–2, or reduces stage 3 to stage 2',
+    );
+  });
+
+  it('defines Inquiline diagnosis, physician training, expulsion, and pre-onset surgery', async () => {
+    const inquiline = normalized((await chapters()).get('chapter-4')!);
+
+    expect(inquiline).toContain(
+      'Any creature can make this check; proficiency in Medicine is not required.',
+    );
+    expect(inquiline).toContain(
+      'In this chapter, a trained physician is a creature proficient in Medicine.',
+    );
+    expect(inquiline).toContain(
+      'Chantry Expulsion cannot begin while the host has an unexpended spell slot, is affected by ongoing magic, or occupies a magical aura or location.',
+    );
+    expect(inquiline).toContain(
+      'Carrying an unused magic item or having an unused magical feature does not restart the process.',
+    );
+    expect(inquiline).toContain(
+      'Treat a graft with no presented disease as stage 0 when calculating this Difficulty Class.',
+    );
+  });
+
+  it('makes Inquiline disease stages cumulative and bounds Zone of Truth', async () => {
+    const inquiline = normalized((await chapters()).get('chapter-4')!);
+
+    expect(inquiline).toContain(
+      'Disease-stage effects are cumulative unless a later stage explicitly replaces an earlier value.',
+    );
+    expect(inquiline).toContain(
+      'Zone of Truth tests whether an Amanuensis speaks sincerely, not whether its account is factually accurate.',
+    );
+    expect(inquiline).not.toContain('beyond the reach of anything but surgery');
+    expect(inquiline).not.toContain('extraction comes first, always');
   });
 });
