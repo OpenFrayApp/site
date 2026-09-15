@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import Cta from '../../components/Cta.astro';
+import BookActions from '../../components/BookActions.astro';
 import { STRONG_WATERS } from '../../data/books.ts';
 import BookLayout from '../../layouts/BookLayout.astro';
 
@@ -39,10 +39,7 @@ const description =
     too much.
   </p>
 
-  <p class="book-cta-row mt-6 mb-0 flex flex-wrap gap-3">
-    <Cta href={`/strong-waters/${chapters[0].id}/`}>Start reading</Cta>
-    <Cta href="/console/" variant="ghost">Open the console</Cta>
-  </p>
+  <BookActions readingHref={`/strong-waters/${chapters[0].id}/`} />
 
   <h2>Contents</h2>
 

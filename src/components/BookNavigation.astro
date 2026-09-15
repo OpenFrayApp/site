@@ -1,0 +1,112 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+// Render a book's persistent chapter navigation only when a reader is inside the book.
+import type { MarkdownHeading } from 'astro';
+import type { Book } from '../data/books.ts';
+
+interface Chapter {
+  id: string;
+  data: {
+    eyebrow?: string;
+    label: string;
+  };
+}
+
+interface Props {
+  book: Book;
+  chapters: Chapter[];
+  current?: string;
+  headings?: MarkdownHeading[];
+}
+
+const { book, chapters, current, headings = [] } = Astro.props;
+const navHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
+/** Return the short marker from a chapter eyebrow when it fits the number gutter. */
+const marker = (eyebrow?: string) => {
+  const last = eyebrow?.split(' ').pop() ?? '';
+  return last.length <= 2 ? last : '';
+};
+
+const chapterLink =
+  'group grid grid-cols-[var(--gutter)_1fr] items-baseline py-1.5 leading-snug ' +
+  'text-text no-underline hover:text-accent ' +
+  'aria-[current=page]:font-semibold aria-[current=page]:text-accent';
+---
+
+{
+  current && (
+    <>
+      {/* The checkbox holds the mobile open state without JavaScript. It stays in the
+        accessibility tree so keyboard users can toggle it and see focus on the label. */}
+      <input class="book-nav-state peer sr-only" id="book-nav-state" type="checkbox" />
+      <label
+        class="book-nav-toggle hidden w-fit cursor-pointer items-center gap-2 rounded-lg border border-border bg-panel px-3.5 py-2 text-sm leading-relaxed font-semibold text-text peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent max-[900px]:mt-4 max-[900px]:inline-flex"
+        for="book-nav-state"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+        Contents
+      </label>
+
+      <aside class="book-sidebar sticky top-6 max-h-[calc(100vh-3rem)] self-start overflow-y-auto pr-2 text-sm leading-relaxed max-[900px]:static max-[900px]:mt-3 max-[900px]:hidden max-[900px]:max-h-[calc(100vh-8rem)] max-[900px]:overflow-y-auto max-[900px]:rounded-xl max-[900px]:border max-[900px]:border-border max-[900px]:bg-panel max-[900px]:p-2.5 max-[900px]:peer-checked:block">
+        <nav aria-label={`${book.name} contents`}>
+          <a
+            class="book-home mb-2 block border-b border-border pb-3 text-base font-bold tracking-tight text-text no-underline hover:text-accent"
+            href={`${book.base}/`}
+          >
+            {book.name}
+          </a>
+          {/* --gutter is the shared text edge for chapter markers and in-page headings. */}
+          <ol class="book-chapters m-0 list-none p-0 [--gutter:1.4rem]">
+            {chapters.map((chapter) => (
+              <li class="m-0">
+                <a
+                  class={chapterLink}
+                  href={`${book.base}/${chapter.id}/`}
+                  aria-current={chapter.id === current ? 'page' : undefined}
+                >
+                  <span
+                    class="num text-xs tabular-nums text-muted group-aria-[current=page]:text-accent"
+                    aria-hidden="true"
+                  >
+                    {marker(chapter.data.eyebrow)}
+                  </span>
+                  <span class="label">{chapter.data.label}</span>
+                </a>
+                {chapter.id === current && navHeadings.length > 0 && (
+                  <ul class="book-headings mt-0.5 mr-0 mb-3 ml-2 list-none border-l border-border p-0 pl-[var(--gutter)]">
+                    {navHeadings.map((heading) => (
+                      <li class={`depth-${heading.depth} m-0`}>
+                        <a
+                          class={`block py-1 leading-snug text-muted no-underline hover:text-accent ${
+                            heading.depth === 3 ? 'pl-3 text-[0.78rem]' : 'text-[0.82rem]'
+                          }`}
+                          href={`#${heading.slug}`}
+                        >
+                          {heading.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    </>
+  )
+}
