@@ -1,16 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 Nicola Mustone
 
+import { fragmentId } from './fragment.ts';
+
 interface ReadingRailOptions {
   root?: Document;
   linkSelector: string;
   scrollContainerSelector?: string;
   closeToggleSelector?: string;
-}
-
-/** Return the decoded target id from an in-page link. */
-function targetId(link: HTMLAnchorElement) {
-  return decodeURIComponent(link.hash.slice(1));
 }
 
 /** Keep a link visible by scrolling only its independently scrolling container. */
@@ -37,7 +34,7 @@ export function setupReadingRail({
 }: ReadingRailOptions) {
   const links = Array.from(root.querySelectorAll<HTMLAnchorElement>(linkSelector));
   const targets = links
-    .map((link) => root.getElementById(targetId(link)))
+    .map((link) => root.getElementById(fragmentId(link.hash)))
     .filter((element): element is HTMLElement => Boolean(element));
   const scrollContainer = scrollContainerSelector
     ? root.querySelector<HTMLElement>(scrollContainerSelector)
@@ -57,7 +54,7 @@ export function setupReadingRail({
   /** Mark one link as the reader's current location. */
   const markCurrentLink = (id: string) => {
     for (const link of links) {
-      const current = targetId(link) === id;
+      const current = fragmentId(link.hash) === id;
       if (current) {
         link.setAttribute('aria-current', 'true');
         keepVisible(link, scrollContainer);

@@ -141,11 +141,13 @@ const schema = current
   </div>
   <script>
     import { setupReadingRail } from '../scripts/readingRail.ts';
+    import { setupTargetedStatBlock } from '../scripts/targetedStatBlock.ts';
 
     setupReadingRail({
       linkSelector: '.book-headings a',
       scrollContainerSelector: '.book-sidebar',
       closeToggleSelector: '#book-nav-state',
     });
+    setupTargetedStatBlock();
   </script>
 </Layout>
