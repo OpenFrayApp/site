@@ -8,6 +8,16 @@
      and the pager all live there now. What stays here is the prose body and the
      rendered markdown inside the components, which have no classes to target. */
 
+  /* Small functional labels need AA contrast, while decorative text elsewhere keeps
+     the site's quieter faint token. Weight, size, and tracking preserve their place
+     below body copy in the book's emphasis hierarchy. */
+  .book {
+    --book-secondary: #8492a6;
+  }
+  :root.light .book {
+    --book-secondary: #64748b;
+  }
+
   .book-body {
     font-size: 1rem;
     line-height: 1.65;

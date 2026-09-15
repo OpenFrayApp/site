@@ -44,7 +44,8 @@ const pagerLink =
   'no-underline transition-[border-color] hover:border-accent';
 // `leading-relaxed` is not decoration: a Tailwind `text-*` utility also sets a
 // line-height, which would otherwise silently replace the 1.6 these inherit from body.
-const pagerLabel = 'block text-xs leading-relaxed font-medium tracking-widest text-faint uppercase';
+const pagerLabel =
+  'block text-xs leading-relaxed font-medium tracking-widest text-[var(--book-secondary)] uppercase';
 
 const BOOK_ID = `${SITE}${base}/#book`;
 const bookNode = {

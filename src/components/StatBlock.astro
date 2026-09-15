@@ -87,7 +87,7 @@ const value = 'm-0 text-muted';
 // composing `cell` with a different text color silently lost the header styling.
 const cell = 'border-none px-1.5 py-1 text-center';
 const bodyCell = `${cell} text-muted`;
-const headCell = `${cell} text-xs font-semibold tracking-widest text-faint uppercase`;
+const headCell = `${cell} text-xs font-semibold tracking-widest text-[var(--book-secondary)] uppercase`;
 const rowHeadCell = `${cell} text-left font-bold text-text`;
 ---
 
@@ -114,7 +114,7 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
           <path class="sb-toggle-up" d="m1 7 5-5 5 5"></path>
         </svg>
       </span>
-      <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-faint italic">{kicker}</p>
+      <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-[var(--book-secondary)] italic">{kicker}</p>
       {
         c.description && (
           <p class="sb-lore m-0 mb-0 text-base leading-relaxed text-muted">{c.description}</p>
@@ -266,7 +266,7 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
           <h4 class="m-0 mb-2 text-xs font-bold tracking-widest text-accent uppercase">
             Spellcasting
           </h4>
-          <p class="sb-note m-0 mb-3 text-sm text-faint italic">
+          <p class="sb-note m-0 mb-3 text-sm text-[var(--book-secondary)] italic">
             {spellcastingLine(c.spellcasting)}
           </p>
           {c.spellcasting.groups.map((group) => (
@@ -276,7 +276,9 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
             </p>
           ))}
           {c.spellcasting.note && (
-            <p class="sb-note m-0 mb-3 text-sm text-faint italic">{c.spellcasting.note}</p>
+            <p class="sb-note m-0 mb-3 text-sm text-[var(--book-secondary)] italic">
+              {c.spellcasting.note}
+            </p>
           )}
         </div>
       )
