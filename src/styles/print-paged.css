@@ -185,7 +185,7 @@ body.print-book::after {
   column-gap: 8mm;
 }
 /* A sub-head takes the section heading's treatment one step smaller, so the two read as
-   one hierarchy. Index bands are h3 as well and keep their filled bar. */
+   one hierarchy. Index bands keep their filled bar through their own class. */
 .chapter-body h3:not(.index-band-head) {
   margin: 1.5rem 0 0.35rem;
   padding-bottom: 0.2rem;
@@ -368,6 +368,9 @@ tr {
 }
 
 /* ---------- creature indexes ---------- */
+.index-jumps {
+  display: none;
+}
 /* Without the span this is nested multicol and the chapter's two columns win. */
 .creature-index {
   column-span: all;

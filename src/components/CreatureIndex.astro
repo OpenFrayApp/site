@@ -33,11 +33,11 @@ const href = (name: string) => {
   return chapter ? `${book.base}/${chapter}/${anchor}` : anchor;
 };
 
-// "Swarm of Tiny Beasts" is a Beast; grouping on the raw string scatters four creatures
-// into three groups of one. A parenthesized tag ("plant (orc)") groups under its base.
+/** Group a swarm or parenthesized creature type under its singular base type. */
 const baseType = (type: string) => {
   const bare = String(type).replace(/\s*\([^)]*\)/, '');
   const word = titleCase(bare.split(' ').pop() ?? '');
+  if (word.endsWith('ies')) return `${word.slice(0, -3)}y`;
   return word.endsWith('s') ? word.slice(0, -1) : word;
 };
 
@@ -57,18 +57,41 @@ for (const c of [...creatures].sort((a, b) => a.name.localeCompare(b.name))) {
   groups.get(key)!.entries.push({ name: c.name, href: href(c.name) });
 }
 
+/** A stable destination for one generated challenge-rating or creature-type band. */
+const bandId = (key: string | number) =>
+  by === 'cr' ? `cr-${entrySlug(formatCr(Number(key)))}` : `type-${entrySlug(String(key))}`;
+
 const ordered = [...groups.keys()]
   .sort((a, b) =>
     typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b)),
   )
-  .map((key) => groups.get(key)!);
+  .map((key) => ({
+    ...groups.get(key)!,
+    id: bandId(key),
+    jumpLabel: by === 'cr' ? formatCr(Number(key)) : String(key),
+  }));
+const jumpLead = by === 'cr' ? 'Challenge Rating' : 'Creature type';
+const jumpLabel = `${jumpLead} bands`;
 ---
+
+<nav class="index-jumps" aria-label={jumpLabel}>
+  <span class="index-jumps-lead">{jumpLead}:</span>
+  <ul>
+    {
+      ordered.map((group) => (
+        <li>
+          <a href={`#${group.id}`}>{group.jumpLabel}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
 
 <div class="creature-index">
   {
     ordered.map((group) => (
-      <section class="index-band">
-        <h3 class="index-band-head">{group.label}</h3>
+      <section class="index-band" id={group.id}>
+        <h2 class="index-band-head">{group.label}</h2>
         <ul class="index-list">
           {group.entries.map((entry) => (
             <li>

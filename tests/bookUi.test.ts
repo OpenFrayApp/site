@@ -7,6 +7,7 @@ import { JSDOM } from 'jsdom';
 import { beforeAll, describe, expect, it } from 'vitest';
 import BookActions from '../src/components/BookActions.astro';
 import BookNavigation from '../src/components/BookNavigation.astro';
+import CreatureIndex from '../src/components/CreatureIndex.astro';
 import SpellIndex from '../src/components/SpellIndex.astro';
 import { BROOD_AND_BLOOM } from '../src/data/books.ts';
 import { setupReadingRail } from '../src/scripts/readingRail.ts';
@@ -145,6 +146,57 @@ describe('BookActions', () => {
     expect(actions[0].classList.contains('cta-ghost')).toBe(false);
     expect(actions[1].href).toBe('/console/');
     expect(actions[1].classList.contains('cta-ghost')).toBe(true);
+  });
+});
+
+describe('CreatureIndex', () => {
+  it.each([
+    {
+      by: 'cr' as const,
+      label: 'Challenge Rating bands',
+      expectedIds: ['cr-0', 'cr-1-8', 'cr-17'],
+      bandCount: 20,
+    },
+    {
+      by: 'type' as const,
+      label: 'Creature type bands',
+      expectedIds: ['type-aberration', 'type-humanoid', 'type-monstrosity', 'type-plant'],
+      bandCount: 4,
+    },
+  ])(
+    'links to every unique $by band destination',
+    async ({ by, label, expectedIds, bandCount }) => {
+      const html = await container.renderToString(CreatureIndex, {
+        props: { by, book: BROOD_AND_BLOOM },
+      });
+      const page = new JSDOM(html, { url: 'https://openfray.app/' }).window.document;
+      const bands = [...page.querySelectorAll<HTMLElement>('.index-band')];
+      const links = [...page.querySelectorAll<HTMLAnchorElement>('.index-jumps a')];
+      const ids = bands.map((band) => band.id);
+
+      expect(page.querySelector('.index-jumps')?.getAttribute('aria-label')).toBe(label);
+      expect(bands).toHaveLength(bandCount);
+      expect(links).toHaveLength(bandCount);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(expectedIds.every((id) => ids.includes(id))).toBe(true);
+      expect(links.map((link) => link.hash)).toEqual(ids.map((id) => `#${id}`));
+      expect(bands.every((band) => band.querySelector(':scope > h2.index-band-head'))).toBe(true);
+    },
+  );
+
+  it('keeps creature destinations in the responsive multi-column index', async () => {
+    const html = await container.renderToString(CreatureIndex, {
+      props: { by: 'type', book: BROOD_AND_BLOOM },
+    });
+    const page = new JSDOM(html, { url: 'https://openfray.app/' }).window.document;
+    const index = page.querySelector('.creature-index')!;
+    const creatureLinks = [...index.querySelectorAll<HTMLAnchorElement>('.index-list a')];
+
+    expect(index).not.toBeNull();
+    expect(creatureLinks).toHaveLength(67);
+    expect(
+      creatureLinks.find((link) => link.textContent === 'Latchling')?.getAttribute('href'),
+    ).toBe('/brood-and-bloom/chapter-4/#c-latchling');
   });
 });
 
