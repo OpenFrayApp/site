@@ -81,7 +81,17 @@ beforeAll(async () => {
 describe('StatBlock', () => {
   it('anchors the block by its slug and folds it into a details accordion', () => {
     expect(doc.querySelector('section.statblock')!.id).toBe('thornling');
-    expect(doc.querySelector('details.sb-fold summary .sb-name')!.textContent).toBe('Thornling');
+    expect(doc.querySelector('details.sb-fold summary .sb-name')!.textContent!.trim()).toBe(
+      'Thornling',
+    );
+  });
+
+  it('labels the closed and open states beside the disclosure marker', () => {
+    const label = doc.querySelector('.sb-summary .sb-toggle-label')!;
+    expect(label.getAttribute('aria-hidden')).toBe('true');
+    expect(label.querySelector('.sb-toggle-more')!.textContent).toBe('See more');
+    expect(label.querySelector('.sb-toggle-hide')!.textContent).toBe('Hide');
+    expect(label.querySelector('svg.sb-toggle-marker')).not.toBeNull();
   });
 
   it('composes the kicker with a space between size and type', () => {

@@ -141,9 +141,9 @@
   }
 
   /* ---------- the stat block's fold ---------- */
-  /* Closed, a block shows its name, type line and lore; open, the rest. The marker is
-     drawn by hand because the native one sits outside the summary box and cannot be
-     placed against a three-line header. */
+  /* Closed, a block shows its name, type line and lore; open, the rest. The label and
+     marker are drawn by hand because the native marker sits outside the summary box and
+     cannot be placed against a three-line header. */
   .sb-summary {
     display: block;
     position: relative;
@@ -154,20 +154,36 @@
   .sb-summary::-webkit-details-marker {
     display: none;
   }
-  .sb-summary::after {
-    content: '';
+  .sb-toggle-label {
     position: absolute;
-    top: 0.6rem;
+    top: 0.25rem;
     right: 0.25rem;
-    width: 0.55rem;
-    height: 0.55rem;
-    border-right: 2px solid var(--accent);
-    border-bottom: 2px solid var(--accent);
-    transform: rotate(45deg);
-    transition: transform 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.5rem;
   }
-  .sb-fold[open] .sb-summary::after {
-    transform: rotate(-135deg);
+  .sb-toggle-marker {
+    width: 0.75rem;
+    height: 0.5rem;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  .sb-toggle-hide,
+  .sb-toggle-up {
+    display: none;
+  }
+  .sb-fold[open] .sb-toggle-more,
+  .sb-fold[open] .sb-toggle-down {
+    display: none;
+  }
+  .sb-fold[open] .sb-toggle-hide,
+  .sb-fold[open] .sb-toggle-up {
+    display: inline;
   }
   .sb-summary:hover .sb-name {
     color: var(--accent);

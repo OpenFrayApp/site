@@ -45,11 +45,12 @@ export function replaceLibraryTerms(
  * Unfold the site's stat-block accordions. The site collapses a block to name,
  * type line and lore inside a <details>; print wants all of it, flattened back to
  * plain siblings so the head grouping still sees name, lore, stats and defenses
- * as children of .statblock.
+ * as children of .statblock. The site's disclosure label is omitted from print.
  */
 export function flattenStatBlockFolds(root: ParentNode): void {
   for (const fold of root.querySelectorAll('.statblock details')) {
     const summary = fold.querySelector('summary');
+    summary?.querySelector('.sb-toggle-label')?.remove();
     if (summary) summary.replaceWith(...summary.childNodes);
     fold.replaceWith(...fold.childNodes);
   }

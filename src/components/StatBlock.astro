@@ -103,7 +103,17 @@ const rowHeadCell = `${cell} text-left font-bold text-text`;
   }
   <details class="sb-fold">
     <summary class="sb-summary">
-      <h3 class="sb-name m-0 border-none p-0 text-2xl tracking-tight text-text">{c.name}</h3>
+      <h3 class="sb-name m-0 border-none py-0 pr-14 pl-0 text-2xl tracking-tight text-text">
+        {c.name}
+      </h3>
+      <span class="sb-toggle-label" aria-hidden="true">
+        <span class="sb-toggle-more">See more</span>
+        <span class="sb-toggle-hide">Hide</span>
+        <svg class="sb-toggle-marker" viewBox="0 0 12 8" fill="none">
+          <path class="sb-toggle-down" d="m1 1 5 5 5-5"></path>
+          <path class="sb-toggle-up" d="m1 7 5-5 5 5"></path>
+        </svg>
+      </span>
       <p class="sb-kicker mt-0.5 mb-3.5 text-sm text-faint italic">{kicker}</p>
       {
         c.description && (
