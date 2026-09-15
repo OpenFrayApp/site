@@ -223,4 +223,63 @@ describe('Brood & Bloom book integrity', () => {
     expect(sporophore).not.toContain('barely contagious');
     expect(sporophore).not.toContain('best decided');
   });
+
+  it('gives Necrophore death, seeding, laying, and hatching one chronology', async () => {
+    const necrophore = normalized((await chapters()).get('chapter-6')!);
+
+    expect(necrophore).toContain(
+      'An eligible corpse has been dead no longer than 24 hours and contains no living sallow graft.',
+    );
+    expect(necrophore).toContain(
+      'Inside established colony ground, an eligible corpse that remains unseeded becomes seeded exactly 3 hours after death.',
+    );
+    expect(necrophore).toContain(
+      'This 3-hour rule applies only to established ground and replaces the adult-arrival roll there.',
+    );
+    expect(necrophore).toContain(
+      'Outside established ground, 1d4 adults arrive 1d6 + 2 hours after a death that draws them: a minimum of 3 hours and a maximum of 8.',
+    );
+    expect(necrophore).toContain(
+      'The larvae emerge 1d6 + 2 hours after laying: a minimum of 3 hours and a maximum of 8.',
+    );
+    expect(necrophore).toContain(
+      'A corpse seeded by the fixed 3-hour rule therefore hatches 6–11 hours after death; a corpse first reached by arriving adults hatches 6–16 hours after death.',
+    );
+    expect(necrophore).toContain(
+      'A Crypt Instar must first feed on the dead for 30 days and grow into a Sepulchre Nymph.',
+    );
+    expect(necrophore).toContain(
+      'the larva seals where it stands as a husk, and 1 hour later the husk splits and the adult takes its first turn.',
+    );
+  });
+
+  it('keeps one canonical sallow-corpse rule and links every lifecycle summary to it', async () => {
+    const entries = await chapters();
+    const allContent = normalized([...entries.values()].join('\n'));
+
+    expect(
+      allContent.match(/A corpse with a living sallow graft cannot be seeded\./g),
+    ).toHaveLength(1);
+    expect(entries.get('chapter-1')).toContain(
+      '[sallow exception](/brood-and-bloom/chapter-6/#reproduction)',
+    );
+    for (const id of ['chapter-3', 'chapter-4']) {
+      expect(entries.get(id)).toContain(
+        '[Necrophore sallow exception](/brood-and-bloom/chapter-6/#reproduction)',
+      );
+    }
+  });
+
+  it('identifies a cult cell’s allied Necrophore and uses exact husk entry names', async () => {
+    const entries = await chapters();
+    const cult = normalized(entries.get('chapter-3')!);
+    const necrophore = normalized(entries.get('chapter-6')!);
+
+    expect(cult).toContain(
+      'When a cell appears, the Game Master chooses whether its allied adult is an Emberwing, Tallow Imago, or Reliquary Imago.',
+    );
+    for (const husk of ['Cinder Nit Husk', 'Gravewax Grub Husk', 'Sepulchre Nymph Husk']) {
+      expect(necrophore).toMatch(new RegExp(`\\| [^|]+ \\| ${husk} \\|`));
+    }
+  });
 });

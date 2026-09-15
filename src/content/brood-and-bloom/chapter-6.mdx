@@ -30,26 +30,45 @@ its territory produces them faster than anything else in the world.
 
 ### Reproduction
 
-An adult lays in any fresh corpse it can reach. It never gets inside a body — a moth
-the size of a fishing boat could not — so it settles over the corpse and lays through
-its ovipositor, and 1d6 + 2 hours later 1d4 larvae climb out of it:
+A corpse becomes seeded when an adult lays in it, and a seeded corpse takes no further
+laying. An adult never gets inside a body — a moth the size of a fishing boat could not —
+so it settles over the corpse and lays through its ovipositor. An eligible corpse has been
+dead no longer than 24 hours and contains no
+living sallow graft. A corpse with a living sallow graft cannot be seeded. Once its Quagdam
+emerges, the remains are no longer eligible.
 
-| Adult           | Lays in          | Larvae         |
-| --------------- | ---------------- | -------------- |
-| Emberwing       | Any fresh corpse | Cinder Nits    |
-| Tallow Imago    | Any fresh corpse | Gravewax Grubs |
-| Reliquary Imago | Any fresh corpse | Crypt Instars  |
+The chronology after a death is:
 
-<Note type="design note">
-  Three hours is short enough that a party resting where they fought wakes to it, and long enough
-  that a party that kills something and keeps walking is gone before it matters. A corpse carried
-  out of a dungeon is usually carried for longer than eight hours, which is the third case.
-</Note>
+1. An adult that reaches an eligible, unseeded corpse lays immediately. An adult present at
+   the death can reach it with its Seed the Dead Reaction.
+2. Inside established colony ground, an eligible corpse that remains unseeded becomes
+   seeded exactly 3 hours after death. This 3-hour rule applies only to established ground
+   and replaces the adult-arrival roll there. It represents an adult laying while
+   unobserved.
+3. Outside established ground, 1d4 adults arrive 1d6 + 2 hours after a death that draws
+   them: a minimum of 3 hours and a maximum of 8. If the corpse remains eligible and
+   unseeded, the first adult to reach it lays; the others remain nearby and fight
+   interference.
+4. The larvae emerge 1d6 + 2 hours after laying: a minimum of 3 hours and a maximum of 8.
+
+A corpse seeded by the fixed 3-hour rule therefore hatches 6–11 hours after death; a corpse
+first reached by arriving adults hatches 6–16 hours after death. An adult present at the
+death produces larvae 3–8 hours after death.
+
+| Adult           | Lays in            | Larvae             |
+| --------------- | ------------------ | ------------------ |
+| Emberwing       | An eligible corpse | 1d4 Cinder Nits    |
+| Tallow Imago    | An eligible corpse | 1d4 Gravewax Grubs |
+| Reliquary Imago | An eligible corpse | 1d4 Crypt Instars  |
+
+The cinder nit and gravewax grub can pupate after hatching. A Crypt Instar must first feed
+on the dead for 30 days and grow into a Sepulchre Nymph. [Pupation](#pupation-and-the-husk)
+begins when one of these three final larval forms drops to 0 Hit Points from anything but
+its line’s destructive damage.
 
 <Note>
-  **Adults lay outside a fight as well.** The Reaction on each stat block is the version that
-  happens in front of the party. A colony's territory is full of bodies seeded days ago, and a
-  battlefield, a barrow, or a plague pit inside one has been seeded unless something prevented it.
+  **Adults lay outside a fight as well.** Seed the Dead resolves a laying the party can see. The
+  established-ground rule resolves adult visits that happen out of sight.
 </Note>
 
 ### Pupation and the husk
@@ -62,11 +81,11 @@ stands as a husk, and 1 hour later the husk splits and the adult takes its first
 
 Each husk has a stat block of its own, at the end of this chapter:
 
-| Line      | Husk            | Destroyed by    | Opens as        |
-| --------- | --------------- | --------------- | --------------- |
-| Ember     | Cinder Nit      | Cold            | Emberwing       |
-| Tallow    | Gravewax Grub   | Cold or Thunder | Tallow Imago    |
-| Reliquary | Sepulchre Nymph | Radiant         | Reliquary Imago |
+| Line      | Husk                 | Destroyed by    | Opens as        |
+| --------- | -------------------- | --------------- | --------------- |
+| Ember     | Cinder Nit Husk      | Cold            | Emberwing       |
+| Tallow    | Gravewax Grub Husk   | Cold or Thunder | Tallow Imago    |
+| Reliquary | Sepulchre Nymph Husk | Radiant         | Reliquary Imago |
 
 Nothing else husks: instars and masses are destroyed at 0 Hit Points like anything
 living, and an adult, once opened, never seals again. During its hour a husk is immune
@@ -81,20 +100,18 @@ the whole time.
 
 ## A colony's territory
 
-A Necrophore colony has no den and no center. Its territory is wherever corpses are.
+A Necrophore colony has no den and no center. Its territory is wherever corpses are. A
+site becomes established ground when a Necrophore adult opens from a husk there. Established
+ground uses the fixed seeding step under Reproduction and has no adult-arrival roll.
 
-Inside a colony's ground, any corpse that is not a necrophore and dead longer than 3
-hours has been seeded unless something prevented it — burned, frozen, sunk in
-running water, or sealed from the air.
+Adults navigate by warmth and by one another's light. Fresh death outside established
+ground can draw them from nearby territory, and a Wakelight Wisp can reveal a corpse to
+every adult within 1 mile.
 
-The adults navigate by warmth and by one another's light, and fresh death draws them from miles away.
-When creatures die in a colony's territory, 1d4 adults arrive within 1d6 + 2 hours of the
-first death. They come to lay, and they fight whatever interferes.
-
-The interval between death and hatching is the window. Corpses
-burned or frozen inside it produce nothing, and a party willing to spend the hours
-can starve a colony out of a region one battlefield at a time. The Lazaret pays for
-exactly this work, by the field.
+A corpse burned, frozen, sunk in running water, or sealed from the air before seeding
+produces nothing. Burning or freezing a seeded corpse before its larvae emerge also ends
+the laying. The Lazaret pays for clearing every corpse from a battlefield before these
+windows close.
 
 ### Reading the ground
 
