@@ -147,6 +147,71 @@ describe('Brood & Bloom book integrity', () => {
     );
   });
 
+  it('gives the Kenotics one complete graft procedure and a defined failure', async () => {
+    const cult = normalized((await chapters()).get('chapter-3')!);
+
+    expect(cult).toContain(
+      'The ostiary lets one latchling attach to the candidate. The rite roots only if the latchling’s first feeding action resolves.',
+    );
+    expect(cult).toContain(
+      'That feeding creates a [graft](/brood-and-bloom/chapter-4/#the-graft) at 1 Depth, before any disease has presented (stage 0).',
+    );
+    expect(cult).toContain(
+      'If the latchling fails to attach or is removed before that feeding resolves, the Kenotics fails: the candidate has no graft and gains no Depth.',
+    );
+    expect(cult).toContain(
+      'The cult calls such a candidate a Failed Postulant. This is an exceptional title, not a grade:',
+    );
+  });
+
+  it('keeps the Hands’ titles, clutch duties, and Countenance schedule coherent', async () => {
+    const cult = normalized((await chapters()).get('chapter-3')!);
+
+    expect(cult).toContain(
+      'The cult has no ranks. Grade records a hand’s disease stage, while office records the work assigned to them.',
+    );
+    expect(cult).toContain(
+      'A cell keeps [latchkin](/brood-and-bloom/chapter-4/), the common name for inquilines.',
+    );
+    expect(cult).toContain('at [Matins](#matins), the daily Countenance queue');
+    expect(cult).toContain(
+      '| Ostiary | Office | Guards the clutch, controls access to it, feeds it, and performs the Kenotics. Usually stage 2 |',
+    );
+    expect(cult).toContain(
+      '| Sacristan | Office | Harvests the clutch and prepares, counts, and issues the cell’s measures. Usually stage 3 |',
+    );
+    expect(cult).toContain(
+      'Office is assigned by ability, not promotion. Almoners hold theirs before initiation; a hand is given an office while they can perform it and loses it when they cannot.',
+    );
+    expect(cult).toContain(
+      'Every member described by these titles is a person; Translation alone names an outcome.',
+    );
+    expect(cult).toContain(
+      'A postulant is a newly grafted hand: fed on once, carrying a graft whose disease has not presented, and dosed with Countenance from the day of the rite.',
+    );
+    expect(cult).not.toContain('A postulant is a hand in their first weeks');
+    expect(cult).toContain('A measure is one dose of the Countenance draught.');
+    expect(cult).toContain(
+      'Each measure or casting lasts 24 hours from the moment that hand takes it.',
+    );
+    expect(cult).toContain(
+      'If Matins is delayed, a hand’s symptoms return when their own 24 hours end, which can happen while they wait in the queue.',
+    );
+    expect(cult).not.toContain('keeps the clutch, harvests it');
+  });
+
+  it('gives every Lazaret lector the same required field history', async () => {
+    const lazaret = normalized((await chapters()).get('chapter-2')!);
+
+    expect(lazaret).toContain(
+      '**Lector.** Runs a house. Every lector served as a prosector first. Lectors diagnose, teach, and decide who is admitted.',
+    );
+    expect(lazaret).toContain(
+      'Every lector served as a prosector first, which is why the officer running a house is the strongest the order fields.',
+    );
+    expect(lazaret).not.toContain('A lector who never served as a prosector');
+  });
+
   it('defines Inquiline diagnosis, physician training, expulsion, and pre-onset surgery', async () => {
     const inquiline = normalized((await chapters()).get('chapter-4')!);
 
