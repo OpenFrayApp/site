@@ -26,7 +26,9 @@ Everything under this heading can be made by a character with no spellcasting wh
 ### Materials
 
 Every preparation is made from one of the three broods, and the differences between them
-decide what a cell, a house, or a party can realistically keep on hand.
+decide what a cell, a house, or a party can realistically keep on hand. A harvest is one
+unit of working material. Harvesting one takes 1 minute with a blade and a container and
+requires no ability check unless the source’s stat block says otherwise.
 
 | Brood      | Working material                       | Stays workable          |
 | ---------- | -------------------------------------- | ----------------------- |
@@ -34,11 +36,26 @@ decide what a cell, a house, or a party can realistically keep on hand.
 | Inquiline  | Tissue cut from a living parasite      | 1 hour from the harvest |
 | Necrophore | Wax, tallow, and wakelight from a body | 24 hours from the death |
 
+An Inquiline harvest is tissue cut from one living Inquiline. The material can be carried,
+but remains workable only until 1 hour after it is cut. The creature must be willing,
+Incapacitated, or Restrained throughout the harvest, and it can provide one harvest between
+Long Rests.
+
+A Sporophore harvest is one usable portion cut from one dead Sporophore whose body was not
+damaged by Fire. Each body provides one harvest. A living Rotgill Fleece is the exception
+to the death requirement and the usual harvesting procedure. Use its Sessile trait to cut
+it from the surface beneath it. The severed portion provides one harvest whether the check
+succeeds or fails. Sporophore material remains workable for 30 days.
+
+A Necrophore harvest is wax, tallow, or wakelight taken from one dead Necrophore within 24
+hours of its death. Each body provides one harvest, and the material ceases to be workable
+when that 24-hour window ends.
+
 Sporophore material is the only kind that stockpiles, which is why every house keeps a
 cupboard of it and why the cheapest preparations are the ones most likely to be available.
-Inquiline material requires a captive parasite, alive and feeding, and cannot be carried.
-Necrophore material requires a fresh death, which is the whole cost of that line and the
-reason its preparations are rare in the hands of anyone who is not already killing.
+Inquiline material can travel only as far as its 1-hour limit permits. Necrophore material
+requires a fresh death, which is the whole cost of that line and the reason its preparations
+are rare in the hands of anyone who is not already killing.
 
 The brood named on a preparation is the material it is made from, not the brood it works
 against. Several of the most useful entries here are made from one and used against
@@ -47,19 +64,21 @@ off. Ashcap dries a body, so ashcap keeps a corpse from being worth laying in. R
 crust stink and stick, so they keep small things from taking hold. Neither fact has
 anything to do with what the ashcap or the rotgill wanted.
 
-Harvesting follows the rules in each brood's chapter. Fire ruins Sporophore material
-outright.
-
 ### Making them
 
-Preparations are made with alchemist's supplies or a herbalism kit and an Intelligence
-check. A failed check spoils the materials.
+The brood named in a recipe is the harvest it consumes under Materials. Every harvest must
+still be workable when crafting begins; once the work begins, it remains usable through the
+listed crafting time. The character must use alchemist’s supplies or a herbalism kit, but
+need not be proficient with the chosen tool. At the end of the listed time, make the
+Intelligence check against the listed DC. The check adds the character’s Intelligence
+modifier and, if the character is proficient with the chosen tool, their Proficiency Bonus.
+A failed check spoils every harvest used in the attempt.
 
-| Rarity   | Time    | DC  | Materials      | Yield per harvest |
-| -------- | ------- | --- | -------------- | ----------------- |
-| Common   | 1 hour  | 13  | One harvest    | 1d4 + 2 doses     |
-| Uncommon | 8 hours | 15  | One harvest    | 1d4 doses         |
-| Rare     | 1 day   | 18  | Three harvests | One dose          |
+| Rarity   | Time    | DC  | Materials      | Yield         |
+| -------- | ------- | --- | -------------- | ------------- |
+| Common   | 1 hour  | 13  | One harvest    | 1d4 + 2 doses |
+| Uncommon | 8 hours | 15  | One harvest    | 1d4 doses     |
+| Rare     | 1 day   | 18  | Three harvests | One dose      |
 
 <div class="wide">
 
@@ -106,8 +125,9 @@ the third is named there only to say that it exists.
 
 ### Using a preparation
 
-Nothing here needs a rule of its own. A preparation costs whatever the game already charges
-for the equipment it most resembles — a potion, a vial of poison, a flask of oil:
+Use the existing rule for the equipment each preparation most resembles: a potion, a vial
+of poison, a flask of oil, or an improvised weapon. An entry states an exception when it
+needs one:
 
 - **Drinking a draught** takes a Bonus Action, as drinking a potion does, and so does
   administering one to a creature within 5 feet.
@@ -118,8 +138,11 @@ for the equipment it most resembles — a potion, a vial of poison, a flask of o
 - **Coating a weapon** with a poison takes a Bonus Action and covers one weapon or up to
   three pieces of ammunition. The coating keeps its potency for 1 minute or until its damage
   is dealt, whichever comes first.
-- **Throwing a poison** replaces one attack of the Attack action, against a target within 20
-  feet.
+- **Throwing a poison or dust** replaces one attack of the Attack action. Treat a thrown
+  preparation as an improvised weapon with a normal range of 20 feet and a long range of 60
+  feet. Make a ranged weapon attack using Dexterity, adding the attacker’s Proficiency Bonus
+  only if they are proficient with improvised weapons. On a hit, apply the preparation’s
+  entry; on a miss, the dose is expended with no effect.
 
 A preparation is not magical and is not affected by a Dispel Magic spell, an antimagic
 field, or anything that detects magic. Nothing here can be identified by an Identify spell.
@@ -180,14 +203,15 @@ Given within a minute of a feeding, before anything has rooted properly.
 
 A creature that drinks a lavage within 1 minute of gaining a graft removes 1d4 Depth and
 takes 2d6 Acid damage that cannot be reduced or prevented. A lavage taken later than that
-does the damage and nothing else. Prosectors carry two and use them without asking.
+does the damage and nothing else. Prosectors carry two and offer one immediately, leaving
+the patient to decide whether to drink it.
 
 **Theriac**
 _Draught, rare. Sporophore. 600 gp._
 
-Four days of reduction from a full fleece, ending in a thick brown liquid that has to be
-warmed before it will pour. It tastes of very little and smells strongly of yeast, and a
-house making one can be identified from the street.
+A full day of reduction from three harvested portions, ending in a thick brown liquid that
+has to be warmed before it will pour. It tastes of very little and smells strongly of yeast,
+and a house making one can be identified from the street.
 
 A creature that drinks a theriac and then completes a Long Rest reduces a contracted
 Sporophore disease by one stage. It has no effect at stage 4 and none on Spore Load.
@@ -327,10 +351,9 @@ _Poison, uncommon. Necrophore. 300 gp._
 Wakelight ground fine while the body is still warm. Faintly luminous, weightless, and
 impossible to brush off cloth.
 
-Thrown at a creature within 20 feet, as a ranged attack. On a hit the target is marked for
-8 hours, and any Necrophore creature within 300 feet that can see the target moves toward
-it by the most direct route available. Washing it off takes 10 minutes and a great deal of
-water.
+Thrown. On a hit the target is marked for 8 hours, and any Necrophore creature within 300
+feet that can see the target moves toward it by the most direct route available. Washing it
+off takes 10 minutes and a great deal of water.
 
 **Adipocere**
 _Poison, rare. Necrophore. 750 gp._
