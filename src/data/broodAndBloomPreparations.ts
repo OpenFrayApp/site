@@ -146,7 +146,7 @@ export const preparations: Preparation[] = [
     price: '200 gp',
     source: 'Trade',
     summary:
-      'DC 14 Constitution save; 2d6 Poison damage and 1 Spore Load on a failure, or half damage on a success',
+      'DC 14 Constitution saving throw; 2d6 Poison damage and 1 Spore Load on a failure, or half damage on a success',
     rule: 'Coats one weapon or up to three pieces of ammunition. The first creature hit makes a DC 14 Constitution saving throw, taking 2d6 Poison damage and gaining 1 Spore Load on a failed save, or half as much damage and no Load on a successful one.',
   },
   {
@@ -157,8 +157,8 @@ export const preparations: Preparation[] = [
     price: '250 gp',
     source: 'Trade',
     summary:
-      'DC 15 Constitution save; on a failure, Speed is halved and Dexterity saves have Disadvantage for 8 hours',
-    rule: 'Ingested, one dose. A creature that swallows it makes a DC 15 Constitution saving throw at the end of the next hour. On a failed save its Speed is halved and it has Disadvantage on Dexterity saving throws for 8 hours as the joints stiffen. On a successful one the hour is merely unpleasant.',
+      'DC 15 Constitution saving throw; on a failure, Speed is halved and Dexterity saving throws have Disadvantage for 8 hours',
+    rule: 'Ingested, one dose. A creature that swallows it makes a DC 15 Constitution saving throw at the end of the next hour. On a failed save its Speed is halved and it has Disadvantage on Dexterity saving throws for 8 hours as the joints stiffen. On a successful saving throw, the poison has no effect.',
   },
   {
     name: 'Wakelight dust',
@@ -168,7 +168,7 @@ export const preparations: Preparation[] = [
     price: '300 gp',
     source: 'Trade',
     summary: 'Marks a target for 8 hours and draws Necrophore creatures within 300 feet',
-    rule: 'Thrown. On a hit the target is marked for 8 hours, and any Necrophore creature within 300 feet that can see the target moves toward it by the most direct route available. Washing it off takes 10 minutes and a great deal of water.',
+    rule: 'Thrown. On a hit the target is marked for 8 hours, and any Necrophore creature within 300 feet that can see the target moves toward it by the most direct route available. Washing it off with water takes 10 minutes.',
   },
   {
     name: 'Adipocere',
@@ -178,7 +178,7 @@ export const preparations: Preparation[] = [
     price: '750 gp',
     source: 'Trade',
     summary:
-      'DC 16 Constitution save; 4d6 Poison damage, the Poisoned condition for 1 hour, and no regained Hit Points on a failure',
+      'DC 16 Constitution saving throw; 4d6 Poison damage, the Poisoned condition for 1 hour, and no regained Hit Points on a failure',
     rule: 'Injury poison, one dose. A creature that takes damage from a coated weapon makes a DC 16 Constitution saving throw, taking 4d6 Poison damage and gaining the Poisoned condition for 1 hour on a failed save, or half as much damage and no condition on a successful one. While Poisoned this way the creature can’t regain Hit Points.',
   },
   {
