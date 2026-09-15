@@ -67,6 +67,21 @@ describe('Brood & Bloom book integrity', () => {
     expect(frontMatter(entries.get('appendix-c')!, 'title')).toBe('Index: alchemy & magic');
   });
 
+  it('places every primary Lazaret topic directly under the chapter title', async () => {
+    const lazaret = (await chapters()).get('chapter-2')!;
+    const headings = [...lazaret.matchAll(/^(#{2,3}) (.+)$/gm)].map(([, marks, text]) => ({
+      depth: marks.length,
+      text,
+    }));
+
+    expect(headings).toEqual(
+      ['Order', 'Houses', 'Ranks', 'Classifications', 'Doctrine', 'Officers'].map((text) => ({
+        depth: 2,
+        text,
+      })),
+    );
+  });
+
   it('matches declared brood counts, stat-block placements, and the verified total', async () => {
     const entries = await chapters();
     const declaredCounts = new Map([

@@ -206,38 +206,8 @@ const schema = [
   </main>
 
   <script>
-    // Marks the section you are reading in the rail. Progressive enhancement: with no
-    // JavaScript every entry is still a working anchor, just none of them highlighted.
-    // `aria-current` carries the state so the stylesheet and the accessibility tree
-    // cannot disagree — news.css keys its accent off the same attribute.
-    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.post-toc a'));
-    const targets = links
-      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
-      .filter((el): el is HTMLElement => Boolean(el));
+    import { setupReadingRail } from '../scripts/readingRail.ts';
 
-    if (links.length && targets.length) {
-      /** Highlight the entry for `id`, clearing whichever was set before. */
-      const mark = (id: string) => {
-        for (const link of links) {
-          const match = decodeURIComponent(link.hash.slice(1)) === id;
-          if (match) link.setAttribute('aria-current', 'true');
-          else link.removeAttribute('aria-current');
-        }
-      };
-
-      // The heading nearest the top of the viewport wins, so the rail tracks what is
-      // being read rather than whatever crossed the threshold most recently.
-      const sync = () => {
-        let current = targets[0];
-        for (const target of targets) {
-          if (target.getBoundingClientRect().top <= 120) current = target;
-        }
-        mark(current.id);
-      };
-
-      sync();
-      window.addEventListener('scroll', sync, { passive: true });
-      window.addEventListener('resize', sync, { passive: true });
-    }
+    setupReadingRail({ linkSelector: '.post-toc a' });
   </script>
 </Layout>

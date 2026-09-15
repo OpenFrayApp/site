@@ -9,6 +9,7 @@ import BookActions from '../src/components/BookActions.astro';
 import BookNavigation from '../src/components/BookNavigation.astro';
 import SpellIndex from '../src/components/SpellIndex.astro';
 import { BROOD_AND_BLOOM } from '../src/data/books.ts';
+import { setupReadingRail } from '../src/scripts/readingRail.ts';
 
 const chapters = [
   { id: 'chapter-1', data: { eyebrow: 'Chapter 1', label: 'The broods' } },
@@ -50,6 +51,80 @@ describe('BookNavigation', () => {
     expect(page.querySelector('a[href="#colonies"]')?.textContent?.trim()).toBe(
       'Colonies and lines',
     );
+  });
+
+  it('tracks the current section semantically and closes mobile contents after navigation', async () => {
+    const html = await container.renderToString(BookNavigation, {
+      props: {
+        book: BROOD_AND_BLOOM,
+        chapters,
+        current: 'chapter-5',
+        headings: [
+          { depth: 2, slug: 'colonies', text: 'Colonies and lines' },
+          { depth: 3, slug: 'traits', text: 'The shared traits' },
+        ],
+      },
+    });
+    const dom = new JSDOM(`${html}<h2 id="colonies">Colonies</h2><h3 id="traits">Traits</h3>`);
+    const { document, Event } = dom.window;
+    const [colonies, traits] = [...document.querySelectorAll<HTMLElement>('h2, h3')];
+    colonies.getBoundingClientRect = () => ({ top: 80 }) as DOMRect;
+    traits.getBoundingClientRect = () => ({ top: 200 }) as DOMRect;
+    const toggle = document.querySelector<HTMLInputElement>('#book-nav-state')!;
+    toggle.checked = true;
+
+    setupReadingRail({
+      root: document,
+      linkSelector: '.book-headings a',
+      scrollContainerSelector: '.book-sidebar',
+      closeToggleSelector: '#book-nav-state',
+    });
+    expect(
+      document
+        .querySelector<HTMLAnchorElement>('.book-headings a[aria-current="true"]')
+        ?.getAttribute('href'),
+    ).toBe('#colonies');
+
+    colonies.getBoundingClientRect = () => ({ top: -20 }) as DOMRect;
+    traits.getBoundingClientRect = () => ({ top: 80 }) as DOMRect;
+    dom.window.dispatchEvent(new Event('scroll'));
+
+    const current = document.querySelector<HTMLAnchorElement>(
+      '.book-headings a[aria-current="true"]',
+    );
+    expect(current?.getAttribute('href')).toBe('#traits');
+
+    current?.click();
+    expect(toggle.checked).toBe(false);
+  });
+
+  it('keeps the active section link inside the rail without scrolling the page', async () => {
+    const html = await container.renderToString(BookNavigation, {
+      props: {
+        book: BROOD_AND_BLOOM,
+        chapters,
+        current: 'chapter-5',
+        headings: [{ depth: 2, slug: 'colonies', text: 'Colonies and lines' }],
+      },
+    });
+    const dom = new JSDOM(`${html}<h2 id="colonies">Colonies</h2>`);
+    const { document } = dom.window;
+    const sidebar = document.querySelector<HTMLElement>('.book-sidebar')!;
+    const link = document.querySelector<HTMLAnchorElement>('.book-headings a')!;
+    const heading = document.querySelector<HTMLElement>('#colonies')!;
+    sidebar.scrollTop = 20;
+    sidebar.getBoundingClientRect = () => ({ top: 0, bottom: 100, height: 100 }) as DOMRect;
+    link.getBoundingClientRect = () => ({ top: 110, bottom: 130 }) as DOMRect;
+    heading.getBoundingClientRect = () => ({ top: 80 }) as DOMRect;
+
+    setupReadingRail({
+      root: document,
+      linkSelector: '.book-headings a',
+      scrollContainerSelector: '.book-sidebar',
+    });
+
+    expect(sidebar.scrollTop).toBe(50);
+    expect(dom.window.scrollY).toBe(0);
   });
 });
 
