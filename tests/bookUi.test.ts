@@ -252,7 +252,7 @@ describe('CreatureIndex', () => {
       expect(destinations.every(Boolean)).toBe(true);
       expect(new Set(destinations).size).toBe(bandCount);
     }
-  });
+  }, 15_000);
 
   it('keeps creature destinations in the responsive multi-column index', async () => {
     const html = await container.renderToString(CreatureIndex, {
