@@ -3,7 +3,14 @@ import type { MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
 import Layout from './Layout.astro';
 import ShareLinks from '../components/ShareLinks.astro';
-import { SITE, WEBSITE_ID, PUBLISHER_ID, breadcrumbs } from '../data/seo.ts';
+import {
+  SITE,
+  WEBSITE_ID,
+  PUBLISHER_ID,
+  AUTHOR_ID,
+  AUTHOR_NAME,
+  breadcrumbs,
+} from '../data/seo.ts';
 import {
   KIND_LABEL,
   NEWS_BASE,
@@ -64,7 +71,7 @@ const schema = [
     inLanguage: 'en',
     ...(data.cover ? { image: new URL(data.cover.src, SITE).href } : {}),
     isPartOf: { '@id': `${SITE}${NEWS_BASE}/#blog` },
-    author: { '@id': PUBLISHER_ID },
+    author: { '@id': AUTHOR_ID },
     publisher: { '@id': PUBLISHER_ID },
   },
   breadcrumbs([
@@ -96,6 +103,8 @@ const schema = [
           <span>{KIND_LABEL[data.kind]}</span>
           <span class="text-border" aria-hidden="true">/</span>
           <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+          <span class="text-border" aria-hidden="true">/</span>
+          <span class="normal-case">By {AUTHOR_NAME}</span>
           {
             meta && (
               <>

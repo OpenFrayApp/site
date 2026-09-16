@@ -1,0 +1,84 @@
+---
+title: 'What your DnD initiative tracker forgets'
+description: 'I used to rely on players to remind me which spells were still running and who they affected. OpenFray keeps that part of the fight on the board.'
+date: 2026-09-16
+slug: 'what-your-initiative-tracker-forgets'
+kind: 'table'
+cover: '../../assets/news/what-your-initiative-tracker-forgets.webp'
+coverAlt: 'A kneeling Ogre wrapped in violet fire and green spell marks raises a greatclub as armored figures approach.'
+---
+
+At my table, I used to rely on players to remind me which spells they had cast and who was
+affected. That worked while the spell was fresh. Two or three turns later, I was looking at
+the creature's turn, hit points, and stat block while the player was thinking about their
+next move. One of us had to catch the effect before the next roll.
+
+Did Bane still apply? Who was inside Faerie Fire? Was the Ogre still Prone? Sometimes the
+reminder came after the dice had landed. Sometimes we missed the bonus or penalty entirely.
+
+I wanted a DnD combat tracker to remember that for me. [OpenFray](/console/) does.
+
+## How I track spells cast by players
+
+When one of my players casts Bane, I cast it in the console on their behalf. They still
+make their own rolls at the table. The action in OpenFray records what the spell changed:
+the targets take the penalty to their attack rolls and saving throws, the caster begins
+concentrating, and the duration starts.
+
+Spells with effects the console can track add them to the chosen targets automatically.
+Anything else can go on the board through **Apply effect**. That is how I add Prone, a
+homebrew effect, or a reminder that needs my judgment when it comes up.
+
+For this fight, the Ogre has three badges. Bane changes rolls the Ogre makes. Faerie Fire
+changes attacks made against it. Prone affects both sides until the Ogre stands.
+
+![Three rows in the tracker, with the selected Ogre at 44 of 68 hit points carrying Attackers: advantage, Prone, and Bane badges.](../../assets/screenshots/console-rows.png)
+
+The badges stay on the Ogre's row. I do not have to remember which character supplied
+each part when another creature acts. OpenFray looks at the creature making the roll and
+the creature it is rolling against, then brings in the effects that apply.
+
+## How modifiers reach the right roll
+
+The Ogre uses its Greatclub against Bram. Prone gives the attack Disadvantage, so the
+console rolls two d20s and keeps the 12. Bane rolls a 1 and subtracts it. With the Ogre's
++6, the result is 17 and the attack misses.
+
+![The game log showing the Ogre's Greatclub attack against Bram: d20 rolls of 12 and 18 at Disadvantage, the 12 kept, 1 subtracted for Bane, 6 added, and a final result of 17 marked Miss.](../../assets/screenshots/greatclub-log.png)
+
+Prone and Bane are named under the roll. Both d20s remain in the log, including the 18
+that Disadvantage discarded. I can see where the 17 came from without asking the players
+to reconstruct it.
+
+If we use real dice, I type the result instead. The effects remain on the board and the
+log still records what happened.
+
+## How I track conditions and durations
+
+Remembering an effect for one roll was only part of the problem. We also let spells run
+for an extra round or removed them too soon.
+
+OpenFray keeps the ending with the effect. It can last for a number of rounds, end at the
+start or end of a named creature's turn, end after a saving throw, or disappear after the
+next roll it changes. Advancing the turn handles the timers and prompts.
+
+![The applied-effects panel showing Bane with 9 rounds left on its attack and saving throw modifiers, Faerie Fire with 8 rounds left, and Prone lasting until removed.](../../assets/screenshots/applied-effects.png)
+
+Here, Bane has 9 rounds left and Faerie Fire has 8. Prone stays until I clear it when the
+Ogre stands. If either spellcaster takes damage, the console offers the concentration
+check when the damage lands and works out the difficulty class.
+
+A player can still catch something I forgot to put on the board. Once it is there, they no
+longer have to remind me every round. They can think about their next turn while I run the
+Ogre's.
+
+## Try the same turn
+
+[Open the console](/console/), add an Ogre and a target, then apply Bane and Prone to the
+Ogre. Roll its Greatclub attack from the stat block. The two d20s, the Bane die, and the
+reasons for both will land in the log.
+
+Nothing needs installing, and the first fight needs no account. See
+[how OpenFray tracks conditions and durations](/features/tracking/) through more of the
+same fight. The [effects guide](/docs/guides/effects/) covers every duration and roll
+direction available in the console.
