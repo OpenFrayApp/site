@@ -97,6 +97,7 @@ describe('news metadata', () => {
       release: 'Release',
       library: 'Library',
       update: 'Update',
+      table: 'From the table',
       adventure: 'Adventure',
     });
   });
@@ -110,6 +111,26 @@ describe('news metadata', () => {
       .match(/'([a-z]+)'/g)
       ?.map((s) => s.replace(/'/g, ''));
     expect(declared?.sort()).toEqual(Object.keys(KIND_LABEL).sort());
+  });
+});
+
+describe('news authorship', () => {
+  const seo = readFileSync(new URL('../src/data/seo.ts', import.meta.url), 'utf8');
+  const newsLayout = readFileSync(
+    new URL('../src/layouts/NewsLayout.astro', import.meta.url),
+    'utf8',
+  );
+  const listing = readFileSync(new URL('../src/pages/news/index.astro', import.meta.url), 'utf8');
+
+  it('shows the one author beside every post date', () => {
+    expect(newsLayout).toContain('By {AUTHOR_NAME}');
+    expect(seo).toContain("export const AUTHOR_NAME = 'Nicola Mustone'");
+  });
+
+  it('attributes both post schemas and the blog listing to the person', () => {
+    expect(seo).toContain("'@type': 'Person'");
+    expect(newsLayout).toContain("author: { '@id': AUTHOR_ID }");
+    expect(listing).toContain("author: { '@id': AUTHOR_ID }");
   });
 });
 

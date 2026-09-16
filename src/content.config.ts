@@ -32,9 +32,9 @@ const strongWaters = defineCollection({
   schema: chapterSchema,
 });
 
-// The news section: release notes and short adventures, one file per post. `kind` is
-// what the post is, and it decides both the badge and which half of STYLE.md applies —
-// an update is documentation, an adventure is game content.
+// The news section: releases, library news, notes from the table and short adventures,
+// one file per post. `kind` decides the badge; an adventure follows the game-content
+// register in STYLE.md, while every other kind follows the site's news register.
 // `image()` needs the schema as a function, so this one is built rather than declared.
 const newsSchema = ({ image }: SchemaContext) =>
   z
@@ -61,9 +61,9 @@ const newsSchema = ({ image }: SchemaContext) =>
       date: z.coerce.date(),
       // What the post is. A release is a version going out and takes a generated cover
       // (scripts/make-release-cover.mjs); a library introduces a book of creatures; an
-      // update is anything else that changed; an adventure is something to run, and
-      // follows STYLE.md's game-content register rather than its plain-instruction one.
-      kind: z.enum(['release', 'library', 'update', 'adventure']),
+      // update is anything else that changed; table is a firsthand note from play; an
+      // adventure is something to run, and follows STYLE.md's game-content register.
+      kind: z.enum(['release', 'library', 'update', 'table', 'adventure']),
       // Adventures only: the level band and how long a table should expect it to take.
       // An update leaves both out, so the card shows nothing where they would go.
       levels: z.string().optional(),

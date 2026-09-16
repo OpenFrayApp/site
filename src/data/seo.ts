@@ -30,14 +30,21 @@ export const baseKeywords = [
 export const SITE = 'https://openfray.app';
 export const WEBSITE_ID = `${SITE}/#website`;
 export const PUBLISHER_ID = `${SITE}/#publisher`;
+export const AUTHOR_ID = `${SITE}/#author`;
+export const AUTHOR_NAME = 'Nicola Mustone';
 
-/** The site and publisher nodes every page's JSON-LD graph refers back to. */
+/** The site, publisher and author nodes every page's JSON-LD graph can refer back to. */
 export const websiteNodes = [
   {
     '@type': 'Organization',
     '@id': PUBLISHER_ID,
     name: 'OpenFray',
     url: `${SITE}/`,
+  },
+  {
+    '@type': 'Person',
+    '@id': AUTHOR_ID,
+    name: AUTHOR_NAME,
   },
   {
     '@type': 'WebSite',
