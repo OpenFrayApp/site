@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# The share form for the Ogre-and-goblins road encounter, filled but never submitted.
+# Signed in through the `gm` session because publishing is account-only.
+name: publish-prepared-encounter
+install: site
+session: gm
+viewport: { width: 1440, height: 1300 }
+
+setup:
+  # The account board hydrates after the app shell; wait before testing its state.
+  - wait: 3000
+
+  # Reset the signed-in board, which persists between recipes.
+  - optional:
+      - click: { css: 'button[aria-label="Sharing with players"]' }
+      - wait: 300
+      - click: { role: button, name: Stop sharing, exact: true }
+      - wait: 300
+      - press: Escape
+      - wait: 200
+  - optional:
+      - click: { css: 'button[aria-label="Stop"]' }
+      - wait: { text: Combat recap }
+      - click: { role: button, name: Done, exact: true }
+      - wait: 300
+  - dialog: accept
+  - optional:
+      - click: { css: 'button[aria-label="Remove everyone and clear the log"]' }
+      - wait: 600
+
+  - use: seed-signed
+    with:
+      pcs: $hero.party
+      monsters:
+        - { name: Ogre, times: [1] }
+        - { name: Goblin Warrior, times: [1, 2, 3, 4] }
+
+  - click: { css: 'button[aria-label="Share this encounter"]', pick: last }
+  - wait: { css: '#share-name' }
+  - fill: { css: '#share-name' }
+    value: The Ogre at Vaelthorn Bridge
+  - fill: { css: '#share-note' }
+    value: The road narrows at the old bridge. Four goblins draw travelers into the Ogre's reach.
+  - optional:
+      - blur: { css: ':focus' }
+  - wait: 400
+
+clip:
+  span:
+    - { text: Share this encounter, exact: true }
+    - { css: '#share-note' }
+    - { css: button, text: Publish, exact: true, pick: last }
+  pad: 20

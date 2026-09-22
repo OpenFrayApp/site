@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# A prepared encounter before initiative: both sides on the tracker and the difficulty
+# estimate beneath them. Anonymous because balancing a first fight needs no account.
+name: encounter-difficulty-hero
+install: site
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - use: seed
+    with:
+      pcs: $hero.party
+      monsters:
+        - { name: Ogre, times: [1] }
+        - { name: Goblin Warrior, times: [1, 2, 3, 4] }
+  - wait: 500
+
+clip:
+  css: div
+  contains: Difficulty
+  matching: XP
+  pick: smallest
+  pad: 8
+
+marks:
+  difficulty: { css: div, contains: Difficulty, matching: XP, pick: smallest }
+
+callouts:
+  - { mark: difficulty }
