@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+#
+# A coherent road ambush saved before combat: one Ogre with four Goblin Warriors.
+# Signed in through the `gm` session because saving is account-only.
+name: save-prepared-encounter
+install: site
+session: gm
+viewport: { width: 1440, height: 900 }
+
+setup:
+  # The account board hydrates after the app shell; wait before testing its state.
+  - wait: 3000
+
+  # Reset the signed-in board, which persists between recipes.
+  - optional:
+      - click: { css: 'button[aria-label="Sharing with players"]' }
+      - wait: 300
+      - click: { role: button, name: Stop sharing, exact: true }
+      - wait: 300
+      - press: Escape
+      - wait: 200
+  - optional:
+      - click: { css: 'button[aria-label="Stop"]' }
+      - wait: { text: Combat recap }
+      - click: { role: button, name: Done, exact: true }
+      - wait: 300
+  - dialog: accept
+  - optional:
+      - click: { css: 'button[aria-label="Remove everyone and clear the log"]' }
+      - wait: 600
+
+  - use: seed-signed
+    with:
+      pcs: $hero.party
+      monsters:
+        - { name: Ogre, times: [1] }
+        - { name: Goblin Warrior, times: [1, 2, 3, 4] }
+
+  - click: { css: 'button[aria-label="Save this encounter"]', pick: last }
+  - wait: 500
+  - fill: { css: '#save-fight-name' }
+    value: The Ogre at Vaelthorn Bridge
+  - click: { css: button, text: Save, exact: true, pick: last }
+  - wait: 1200
+  - press: Escape
+  - wait: 300
+
+  - click: { css: 'button[aria-label="Show the compendium"]', pick: last }
+  - wait: 300
+  - click: { css: button, text: Encounters, pick: last }
+  - wait: { text: The Ogre at Vaelthorn Bridge }
+  - click: { text: The Ogre at Vaelthorn Bridge, pick: last }
+  - wait: 500
+
+clip:
+  span:
+    - { text: The Ogre at Vaelthorn Bridge, pick: last }
+    - { css: p, startsWith: 'Restore', pick: last }
+  pad: 24
+check: false
