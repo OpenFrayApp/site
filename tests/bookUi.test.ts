@@ -254,10 +254,9 @@ describe('CreatureIndex', () => {
     }
   }, 15_000);
 
-  it('keeps creature destinations in the responsive multi-column index', async () => {
-    const html = await container.renderToString(CreatureIndex, {
-      props: { by: 'type', book: BROOD_AND_BLOOM },
-    });
+  it('keeps creature destinations in the responsive multi-column index', () => {
+    buildSite();
+    const html = readFileSync('dist/brood-and-bloom/appendix-b/index.html', 'utf8');
     const page = new JSDOM(html, { url: 'https://openfray.app/' }).window.document;
     const index = page.querySelector('.creature-index')!;
     const creatureLinks = [...index.querySelectorAll<HTMLAnchorElement>('.index-list a')];
@@ -267,7 +266,7 @@ describe('CreatureIndex', () => {
     expect(
       creatureLinks.find((link) => link.textContent === 'Latchling')?.getAttribute('href'),
     ).toBe('/brood-and-bloom/chapter-4/#c-latchling');
-  });
+  }, 15_000);
 });
 
 /** Read a hexadecimal custom-property color from one CSS selector block. */
