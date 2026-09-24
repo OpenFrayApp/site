@@ -19,13 +19,11 @@ browser, and needs no account to run a fight. A free account lets you save and p
 
 ## The session that ended mid-fight
 
-Sessions rarely end on a clean round. **Save** keeps the board exactly as it stands: the
-creatures, the party, hit points, effects, conditions, initiative, the round you are on,
-and the log. Next week you open it and carry on.
+**Save** keeps the board as it stands: creatures, party, hit points, effects,
+conditions, initiative, the current round, and the log.
 
-It works the other way round too. Build the fight on a Tuesday, save it, and it is
-waiting on Saturday with the cast already assembled. Prep a month of them if you like.
-Save as many as you want, as often as you want.
+You can also build the fight on Tuesday and have it waiting on Saturday with the
+cast already assembled. Save as many encounters as you want, as often as you want.
 
 Saved fights live in the compendium under **Encounters**. Each card shows what was on the
 board, grouped and counted, so you can tell one goblin ambush from another without opening
@@ -71,7 +69,7 @@ A creature can also say where it came from, and the stat block shows it. A creat
 in with the OpenFray Importer cannot be published at all: those stat blocks are Wizards of
 the Coast's.
 
-### Everything you have up, in one place
+### Manage your published links
 
 **Shared links**, under your account, lists what you have published: copy a link again, open
 it to see what a reader sees, or unpublish it. Unpublishing is immediate and final.
@@ -106,9 +104,8 @@ Choose a **backdrop** for the campaign: a mountain fortress, desert ruin, elven 
 frozen lake, and more. Each backdrop has its own light or dark treatment;
 the theme toggle is disabled while one is displayed.
 
-The screen can also head itself with the **campaign's name and yours** as the Game Master
-running it. Each is its own setting under Player view, both off by default, and neither
-travels on an anonymous link.
+Show the **campaign’s name and your Game Master name** above the board. Each has
+its own setting under Player view. Both start off and require a signed-in GM.
 
 ![The shared player view over a mountain-fortress backdrop, headed with a campaign name and the Game Master running it: the party listed with hit points and armor class, the foes in words with their effect chips, and the game log beside them.](../../assets/screenshots/player-view-hero.png)
 
@@ -122,9 +119,8 @@ the log, with both dice available to inspect.
 
 ## Smaller things
 
-- The player view moved to `openfray.app/p/`, beside published encounters at
-  `openfray.app/s/`. Both sit at the root of the domain, because they get pasted where
-  somebody who has never seen the console will read them.
+- Player-view links now use `openfray.app/p/`; published encounters use
+  `openfray.app/s/`.
 - Neither is counted by its code: analytics sees `/s/` and `/p/` and nothing after them.
 - Signing out hands a shared link back to an anonymous one, so a device that no longer owns
   your name stops broadcasting under it.
@@ -133,8 +129,7 @@ the log, with both dice available to inspect.
   did.
 - A condition named in a spell's rules text, or in the **Applied effects** list, explains
   itself on hover, the way one in the tracker already did.
-- A field's description sits behind the **?** beside its label, so what stays visible is
-  state or consequence rather than boilerplate.
+- Tap or point at the **?** beside a field’s label to read its description.
 - The short-rest tally sits in the campfire button's corner, off the artwork.
 - The compendium's tabs lay out three by three.
 - The app says **encounter** where it used to say fight.
