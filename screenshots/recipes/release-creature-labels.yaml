@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# Capture the 1.3 release candidate until these controls reach console main.
+name: release-creature-labels
+install: site
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - use: open-settings
+  - click: { role: tab, name: Tracker, exact: true }
+  - select: { css: '#creature-label-style' }
+    option: letters
+  - fill: { css: '#tracker-creature-color' }
+    value: '#fbbf24'
+  - fill: { css: '#tracker-ally-color' }
+    value: '#a78bfa'
+  - click: { role: button, name: Done, exact: true }
+  - use: seed
+    with:
+      pcs: $hero.party
+      monsters:
+        - { name: Goblin Warrior, times: [1, 2, 3] }
+  - wait: 500
+
+clip:
+  span:
+    - { text: Players and allies, exact: true }
+    - { trackerRow: Goblin Warrior C }
+  pad: 8

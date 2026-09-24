@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# Capture the 1.3 release candidate until these controls reach console main.
+name: release-reference-search
+install: site
+viewport: { width: 1440, height: 900 }
+
+setup:
+  - click: { role: button, name: Search references, exact: true }
+  - fill: { placeholder: Search by name… }
+    value: fire
+  - wait: 1200
+
+clip:
+  css: 'input[aria-label="Search references"]'
+  ancestor: { narrowerThan: 95vw, pick: outermost }
+  pad: 16

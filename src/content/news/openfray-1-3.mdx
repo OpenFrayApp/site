@@ -1,6 +1,6 @@
 ---
-title: 'OpenFray 1.3'
-description: 'Search references from the header, choose creature labels and tracker colors, and recover an interrupted fight. Compatible with 5.5e and 5e.'
+title: 'OpenFray 1.3: Keep the fight moving'
+description: 'Find a spell while the table waits, keep the goblins straight, and recover an interrupted fight. OpenFray’s free combat console works with 5.5e and 5e.'
 date: 2026-09-24
 slug: 'openfray-1-3-release'
 kind: 'release'
@@ -8,79 +8,81 @@ cover: '../../assets/news/openfray-1-3.webp'
 coverAlt: 'The version number 1.3.0 over a dark indigo wash, beneath RELEASE and above “Find it. Keep the fight moving.”'
 ---
 
-Version 1.3.0 brings reference search to the header, new ways to tell creatures apart,
-and recovery for an interrupted fight. The [console](/console/) is free, runs in your
-browser, and needs no account to run a fight.
+A player names a spell. Three goblins need telling apart. The session ends halfway
+through a fight. OpenFray 1.3 brings reference search, creature labels, and recovery
+controls to those moments at the table.
+
+OpenFray is a free combat console for Game Masters running DnD 5e. It keeps initiative,
+hit points, and effects together in a browser tab. You can run a fight without an
+account or anything to install.
+
+[Open the console](/console/) to try it with your next encounter.
 
 ## Find the spell while the table waits
 
-Search from the header for a creature, spell, condition, saved character, or console
-navigation. Results scroll, and the search shortcut can be changed in **Settings**.
+Look up a spell or condition from the header while the encounter stays open.
+The same search finds creatures, saved characters, and console navigation, with
+creatures from every enabled library and the available spells in its results.
 
-The search includes creatures from every enabled library and the available spells.
-You can cast a spell found there even with an empty encounter, before adding anyone
-to the tracker.
+You can cast a spell straight from search, even before anyone is on the board.
+Results scroll, and you can choose a keyboard shortcut in **Settings**.
+
+![Search results for “fire,” with Fire Bolt, Fire Elemental, Fireball, and other matches labeled as spells or creatures and badged by library and edition.](../../assets/screenshots/release-reference-search.png)
 
 ## Keep the goblins straight
 
-Three goblins can read Goblin 1, 2, and 3; Goblin I, II, and III; or Goblin A, B, and C.
-Choose **Creature labels** on the **Tracker** tab in **Settings**.
-Removing one leaves the others’ labels unchanged, so Goblin C keeps its letter when
-Goblin B leaves the board.
+Goblin B leaves the board. Goblin C keeps its letter, so the creature your players
+have been calling C is still C on its next turn.
 
-Changing the style affects new labels. Existing labels and names you typed stay as
-they are.
+Repeated creatures can use numbers, Roman numerals, or letters. Choose a style in
+**Settings → Tracker**; it applies to new labels and leaves existing labels and
+names you typed unchanged.
 
-You can also choose the tracker’s **Creature color** and **Ally color**. Each picker
-has its own reset arrow. These change the side markers; hit-point colors, the active
-turn, and selection highlights stay as they are.
+Choose creature and ally marker colors that you can distinguish against your
+background. The shared player view follows your tracker colors by default.
+If the table’s screen needs different colors, you control those overrides too,
+without changing your own tracker.
 
-The shared player view follows your tracker colors by default. As Game Master, you
-can set separate overrides on the **Player view** tab for everyone watching.
-Reset either override to make that color follow the tracker again. Your own tracker
-stays unchanged.
+![The tracker before a fight, with four player characters marked in purple and three Goblin Warriors labeled A, B, and C with yellow side markers.](../../assets/screenshots/release-creature-labels.png)
 
-The handbook’s [tracker settings](/docs/reference/settings/#tracker) and
-[player-view settings](/docs/reference/settings/#player-view) cover both choices.
+Each color has its own reset arrow. Resetting a player-view override makes it follow
+the tracker again. The handbook covers [tracker settings](/docs/reference/settings/#tracker)
+and [player-view settings](/docs/reference/settings/#player-view).
 
 ## Recover an interrupted fight
 
-Security and recovery arrive together in 1.3.0: offline recovery, safe updates,
-cloud-copy conflict handling, session recovery, and more reliable shared player views.
+Version 1.3 adds offline recovery and security protections for the encounter you are
+running, including session recovery, safe updates, and more reliable shared player views.
 
-If your device and the cloud both contain changes, **Choose a board copy** lets you
-pick which one to continue. The other stays available for recovery, and you can
-download both copies before choosing.
+When your device and the cloud both contain changes, the console asks which board
+copy you want to continue. The other stays available for recovery, and you can
+download both before choosing. If saving fails, you can retry or download a recovery copy.
 
-A console update waits for you to review it. **Update and reload** verifies a recovery
-checkpoint before reloading the encounter. Finish any open forms first: unfinished
-form entries are lost in the reload.
-
-If saving fails, you can retry or download a recovery copy. When sign-in is needed
-to resume saving, the console offers it from the recovery controls.
-
-## Sign in directly
-
-Choose Google or Discord to sign in. The Terms notice sits beside the provider
-buttons, with no checkbox to tick first. Signing in gives you saved encounters,
-creatures, characters, and campaigns across devices.
+Updates wait for you to review them. **Update and reload** checks the encounter’s
+recovery copy before reloading. Finish open forms first: unfinished form entries
+are lost in the reload.
 
 ## Smaller things
 
+- The sign-in page is simpler: choose Google or Discord directly, with the Terms
+  notice beside the buttons and no checkbox.
 - Keyboard focus is visible, and initiative rows support arrow-key reordering.
 - Repeated touch controls have larger targets.
 - The tracker has updated cleanup icons, and the game log heading separates it from
   the controls.
 
-## Where to start
-
-[Settings and appearance](/docs/reference/settings/) covers labels, colors, and
-keyboard preferences. [Share the player view](/docs/guides/player-view/) explains
-what reaches the table’s screen. [Saving](/docs/guides/saving/) covers keeping an
-encounter for another session.
-
 The [unified changelog](https://github.com/OpenFrayApp/openfray/blob/main/CHANGELOG.md)
 records the release across the console, website, and handbook.
 
-[Open the console](/console/) to run a fight, or follow
-[getting started](/docs/getting-started/) from an empty board.
+## Put your next encounter on the board
+
+Add the party and a few creatures, then run a fight. You can already save encounters
+with a free account, ready to restore next session or open on another device.
+
+![A saved encounter named “The Ogre at Vaelthorn Bridge,” with the party, an Ogre, and four Goblin Warriors listed above the Restore and Add creatures controls.](../../assets/screenshots/save-prepared-encounter.png)
+
+The [saving guide](/docs/guides/saving/) explains how to restore the board or reuse
+its creatures in another encounter.
+
+[Open the console](/console/) to try a fight, then sign in with Google or Discord to
+save it for your next session.
