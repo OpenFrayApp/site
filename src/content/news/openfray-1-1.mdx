@@ -1,6 +1,6 @@
 ---
 title: 'OpenFray 1.1'
-description: 'The combat console runs on a phone, answers to the keyboard, and ends effects at the moment the rules say. Compatible with 5.5e and 5e.'
+description: 'Run a fight from your phone or keep your hands on the keyboard. OpenFray 1.1 adds mobile layouts, rebindable shortcuts, and turn-based effect durations.'
 date: 2026-08-17
 slug: 'openfray-1-1-release'
 kind: 'release'
@@ -8,74 +8,69 @@ cover: '../../assets/news/openfray-1-1.webp'
 coverAlt: 'The version number 1.1.0, large and pale over a dark indigo wash, under the word RELEASE and above the line "On a phone, and on the keyboard".'
 ---
 
-Version 1.1.0 is out. [The console](/console/) now runs on a phone or tablet properly, answers to the
-keyboard, and knows when an effect ends. It is still a browser tab, it still needs no
-account, and your fight still lives where you left it.
+Leave the laptop at home, or keep your hands on its keyboard. OpenFray 1.1 gives
+phones and tablets their own layouts and lets you advance turns, apply effects,
+and cast spells with shortcuts you can change.
+
+OpenFray is a free combat console for Game Masters running DnD 5e, compatible with
+5.5e and 5e. It runs in your browser, with no account needed for a fight.
+
+[Open the console](/console/) on the device you bring to the table.
 
 ## The console in your pocket
 
-On a phone, the console is three screens you swipe between: the tracker, the stat block,
-and the controls. A bottom bar jumps straight to any of them, and tapping a creature in
-the tracker slides over to its stat block. The header's panels open as sheets, and the
-three add buttons collapse into one.
+Swipe between the tracker, stat block, and controls on a phone. Tap a creature to
+open its stat block, or use the bottom bar to jump to another screen.
+Panels open as sheets, and controls have larger touch targets.
 
-Every control has a finger-sized target on a touch screen. A mouse keeps the dense
-layout it had, and form fields take a size iOS Safari will not zoom the page for.
-
-A tablet held portrait gets the phone's layout whole, iPad Pro included. A small tablet
-held landscape puts the tracker beside the stat block, with the controls and the log
-below. From a laptop's width up, the three-column console is unchanged.
+A portrait tablet uses the same layout. Turn a small tablet sideways and the tracker
+sits beside the stat block, with controls and the log below. A laptop keeps the
+three-column view.
 
 ## Run it from the keyboard
 
-The other half of this release stays at the desk. The console can now be run from the
-keyboard: `N` advances the turn, `J` and `K` walk the tracker, `D` lands in the selected
-creature's hit points, `E` applies an effect, `G` rolls a group save, `C` casts a spell.
-`A`, `Shift+A`, and `Ctrl+A` cover the three adds, and `Enter` applies whatever dialog
-is open.
+Advance the turn with `N`, select creatures with `J` and `K`, or press `D` to reach
+the selected creature’s hit points. `E` opens effects, `G` opens a group save, and
+`C` opens spellcasting.
 
-Press `Shift+/` for the full list, or find it behind the gear. Every shortcut is
-rebindable in **Settings**, under **Keyboard**. A key another command holds is refused
-by name, and the keys the browser needs stay off limits.
+Press `Shift+/` for the full list. Change any shortcut in **Settings → Keyboard**
+to fit the keys you use at the table.
 
 ![The keyboard cheat sheet open over a running fight: every command grouped under Turn and fight, Selection, The selected creature, and Add and open, each with its key beside it.](../../assets/screenshots/keyboard-overlay.png)
 
-## Effects end when the rules say
+## Let the turn clear the effect
 
-An effect can now be hung on a turn: the start or the end of one, on any creature on the
-board. "Charmed until the start of its next turn" is something the **Apply effect** box
-can say, and it clears itself at the right moment.
+Set an effect to end at the start or end of any creature’s turn. For “Charmed until
+the start of its next turn,” choose that turn in **Apply effect** and the console
+clears it when the turn arrives.
 
-**or its next roll** rides on top of any duration and ends the effect on the first roll
-it changes. It replaces "This turn / next attack", which read like a turn and never
-cleared for a player's own rolls. An effect saved with the old option still works.
+Add **or its next roll** to end an effect early on the first roll it changes.
+It replaces the old “This turn / next attack” option; effects saved with that option
+still work.
 
-Rolls now spend what they should everywhere. Group saves, concentration checks, and a
-creature's own stat-block rolls used to leave a spent effect sitting on the row.
-Vicious Mockery, Latchwork, Guiding Bolt, Guidance, and Resistance carry the bounds the
-rules give them, re-read against both editions.
+Group saves, concentration checks, and stat-block rolls now clear the effects they
+spend. Vicious Mockery, Latchwork, Guiding Bolt, Guidance, and Resistance also have
+corrected duration bounds, checked against both editions.
 
 Effects, durations, and the box that stages them are written up in
 [the handbook](/docs/guides/effects/).
 
-## Casting
+## Keep the spell’s effect after the hit
 
-A spell resolved by an attack roll applies its effect. Guiding Bolt left nothing on the
-target it hit; Flame Blade, Spiritual Weapon, Arcane Hand, Arcane Sword, and Vampiric
-Touch left no reminder on the caster. All six land now.
+Guiding Bolt now applies its effect to the target it hits. Flame Blade, Spiritual
+Weapon, Arcane Hand, Arcane Sword, and Vampiric Touch leave their reminders on the
+caster, so you can see what remains after resolving the attack.
 
 A saved character's spell attack bonus and spell save DC are filled in from the class,
 level, and ability scores you transcribed. A multiclass caster, a subclass caster, and
 an anonymous character leave the field to you, as before. Casting has
 [its own handbook page](/docs/guides/spells/).
 
-## Campaign notes
+## Keep the next session’s hooks with the campaign
 
-A campaign now carries notes: markdown, private to you, for the threads and hooks that
-are not house rules. They sit in the campaign form and on the campaign card, where you
-can write them without opening the form. Click, type, click away. Characters have had
-notes like these; now the game itself does. Campaigns are written up in
-[the handbook](/docs/guides/campaigns/).
+Campaigns now carry private notes for your threads and hooks. Write Markdown in the
+campaign form or directly on its card. The
+[campaign guide](/docs/guides/campaigns/) explains where to find them.
 
 ## In the books
 
@@ -92,11 +87,15 @@ are unchanged.
 - [The compendium](/docs/reference/compendium/) follows the same layout switch as the
   fight.
 
-## Where to start
+## Bring the device you have
 
-If you have never opened it, [getting started](/docs/getting-started/) runs one fight
-from an empty board to the summary at the end. If you already run OpenFray, open
-[the console](/console/) on your phone and swipe.
+[Getting started](/docs/getting-started/) walks through one fight, from an empty board
+to the summary at the end. The
+[changelog](https://github.com/OpenFrayApp/openfray/blob/main/CHANGELOG.md) records
+this release’s changes.
 
-Every version so far, and what each one changed, is in the
-[changelog](https://github.com/OpenFrayApp/openfray/blob/main/CHANGELOG.md).
+A free account keeps your characters, custom creatures, and campaigns available
+across devices. Your keyboard preferences stay in the browser where you set them.
+
+[Open the console](/console/) on your phone, tablet, or laptop. Try a fight, then
+sign in with Google or Discord to keep your party and campaign for next time.
