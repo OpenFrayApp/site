@@ -16,8 +16,8 @@ SITE=../src/assets/screenshots
 # evidence for one claim, and wider than tall so it can sit beside prose.
 magick "$OUT/console-hero.png" -crop 880x388+40+648 +repage "$SITE/console-rows.png"
 magick "$OUT/console-hero.png" -crop 780x994+2800+872 +repage "$SITE/console-log.png"
-magick "$OUT/console-hero.png" -crop 764x290+2798+930 +repage "$SITE/greatclub-log.png"
-magick "$OUT/console-hero.png" -crop 780x452+2790+380 +repage "$SITE/applied-effects.png"
+magick "$OUT/console-hero.png" -crop 764x194+2798+918 +repage "$SITE/greatclub-log.png"
+magick "$OUT/console-hero.png" -crop 780x470+2790+350 +repage "$SITE/applied-effects.png"
 
 # From group-save-hero.png (3600x2000): the dice chip and the six outcome rows —
 # full damage, halves, the immune zero, the resisted quarter, and the player rows
