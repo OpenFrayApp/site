@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# Bram's effect details, without the stat block and unrelated console controls.
+name: in-person-gm-board
+install: site
+viewport: { width: 1800, height: 1000 }
+setup:
+  - use: seed
+    with: { pcs: $table.party, monsters: $table.foes }
+  - use: table-turns
+clip:
+  css: div
+  contains: Applied effects
+  maxChildren: 4
+  pick: smallest
+  pad: 0

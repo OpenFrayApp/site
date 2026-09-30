@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# Seed table.yaml, play table-turns, and share the sample fight from the console.
+# Pass the full local player link, including its live fragment, as TABLE_PLAYER_URL:
+# npx shotlist in-person-player-tablet --install --allow-env TABLE_PLAYER_URL
+# Keep the GM's console open during capture. Never commit the live link.
+name: in-person-player-tablet
+install: site
+viewport: { width: 1800, height: 1000 }
+setup:
+  - openPage: '${env.TABLE_PLAYER_URL}'
+    as: player
+    viewport: { width: 960, height: 620 }
+  - wait: { text: Kessa Quick }
+  - wait: { text: Live, exact: true }
+  - wait: 800
+clip: viewport
+check: false

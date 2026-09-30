@@ -1,0 +1,14 @@
+# A small article fixture: four player characters and one Ogre.
+party:
+  - { name: Elowen Vale, ac: 12, hp: 22, init: 3 }
+  - { name: Sister Mirad, ac: 18, hp: 27, init: 0 }
+  - { name: Bram Ironfist, ac: 18, hp: 34, init: 1 }
+  - { name: Kessa Quick, ac: 15, hp: 26, init: 5 }
+foes:
+  - { name: Ogre, times: [1] }
+initiative:
+  - { who: Elowen Vale, roll: 23 }
+  - { who: Sister Mirad, roll: 19 }
+  - { who: Bram Ironfist, roll: 15 }
+  - { who: Kessa Quick, roll: 12 }
+  - { who: Ogre, roll: 8 }
