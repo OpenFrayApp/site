@@ -1,0 +1,57 @@
+# Play three turns after seeding table.yaml: Faerie Fire, Bless, then Bram's hit.
+steps:
+  - use: start
+    with: { rolls: $table.initiative }
+  - click: { role: button, name: Cast spell, exact: true }
+  - select: { label: Caster }
+    optionLabel: Elowen Vale
+  - fill: { placeholder: Search spells… }
+    value: Faerie Fire
+  - wait: 500
+  - click: { css: button, startsWith: Faerie Fire, pick: first }
+  - wait: 500
+  - click:
+      css: button
+      text: Ogre
+      within: { css: '[role=dialog]', pick: last }
+  - click: { role: button, name: Roll saves, exact: true }
+  - wait: 600
+  - click:
+      css: button
+      text: Fail
+      within: { css: '[role=dialog]', pick: last }
+  - click:
+      css: button
+      startsWith: Apply Faerie Fire
+      within: { css: '[role=dialog]', pick: last }
+  - optional:
+      - click:
+          css: button
+          text: Close
+          within: { css: '[role=dialog]', pick: last }
+  - click: { role: button, name: Next turn, exact: true }
+  - click: { role: button, name: Cast spell, exact: true }
+  - select: { label: Caster }
+    optionLabel: Sister Mirad
+  - fill: { placeholder: Search spells… }
+    value: Bless
+  - wait: 500
+  - click: { css: button, startsWith: Bless, pick: first }
+  - wait: 500
+  - each: [Sister Mirad, Elowen Vale, Bram Ironfist, Kessa Quick]
+    as: who
+    steps:
+      - click:
+          css: button
+          text: $who
+          within: { css: '[role=dialog]', pick: last }
+  - click:
+      css: button
+      text: Apply effect
+      within: { css: '[role=dialog]', pick: last }
+  - press: Escape
+  - click: { role: button, name: Next turn, exact: true }
+  - use: set-hp
+    with: { who: Ogre, hp: 60 }
+  - click: { role: button, name: Next turn, exact: true }
+  - click: { text: Bram Ironfist, within: { trackerRow: Bram Ironfist } }

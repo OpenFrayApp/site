@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../node_modules/shotlist/dist/recipe.schema.json
+# The same live link as in-person-player-tablet, cropped to the party's four rows.
+# Pass TABLE_PLAYER_URL with --allow-env; keep the GM's console open during capture.
+name: in-person-player-effects
+install: site
+viewport: { width: 1800, height: 1000 }
+setup:
+  - openPage: '${env.TABLE_PLAYER_URL}'
+    as: player
+    viewport: { width: 960, height: 620 }
+  - wait: { text: Live, exact: true }
+  - wait: { text: Bless, exact: true, pick: first }
+clip:
+  span:
+    - css: li
+      contains: Elowen Vale
+      pick: smallest
+      within: { css: section, contains: Turn order, pick: smallest }
+    - css: li
+      contains: Kessa Quick
+      pick: smallest
+      within: { css: section, contains: Turn order, pick: smallest }
+  pad: 0
