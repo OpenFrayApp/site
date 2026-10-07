@@ -2,9 +2,9 @@ Guidance for AI agents (and humans) working on the OpenFray site. The cross-repo
 agreements (code style, writing style, committing, working agreements, content
 licensing) live in the
 [openfray repo's AGENTS.md](https://github.com/OpenFrayApp/openfray/blob/main/AGENTS.md).
-The shared workspace is `/Users/nico/GitHub/openfray/openfray-app/`. Read its
-`AGENTS.md` and `STYLE.md` before working here. For cross-repo work, read its
-`CONTEXT-MAP.md`. Every published word follows this
+Read the parent's [STYLE.md](https://github.com/OpenFrayApp/openfray/blob/main/STYLE.md)
+before working here. For cross-repo work, read its
+[context map](https://github.com/OpenFrayApp/openfray/blob/main/CONTEXT-MAP.md). Every published word follows this
 repo's [STYLE.md](./STYLE.md) (the persuading voice, and the books' register),
 built on the shared core in that repo. **Read all three before working here.** This file carries what is specific to the site:
 where the books live, how the print edition is built, and how the site is styled.
@@ -52,8 +52,8 @@ footer to carry the compatibility and trademark notices.
 [Paged.js](https://pagedjs.org) lays it out on A4. Run the dev server, open
 `/the-waking-garden/print/`, and print to PDF. Pagination takes about a minute and the
 page is blank while it runs. `scripts/print-check.mjs` verifies a print edition
-end-to-end (page count, cross-references, the word map); its skill is in
-`.claude/skills/print-check/`.
+end-to-end (page count, cross-references, the word map); the procedure is in
+[Check the print edition](./docs/development/print-check.md).
 
 It is a **local tool, not a page of the site**: the openfray repo's assemble step
 removes the route from `dist/` and the sitemap filter keeps it unadvertised. It lives
@@ -143,8 +143,8 @@ numbers. `scripts/measure-css.mjs snapshot <url> <out.json>` captures a page and
 `… diff <before> <after> --omit-derived` reports what changed, naming the declaration
 behind each change and folding away the nodes that merely moved with it. It wraps
 [qain](https://github.com/Shinyaigeek/qain) — the script's own job is forcing the
-`localStorage` theme (`--theme light`) and settling the page. Its skill is in
-`.claude/skills/measure-css/`.
+`localStorage` theme (`--theme light`) and settling the page. The procedure is in
+[Measure CSS changes](./docs/development/measure-css.md).
 
 ## Working here
 
@@ -154,7 +154,7 @@ behind each change and folding away the nodes that merely moved with it. It wrap
 - The marketing screenshots and video loops (the home page and the feature pages) are
   shot by this repo's own pipeline. Recipes live in `screenshots/`, the loops in
   `scripts/record-loops.mjs`, and the crops in `screenshots/recut-vignettes.sh`. Shoot
-  against a clean console `main` on port 5199 (`.claude/launch.json` starts it); never
+  against a clean console `main` on port 5199 (`npm run dev` in the console clone); never
   edit an installed image by hand.
 - Commit subjects use the `Site:`, `Print:`, `Style:`, and `Copy:` areas; the full
   committing and PR agreements are in the parent repo's AGENTS.md.

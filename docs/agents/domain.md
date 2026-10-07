@@ -4,7 +4,8 @@ Engineering skills use this repo’s domain documentation when exploring the cod
 
 ## Before exploring
 
-Read the domain documents relevant to the work:
+Read `AGENTS.md` and `README.md` for the site's current scope and contracts.
+Read additional domain documents when present:
 
 - `CONTEXT.md` at the repo root.
 - ADRs under `docs/adr/` that affect the area being changed.
