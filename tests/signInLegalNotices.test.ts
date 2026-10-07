@@ -11,6 +11,17 @@ function legalText(page: string) {
     .replace(/\s+/g, ' ');
 }
 
+describe('legal links', () => {
+  it.each(['src/layouts/Layout.astro', 'src/content/news/openfray-1-2.mdx', 'public/llms.txt'])(
+    'uses trailing slashes in %s',
+    (path) => {
+      const source = readFileSync(path, 'utf8');
+      expect(source).toMatch(/\/(?:privacy|terms)\//);
+      expect(source).not.toMatch(/\/(?:privacy|terms)(?=["')?#])/);
+    },
+  );
+});
+
 describe('sign-in legal notices', () => {
   it('describes agreement through the named provider buttons', () => {
     const terms = legalText('terms');
