@@ -148,6 +148,11 @@ behind each change and folding away the nodes that merely moved with it. It wrap
 
 ## Working here
 
+- **Legal links:** use `/privacy/` and `/terms/`, including in absolute URLs. The footer,
+  news links, and `public/llms.txt` are covered by `tests/signInLegalNotices.test.ts`.
+- **Script tests:** Vitest defaults to jsdom here. Use `// @vitest-environment node`
+  for node-only script tests, including tests that resolve `import.meta.url` as a file URL.
+
 - **Legal pages:** any change to `src/pages/privacy.astro` or `terms.astro`
   must **also bump the `Last updated:` date** (`<p class="updated">`) to the current
   date, in the same edit. Never alter the legal copy without updating that date.
