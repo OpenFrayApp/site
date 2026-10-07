@@ -30,7 +30,7 @@ const centered = align === 'center';
           id={id}
           class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD} ${centered ? 'mx-auto text-center' : ''}`}
         >
-          {heading}
+          <slot name="heading">{heading}</slot>
         </h2>
       )
     }

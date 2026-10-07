@@ -35,8 +35,8 @@ const repo = 'https://github.com/OpenFrayApp';
 // which is where a license question actually gets answered.
 const wrapUpLinks = [
   { label: 'OpenFray on GitHub', href: repo },
-  { label: 'Report a bug', href: `${repo}/issues` },
-  { label: 'Credits and licenses', href: `${repo}/blob/main/CREDITS.md` },
+  { label: 'Report a bug', href: `${repo}/openfray/issues` },
+  { label: 'Credits and licenses', href: `${repo}/console/blob/main/CREDITS.md` },
   { label: 'Read the handbook', href: '/docs/' },
 ];
 
@@ -138,13 +138,13 @@ const rest = [
       <h1
         class="mt-0 mb-5 max-w-[20ch] text-[clamp(2.5rem,6.5vw,4.25rem)] leading-[1.04] font-extrabold tracking-tight"
       >
-        Never lose concentration.
+        Run the fight.<br />Stop remembering it.
       </h1>
 
       <p class={`${tagline} mb-8`}>
-        OpenFray holds the whole state of a Dungeons and Dragons encounter — who’s frightened by
-        whom, who has advantage on whom, what every creature has left to spend — so you run it
-        instead of remembering it.
+        OpenFray keeps track of initiative, conditions, concentration, advantage, and what each
+        creature has left to spend. Keep your attention on what matters: the story unfolding, your
+        players’ ideas, and what happens next.
       </p>
 
       <div class="cta-row flex flex-wrap gap-3">
@@ -171,9 +171,9 @@ const rest = [
       id="screenshots"
       aria-labelledby="console-shot-title"
     >
-      <p class={`${EYEBROW} mb-4`}>A fight in progress</p>
+      <p class={`${EYEBROW} mb-4`}>Be in control</p>
       <h2 id="console-shot-title" class={`mt-0 mb-8 max-w-[18ch] ${DISPLAY_MD}`}>
-        The whole encounter on one screen
+        The whole encounter<br />on one screen
       </h2>
 
       <figure class="m-0">
@@ -212,21 +212,25 @@ const rest = [
     }
     <section class={`mt-20 ${TEXT_COL}`}>
       <Split
-        eyebrow="The difference"
-        heading="What OpenFray keeps hold of"
+        eyebrow="Less to remember"
+        heading="Automate your memory not your game"
         id="difference-title"
         caption="One swing, watched through: Prone forces two d20s and the lower die, Bane takes its d4 — named right under the roll — and the log files the receipt."
       >
+        <Fragment slot="heading">Automate your memory<br />not your game</Fragment>
         <p class="mt-0 mb-5">
-          Effects have two ends, and OpenFray records which end is which. The cleric's Bane rides
-          the Ogre's own rolls; the wizard's Faerie Fire arms everyone who swings at it — and when
-          the Ogre finally attacks, all of it is already in the arithmetic.
+          The Ogre is Prone and affected by the cleric’s Bane. When you roll its Greatclub attack,
+          OpenFray rolls with disadvantage and subtracts the Bane d4. You can see exactly why the
+          roll changed, and the result stays in the game log.
         </p>
         <p class="mb-5">
-          A scratchpad, not a second character sheet: it never asks for a player's build. It tracks
-          what just happened and what has to be remembered this round — which is why it stays fast
-          instead of becoming a worse VTT.
+          You choose the Ogre’s target and apply the effects. OpenFray handles the modifiers when
+          you roll. Keep your maps, character sheets, and rulings. The console never needs a
+          player’s build.
         </p>
+        <div class="cta-row mb-5 flex flex-wrap gap-3">
+          <Cta href="/console/">Open the console →</Cta>
+        </div>
         <p class="mb-0">
           <a
             href="/features/tracking/"
@@ -436,11 +440,12 @@ const rest = [
     }
     <Band
       eyebrow="Start here"
-      heading="Your first fight, in three steps"
+      heading="Your first fight in three steps"
       id="first-fight-title"
       align="center"
       class="mt-20"
     >
+      <Fragment slot="heading">Your first fight<br />in three steps</Fragment>
       <ol class="m-0 grid list-none gap-x-10 gap-y-6 p-0 lg:grid-cols-3">
         {
           firstFight.map((s, i) => (
@@ -464,7 +469,7 @@ const rest = [
 
     <section class={`rest mt-20 ${TEXT_COL} text-left`} aria-labelledby="rest-title">
       <p class={`${EYEBROW} mb-4 text-center`}>The rest of the table</p>
-      <h2 id="rest-title" class={`mx-auto mt-0 mb-8 max-w-[18ch] text-center ${DISPLAY_MD}`}>
+      <h2 id="rest-title" class={`mx-auto mt-0 mb-8 text-center ${DISPLAY_MD}`}>
         Everything else you'd expect
       </h2>
       <Cards layout="flow" items={rest} />
@@ -484,19 +489,16 @@ const rest = [
       </div>
     </section>
 
-    {
-      /* The second conversion, seeded after the value is proven and never gating it:
-      everything above works anonymous, and this section says exactly that first. */
-    }
+    {/* Saving and campaigns need an account; running fights remains anonymous. */}
     <section class={`account mt-20 ${TEXT_COL} text-center`} aria-labelledby="account-title">
       <p class={`${EYEBROW} mb-4`}>When you're ready</p>
-      <h2 id="account-title" class={`mx-auto mt-0 mb-5 max-w-[18ch] ${DISPLAY_MD}`}>
-        Everything works without an account
+      <h2 id="account-title" class={`mx-auto mt-0 mb-5 ${DISPLAY_MD}`}>
+        Run your fights without an account
       </h2>
       <p class={`${tagline} mx-auto max-w-[52rem]`}>
-        The free account is for keeping. Sign in with Discord or Google and your fights, custom
-        creatures, characters, and campaigns follow you between devices. Everything on this page
-        works before you do.
+        Open the console and run your fights without signing in. When you want to save your fights,
+        custom creatures, characters, and campaigns across devices, sign in with Discord or Google.
+        The account is free.
       </p>
       {
         /* The two things an account is actually for, named rather than left to
@@ -526,10 +528,12 @@ const rest = [
       <Panel eyebrow="Open source" heading="Free to use, and built in the open" id="wrap-up-title">
         <div class="mt-8 grid gap-8 border-t border-border pt-8 sm:grid-cols-3">
           <div>
-            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">Version 1.2</h3>
+            <h3 class="m-0 mb-1.5 text-base leading-relaxed font-bold text-text">
+              Free and ad-free
+            </h3>
             <p class="m-0 text-sm leading-normal text-muted">
-              Out of beta, and running tables. The console is free and ad-free, with no paid tier —
-              this is the whole product, signed in or not.
+              The console has no paid tier. Run your fights without an account, or sign in free to
+              save and sync them.
             </p>
           </div>
           <div>
@@ -537,8 +541,8 @@ const rest = [
               Open all the way down
             </h3>
             <p class="m-0 text-sm leading-normal text-muted">
-              The code is AGPL-3.0 and every line of it is public. The creatures and rules in our
-              own books are Creative Commons.
+              The console’s code is public under AGPL version 3 or later. The importer is
+              MIT-licensed. The creatures and rules in our own books are Creative Commons.
             </p>
           </div>
           <div>

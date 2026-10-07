@@ -6,7 +6,7 @@ OpenFray is compatible with 5.5e (Basic Rules 2024) and 5e (Basic Rules 2014). I
 
 One principle shapes every feature: OpenFray is a fast scratchpad, not a system of record. It tracks what happens at the table, plus the reference a Game Master chooses to jot down. It never models the rules engine behind a character, so class features, player spell slots, and character sheets are out of scope by design. A player’s own sheet still owns what a character can do.
 
-openfray.app serves three parts from one deploy. The website is at the root, the combat console is at `/console/`, and the handbook is at `/docs/`. The code is AGPL-3.0. Game content is honored under each source’s own license, preferring CC-BY over ORC over OGL.
+openfray.app serves three parts from one deploy. The website is at the root, the combat console is at `/console/`, and the handbook is at `/docs/`. The code is licensed under AGPL version 3 or later, except the importer, which is MIT-licensed. Game content is honored under each source’s own license, preferring CC-BY over ORC over OGL.
 
 ## The console
 
@@ -63,7 +63,7 @@ The console ships six third-party libraries (Basic Rules 2024, Basic Rules 2014,
 
 - [OpenFray on GitHub](https://github.com/OpenFrayApp): Every OpenFray repository, under one organization.
 - [openfray repository](https://github.com/OpenFrayApp/openfray): The parent repository that assembles the console, the website, and the handbook into this one deploy.
-- [console](https://github.com/OpenFrayApp/console): The combat console, under AGPL-3.0.
+- [console](https://github.com/OpenFrayApp/console): The combat console, under AGPL version 3 or later.
 - [site](https://github.com/OpenFrayApp/site): This website and the published libraries.
 - [docs](https://github.com/OpenFrayApp/docs): The handbook.
 - [README](https://github.com/OpenFrayApp/openfray/blob/main/README.md): What OpenFray is, the scope principle, current status, and how to run it locally.
