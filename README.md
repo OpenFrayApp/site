@@ -34,6 +34,12 @@ The print editions live under each book's `/print` route and never ship.
 
 ## Before contributing
 
+Use the shared
+[Contributing](https://github.com/OpenFrayApp/openfray/blob/main/CONTRIBUTING.md),
+[Verification commands](https://github.com/OpenFrayApp/openfray/blob/main/docs/development/verification.md),
+and [Repository file policy](https://github.com/OpenFrayApp/openfray/blob/main/docs/development/repository-files.md)
+for branch targets, check scope, and private local files.
+
 Read [AGENTS.md](./AGENTS.md). Every published word follows the parent repo's
 STYLE.md.
 
