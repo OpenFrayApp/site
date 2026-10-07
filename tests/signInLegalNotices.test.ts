@@ -8,7 +8,8 @@ import { describe, expect, it } from 'vitest';
 function legalText(page: string) {
   return readFileSync(`src/pages/${page}.astro`, 'utf8')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([.,:;])/g, '$1');
 }
 
 describe('legal links', () => {
@@ -20,6 +21,50 @@ describe('legal links', () => {
       expect(source).not.toMatch(/\/(?:privacy|terms)(?=["')?#])/);
     },
   );
+});
+
+describe('tutorial privacy notices', () => {
+  it('discloses permanent suppression in device settings and account metadata', () => {
+    const privacy = legalText('privacy');
+    expect(privacy).toContain(
+      'Whether you permanently dismissed or completed the tutorial, stored in your account’s user metadata.',
+    );
+    expect(privacy).toContain(
+      'App settings — which content libraries you have turned on, how the compendium is sorted, and what your player view reveals, in localStorage. These settings also record permanent tutorial dismissal or completion.',
+    );
+    expect(privacy).toContain(
+      'Automatic tutorial invitations stop when either your device or your account records permanent dismissal or completion.',
+    );
+    expect(privacy).toContain('You can still start the tutorial manually.');
+  });
+
+  it('discloses anonymous transfer and the limits of background account updates', () => {
+    const privacy = legalText('privacy');
+    expect(privacy).toContain(
+      'A device preference set while anonymous transfers to your account after sign-in.',
+    );
+    expect(privacy).toContain(
+      'Preference changes apply locally first, with account updates sent in the background.',
+    );
+    expect(privacy).toContain(
+      'If an account update fails, suppression across devices remains unconfirmed.',
+    );
+    expect(privacy).toContain('Anonymous encounter data lives only in your browser');
+  });
+
+  it('separates the session invitation latch, encounter recovery, and unsaved guide progress', () => {
+    const privacy = legalText('privacy');
+    expect(privacy).toContain(
+      'Tutorial invitation state: whether an invitation has already been offered in this tab’s session, in sessionStorage. This is separate from anonymous encounter recovery.',
+    );
+    expect(privacy).toContain('Tutorial step progress is kept only in memory.');
+    expect(privacy).toContain(
+      'Reloading closes the guide without restoring a step; encounter recovery uses the normal storage described above.',
+    );
+    expect(privacy).toContain(
+      'If browser storage is blocked, tutorial use remains available, but device preferences and session invitation state may not survive a reload.',
+    );
+  });
 });
 
 describe('sign-in legal notices', () => {
