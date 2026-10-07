@@ -16,3 +16,21 @@ dist/
 # `shotlist --login` writes a live signed-in session here. Never commit one.
 .shotlist/
 .pi/
+
+# Private workspace state and generated artifacts.
+.dev.vars
+.dev.vars.*
+.wrangler/
+local/
+.claude/
+/docs/marketing/
+/.agents/product-marketing.md
+/.agents/product-marketing-context.md
+/.agents/listening-sources.md
+/.agents/loops/
+/.agents/advisors/
+coverage/
+.artifacts/
+.cache/
+.tmp/
+*.tsbuildinfo
