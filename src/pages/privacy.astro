@@ -76,6 +76,12 @@ import Layout from '../layouts/Layout.astro';
         ><td>To save your work and sync it across your devices.</td></tr
       >
       <tr
+        ><td>Tutorial preference</td><td
+          >Whether you permanently dismissed or completed the tutorial, stored in your account’s
+          user metadata.</td
+        ><td>To suppress automatic tutorial invitations across your devices.</td></tr
+      >
+      <tr
         ><td>What you publish</td><td
           >The cast or stat block, any note, any byline you type, the license you state, and your
           account as its owner.</td
@@ -100,6 +106,13 @@ import Layout from '../layouts/Layout.astro';
         ><td>To run the Service securely and diagnose problems.</td></tr
       >
     </table>
+    <p>
+      Automatic tutorial invitations stop when either your device or your account records permanent
+      dismissal or completion. You can still start the tutorial manually. A device preference set
+      while anonymous transfers to your account after sign-in. Preference changes apply locally
+      first, with account updates sent in the background. If an account update fails, suppression
+      across devices remains unconfirmed.
+    </p>
     <p>
       If we remove a page you published, we write to the address on your account to tell you, and we
       keep the code of the removed page and the date so the link can say it is gone. That record
@@ -127,7 +140,8 @@ import Layout from '../layouts/Layout.astro';
       <li><strong>Theme preference</strong> — light or dark, in <code>localStorage</code>.</li>
       <li>
         <strong>App settings</strong> — which content libraries you have turned on, how the compendium
-        is sorted, and what your player view reveals, in <code>localStorage</code>.
+        is sorted, and what your player view reveals, in <code>localStorage</code>. These settings
+        also record permanent tutorial dismissal or completion.
       </li>
       <li>
         <strong>Player view link</strong> — without an account, the name of your share link, in <code
@@ -140,11 +154,22 @@ import Layout from '../layouts/Layout.astro';
         >.
       </li>
       <li>
+        <strong>Tutorial invitation state</strong>: whether an invitation has already been offered
+        in this tab’s session, in <code>sessionStorage</code>. This is separate from anonymous
+        encounter recovery.
+      </li>
+      <li>
         <strong>Authentication token</strong> — when signed in, your session is kept in <code
           >localStorage</code
         > by our authentication provider so you stay logged in; cleared when you sign out.
       </li>
     </ul>
+    <p>
+      Tutorial step progress is kept only in memory. Reloading closes the guide without restoring a
+      step; encounter recovery uses the normal storage described above. If browser storage is
+      blocked, tutorial use remains available, but device preferences and session invitation state
+      may not survive a reload.
+    </p>
     <p>
       Our analytics (Fathom Analytics) and hosting (Cloudflare) providers produce <strong
         >aggregate, cookieless</strong
@@ -194,10 +219,10 @@ import Layout from '../layouts/Layout.astro';
     <h2>6. Legal bases (EEA/UK users)</h2>
     <p>
       Where the GDPR applies, we process the data necessary to create and authenticate your account
-      and save your content to perform our contract with you. Signing in is optional; when you
-      choose it, this processing is necessary to provide the account features you request. We also
-      process technical data on the basis of our legitimate interests in operating and securing the
-      Service.
+      and save your content to perform our contract with you. We also store your tutorial preference
+      to provide the account behavior described above. Signing in is optional; when you choose it,
+      this processing is necessary to provide the account features you request. We also process
+      technical data on the basis of our legitimate interests in operating and securing the Service.
     </p>
     <p>
       Agreeing to the Terms of Service is agreement to a contract, not consent to all personal-data
@@ -210,9 +235,9 @@ import Layout from '../layouts/Layout.astro';
       We keep your account and content until you delete them. You can permanently delete your
       account and all associated data at any time from within the app (Account → Delete account);
       this erases your encounters, custom creatures, custom spells, campaigns, characters, every
-      page you published, and your sign-in record. Anonymous data lives only in your browser, and
-      the only thing that ever leaves it is the player view you choose to share, which is relayed to
-      your players and never stored.
+      page you published, and your sign-in record. Anonymous encounter data lives only in your
+      browser, and the only thing that ever leaves it is the player view you choose to share, which
+      is relayed to your players and never stored.
     </p>
     <p>
       An encounter or creature you published stays up until you unpublish it or we remove it, and
