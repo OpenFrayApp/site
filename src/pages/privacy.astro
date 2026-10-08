@@ -196,10 +196,10 @@ import { legalDates, legalDateLabel } from '../data/legalDates';
       >
       <tr
         ><td>Resend</td><td
-          >Sending service emails: welcome emails and notices of published Terms or Privacy Policy
-          updates, answers to reports, and notices when a published page is removed. Resend
-          processes recipient addresses, message content, and delivery information. Provider
-          delivery records have their own retention under Resend’s policies.</td
+          >Sending service emails: welcome emails, notices of published Terms or Privacy Policy
+          updates, account-deletion confirmations, answers to reports, and notices when a published
+          page is removed. Resend processes recipient addresses, message content, and delivery
+          information. Provider delivery records have their own retention under Resend’s policies.</td
         ></tr
       >
       <tr
@@ -254,12 +254,15 @@ import { legalDates, legalDateLabel } from '../data/legalDates';
     </p>
 
     <p>
-      Welcome and legal-update emails are service messages, separate from newsletter subscriptions.
-      Pending deliveries temporarily retain the recipient address. Delivery history retains the
-      account identifier and sanitized sending state until account deletion. Deletion removes these
-      application records; it does not erase provider delivery records or copies in mailboxes.
-      Replies reach a monitored mailbox, and voluntary correspondence is retained separately for
-      answering your questions.
+      Welcome, legal-update, and account-deletion emails are service messages, separate from
+      newsletter subscriptions. Pending deliveries temporarily retain the recipient address.
+      Delivery history retains the account identifier and sanitized sending state until account
+      deletion. Deletion removes these application records; it does not erase provider delivery
+      records or copies in mailboxes. After successful account deletion, we attempt one confirmation
+      using an address held only in server memory. We retain no confirmation recipient or retry
+      record. Missing email or sending failure does not prevent deletion. Replies reach a monitored
+      mailbox, and voluntary correspondence is retained separately for answering questions and
+      receiving feedback. Replying does not create an account.
     </p>
 
     <h2>8. Your rights</h2>

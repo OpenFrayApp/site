@@ -32,7 +32,11 @@ it('describes publication-time service notices and limited analytics processing 
   );
   expect(privacy).not.toMatch(/collects no personal data|aggregate traffic only, no personal data/);
   expect(privacy).toContain(
-    'welcome emails and notices of published Terms or Privacy Policy updates',
+    'welcome emails, notices of published Terms or Privacy Policy updates, account-deletion confirmations',
   );
   expect(privacy).toContain('Provider delivery records');
+  expect(privacy).toContain('address held only in server memory');
+  expect(privacy).toContain('We retain no confirmation recipient or retry record');
+  expect(privacy).toContain('Replying does not create an account');
+  expect(privacy).toContain('does not erase provider delivery records or copies in mailboxes');
 });
