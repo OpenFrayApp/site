@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { legalDates, legalDateLabel } from '../data/legalDates';
 ---
 
 <Layout
@@ -8,7 +9,9 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="doc mx-auto max-w-5xl px-6 pt-4 pb-12">
     <h1>Terms of Service</h1>
-    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">Last updated: 7 October 2026</p>
+    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">
+      Last updated: <time datetime={legalDates.terms}>{legalDateLabel(legalDates.terms)}</time>
+    </p>
 
     <p class="lead text-[1.05rem] leading-relaxed text-text">
       These terms govern your use of OpenFray, a free combat console for tabletop games at <a
@@ -314,9 +317,11 @@ import Layout from '../layouts/Layout.astro';
       page is always the current version, and continued use after a change means you accept it.
     </p>
     <p>
-      For a change that materially affects your rights, we will say so where you can see it before
-      it takes effect: in the app, or by writing to the address on your account. If you would rather
-      not accept it, delete your account, which takes everything with it.
+      We initiate email notification to existing account holders when the updated terms are
+      published. Each change to the displayed date identifies a new version. The email links to the
+      published terms; publication does not depend on when the email arrives. Delivery and receipt
+      are not guaranteed. If you do not accept the updated terms, stop using the Service and delete
+      your account.
     </p>
 
     <h2>17. Governing law</h2>

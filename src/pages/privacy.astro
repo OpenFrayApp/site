@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { legalDates, legalDateLabel } from '../data/legalDates';
 ---
 
 <Layout
@@ -8,7 +9,9 @@ import Layout from '../layouts/Layout.astro';
 >
   <main class="doc mx-auto max-w-5xl px-6 pt-4 pb-12">
     <h1>Privacy Policy</h1>
-    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">Last updated: 7 October 2026</p>
+    <p class="updated mt-0 mb-8 text-sm leading-relaxed text-faint">
+      Last updated: <time datetime={legalDates.privacy}>{legalDateLabel(legalDates.privacy)}</time>
+    </p>
 
     <p class="lead text-[1.05rem] leading-relaxed text-text">
       OpenFray is a free, open-source combat console for tabletop games. This policy explains what
@@ -120,9 +123,9 @@ import Layout from '../layouts/Layout.astro';
       one message and is not kept for it afterwards.
     </p>
     <p>
-      We use <strong>privacy-friendly, cookieless analytics</strong> (Fathom Analytics) to see aggregate
-      traffic — it stores no cookies, collects no personal data, and never tracks you across sites. We
-      run no advertising, and we never sell your data.
+      We use Fathom Analytics to measure website traffic and feature usage without cookies or
+      cross-site tracking. Fathom processes limited technical information to generate
+      privacy-preserving statistics. We run no advertising, and we never sell your data.
     </p>
     <p>
       A shared link and a player view are counted as <code>/s/</code> and <code>/p/</code>, without
@@ -171,11 +174,9 @@ import Layout from '../layouts/Layout.astro';
       may not survive a reload.
     </p>
     <p>
-      Our analytics (Fathom Analytics) and hosting (Cloudflare) providers produce <strong
-        >aggregate, cookieless</strong
-      > traffic statistics; Cloudflare may also set a strictly-necessary security cookie to protect the
-      Service from abuse. None of this stores a tracking identifier or follows you across sites — so no
-      cookie-consent banner is needed.
+      Fathom processes limited technical information to produce aggregate statistics without cookies
+      or cross-site tracking. Cloudflare processes request information for hosting and security, and
+      may set a strictly necessary security cookie to protect the Service from abuse.
     </p>
 
     <h2>5. Who processes your data</h2>
@@ -195,14 +196,16 @@ import Layout from '../layouts/Layout.astro';
       >
       <tr
         ><td>Resend</td><td
-          >Sending the few emails the service sends: an answer to a report you filed, and a notice
-          to you if a page you published is removed.</td
+          >Sending service emails: welcome emails and notices of published Terms or Privacy Policy
+          updates, answers to reports, and notices when a published page is removed. Resend
+          processes recipient addresses, message content, and delivery information. Provider
+          delivery records have their own retention under Resend’s policies.</td
         ></tr
       >
       <tr
         ><td>Fathom Analytics</td><td
-          >Privacy-friendly, cookieless website analytics — aggregate traffic only, no personal data
-          or cross-site tracking.</td
+          >Website traffic and feature usage statistics from limited technical information, without
+          cookies or cross-site tracking.</td
         ></tr
       >
       <tr
@@ -250,6 +253,15 @@ import Layout from '../layouts/Layout.astro';
       holds nothing of what was published and nothing about who published it.
     </p>
 
+    <p>
+      Welcome and legal-update emails are service messages, separate from newsletter subscriptions.
+      Pending deliveries temporarily retain the recipient address. Delivery history retains the
+      account identifier and sanitized sending state until account deletion. Deletion removes these
+      application records; it does not erase provider delivery records or copies in mailboxes.
+      Replies reach a monitored mailbox, and voluntary correspondence is retained separately for
+      answering your questions.
+    </p>
+
     <h2>8. Your rights</h2>
     <p>
       Depending on where you live, you may have the right to access, correct, export, or delete your
@@ -274,8 +286,10 @@ import Layout from '../layouts/Layout.astro';
 
     <h2>11. Changes</h2>
     <p>
-      We may update this policy as the Service evolves. Material changes will be reflected by the
-      “Last updated” date above; significant changes may be highlighted in the app.
+      We may update this policy as the Service evolves. We initiate email notification to existing
+      account holders when a new “Last updated” date is published. The email links to this policy.
+      Delivery and receipt are not guaranteed. This policy explains processing; review does not
+      require acceptance as a separate contract.
     </p>
 
     <h2>12. Contact</h2>

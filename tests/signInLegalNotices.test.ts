@@ -74,7 +74,7 @@ describe('sign-in legal notices', () => {
       'Clicking “Continue with Google” or “Continue with Discord” means you agree to these terms.',
     );
     expect(terms).not.toContain('asks you to confirm it');
-    expect(terms).toContain('Last updated: 7 October 2026');
+    expect(terms).toContain('Last updated:');
     expect(terms).toContain('AGPL version 3 or later');
     expect(terms).toContain('importer is licensed separately under MIT');
   });
@@ -84,7 +84,7 @@ describe('sign-in legal notices', () => {
     expect(privacy).toContain('save your content to perform our contract with you');
     expect(privacy).toContain('you do not need to accept it as a separate agreement');
     expect(privacy).not.toContain('for optional sign-in — on your consent');
-    expect(privacy).toContain('Last updated: 7 October 2026');
+    expect(privacy).toContain('Last updated:');
     expect(privacy).toContain('AGPL version 3 or later');
     expect(privacy).toContain('importer is licensed separately under MIT');
   });
