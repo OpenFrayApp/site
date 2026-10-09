@@ -154,8 +154,10 @@ behind each change and folding away the nodes that merely moved with it. It wrap
   for node-only script tests, including tests that resolve `import.meta.url` as a file URL.
 
 - **Legal pages:** any change to `src/pages/privacy.astro` or `terms.astro`
-  must **also bump the `Last updated:` date** (`<p class="updated">`) to the current
-  date, in the same edit. Never alter the legal copy without updating that date.
+  must **also bump the document’s date in `src/data/legalDates.ts`** to the current
+  date, in the same edit. Visible labels and `/legal-publication.json` share that source.
+  A date controls legal-update email eligibility; reusing a date cannot send another notice.
+  Read [Legal publication](./docs/development/legal-publication.md) before coordinating activation.
 - The marketing screenshots and video loops (the home page and the feature pages) are
   shot by this repo's own pipeline. Recipes live in `screenshots/`, the loops in
   `scripts/record-loops.mjs`, and the crops in `screenshots/recut-vignettes.sh`. Shoot
