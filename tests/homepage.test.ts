@@ -29,9 +29,9 @@ describe('homepage account and source links', () => {
     expect(homepage).not.toContain('Everything on this page');
   });
 
-  it('points issues and credits at their owning repositories', () => {
+  it('points issues at their owning repository and credits at the canonical page', () => {
     expect(homepage).toContain('href: `${repo}/openfray/issues`');
-    expect(homepage).toContain('href: `${repo}/console/blob/main/CREDITS.md`');
+    expect(homepage).toContain("href: '/credits/'");
     expect(homepage).not.toContain('href: `${repo}/issues`');
     expect(homepage).not.toContain('href: `${repo}/blob/main/CREDITS.md`');
   });
