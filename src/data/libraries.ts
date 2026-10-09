@@ -23,6 +23,7 @@ export const shippedLibraries: string[] = [
   'Tome of Beasts 2 (Kobold Press)',
   'Tome of Beasts 3 (Kobold Press)',
   'Creature Codex (Kobold Press)',
+  'A5E SRD: Adventurer’s Guide spells',
   'Kibbles’ Casting Compendium v2.3',
   'Spells That Don’t Suck',
   'So Many Spells',
