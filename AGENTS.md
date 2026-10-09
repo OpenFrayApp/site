@@ -156,8 +156,8 @@ behind each change and folding away the nodes that merely moved with it. It wrap
 - **Legal pages:** any change to `src/pages/privacy.astro` or `terms.astro`
   must **also bump the document’s date in `src/data/legalDates.ts`** to the current
   date, in the same edit. Visible labels and `/legal-publication.json` share that source.
-  A date controls legal-update email eligibility; reusing a date cannot send another notice.
-  Read [Legal publication](./docs/development/legal-publication.md) before coordinating activation.
+  Dates describe the published documents. Changing a date does not authorize or trigger email.
+  Read [Legal publication](./docs/development/legal-publication.md) when publishing policy changes.
 - The marketing screenshots and video loops (the home page and the feature pages) are
   shot by this repo's own pipeline. Recipes live in `screenshots/`, the loops in
   `scripts/record-loops.mjs`, and the crops in `screenshots/recut-vignettes.sh`. Shoot
