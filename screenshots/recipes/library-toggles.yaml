@@ -2,11 +2,13 @@
 #
 # The Settings dialog on its libraries list: every shelf the console ships, each with
 # its own toggle — the picture behind "your table picks which libraries appear".
+# After shooting, run bash screenshots/recut-library-toggles.sh.
 name: library-toggles
 install: site
 viewport: { width: 1800, height: 1300 }
 
 setup:
+  - click: { role: button, name: Not now }
   - use: open-settings
   # A table mid-choice, not a fresh install: two of ours and a Kobold book joined
   # the core rules, and the rest wait unticked.
