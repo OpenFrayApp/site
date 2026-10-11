@@ -48,7 +48,7 @@ magick "$OUT/player-view-hero.png" -crop 990x586+1092+214 +repage \
   -bordercolor "$PVBG" -border 20 "$SITE/pv-log.png"
 
 # The Settings clip rides a viewport-tall wrapper; trim it to the dialog itself.
-magick "$OUT/library-toggles.png" -crop 1080x1360+0+0 +repage "$SITE/library-toggles.png"
+bash ./recut-library-toggles.sh
 
 # From apply-effect-hero.png (1080x1910, already clipped to the modal): its four
 # zones, in the order the page tells them.
