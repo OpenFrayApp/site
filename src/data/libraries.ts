@@ -12,18 +12,20 @@ export interface Library {
 }
 
 /**
- * The libraries the console ships that we only reference — the SRD sets and the Kobold
- * Press books. Labels match the console's own Settings panel exactly, so a reader
- * ticking them there recognizes what they read here.
+ * Third-party libraries shipped in the console and referenced on the site.
  */
 export const shippedLibraries: string[] = [
-  'Basic Rules 2024 (SRD 5.2.1)',
-  'Basic Rules 2014 (SRD 5.1)',
-  'Tome of Beasts 1 (Kobold Press)',
-  'Tome of Beasts 2 (Kobold Press)',
-  'Tome of Beasts 3 (Kobold Press)',
-  'Creature Codex (Kobold Press)',
-  'Kibbles’ Casting Compendium v2.3',
+  'Basic Rules 2024',
+  'Basic Rules 2014',
+  'Tome of Beasts 1',
+  'Tome of Beasts 2',
+  'Tome of Beasts 3',
+  'Creature Codex',
+  'Tome of Heroes',
+  'Deep Magic',
+  'Warlock Grimoire',
+  'Khyberia',
+  'Kibbles’ Casting Compendium',
   'Spells That Don’t Suck',
   'So Many Spells',
 ];

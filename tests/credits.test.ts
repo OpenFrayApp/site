@@ -40,7 +40,7 @@ it('renders canonical console attribution and licenses with one page heading', a
 it('links the canonical credits page and lists the shipped reference collections', () => {
   expect(readFileSync('src/pages/credits.astro', 'utf8')).toContain('../../../console/CREDITS.md');
   expect(readFileSync('src/pages/index.astro', 'utf8')).toContain("href: '/credits/'");
-  expect(shippedLibraries).toContain('Kibbles’ Casting Compendium v2.3');
+  expect(shippedLibraries).toContain('Kibbles’ Casting Compendium');
   expect(shippedLibraries).toContain('Spells That Don’t Suck');
   expect(shippedLibraries).toContain('So Many Spells');
 });
