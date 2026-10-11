@@ -4,11 +4,18 @@
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { features } from '../src/data/features.ts';
 
 const layout = readFileSync('src/layouts/Layout.astro', 'utf8');
 const featureLinks = layout.match(/features\.map\([\s\S]*?\)\)\s*\}/)?.[0];
 
 describe('responsive feature navigation', () => {
+  it('shows the current creature and spell totals for Libraries', () => {
+    expect(features.find((feature) => feature.name === 'Libraries')?.blurb).toBe(
+      'Over 2300 creatures and 1900 spells included, plus everything your table invents.',
+    );
+  });
+
   it('hides icons and descriptions through tablet widths while retaining desktop content', () => {
     expect(featureLinks).toBeDefined();
     expect(featureLinks?.match(/max-\[1025px\]:hidden/g)).toHaveLength(2);

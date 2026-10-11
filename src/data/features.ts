@@ -29,7 +29,7 @@ export const features: Feature[] = [
   {
     name: 'Libraries',
     href: '/features/libraries/',
-    blurb: 'Over 2000 creatures included, plus everything your table invents.',
+    blurb: 'Over 2300 creatures and 1900 spells included, plus everything your table invents.',
     icon: 'libraries',
   },
 ];
