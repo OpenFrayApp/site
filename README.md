@@ -9,9 +9,16 @@ This repo is one part of OpenFray. The console and the handbook live in their ow
 repos, and [openfray](https://github.com/OpenFrayApp/openfray) ties the
 three together into the single deploy that serves the domain. The one thing this repo
 needs from outside: a clone of [console](https://github.com/OpenFrayApp/console)
-sitting beside it (same parent folder, named `console`), because the book pages
-import its compendium JSON at build time, so the stat blocks can never drift from
-what the app ships.
+sitting beside it (same parent folder, named `console`). The book pages import its
+compendium JSON, and the credits page imports its `CREDITS.md`. The account page
+imports its dependency-free `src/lib/byline.ts` and `src/schema/contentLicense.ts`.
+
+Site CI checks out only those paths from console commit
+`6f538b07ba6eafe0043b0e376f4c13c0a0d90448`. This reviewed, published snapshot pins
+compendium, credits, and account helpers together. To update any of them, review
+one published console commit and update the workflow pin and
+`tests/checksWorkflow.test.ts` together. Verify the build and tests against that
+sparse checkout before publishing the change.
 
 ## Running it
 

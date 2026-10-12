@@ -29,12 +29,14 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           repository: OpenFrayApp/console
-          ref: develop
+          ref: 6f538b07ba6eafe0043b0e376f4c13c0a0d90448
           path: console
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /public/compendium/
             /CREDITS.md
+            /src/lib/byline.ts
+            /src/schema/contentLicense.ts
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
