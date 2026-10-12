@@ -230,3 +230,21 @@ it('uses the account fallback for direct entry', async () => {
   );
   expect(browser.navigate).toHaveBeenCalledWith('/account/');
 });
+
+it('discards an abandoned handoff when the entry page reloads, so its later callback cannot install a session', async () => {
+  const { browser, root, auth, callbackUrl } = await attempt();
+  const container = await AstroContainer.create();
+  browser.window.history.replaceState(null, '', '/sign-in/?returnTo=%2Fconsole%2F');
+  browser.window.document.body.innerHTML = await container.renderToString(AuthEntry, {
+    props: { intent: 'sign-in' },
+  });
+  mountAuthEntry(browser.window.document.querySelector('main')!, browser);
+  await completeAuthCallback(
+    root,
+    browser,
+    callbackUrl + '#access_token=access&refresh_token=refresh',
+  );
+  expect(auth.setSession).not.toHaveBeenCalled();
+  expect(browser.getAuth).not.toHaveBeenCalled();
+  expect(browser.navigate).not.toHaveBeenCalled();
+});
