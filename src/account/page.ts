@@ -3,7 +3,7 @@
 
 import type { Session, SupabaseClient } from '@supabase/supabase-js';
 import { validateReturnTo } from '../auth/returnTo.ts';
-import { signOutAccountSession } from './signOut.ts';
+import { readAccountSession, signOutAccountSession } from './signOut.ts';
 import { accountRequests, type AccountUser } from './requests.ts';
 import { bylineError, BYLINE_MAX } from '../../../console/src/lib/byline.ts';
 import {
@@ -20,6 +20,7 @@ type Dependencies = {
   fetch: typeof fetch;
   navigate: (destination: string) => void;
   signOut?: typeof signOutAccountSession;
+  readSession?: (client: SupabaseClient) => Session | null | Promise<Session | null>;
 };
 const CHANGED = 'Your session changed. Sign in again to manage your account.';
 
@@ -28,6 +29,15 @@ function displayName(user: AccountUser) {
   const metadata = user.user_metadata;
   const name = metadata.display_name ?? metadata.full_name ?? metadata.name;
   return typeof name === 'string' ? name : '';
+}
+
+/** Compare observed session credentials without deriving authorization from stored metadata. */
+function sameSession(left: Session, right: Session) {
+  return (
+    left.user.id === right.user.id &&
+    left.access_token === right.access_token &&
+    left.refresh_token === right.refresh_token
+  );
 }
 
 /** Mount the site-owned account boundary with validated navigation and verified identity generations. */
@@ -67,6 +77,8 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   let allowReserved = false;
   let endingGeneration: number | null = null;
   let endedGeneration: number | null = null;
+  let endingMessage = '';
+  let authEventGeneration = 0;
   const licenseSelect = root.querySelector<HTMLSelectElement>('#share-license-default')!;
   const licenseHint = root.querySelector<HTMLElement>('[data-account-license-hint]')!;
   const nameInput = root.querySelector<HTMLInputElement>('#display-name')!;
@@ -207,26 +219,77 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   async function refreshReplacement(captured: number, expected: Session, allowMissing = false) {
     if (!current(captured)) return true;
     const before = generation;
-    const result = await client.auth.getSession().catch(() => null);
-    if (disposed || before !== generation) return true;
-    if (!result) {
-      void observe(null);
-      status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+    let actual: Session | null;
+    try {
+      actual = await (dependencies.readSession ?? readAccountSession)(client);
+    } catch {
+      if (!disposed && before === generation) {
+        void observe(null);
+        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+      }
       return true;
     }
-    const actual = result.data.session;
-    if (
-      result.error ||
-      (!actual && !allowMissing) ||
-      (actual &&
-        (actual.user.id !== expected.user.id ||
-          actual.access_token !== expected.access_token ||
-          actual.refresh_token !== expected.refresh_token))
-    ) {
-      void observe(result.error ? null : actual);
+    if (disposed || before !== generation) return true;
+    if ((!actual && !allowMissing) || (actual && !sameSession(actual, expected))) {
+      void observe(actual);
       return true;
     }
     return false;
+  }
+
+  /** Accept a null event only after native storage confirms absence, retaining any present current identity. */
+  async function reconcileNull(eventGeneration: number, initial: boolean) {
+    const captured = generation;
+    let actual: Session | null;
+    try {
+      actual = await (dependencies.readSession ?? readAccountSession)(client);
+    } catch {
+      if (!disposed && generation === captured && authEventGeneration === eventGeneration) {
+        endedGeneration = null;
+        void observe(null);
+        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+      }
+      return;
+    }
+    if (disposed || generation !== captured || authEventGeneration !== eventGeneration) return;
+    if (actual) {
+      endedGeneration = null;
+      if (!session || !sameSession(actual, session) || !current(captured))
+        void observe(actual, initial);
+      return;
+    }
+    endedGeneration = endingGeneration === captured ? captured : null;
+    void observe(null, initial);
+    if (endedGeneration !== null) status.textContent = endingMessage;
+  }
+
+  /** Publish a cleanup outcome only after reconciling native identity, including after an own null event. */
+  async function finishCleanup(
+    captured: number,
+    expected: Session | null,
+    message: string,
+    allowExpected = false,
+  ) {
+    if (!current(captured) && endedGeneration !== captured) return;
+    const before = generation;
+    let actual: Session | null;
+    try {
+      actual = await (dependencies.readSession ?? readAccountSession)(client);
+    } catch {
+      if (!disposed && generation === before) {
+        void observe(null);
+        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+      }
+      return;
+    }
+    if (disposed || generation !== before) return;
+    if (actual && (!allowExpected || !expected || !sameSession(actual, expected))) {
+      endedGeneration = null;
+      void observe(actual);
+      return;
+    }
+    void observe(null);
+    status.textContent = message;
   }
 
   /** Save one display name with the publishing validator and re-read the authenticated profile. */
@@ -336,16 +399,14 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       }
       if (!current(captured) || (await refreshReplacement(captured, verified.session))) return;
       endingGeneration = captured;
+      endingMessage = 'Signed out.';
       await (dependencies.signOut ?? signOutAccountSession)(client, verified.session, () =>
         current(captured),
       );
-      endingGeneration = null;
-      if (!current(captured) && endedGeneration !== captured) return;
-      await observe(null);
-      status.textContent = 'Signed out.';
+      await finishCleanup(captured, verified.session, 'Signed out.');
     } catch (error) {
       if (endedGeneration === captured && !session) {
-        status.textContent = 'Signed out.';
+        await finishCleanup(captured, null, 'Signed out.');
         return;
       }
       if (!current(captured) || !session || (await refreshReplacement(captured, session))) return;
@@ -378,26 +439,15 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         );
       if (await refreshReplacement(captured, verified.session)) return;
       endingGeneration = captured;
-      let cleanupFailed = false;
+      endingMessage =
+        'Account deleted. If session cleanup failed, sign in again before using another account.';
       await (dependencies.signOut ?? signOutAccountSession)(
         client,
         verified.session,
         () => current(captured),
         'local',
-      ).catch(() => {
-        cleanupFailed = true;
-      });
-      endingGeneration = null;
-      if (!current(captured) && endedGeneration !== captured) return;
-      if (
-        cleanupFailed &&
-        current(captured) &&
-        (await refreshReplacement(captured, verified.session, true))
-      )
-        return;
-      await observe(null);
-      status.textContent =
-        'Account deleted. If session cleanup failed, sign in again before using another account.';
+      ).catch(() => {});
+      await finishCleanup(captured, verified.session, endingMessage, true);
     } catch (error) {
       if (!current(captured)) return;
       fieldset.disabled = false;
@@ -435,8 +485,14 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     return dispose;
   }
   subscription = client.auth.onAuthStateChange((event, next) => {
-    endedGeneration = !next && endingGeneration === generation ? endingGeneration : null;
-    void observe(next, event === 'INITIAL_SESSION' && generation === 0);
+    const eventGeneration = ++authEventGeneration;
+    const initial = event === 'INITIAL_SESSION' && generation === 0;
+    if (next) {
+      endedGeneration = null;
+      void observe(next, initial);
+    } else {
+      void reconcileNull(eventGeneration, initial);
+    }
   }).data.subscription;
   const initialGeneration = generation;
   void client.auth

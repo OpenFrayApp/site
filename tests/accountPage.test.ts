@@ -60,7 +60,9 @@ async function account(
     return fetch(input, init);
   };
   const navigate = vi.fn();
-  const signOut = vi.fn().mockResolvedValue(undefined);
+  const signOut = vi.fn().mockImplementation(async () => {
+    auth.getSession.mockResolvedValue({ data: { session: null }, error: null } as never);
+  });
   const dispose = mountAccount(window.document.querySelector('main')!, {
     window,
     getClient: () => ({ auth }) as never,
@@ -69,6 +71,7 @@ async function account(
     fetch: fetcher,
     navigate,
     signOut,
+    readSession: async () => (await auth.getSession()).data.session as never,
   });
   cleanups.push(() => {
     dispose();
@@ -143,7 +146,7 @@ it('fences delayed identity reads when the account is replaced or expires', asyn
     'other@example.invalid',
   );
   emit(null);
-  expect(document.querySelector('fieldset')?.disabled).toBe(true);
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(true));
   expect(document.querySelector('[data-account-identity]')?.textContent).toBe('');
   expect(document.querySelector('[role="status"]')?.textContent).toContain('Sign in');
 });
@@ -371,7 +374,7 @@ it('suppresses stale profile replies and aborts their request when the current a
   await vi.waitFor(() => expect(reply).toBeDefined());
   const signal = fetch.mock.calls.at(-1)?.[1].signal;
   emit(null);
-  expect(signal.aborted).toBe(true);
+  await vi.waitFor(() => expect(signal.aborted).toBe(true));
   reply(new Response(JSON.stringify(user), { status: 200 }));
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(document.querySelector('fieldset')?.disabled).toBe(true);

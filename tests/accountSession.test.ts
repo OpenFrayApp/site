@@ -286,3 +286,76 @@ it('does not apply a late confirmed deletion reply to a replacement native sessi
   expect(confirm.value).toBe('');
   expect(document.querySelector('[role="status"]')?.textContent).not.toContain('Account deleted');
 });
+
+it.each(['sign-out', 'delete'])(
+  'preserves B stored after final SDK auxiliary-user removal during A %s',
+  async (action) => {
+    const { client, document, window, fetch, replaceStoredIdentity } = await sdkAccount(true);
+    await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+    const previous = window.localStorage.getItem('sb-sdk-account-auth-token')!;
+    const nativeRemove = window.Storage.prototype.removeItem;
+    let interleaved = false;
+    vi.spyOn(window.Storage.prototype, 'removeItem').mockImplementation(function (
+      this: Storage,
+      key: string,
+    ) {
+      nativeRemove.call(this, key);
+      if (key === 'sb-sdk-account-auth-token-user' && !interleaved) {
+        interleaved = true;
+        window.localStorage.setItem('sb-sdk-account-auth-token', previous);
+        replaceStoredIdentity();
+      }
+    });
+    if (action === 'delete') {
+      const defaultFetch = fetch.getMockImplementation()!;
+      fetch.mockImplementation(async (input, init) =>
+        new URL(String(input)).pathname === '/functions/v1/account-delete'
+          ? new Response('{"deleted":true}', { status: 200 })
+          : defaultFetch(input, init),
+      );
+      const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
+      confirm.value = 'owner@example.invalid';
+      confirm.dispatchEvent(new window.Event('input', { bubbles: true }));
+    }
+    document.querySelector<HTMLButtonElement>(`[data-account-${action}]`)!.click();
+    await vi.waitFor(() => expect(interleaved).toBe(true));
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-account-identity]')?.textContent).toBe(
+        'replacement@example.invalid',
+      ),
+    );
+    expect((await client.auth.getSession()).data.session?.user.id).toBe('replacement');
+    expect(document.querySelector('fieldset')?.disabled).toBe(false);
+    expect(document.querySelector('[role="status"]')?.textContent).not.toMatch(
+      /Signed out|Account deleted/,
+    );
+  },
+);
+
+it('ignores a delayed old cross-tab SIGNED_OUT after B has been verified', async () => {
+  const { client, document, window, replaceStoredIdentity } = await sdkAccount(true);
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  replaceStoredIdentity();
+  const replacement = JSON.parse(window.localStorage.getItem('sb-sdk-account-auth-token')!);
+  await client.auth.setSession(replacement);
+  await vi.waitFor(() =>
+    expect(document.querySelector('[data-account-identity]')?.textContent).toBe(
+      'replacement@example.invalid',
+    ),
+  );
+  let delivered = false;
+  const subscription = client.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_OUT') delivered = true;
+  }).data.subscription;
+  cleanups.push(() => subscription.unsubscribe());
+  const channel = new BroadcastChannel('sb-sdk-account-auth-token');
+  channel.postMessage({ event: 'SIGNED_OUT', session: null });
+  await vi.waitFor(() => expect(delivered).toBe(true));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  channel.close();
+  expect(document.querySelector('[data-account-identity]')?.textContent).toBe(
+    'replacement@example.invalid',
+  );
+  expect(document.querySelector('fieldset')?.disabled).toBe(false);
+  expect((await client.auth.getSession()).data.session?.user.id).toBe('replacement');
+});

@@ -29,6 +29,28 @@ export function accountSessionAdapter(url: string, storage: Storage) {
   }
 
   return {
+    readSession: (): Session | null => {
+      const stored = storage.getItem(key);
+      if (stored === null) return null;
+      const value: unknown = JSON.parse(stored);
+      if (!value || typeof value !== 'object')
+        throw new Error('Stored account session is malformed.');
+      const candidate = value as Partial<Session>;
+      if (
+        typeof candidate.access_token !== 'string' ||
+        !candidate.access_token ||
+        typeof candidate.refresh_token !== 'string' ||
+        !candidate.refresh_token ||
+        typeof candidate.expires_at !== 'number' ||
+        !Number.isFinite(candidate.expires_at) ||
+        !candidate.user ||
+        typeof candidate.user !== 'object' ||
+        typeof candidate.user.id !== 'string' ||
+        !candidate.user.id
+      )
+        throw new Error('Stored account session is malformed.');
+      return candidate as Session;
+    },
     storage: {
       getItem: (name: string) => {
         check();
@@ -76,6 +98,14 @@ export function accountSessionAdapter(url: string, storage: Storage) {
 /** Associate the guarded SDK boundary with its one persistent client. */
 export function registerAccountSessionAdapter(client: SupabaseClient, adapter: Adapter) {
   adapters.set(client, adapter);
+}
+
+/** Read only the registered client's native session candidate; this is never trusted authorization. */
+export function readAccountSession(client: SupabaseClient): Session | null {
+  const adapter = adapters.get(client);
+  if (!adapter)
+    throw new Error('Account session reconciliation is unavailable. Reload and try again.');
+  return adapter.readSession();
 }
 
 /** Fence SDK sign-out to the captured session and refuse observed replacements. */

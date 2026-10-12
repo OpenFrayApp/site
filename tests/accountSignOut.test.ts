@@ -3,7 +3,7 @@
 
 import { afterEach, expect, it, vi } from 'vitest';
 import { createSiteClient } from '../src/auth/client.ts';
-import { signOutAccountSession } from '../src/account/signOut.ts';
+import { readAccountSession, signOutAccountSession } from '../src/account/signOut.ts';
 
 const key = 'sb-guarded-auth-token';
 const clients: ReturnType<typeof createSiteClient>[] = [];
@@ -141,4 +141,19 @@ it('halts cleanup before SDK broadcasts if a replacement appears between storage
   );
   expect(events).not.toContain('SIGNED_OUT');
   expect((await client.auth.getSession()).data.session?.user.id).toBe('replacement');
+});
+
+it('distinguishes native absence, malformed session, expired candidate, and an unregistered client without SDK side effects', async () => {
+  const { client, session, fetch } = await identity();
+  fetch.mockClear();
+  expect(readAccountSession(client)?.user.id).toBe('owner');
+  localStorage.setItem(key, JSON.stringify({ ...session, expires_at: 1 }));
+  expect(readAccountSession(client)?.expires_at).toBe(1);
+  localStorage.setItem(key, '{broken');
+  expect(() => readAccountSession(client)).toThrow();
+  expect(localStorage.getItem(key)).toBe('{broken');
+  localStorage.removeItem(key);
+  expect(readAccountSession(client)).toBeNull();
+  expect(() => readAccountSession({ auth: {} } as never)).toThrow('unavailable');
+  expect(fetch).not.toHaveBeenCalled();
 });
