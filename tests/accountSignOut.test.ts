@@ -88,7 +88,7 @@ it('refuses a same-user token renewal before SDK logout dispatch', async () => {
   expect(JSON.parse(localStorage.getItem(key)!).access_token).toBe('renewed');
 });
 
-it('refuses a replacement acquired while SDK signout waits on its session lock', async () => {
+it('preserves concurrent SDK sign-in from delayed old-session cleanup', async () => {
   const { client, session, fetch, events } = await identity();
   let release!: (response: Response) => void;
   fetch.mockImplementationOnce(
@@ -97,7 +97,11 @@ it('refuses a replacement acquired while SDK signout waits on its session lock',
         release = resolve;
       }),
   );
-  const pendingUpdate = client.auth.updateUser({ data: { display_name: 'Pending' } });
+  const access_token = `${btoa('{"alg":"HS256","typ":"JWT"}')}.${btoa(JSON.stringify({ sub: 'replacement', exp: Math.floor(Date.now() / 1000) + 3600 })).replace(/=+$/, '')}.c2lnbmF0dXJl`;
+  const pendingSignIn = client.auth.setSession({
+    access_token,
+    refresh_token: 'replacement-refresh',
+  });
   await vi.waitFor(() => expect(release).toBeDefined());
   const signout = signOutAccountSession(client, session, () => true);
   const refusal = expect(signout).rejects.toThrow('changed');
@@ -107,8 +111,12 @@ it('refuses a replacement acquired while SDK signout waits on its session lock',
       headers: { 'Content-Type': 'application/json' },
     }),
   );
-  await pendingUpdate;
+  await pendingSignIn;
   await refusal;
+  const logout = fetch.mock.calls.find(([input]) => String(input).includes('/logout'));
+  expect(new Headers(logout?.[1]?.headers).get('Authorization')).toBe(
+    `Bearer ${session.access_token}`,
+  );
   expect(events).not.toContain('SIGNED_OUT');
   expect(JSON.parse(localStorage.getItem(key)!).user.id).toBe('replacement');
 });

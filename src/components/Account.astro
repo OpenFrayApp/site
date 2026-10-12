@@ -1,6 +1,11 @@
 ---
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 Nicola Mustone
+
+import {
+  LICENSE_LABELS,
+  LICENSES_FROM_SCRATCH,
+} from '../../../console/src/schema/contentLicense.ts';
 ---
 
 <main class="mx-auto w-full max-w-xl px-6 py-12" data-account>
@@ -29,8 +34,8 @@
     <section class="rounded-lg border border-border bg-panel p-4">
       <h2 class="font-semibold text-text">Display name</h2>
       <p id="account-name-description" class="mt-2 text-muted">
-        The name shown on the player view and your shared encounters. Leave blank to hide it. The
-        default comes from your sign-in provider.
+        The name shown on the player view and your shared encounters. Leave blank to reset your
+        custom name. Your provider name is used when available.
       </p>
       <form data-account-name-form class="mt-4 flex flex-wrap items-end gap-3">
         <div class="min-w-0 flex-1">
@@ -50,6 +55,32 @@
           >Save</button
         >
       </form>
+    </section>
+    <section class="rounded-lg border border-border bg-panel p-4">
+      <h2 class="font-semibold text-text">Default license for shared encounters</h2>
+      <p id="account-license-description" class="mt-2 text-muted">
+        What the share dialog starts on. It covers your own words: the name, the note, and which
+        creatures you put together. Creatures carry their own licenses. You can change it on any
+        share without changing this.
+      </p>
+      <label for="share-license-default" class="mt-4 block font-semibold">License</label>
+      <select
+        id="share-license-default"
+        aria-describedby="account-license-description account-license-hint"
+        class="mt-2 min-h-11 w-full rounded-lg border border-border bg-bg px-3 py-2 text-base text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        {
+          LICENSES_FROM_SCRATCH.map((license) => (
+            <option value={license}>{LICENSE_LABELS[license]}</option>
+          ))
+        }
+      </select>
+      <p
+        id="account-license-hint"
+        data-account-license-hint
+        class="mt-2 text-sm leading-relaxed text-muted"
+      >
+      </p>
     </section>
     <section class="rounded-lg border border-border bg-panel p-4">
       <h2 class="font-semibold text-text">Delete account</h2>

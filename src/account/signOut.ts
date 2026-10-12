@@ -65,7 +65,7 @@ export function accountSessionAdapter(url: string, storage: Storage) {
       try {
         check();
         const result = await client.auth.signOut({ scope });
-        if (result.error) throw result.error;
+        if (result.error) throw new Error('Sign-out failed. Check your account and try again.');
       } finally {
         guard = undefined;
       }
@@ -78,7 +78,7 @@ export function registerAccountSessionAdapter(client: SupabaseClient, adapter: A
   adapters.set(client, adapter);
 }
 
-/** End only the captured current session, without removing or broadcasting a replacement. */
+/** Fence SDK sign-out to the captured session and refuse observed replacements. */
 export async function signOutAccountSession(
   client: SupabaseClient,
   session: Session,
