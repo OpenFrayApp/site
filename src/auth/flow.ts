@@ -94,3 +94,57 @@ export function mountAuthEntry(root: HTMLElement, browser: AuthBrowser) {
     });
   });
 }
+
+/** Consume a matching tab attempt before explicitly installing its implicit-flow session. */
+export async function completeAuthCallback(
+  root: HTMLElement,
+  browser: AuthBrowser,
+  callbackHref = browser.window.location.href,
+) {
+  const { window, getAuth, navigate } = browser;
+  const callback = new URL(callbackHref);
+  window.history.replaceState(null, '', '/auth/callback/');
+  const status = root.querySelector<HTMLElement>('[data-auth-status]')!;
+  try {
+    const stored = window.sessionStorage.getItem(attemptKey);
+    window.sessionStorage.removeItem(attemptKey);
+    const attempt = stored ? JSON.parse(stored) : null;
+    if (
+      !attempt ||
+      attempt.version !== 1 ||
+      typeof attempt.attemptId !== 'string' ||
+      !/^[\w-]{20,}$/.test(attempt.attemptId) ||
+      callback.origin !== window.location.origin ||
+      callback.pathname !== '/auth/callback/' ||
+      callback.searchParams.getAll('attempt').length !== 1 ||
+      attempt.attemptId !== callback.searchParams.get('attempt') ||
+      !Number.isFinite(attempt.startedAt) ||
+      attempt.startedAt > Date.now() ||
+      Date.now() - attempt.startedAt >= 10 * 60 * 1000 ||
+      typeof attempt.returnTo !== 'string'
+    )
+      throw new Error('Unmatched or expired attempt');
+    const returnTo = validateReturnTo(attempt.returnTo, window.location.origin);
+    root
+      .querySelector<HTMLAnchorElement>('[data-auth-retry]')!
+      .setAttribute('href', `/sign-in/?returnTo=${encodeURIComponent(returnTo)}`);
+    const tokens = new URLSearchParams(callback.hash.slice(1));
+    if (
+      callback.searchParams.has('error') ||
+      tokens.has('error') ||
+      tokens.getAll('access_token').length !== 1 ||
+      tokens.getAll('refresh_token').length !== 1 ||
+      !tokens.get('access_token') ||
+      !tokens.get('refresh_token')
+    )
+      throw new Error('Canceled or incomplete callback');
+    const { data, error } = await getAuth().setSession({
+      access_token: tokens.get('access_token')!,
+      refresh_token: tokens.get('refresh_token')!,
+    });
+    if (error || !data.session) throw new Error('Incomplete sign-in');
+    navigate(validateReturnTo(attempt.returnTo, window.location.origin));
+  } catch {
+    status.textContent = 'Sign-in was canceled or could not be completed. Try signing in again.';
+  }
+}
