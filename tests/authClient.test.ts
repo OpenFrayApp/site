@@ -2,7 +2,7 @@
 // Copyright (C) 2026 Nicola Mustone
 
 import { afterEach, expect, it, vi } from 'vitest';
-import { createSiteAuth } from '../src/auth/client.ts';
+import { createSiteAuth, getSiteAuth, getSiteClient } from '../src/auth/client.ts';
 
 afterEach(() => {
   localStorage.clear();
@@ -48,6 +48,16 @@ it('persists an explicitly completed session under the compatible SDK default ke
   expect(JSON.parse(localStorage.getItem('sb-project-ref-auth-token')!).user.id).toBe('user-1');
   expect((await auth.getSession()).data.session?.user.id).toBe('user-1');
   auth.stopAutoRefresh();
+});
+
+it('shares one persistent client between auth and account callers', async () => {
+  vi.stubEnv('PUBLIC_SUPABASE_URL', 'https://singleton.supabase.co');
+  vi.stubEnv('PUBLIC_SUPABASE_ANON_KEY', 'public-anon-key');
+  expect(getSiteClient()).toBe(getSiteClient());
+  expect(getSiteAuth()).toBe(getSiteClient().auth);
+  expect((await getSiteAuth().getSession()).data.session).toBeNull();
+  getSiteAuth().stopAutoRefresh();
+  vi.unstubAllEnvs();
 });
 
 it('fails closed when public configuration is unavailable', () => {

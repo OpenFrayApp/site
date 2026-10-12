@@ -9,6 +9,7 @@ import { expect, it } from 'vitest';
 import SignIn from '../src/pages/sign-in.astro';
 import SignUp from '../src/pages/sign-up.astro';
 import Callback from '../src/pages/auth/callback.astro';
+import Account from '../src/pages/account.astro';
 
 it.each([
   [SignIn, 'Sign in'],
@@ -19,6 +20,16 @@ it.each([
   const document = new JSDOM(html).window.document;
   expect(document.querySelector('h1')?.textContent).toBe(heading);
   expect(document.querySelectorAll('[data-provider]')).toHaveLength(3);
+});
+
+it('renders the real account fallback route with disabled controls until identity verification', async () => {
+  const container = await AstroContainer.create({ astroConfig: { site: 'https://openfray.app' } });
+  const document = new JSDOM(await container.renderToString(Account)).window.document;
+  expect(document.querySelector('h1')?.textContent).toBe('Account');
+  expect(document.querySelector('fieldset')?.disabled).toBe(true);
+  expect(document.querySelector('[role="status"]')?.textContent).toContain('Checking');
+  expect(document.querySelector('label[for="display-name"]')).not.toBeNull();
+  expect(document.querySelector('label[for="account-confirm-email"]')).not.toBeNull();
 });
 
 it('scrubs callback material synchronously before any external script can run', async () => {

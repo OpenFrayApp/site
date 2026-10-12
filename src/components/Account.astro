@@ -1,0 +1,133 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+import {
+  LICENSE_LABELS,
+  LICENSES_FROM_SCRATCH,
+} from '../../../console/src/schema/contentLicense.ts';
+---
+
+<main class="mx-auto w-full max-w-xl px-6 py-12" data-account>
+  <h1 class="text-3xl leading-tight font-bold text-text">Account</h1>
+  <p data-account-status role="status" aria-live="polite" class="mt-4 text-muted">
+    Checking your account…
+  </p>
+  <p class="mt-4"><a data-account-return href="/account/">Return</a></p>
+  <p class="mt-3"><a data-account-sign-in href="/sign-in/" hidden>Sign in again</a></p>
+  <fieldset disabled class="mt-6 min-w-0 space-y-6">
+    <legend class="sr-only">Account controls</legend>
+    <section class="rounded-lg border border-border bg-panel p-4">
+      <h2 class="font-semibold text-text">Signed in</h2>
+      <p data-account-identity class="mt-2 break-words text-muted"></p>
+      <p class="mt-2 text-muted">
+        Change your email or password in your <span data-account-provider></span> account. OpenFray never
+        sees your password.
+      </p>
+      <button
+        type="button"
+        data-account-sign-out
+        class="mt-3 min-h-11 cursor-pointer rounded-lg border border-border px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60"
+        >Sign out</button
+      >
+    </section>
+    <section class="rounded-lg border border-border bg-panel p-4">
+      <h2 class="font-semibold text-text">Display name</h2>
+      <p id="account-name-description" class="mt-2 text-muted">
+        The name shown on the player view and your shared encounters. Leave blank to reset your
+        custom name. Your provider name is used when available.
+      </p>
+      <form data-account-name-form class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="min-w-0 flex-1">
+          <label for="display-name" class="block font-semibold">Name</label>
+          <input
+            id="display-name"
+            type="text"
+            autocomplete="off"
+            placeholder="Anonymous"
+            aria-describedby="account-name-description"
+            class="mt-2 min-h-11 w-full rounded-lg border border-border bg-bg px-3 py-2 text-base text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          />
+        </div>
+        <button
+          type="submit"
+          class="min-h-11 cursor-pointer rounded-lg border border-border px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60"
+          >Save</button
+        >
+      </form>
+    </section>
+    <section class="rounded-lg border border-border bg-panel p-4">
+      <h2 class="font-semibold text-text">Default license for shared encounters</h2>
+      <p id="account-license-description" class="mt-2 text-muted">
+        What the share dialog starts on. It covers your own words: the name, the note, and which
+        creatures you put together. Creatures carry their own licenses. You can change it on any
+        share without changing this.
+      </p>
+      <label for="share-license-default" class="mt-4 block font-semibold">License</label>
+      <select
+        id="share-license-default"
+        aria-describedby="account-license-description account-license-hint"
+        class="mt-2 min-h-11 w-full rounded-lg border border-border bg-bg px-3 py-2 text-base text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        {
+          LICENSES_FROM_SCRATCH.map((license) => (
+            <option value={license}>{LICENSE_LABELS[license]}</option>
+          ))
+        }
+      </select>
+      <p
+        id="account-license-hint"
+        data-account-license-hint
+        class="mt-2 text-sm leading-relaxed text-muted"
+      >
+      </p>
+    </section>
+    <section class="rounded-lg border border-border bg-panel p-4">
+      <h2 class="font-semibold text-text">Delete account</h2>
+      <p class="mt-2 text-muted">
+        Deletes your account and <strong>everything in it</strong>: your encounters, creatures and
+        spells, campaigns, characters, and every page you have published. It happens straight away
+        and can’t be undone.
+      </p>
+      <p class="mt-2 text-muted">Anyone holding one of your shared links will find it gone.</p>
+      <form data-account-delete-form class="mt-4 space-y-3">
+        <label for="account-confirm-email" class="block font-semibold"
+          >Type your current account email to confirm</label
+        >
+        <input
+          id="account-confirm-email"
+          data-account-confirm-email
+          type="text"
+          autocomplete="off"
+          aria-label="Confirm account email to delete"
+          class="min-h-11 w-full rounded-lg border border-border bg-bg px-3 py-2 text-base text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        />
+        <button
+          type="submit"
+          data-account-delete
+          disabled
+          class="min-h-11 cursor-pointer rounded-lg border border-border px-4 py-2 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60"
+          >Delete my account</button
+        >
+      </form>
+    </section>
+  </fieldset>
+  <noscript><p class="mt-4">Enable JavaScript to manage your account.</p></noscript>
+</main>
+
+<script>
+  import { mountAccount } from '../account/page.ts';
+  import { getSiteClient } from '../auth/client.ts';
+  const root = document.querySelector<HTMLElement>('[data-account]');
+  if (root) {
+    const dispose = mountAccount(root, {
+      window,
+      getClient: getSiteClient,
+      url: import.meta.env.PUBLIC_SUPABASE_URL,
+      publicKey: import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+      fetch: (...args) => fetch(...args),
+      navigate: (destination) => window.location.assign(destination),
+    });
+    window.addEventListener('pagehide', dispose, { once: true });
+  }
+</script>
