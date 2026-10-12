@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Nicola Mustone
 
 import { createClient } from '@supabase/supabase-js';
+import { accountSessionAdapter, registerAccountSessionAdapter } from '../account/signOut.ts';
 
 /** Create the compatible browser session consumer without accepting URL tokens automatically. */
 export function createSiteClient(url: string | undefined, anonKey: string | undefined) {
@@ -12,16 +13,20 @@ export function createSiteClient(url: string | undefined, anonKey: string | unde
   } catch {
     throw new Error('Browser storage is unavailable');
   }
-  return createClient(url, anonKey, {
+  const adapter = accountSessionAdapter(url, window.localStorage);
+  const client = createClient(url, anonKey, {
+    global: { fetch: adapter.fetch },
     auth: {
       // Bypass the SDK's quota probe and memory fallback so session write failures propagate.
-      storage: window.localStorage,
+      storage: adapter.storage,
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: false,
       flowType: 'implicit',
     },
   });
+  registerAccountSessionAdapter(client, adapter);
+  return client;
 }
 
 /** Preserve the auth-only factory contract used by OAuth callers. */
