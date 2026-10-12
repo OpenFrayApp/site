@@ -3,6 +3,7 @@
 // @vitest-environment node
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { readFileSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 import { expect, it } from 'vitest';
 import SignIn from '../src/pages/sign-in.astro';
@@ -30,4 +31,10 @@ it('scrubs callback material synchronously before any external script can run', 
   expect(dom.window.location.href).toBe('https://openfray.app/auth/callback/');
   expect(dom.window.document.querySelector('script[src*="fathom"]')).toBeNull();
   expect(dom.window.document.querySelector('h1')?.textContent).toBe('Completing sign-in');
+});
+
+it('documents a callback allowlist pattern with one literal escape before the query separator', () => {
+  const documentation = readFileSync('docs/development/authentication.md', 'utf8');
+  const pattern = documentation.match(/restricted pattern `([^`]+)`/)?.[1];
+  expect(pattern).toBe(String.raw`https://openfray.app/auth/callback/\?attempt=*`);
 });
