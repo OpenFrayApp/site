@@ -53,8 +53,21 @@ const providers = [
   </p>
   <p class="mt-6">
     <a data-auth-switch href={signingUp ? '/sign-in/' : '/sign-up/'}
-      >{signingUp ? 'Sign in' : 'Create a free account'}</a>
+      >{signingUp ? 'Sign in' : 'Create a free account'}</a
+    >
   </p>
   <p class="mt-3"><a data-auth-cancel href="/account/">Cancel and return</a></p>
   <noscript><p class="mt-4">Enable JavaScript to continue with a provider.</p></noscript>
 </main>
+
+<script>
+  import { mountAuthEntry } from '../auth/flow.ts';
+  import { getSiteAuth } from '../auth/client.ts';
+  const root = document.querySelector<HTMLElement>('[data-auth-entry]');
+  if (root)
+    mountAuthEntry(root, {
+      window,
+      getAuth: getSiteAuth,
+      navigate: (destination) => window.location.assign(destination),
+    });
+</script>

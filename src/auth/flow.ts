@@ -31,6 +31,7 @@ export function mountAuthEntry(root: HTMLElement, browser: AuthBrowser) {
   const status = root.querySelector<HTMLElement>('[data-auth-status]')!;
   let busy = false;
   let cancelled = false;
+  let handoffGeneration = 0;
 
   /** Remove an abandoned attempt without assuming browser storage is available. */
   function discardAttempt() {
@@ -43,6 +44,8 @@ export function mountAuthEntry(root: HTMLElement, browser: AuthBrowser) {
 
   /** Restore usable provider controls after a failed or abandoned handoff. */
   function reset() {
+    handoffGeneration += 1;
+    cancelled = false;
     busy = false;
     buttons.forEach((button) => {
       button.disabled = false;
@@ -68,6 +71,7 @@ export function mountAuthEntry(root: HTMLElement, browser: AuthBrowser) {
     button.addEventListener('click', async () => {
       if (busy || cancelled) return;
       busy = true;
+      const generation = ++handoffGeneration;
       buttons.forEach((button) => {
         button.disabled = true;
       });
@@ -85,8 +89,9 @@ export function mountAuthEntry(root: HTMLElement, browser: AuthBrowser) {
           options: { redirectTo: redirectTo.href, skipBrowserRedirect: true },
         });
         if (error || !data.url) throw new Error('OAuth handoff failed');
-        if (!cancelled) navigate(data.url);
+        if (!cancelled && generation === handoffGeneration) navigate(data.url);
       } catch {
+        if (generation !== handoffGeneration || cancelled) return;
         reset();
         status.textContent =
           'Could not start sign-in. Allow browser storage and choose a provider to try again.';

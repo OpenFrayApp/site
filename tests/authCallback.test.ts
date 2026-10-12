@@ -188,3 +188,45 @@ it('revalidates a stored return before navigation', async () => {
   await completeAuthCallback(root, browser);
   expect(browser.navigate).toHaveBeenCalledWith('/account/');
 });
+
+it.each(['getItem', 'removeItem'])(
+  'fails closed when callback storage %s is denied',
+  async (method) => {
+    const { browser, root, auth, callbackUrl } = await attempt();
+    vi.spyOn(Object.getPrototypeOf(browser.window.sessionStorage), method).mockImplementation(
+      () => {
+        throw new Error('denied');
+      },
+    );
+    browser.window.history.replaceState(
+      null,
+      '',
+      callbackUrl + '#access_token=access&refresh_token=refresh',
+    );
+    await completeAuthCallback(root, browser);
+    expect(auth.setSession).not.toHaveBeenCalled();
+    expect(browser.getAuth).not.toHaveBeenCalled();
+    expect(browser.navigate).not.toHaveBeenCalled();
+    expect(browser.window.location.hash).toBe('');
+    vi.restoreAllMocks();
+  },
+);
+
+it('consumes before the network completes so concurrent replay cannot install twice', async () => {
+  const { browser, root, auth, callbackUrl } = await attempt();
+  auth.setSession.mockReturnValueOnce(new Promise(() => {}));
+  const href = callbackUrl + '#access_token=access&refresh_token=refresh';
+  void completeAuthCallback(root, browser, href);
+  await completeAuthCallback(root, browser, href);
+  expect(auth.setSession).toHaveBeenCalledTimes(1);
+});
+
+it('uses the account fallback for direct entry', async () => {
+  const { browser, root, callbackUrl } = await attempt('sign-up', 'custom:patreon', '');
+  await completeAuthCallback(
+    root,
+    browser,
+    callbackUrl + '#access_token=access&refresh_token=refresh',
+  );
+  expect(browser.navigate).toHaveBeenCalledWith('/account/');
+});

@@ -18,7 +18,7 @@ async function entry(
   const dom = new JSDOM(html, {
     url: `https://openfray.app/${intent}/?returnTo=${encodeURIComponent(returnTo)}`,
   });
-  const window = dom.window as unknown as Window;
+  const window = dom.window as unknown as Window & typeof globalThis;
   const document = window.document;
   const auth = {
     signInWithOAuth: vi
@@ -131,10 +131,6 @@ it.each(['google', 'discord', 'custom:patreon'])(
 
 it('does not contact the provider when tab storage is denied', async () => {
   const { auth, navigate, document, window } = await entry();
-  vi.spyOn(window.sessionStorage, 'setItem').mockImplementation(() => {
-    throw new Error('denied');
-  });
-  // jsdom storage methods are defined on the prototype.
   vi.spyOn(Object.getPrototypeOf(window.sessionStorage), 'setItem').mockImplementation(() => {
     throw new Error('denied');
   });
@@ -154,4 +150,28 @@ it('blocks repeat clicks while the provider handoff is pending', async () => {
   document.querySelector<HTMLButtonElement>('[data-provider="discord"]')!.click();
   expect(auth.signInWithOAuth).toHaveBeenCalledTimes(1);
   expect([...document.querySelectorAll('button')].every((button) => button.disabled)).toBe(true);
+});
+
+it('discards the canceled attempt and does not redirect after a late provider response', async () => {
+  const { auth, navigate, document, window } = await entry();
+  let resolve!: (value: unknown) => void;
+  auth.signInWithOAuth.mockReturnValueOnce(
+    new Promise((done) => {
+      resolve = done;
+    }),
+  );
+  document.querySelector<HTMLButtonElement>('[data-provider="google"]')!.click();
+  document.querySelector('[data-auth-cancel]')!.dispatchEvent(new window.Event('click'));
+  resolve({ data: { url: 'https://provider.example/' }, error: null });
+  await new Promise((done) => setTimeout(done, 0));
+  expect(navigate).not.toHaveBeenCalled();
+  expect(window.sessionStorage.getItem('openfray-oauth-attempt')).toBeNull();
+});
+
+it('allows a fresh handoff after returning from a canceled provider through the back-forward cache', async () => {
+  const { auth, document, window } = await entry();
+  document.querySelector('[data-auth-cancel]')!.dispatchEvent(new window.Event('click'));
+  window.dispatchEvent(new window.PageTransitionEvent('pageshow', { persisted: true }));
+  document.querySelector<HTMLButtonElement>('[data-provider="discord"]')!.click();
+  await vi.waitFor(() => expect(auth.signInWithOAuth).toHaveBeenCalled());
 });

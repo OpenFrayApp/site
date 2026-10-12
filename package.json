@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@qain/core": "^0.0.5",
+    "@types/jsdom": "30.0.0",
     "jsdom": "^26.1.0",
     "pagedjs": "^0.4.3",
     "prettier": "^3.9.5",
