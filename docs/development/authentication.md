@@ -6,9 +6,9 @@ Entry intent changes presentation only. This slice has no newsletter controls.
 
 ## Release gate
 
-Keep #139 unreleased until #140 supplies `/account/`.
-Direct entry and invalid return destinations fall back to that route.
-The console keeps account management until #140 moves it to the site.
+Direct entry and invalid return destinations fall back to the site’s `/account/` route.
+The site owns account management; see [Site account management](./account.md).
+Keep source changes unreleased until the parent’s assembled, handbook, and authenticated cross-surface gates pass.
 
 ## Public configuration
 

@@ -25,15 +25,13 @@ async function identity() {
     user_metadata: {},
     created_at: '2026-01-01',
   };
-  const fetch = vi
-    .fn()
-    .mockImplementation(
-      async () =>
-        new Response(JSON.stringify(user), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-    );
+  const fetch = vi.fn().mockImplementation(
+    async () =>
+      new Response(JSON.stringify(user), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+  );
   vi.stubGlobal('fetch', fetch);
   const client = createSiteClient('https://guarded.supabase.co', 'public-key');
   clients.push(client);
