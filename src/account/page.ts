@@ -38,7 +38,9 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     window.location.origin,
   );
   const accountDestination =
-    returnTo === '/account/' ? '/account/' : `/account/?returnTo=${encodeURIComponent(returnTo)}`;
+    returnTo === '/account/'
+      ? '/account/'
+      : `/account/?returnTo=${encodeURIComponent(returnTo).replace(/%2F/g, '/')}`;
   const signInDestination = `/sign-in/?returnTo=${encodeURIComponent(accountDestination)}`;
   const returnLink = root.querySelector<HTMLAnchorElement>('[data-account-return]')!;
   const signInLink = root.querySelector<HTMLAnchorElement>('[data-account-sign-in]')!;

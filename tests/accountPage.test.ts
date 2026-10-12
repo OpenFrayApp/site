@@ -98,7 +98,7 @@ it('routes an anonymous account visit through sign-in and retains its validated 
   const destination = new URL(navigate.mock.calls[0][0], 'https://openfray.app');
   expect(destination.pathname).toBe('/sign-in/');
   expect(destination.searchParams.get('returnTo')).toBe(
-    '/account/?returnTo=%2Fconsole%2F%3Ffight%3D7%23log',
+    '/account/?returnTo=/console/%3Ffight%3D7%23log',
   );
   expect(document.querySelector('fieldset')?.disabled).toBe(true);
 });
