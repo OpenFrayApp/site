@@ -16,7 +16,8 @@ export function validateReturnTo(value: string | null, origin: string): string {
       decoded = next;
     } while (true);
     const url = new URL(value, origin);
-    if (url.origin !== origin || url.username || url.password) return fallback;
+    if (url.origin !== origin || url.username || url.password || url.pathname.startsWith('//'))
+      return fallback;
     const pathname = decodeURIComponent(url.pathname).replace(/\/+$/, '').toLowerCase();
     if (['/sign-in', '/sign-up', '/auth/callback'].includes(pathname)) return fallback;
     return url.pathname + url.search + url.hash;

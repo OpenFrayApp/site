@@ -53,3 +53,16 @@ it('persists an explicitly completed session under the compatible SDK default ke
 it('fails closed when public configuration is unavailable', () => {
   expect(() => createSiteAuth('', '')).toThrow('Sign-in is not configured');
 });
+
+it('does not silently fall back to a memory-only session when persistent browser storage is denied', () => {
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('denied');
+  });
+  try {
+    expect(() => createSiteAuth('https://project-ref.supabase.co', 'public-anon-key')).toThrow(
+      'Browser storage is unavailable',
+    );
+  } finally {
+    vi.restoreAllMocks();
+  }
+});

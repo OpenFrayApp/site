@@ -6,6 +6,13 @@ import { createClient } from '@supabase/supabase-js';
 /** Create the compatible browser session consumer without accepting URL tokens automatically. */
 export function createSiteAuth(url: string | undefined, anonKey: string | undefined) {
   if (!url || !anonKey) throw new Error('Sign-in is not configured');
+  // The SDK can fall back to memory, which cannot survive the return to the console.
+  try {
+    window.localStorage.setItem('openfray-auth-storage-check', '');
+    window.localStorage.removeItem('openfray-auth-storage-check');
+  } catch {
+    throw new Error('Browser storage is unavailable');
+  }
   return createClient(url, anonKey, {
     auth: {
       persistSession: true,

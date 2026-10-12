@@ -175,3 +175,16 @@ it('allows a fresh handoff after returning from a canceled provider through the 
   document.querySelector<HTMLButtonElement>('[data-provider="discord"]')!.click();
   await vi.waitFor(() => expect(auth.signInWithOAuth).toHaveBeenCalled());
 });
+
+it.each([
+  '/a/..//evil.example/',
+  '/.//evil.example/',
+  '/%2e//evil.example/',
+  '/%2e%2e//evil.example/',
+])(
+  'rejects %s when canonicalization would produce a protocol-relative destination',
+  async (returnTo) => {
+    const { document } = await entry('sign-in', returnTo);
+    expect(document.querySelector('[data-auth-cancel]')?.getAttribute('href')).toBe('/account/');
+  },
+);
