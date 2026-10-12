@@ -1,0 +1,73 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+interface Props {
+  intent: 'sign-in' | 'sign-up';
+}
+const { intent } = Astro.props;
+const signingUp = intent === 'sign-up';
+const providers = [
+  { id: 'google', name: 'Google' },
+  { id: 'discord', name: 'Discord' },
+  { id: 'custom:patreon', name: 'Patreon' },
+];
+---
+
+<main class="mx-auto w-full max-w-md px-6 py-12" data-auth-entry>
+  <h1 class="text-3xl leading-tight font-bold text-text">
+    {signingUp ? 'Create a free account' : 'Sign in'}
+  </h1>
+  <p class="mt-3 text-muted">
+    Save your encounters, characters, and custom creatures across devices.
+  </p>
+  <p id="auth-terms" class="mt-6 text-sm leading-relaxed text-muted">
+    By continuing with Google, Discord, or Patreon, you agree to the <a href="/terms/"
+      >Terms of Service</a
+    >. Our <a href="/privacy/">Privacy Policy</a> explains how we handle your personal data.
+  </p>
+  <div class="mt-5 flex flex-col gap-3">
+    {
+      providers.map((provider) => (
+        <button
+          type="button"
+          data-provider={provider.id}
+          aria-describedby="auth-terms auth-age"
+          class="min-h-11 w-full cursor-pointer rounded-lg border border-border bg-panel px-4 py-3 font-semibold text-text hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60"
+        >
+          Continue with {provider.name}
+        </button>
+      ))
+    }
+  </div>
+  <p data-auth-status role="status" aria-live="polite" class="mt-4 text-muted"></p>
+  <p class="mt-4 text-sm leading-relaxed text-muted">
+    {
+      signingUp
+        ? 'Already have an account? Continuing signs you in.'
+        : 'First time here? Continuing creates a free account.'
+    }
+  </p>
+  <p id="auth-age" class="mt-3 text-sm leading-relaxed text-muted">
+    You must be at least 13 and meet your country’s minimum digital-consent age if higher.
+  </p>
+  <p class="mt-6">
+    <a data-auth-switch href={signingUp ? '/sign-in/' : '/sign-up/'}
+      >{signingUp ? 'Sign in' : 'Create a free account'}</a
+    >
+  </p>
+  <p class="mt-3"><a data-auth-cancel href="/account/">Cancel and return</a></p>
+  <noscript><p class="mt-4">Enable JavaScript to continue with a provider.</p></noscript>
+</main>
+
+<script>
+  import { mountAuthEntry } from '../auth/flow.ts';
+  import { getSiteAuth } from '../auth/client.ts';
+  const root = document.querySelector<HTMLElement>('[data-auth-entry]');
+  if (root)
+    mountAuthEntry(root, {
+      window,
+      getAuth: getSiteAuth,
+      navigate: (destination) => window.location.assign(destination),
+    });
+</script>
