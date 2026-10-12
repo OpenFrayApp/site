@@ -19,6 +19,7 @@ async function account(
   returnTo = '/console/?fight=7#log',
   signedIn = true,
   grant: unknown = false,
+  initialRead?: Promise<unknown>,
 ) {
   const container = await AstroContainer.create();
   const html = await container.renderToString(Account);
@@ -48,6 +49,7 @@ async function account(
       return { data: { subscription: { unsubscribe: vi.fn() } } };
     }),
   };
+  if (initialRead) auth.getSession.mockImplementationOnce(() => initialRead as never);
   const fetch = vi
     .fn()
     .mockImplementation(async () => new Response(JSON.stringify(grant), { status: 200 }));
@@ -533,4 +535,27 @@ it('clears the publishing name when the account has no provider fallback', async
   expect(document.querySelector('[role="status"]')?.textContent).toBe(
     'Cleared. Encounters publish unsigned.',
   );
+});
+
+it('does not publish a rejected initial session read after B has been observed and verified', async () => {
+  let reject!: (error: Error) => void;
+  const initialRead = new Promise((_, failure) => {
+    reject = failure;
+  });
+  const { document, user, session, readUser, emit } = await account(
+    undefined,
+    true,
+    false,
+    initialRead,
+  );
+  const replacement = { ...user, id: 'replacement', email: 'replacement@example.invalid' };
+  readUser.mockResolvedValue({ data: { user: replacement }, error: null });
+  emit({ ...session, access_token: 'replacement-token', user: replacement });
+  await vi.waitFor(() =>
+    expect(document.querySelector('[data-account-identity]')?.textContent).toBe(replacement.email),
+  );
+  reject(new Error('initial read failed'));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(document.querySelector('[role="status"]')?.textContent).toBe('');
+  expect(document.querySelector('fieldset')?.disabled).toBe(false);
 });

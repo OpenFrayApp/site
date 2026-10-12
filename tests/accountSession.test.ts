@@ -359,3 +359,70 @@ it('ignores a delayed old cross-tab SIGNED_OUT after B has been verified', async
   expect(document.querySelector('fieldset')?.disabled).toBe(false);
   expect((await client.auth.getSession()).data.session?.user.id).toBe('replacement');
 });
+
+it.each(['name-put', 'license-put', 'name-get', 'license-get', 'delete-unconfirmed'])(
+  'fences %s failure when B replaces native A before its event arrives',
+  async (action) => {
+    const { client, document, window, fetch, replaceStoredIdentity } = await sdkAccount(true);
+    await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+    const owner = (await client.auth.getSession()).data.session!.user;
+    const defaultFetch = fetch.getMockImplementation()!;
+    let reply!: (response: Response) => void;
+    let written = false;
+    let blocked = false;
+    fetch.mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      const shouldBlock =
+        !blocked &&
+        ((action.endsWith('-put') && path === '/auth/v1/user' && init?.method === 'PUT') ||
+          (action.endsWith('-get') &&
+            written &&
+            path === '/auth/v1/user' &&
+            init?.method === 'GET') ||
+          (action === 'delete-unconfirmed' && path === '/functions/v1/account-delete'));
+      if (shouldBlock) {
+        blocked = true;
+        return new Promise<Response>((resolve) => {
+          reply = resolve;
+        });
+      }
+      if (path === '/auth/v1/user' && init?.method === 'PUT') {
+        written = true;
+        return new Response(JSON.stringify(owner), { status: 200 });
+      }
+      return defaultFetch(input, init);
+    });
+    if (action.startsWith('name')) {
+      document.querySelector<HTMLInputElement>('#display-name')!.value = 'Changed name';
+      document
+        .querySelector<HTMLFormElement>('[data-account-name-form]')!
+        .dispatchEvent(new window.Event('submit', { cancelable: true }));
+    } else if (action.startsWith('license')) {
+      const license = document.querySelector<HTMLSelectElement>('#share-license-default')!;
+      license.value = 'reserved';
+      license.dispatchEvent(new window.Event('change'));
+    } else {
+      const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
+      confirm.value = 'owner@example.invalid';
+      confirm.dispatchEvent(new window.Event('input', { bubbles: true }));
+      document.querySelector<HTMLButtonElement>('[data-account-delete]')!.click();
+    }
+    await vi.waitFor(() => expect(reply).toBeDefined());
+    replaceStoredIdentity();
+    reply(
+      new Response(action === 'delete-unconfirmed' ? '{"deleted":false}' : '{}', {
+        status: action === 'delete-unconfirmed' ? 200 : 503,
+      }),
+    );
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-account-identity]')?.textContent).toBe(
+        'replacement@example.invalid',
+      ),
+    );
+    expect(document.querySelector('fieldset')?.disabled).toBe(false);
+    expect(document.querySelector<HTMLInputElement>('[data-account-confirm-email]')?.value).toBe(
+      '',
+    );
+    expect(document.querySelector('[role="status"]')?.textContent).not.toMatch(/failed|could not/);
+  },
+);

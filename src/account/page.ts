@@ -295,7 +295,8 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   /** Save one display name with the publishing validator and re-read the authenticated profile. */
   async function saveName(event: Event) {
     event.preventDefault();
-    if (fieldset.disabled || !user) return;
+    if (fieldset.disabled || !user || !session) return;
+    const expected = session;
     const name = nameInput.value.trim();
     const problem = name ? bylineError(name, { allowReserved }) : null;
     if (problem) {
@@ -329,7 +330,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
           ? 'Custom name cleared. Your provider name is shown.'
           : 'Cleared. Encounters publish unsigned.';
     } catch (error) {
-      if (!current(captured)) return;
+      if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       fieldset.disabled = false;
       status.textContent =
         error instanceof Error ? error.message : 'Your profile could not be saved. Try again.';
@@ -343,10 +344,12 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     if (
       fieldset.disabled ||
       !user ||
+      !session ||
       !isContentLicense(license) ||
       !LICENSES_FROM_SCRATCH.includes(license)
     )
       return;
+    const expected = session;
     const captured = generation;
     fieldset.disabled = true;
     status.textContent = 'Saving…';
@@ -370,7 +373,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       fieldset.disabled = false;
       status.textContent = 'Saved.';
     } catch (error) {
-      if (!current(captured)) return;
+      if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       fieldset.disabled = false;
       const previous = isContentLicense(user?.user_metadata.share_license)
         ? user.user_metadata.share_license
@@ -419,7 +422,8 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   /** Invoke existing empty-body erasure, require its explicit success, then clean up only this local session. */
   async function deleteAccount(event: Event) {
     event.preventDefault();
-    if (fieldset.disabled || !confirmed()) return;
+    if (fieldset.disabled || !confirmed() || !session) return;
+    const expected = session;
     const captured = generation;
     fieldset.disabled = true;
     status.textContent = 'Deleting account…';
@@ -449,7 +453,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       ).catch(() => {});
       await finishCleanup(captured, verified.session, endingMessage, true);
     } catch (error) {
-      if (!current(captured)) return;
+      if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       fieldset.disabled = false;
       status.textContent =
         error instanceof Error ? error.message : 'Account deletion failed. Try again.';
@@ -495,10 +499,16 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     }
   }).data.subscription;
   const initialGeneration = generation;
+  const initialAuthEventGeneration = authEventGeneration;
   void client.auth
     .getSession()
     .then(({ data, error }) => {
-      if (disposed || generation !== initialGeneration) return;
+      if (
+        disposed ||
+        generation !== initialGeneration ||
+        authEventGeneration !== initialAuthEventGeneration
+      )
+        return;
       if (error) {
         status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
         return;
@@ -506,7 +516,12 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       void observe(data.session, true);
     })
     .catch(() => {
-      if (!disposed) status.textContent = 'Your session could not be read. Reload to retry.';
+      if (
+        !disposed &&
+        generation === initialGeneration &&
+        authEventGeneration === initialAuthEventGeneration
+      )
+        status.textContent = 'Your session could not be read. Reload to retry.';
     });
   return dispose;
 }
