@@ -29,6 +29,7 @@ export function accountSessionAdapter(url: string, storage: Storage) {
   }
 
   return {
+    /** Read a native candidate without SDK initialization, mutation, or guarded storage access. */
     readSession: (): Session | null => {
       const stored = storage.getItem(key);
       if (stored === null) return null;

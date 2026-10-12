@@ -47,6 +47,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     new URL(window.location.href).searchParams.get('returnTo'),
     window.location.origin,
   );
+  // The strict OAuth validator rejects escaped slashes even inside nested query values.
   const accountDestination =
     returnTo === '/account/'
       ? '/account/'

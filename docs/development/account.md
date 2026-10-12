@@ -8,6 +8,7 @@ Tutorial suppression remains a console preference without an account-page contro
 
 The page uses `getSiteClient()`, the same persistent Supabase singleton as `getSiteAuth()`.
 Anonymous visits enter `/sign-in/` with an account destination carrying the validated initiating return.
+Nested return values retain literal path slashes while escaping query and fragment delimiters, so the strict OAuth validator can accept them.
 The return action validates the destination again before navigation.
 No account identifier, recipient override, referrer, or session token controls the destination or mutation target.
 
@@ -25,15 +26,22 @@ The page shows the verified effective name after saving; accounts with a provide
 Profile writes use authenticated, abortable `PUT /auth/v1/user` requests.
 They carry only the changed metadata and the verified caller’s bearer token.
 The page re-reads the trusted user after a write without installing a captured session.
+Profile changes do not update the SDK’s stored user or fabricate `USER_UPDATED` events.
+The console consumption boundary must fetch the trusted current profile on startup and return.
 The SDK’s `updateUser` method can restore an outdated session after an asynchronous request, so account writes do not use it.
 The SDK’s `getUser(token)` can remove a replacement session when an old token returns `session_not_found`.
 Account verification uses the abortable request adapter instead and validates the returned user fields.
-The page checks native SDK state after asynchronous account replies to fence replacements whose auth event has not arrived.
+The page checks native SDK state after successful and failed asynchronous account replies to fence replacements whose auth event has not arrived.
+Initial session-read failures are fenced by the identity and auth-event generations.
 
 Sign-out first revokes `stop_all_live_views`.
 Revocation failure keeps the account signed in and offers retry guidance.
 The SDK logout transport and native storage adapter guard only an explicit account cleanup operation.
 The guard refuses logout or removal when it observes a replaced or renewed session.
+Before accepting a null auth event or reporting cleanup completion, the page reads the registered adapter’s native session candidate.
+Any present replacement is verified before enabling its controls; stale null events cannot clear an already verified replacement.
+Malformed or unavailable storage fails closed and is never reported as confirmed logout.
+These native reads do not mutate SDK storage or establish trusted identity.
 The SDK defaults to lockless coordination; native localStorage comparison and removal are separate operations.
 The guard does not provide atomic comparison/removal across unrelated tabs.
 Already-dispatched server effects cannot be recalled when a session changes during network transit.
