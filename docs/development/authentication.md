@@ -49,6 +49,8 @@ These pages do not change provider email verification or identity-linking behavi
 Links use `returnTo` containing an encoded pathname, query, and fragment.
 The site accepts only root-relative same-origin returns beginning with exactly one slash.
 It rejects external URLs, credentials, backslashes, control characters, malformed escapes, unsafe encoded separators, and auth-route loops.
+It also rejects `access_token`, `refresh_token`, `provider_token`, and `provider_refresh_token` parameters in queries or callback-shaped fragments, including encoded variants.
+Ordinary path, query, and fragment content remains intact. Credential removal takes priority over verbatim return preservation.
 It validates the stored destination again before final navigation.
 Neither the referrer nor a caller-selected callback return controls navigation.
 

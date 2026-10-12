@@ -248,3 +248,25 @@ it('discards an abandoned handoff when the entry page reloads, so its later call
   expect(browser.getAuth).not.toHaveBeenCalled();
   expect(browser.navigate).not.toHaveBeenCalled();
 });
+
+it.each(['access_token', 'refresh_token', 'provider_token', 'provider_refresh_token'])(
+  'does not forward stored %s credentials after a successful authentication',
+  async (parameter) => {
+    for (const returnTo of [
+      `/console/?${parameter}=legacy-secret#log`,
+      `/console/#${parameter}%253Dlegacy-secret`,
+    ]) {
+      const { browser, root, callbackUrl } = await attempt();
+      const storage = browser.window.sessionStorage;
+      const stored = JSON.parse(storage.getItem('openfray-oauth-attempt')!);
+      stored.returnTo = returnTo;
+      storage.setItem('openfray-oauth-attempt', JSON.stringify(stored));
+      await completeAuthCallback(
+        root,
+        browser,
+        callbackUrl + '#access_token=access&refresh_token=refresh',
+      );
+      expect(browser.navigate).toHaveBeenCalledWith('/account/');
+    }
+  },
+);

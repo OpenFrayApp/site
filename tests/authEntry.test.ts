@@ -188,3 +188,34 @@ it.each([
     expect(document.querySelector('[data-auth-cancel]')?.getAttribute('href')).toBe('/account/');
   },
 );
+
+it.each(['access_token', 'refresh_token', 'provider_token', 'provider_refresh_token'])(
+  'rejects return URLs containing the OAuth credential parameter %s',
+  async (parameter) => {
+    const variants = [
+      `/console/?${parameter}=secret#log`,
+      `/console/#${parameter}=secret`,
+      `/console/?fight=7&%${parameter.charCodeAt(0).toString(16)}${parameter.slice(1)}=secret`,
+      `/console/#%${parameter.charCodeAt(0).toString(16)}${parameter.slice(1)}%3Dsecret`,
+      `/console/?${parameter.replace('_', '%255f')}=secret`,
+      `/console/#${parameter}%253Dsecret`,
+      `/console/#expires_in=3600%26${parameter}%3Dsecret`,
+    ];
+    for (const returnTo of variants) {
+      const { document } = await entry('sign-in', returnTo);
+      expect(document.querySelector('[data-auth-cancel]')?.getAttribute('href')).toBe('/account/');
+      expect(document.querySelector('[data-auth-switch]')?.getAttribute('href')).toBe(
+        '/sign-up/?returnTo=%2Faccount%2F',
+      );
+    }
+  },
+);
+
+it.each([
+  '/console/?search=access_token#access_token-reference',
+  '/console/?provider=google&view=log#encounter',
+  '/console/access_token=notes/?fight=7#log',
+])('preserves ordinary return URL %s without credential parameters', async (returnTo) => {
+  const { document } = await entry('sign-up', returnTo);
+  expect(document.querySelector('[data-auth-cancel]')?.getAttribute('href')).toBe(returnTo);
+});
