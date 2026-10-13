@@ -53,19 +53,31 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       ? '/account/'
       : `/account/?returnTo=${encodeURIComponent(returnTo).replace(/%2F/g, '/')}`;
   const signInDestination = `/sign-in/?returnTo=${encodeURIComponent(accountDestination)}`;
+  const consoleReturnTo = /^\/console(?:\/|$)/.test(
+    new URL(returnTo, window.location.origin).pathname,
+  )
+    ? returnTo
+    : '/console/';
+  const signedOutDestination = `/sign-in/?returnTo=${encodeURIComponent(consoleReturnTo)}`;
   const returnLink = root.querySelector<HTMLAnchorElement>('[data-account-return]')!;
   const signInLink = root.querySelector<HTMLAnchorElement>('[data-account-sign-in]')!;
   const status = root.querySelector<HTMLElement>('[data-account-status]')!;
   const fieldset = root.querySelector<HTMLFieldSetElement>('fieldset')!;
+  const signOutButton = root.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
+  /** Lock account actions together while keeping the console return link reachable. */
+  function setControlsDisabled(disabled: boolean) {
+    fieldset.disabled = disabled;
+    signOutButton.disabled = disabled;
+  }
   const identity = root.querySelector<HTMLElement>('[data-account-identity]')!;
   const provider = root.querySelector<HTMLElement>('[data-account-provider]')!;
-  returnLink.href = returnTo;
+  returnLink.href = consoleReturnTo;
   signInLink.href = signInDestination;
   const requests = accountRequests(dependencies.url, dependencies.publicKey, dependencies.fetch);
   /** Revalidate the initiating destination immediately before the return action. */
   const onReturn = (event: Event) => {
     event.preventDefault();
-    navigate(validateReturnTo(returnTo, window.location.origin));
+    navigate(validateReturnTo(consoleReturnTo, window.location.origin));
   };
   returnLink.addEventListener('click', onReturn);
   let client: SupabaseClient;
@@ -124,7 +136,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     licenseHint.textContent = '';
     confirmEmail.value = '';
     deleteButton.disabled = true;
-    fieldset.disabled = true;
+    setControlsDisabled(true);
     identity.textContent = '';
     provider.textContent = '';
     signInLink.hidden = false;
@@ -162,7 +174,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
             string
           >
         )[providerId ?? ''] ?? 'identity provider';
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       signInLink.hidden = true;
       status.textContent = '';
       if (next.expires_at)
@@ -270,27 +282,36 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     expected: Session | null,
     message: string,
     allowExpected = false,
+    destination?: string,
   ) {
     if (!current(captured) && endedGeneration !== captured) return;
-    const before = generation;
-    let actual: Session | null;
-    try {
-      actual = await (dependencies.readSession ?? readAccountSession)(client);
-    } catch {
-      if (!disposed && generation === before) {
-        void observe(null);
-        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const before = generation;
+      let actual: Session | null;
+      try {
+        actual = await (dependencies.readSession ?? readAccountSession)(client);
+      } catch {
+        if (!disposed && generation === before) {
+          void observe(null);
+          status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+        }
+        return;
       }
+      if (disposed) return;
+      if (generation !== before) {
+        if (attempt === 0 && endedGeneration === captured && !session) continue;
+        return;
+      }
+      if (actual && (!allowExpected || !expected || !sameSession(actual, expected))) {
+        endedGeneration = null;
+        void observe(actual);
+        return;
+      }
+      void observe(null);
+      status.textContent = message;
+      if (destination) navigate(destination);
       return;
     }
-    if (disposed || generation !== before) return;
-    if (actual && (!allowExpected || !expected || !sameSession(actual, expected))) {
-      endedGeneration = null;
-      void observe(actual);
-      return;
-    }
-    void observe(null);
-    status.textContent = message;
   }
 
   /** Save one display name with the publishing validator and re-read the authenticated profile. */
@@ -305,7 +326,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       return;
     }
     const captured = generation;
-    fieldset.disabled = true;
+    setControlsDisabled(true);
     status.textContent = 'Saving…';
     try {
       const verified = await verifiedCurrent(captured);
@@ -324,7 +345,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         throw new Error('Your profile could not be verified. Reload to check it.');
       user = updated;
       nameInput.value = displayName(user);
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       status.textContent = name
         ? 'Saved.'
         : nameInput.value
@@ -332,7 +353,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
           : 'Cleared. Encounters publish unsigned.';
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       status.textContent =
         error instanceof Error ? error.message : 'Your profile could not be saved. Try again.';
     }
@@ -352,7 +373,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       return;
     const expected = session;
     const captured = generation;
-    fieldset.disabled = true;
+    setControlsDisabled(true);
     status.textContent = 'Saving…';
     try {
       const verified = await verifiedCurrent(captured);
@@ -371,11 +392,11 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         throw new Error('Your preference could not be verified. Reload to check it.');
       user = updated;
       licenseHint.textContent = LICENSE_HINTS[license];
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       status.textContent = 'Saved.';
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       const previous = isContentLicense(user?.user_metadata.share_license)
         ? user.user_metadata.share_license
         : 'unstated';
@@ -390,7 +411,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   async function signOut() {
     if (fieldset.disabled || !user) return;
     const captured = generation;
-    fieldset.disabled = true;
+    setControlsDisabled(true);
     status.textContent = 'Signing out…';
     try {
       const verified = await verifiedCurrent(captured);
@@ -407,14 +428,14 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       await (dependencies.signOut ?? signOutAccountSession)(client, verified.session, () =>
         current(captured),
       );
-      await finishCleanup(captured, verified.session, 'Signed out.');
+      await finishCleanup(captured, verified.session, 'Signed out.', false, signedOutDestination);
     } catch (error) {
       if (endedGeneration === captured && !session) {
-        await finishCleanup(captured, null, 'Signed out.');
+        await finishCleanup(captured, null, 'Signed out.', false, signedOutDestination);
         return;
       }
       if (!current(captured) || !session || (await refreshReplacement(captured, session))) return;
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       status.textContent = error instanceof Error ? error.message : 'Sign-out failed. Try again.';
     } finally {
       endingGeneration = null;
@@ -426,7 +447,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     if (fieldset.disabled || !confirmed() || !session) return;
     const expected = session;
     const captured = generation;
-    fieldset.disabled = true;
+    setControlsDisabled(true);
     status.textContent = 'Deleting account…';
     try {
       const verified = await verifiedCurrent(captured);
@@ -455,7 +476,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       await finishCleanup(captured, verified.session, endingMessage, true);
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
-      fieldset.disabled = false;
+      setControlsDisabled(false);
       status.textContent =
         error instanceof Error ? error.message : 'Account deletion failed. Try again.';
     } finally {
@@ -463,7 +484,6 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     }
   }
   deleteForm.addEventListener('submit', deleteAccount);
-  const signOutButton = root.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
   signOutButton.addEventListener('click', signOut);
 
   let subscription: { unsubscribe: () => void } | undefined;

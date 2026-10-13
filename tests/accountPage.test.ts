@@ -65,6 +65,7 @@ async function account(
   const signOut = vi.fn().mockImplementation(async () => {
     auth.getSession.mockResolvedValue({ data: { session: null }, error: null } as never);
   });
+  const readSession = vi.fn(async () => (await auth.getSession()).data.session as never);
   const dispose = mountAccount(window.document.querySelector('main')!, {
     window,
     getClient: () => ({ auth }) as never,
@@ -73,7 +74,7 @@ async function account(
     fetch: fetcher,
     navigate,
     signOut,
-    readSession: async () => (await auth.getSession()).data.session as never,
+    readSession,
   });
   cleanups.push(() => {
     dispose();
@@ -89,6 +90,7 @@ async function account(
     fetch,
     navigate,
     signOut,
+    readSession,
     dispose,
     emit: (session: unknown) => {
       auth.getSession.mockResolvedValue({ data: { session }, error: null } as never);
@@ -120,6 +122,32 @@ it('shows only the verified current account email and provider with an accessibl
     '/console/?fight=7#log',
   );
   expect(document.querySelectorAll('h1')).toHaveLength(1);
+});
+
+it('groups the blue console return and red sign-out controls in the signed-in box', async () => {
+  const { document } = await account();
+  const returnLink = document.querySelector<HTMLAnchorElement>('[data-account-return]')!;
+  const signOutButton = document.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
+  expect(returnLink.textContent?.trim()).toBe('Return to console →');
+  expect(returnLink.className).toContain('text-accent');
+  expect(returnLink.closest('section')).toBe(signOutButton.closest('section'));
+  expect(returnLink.closest('fieldset')).toBeNull();
+  expect(signOutButton.disabled).toBe(true);
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  expect(signOutButton.disabled).toBe(false);
+  expect(signOutButton.className).toContain('ml-auto');
+  expect(signOutButton.className).toContain('text-rose-300');
+  expect(document.querySelector('[data-account-delete]')?.closest('section')?.className).toContain(
+    'bg-rose-950/20',
+  );
+});
+
+it('returns direct account visits to the console after sign-out', async () => {
+  const { document, navigate } = await account('/account/');
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  expect(document.querySelector('[data-account-return]')?.getAttribute('href')).toBe('/console/');
+  document.querySelector<HTMLButtonElement>('[data-account-sign-out]')!.click();
+  await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('/sign-in/?returnTo=%2Fconsole%2F'));
 });
 
 it('fences delayed identity reads when the account is replaced or expires', async () => {
@@ -162,6 +190,7 @@ it('refuses signout when live-view revocation fails, then supports an explicit r
     expect(document.querySelector('[role="status"]')?.textContent).toContain('Live views'),
   );
   expect(signOut).not.toHaveBeenCalled();
+  expect(navigate).not.toHaveBeenCalled();
   expect(document.querySelector('[data-account-identity]')?.textContent).toContain(
     'owner@example.invalid',
   );
@@ -173,7 +202,9 @@ it('refuses signout when live-view revocation fails, then supports an explicit r
   );
   expect(JSON.parse(fetch.mock.calls.at(-1)?.[1]?.body as string)).toEqual({});
   expect(document.querySelector('[role="status"]')?.textContent).toContain('Signed out');
-  expect(navigate).not.toHaveBeenCalled();
+  await vi.waitFor(() =>
+    expect(navigate).toHaveBeenCalledWith('/sign-in/?returnTo=%2Fconsole%2F%3Ffight%3D7%23log'),
+  );
 });
 
 it('requires the typed current email and preserves irreversible deletion failure until deleted:true', async () => {
@@ -265,12 +296,12 @@ it('returns safely for malicious destinations and never forwards URL account tar
     'https://evil.example/?account=other&access_token=secret',
   );
   document.querySelector<HTMLAnchorElement>('[data-account-return]')!.click();
-  expect(navigate).toHaveBeenCalledWith('/account/');
+  expect(navigate).toHaveBeenCalledWith('/console/');
 });
 
 it('suppresses stale signout/deletion effects after an identity replacement', async () => {
   for (const action of ['sign-out', 'delete']) {
-    const { document, readUser, fetch, signOut, user, session, emit } = await account();
+    const { document, readUser, fetch, signOut, user, session, emit, navigate } = await account();
     await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
     if (action === 'delete') {
       const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
@@ -295,6 +326,7 @@ it('suppresses stale signout/deletion effects after an identity replacement', as
     reply(new Response('{"deleted":true}', { status: 200 }));
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(signOut).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
     expect(
       document.querySelector('[data-account-confirm-email]')?.getAttribute('value'),
     ).toBeNull();
@@ -302,8 +334,8 @@ it('suppresses stale signout/deletion effects after an identity replacement', as
   }
 });
 
-it('announces successful SDK signout instead of treating its own auth event as expiry', async () => {
-  const { document, signOut, emit } = await account();
+it('redirects successful SDK signout after reconciling its own auth event', async () => {
+  const { document, signOut, emit, navigate } = await account();
   await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
   signOut.mockImplementationOnce(async () => {
     emit(null);
@@ -312,7 +344,65 @@ it('announces successful SDK signout instead of treating its own auth event as e
   await vi.waitFor(() =>
     expect(document.querySelector('[role="status"]')?.textContent).toBe('Signed out.'),
   );
+  await vi.waitFor(() => expect(navigate).toHaveBeenCalledOnce());
+  expect(navigate).toHaveBeenCalledWith('/sign-in/?returnTo=%2Fconsole%2F%3Ffight%3D7%23log');
 });
+
+it.each(['empty', 'replacement'] as const)(
+  'settles an own null event during cleanup reread with %s native storage',
+  async (outcome) => {
+    const { document, signOut, emit, navigate, readSession, auth, user, session, readUser } =
+      await account();
+    await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+    let finishOwnNull!: (value: null) => void;
+    const ownNull = new Promise<null>((resolve) => {
+      finishOwnNull = resolve;
+    });
+    let finishCleanupRead!: (value: null) => void;
+    const cleanupRead = new Promise<null>((resolve) => {
+      finishCleanupRead = resolve;
+    });
+    let cleanupStarted = false;
+    const other = { ...user, id: 'other', email: 'other@example.invalid' };
+    const replacement = { ...session, user: other, access_token: 'other-token' };
+    signOut.mockImplementationOnce(async () => {
+      readSession.mockClear();
+      readSession
+        .mockImplementationOnce(() => ownNull as never)
+        .mockImplementationOnce(() => {
+          cleanupStarted = true;
+          return cleanupRead as never;
+        })
+        .mockImplementationOnce(async () => {
+          if (outcome === 'empty') return null as never;
+          auth.getSession.mockResolvedValue({
+            data: { session: replacement },
+            error: null,
+          } as never);
+          readUser.mockResolvedValue({ data: { user: other }, error: null } as never);
+          return replacement as never;
+        });
+      emit(null);
+    });
+    document.querySelector<HTMLButtonElement>('[data-account-sign-out]')!.click();
+    await vi.waitFor(() => expect(cleanupStarted).toBe(true));
+    finishOwnNull(null);
+    await vi.waitFor(() =>
+      expect(document.querySelector('[role="status"]')?.textContent).toBe('Signed out.'),
+    );
+    expect(navigate).not.toHaveBeenCalled();
+    finishCleanupRead(null);
+    if (outcome === 'empty') {
+      await vi.waitFor(() => expect(navigate).toHaveBeenCalledOnce());
+      expect(navigate).toHaveBeenCalledWith('/sign-in/?returnTo=%2Fconsole%2F%3Ffight%3D7%23log');
+    } else {
+      await vi.waitFor(() =>
+        expect(document.querySelector('[data-account-identity]')?.textContent).toBe(other.email),
+      );
+      expect(navigate).not.toHaveBeenCalled();
+    }
+  },
+);
 
 it.each([false, 'true', { allowReserved: true }])(
   'ignores editable grants and malformed reserved capability %j',
