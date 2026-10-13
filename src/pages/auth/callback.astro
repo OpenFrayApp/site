@@ -1,0 +1,58 @@
+---
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright (C) 2026 Nicola Mustone
+
+import '../../styles/global.css';
+import AuthCallback from '../../components/AuthCallback.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script is:inline>
+      // Capture only in memory and scrub before loading scripts or rendering links.
+      window.openfrayOAuthCallbackHref = window.location.href;
+      window.history.replaceState(null, '', '/auth/callback/');
+      try {
+        if (localStorage.getItem('openfray-theme') === 'light')
+          document.documentElement.classList.add('light');
+      } catch {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Completing sign-in | OpenFray</title>
+  </head>
+  <body>
+    <header class="mx-auto w-full max-w-md px-6 py-5">
+      <a href="/" class="font-bold text-text no-underline">OpenFray</a>
+    </header>
+    <AuthCallback />
+    <footer
+      class="mx-auto flex w-full max-w-md flex-wrap gap-5 border-t border-border px-6 py-6 text-sm leading-relaxed text-muted"
+    >
+      <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a
+        href="https://github.com/OpenFrayApp/site">Source</a
+      >
+    </footer>
+    <script>
+      import { completeAuthCallback } from '../../auth/flow.ts';
+      import { getSiteAuth } from '../../auth/client.ts';
+      const callbackWindow = window as Window & { openfrayOAuthCallbackHref?: string };
+      const callbackHref = callbackWindow.openfrayOAuthCallbackHref;
+      delete callbackWindow.openfrayOAuthCallbackHref;
+      const root = document.querySelector<HTMLElement>('[data-auth-callback]');
+      if (root)
+        void completeAuthCallback(
+          root,
+          {
+            window,
+            getAuth: getSiteAuth,
+            navigate: (destination) => window.location.replace(destination),
+          },
+          callbackHref,
+        );
+    </script>
+  </body>
+</html>
