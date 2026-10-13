@@ -131,7 +131,7 @@ it('groups the blue console return and red sign-out controls in the signed-in bo
   const returnLink = document.querySelector<HTMLAnchorElement>('[data-account-return]')!;
   const signOutButton = document.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
   expect(returnLink.textContent?.trim()).toBe('Return to console →');
-  expect(returnLink.className).toContain('bg-accent-strong');
+  expect(returnLink.className).toContain('bg-indigo-600');
   expect(returnLink.className).toContain('text-white');
   expect(returnLink.className).toContain('rounded-lg');
   expect(returnLink.closest('section')).toBe(signOutButton.closest('section'));
