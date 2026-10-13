@@ -2,16 +2,31 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright (C) 2026 Nicola Mustone
 
+import ProviderIcon from './ProviderIcon.astro';
+
 interface Props {
   intent: 'sign-in' | 'sign-up';
 }
 const { intent } = Astro.props;
 const signingUp = intent === 'sign-up';
 const providers = [
-  { id: 'google', name: 'Google' },
-  { id: 'discord', name: 'Discord' },
-  { id: 'custom:patreon', name: 'Patreon' },
-];
+  {
+    id: 'google',
+    name: 'Google',
+    classes: 'border border-border bg-panel text-text hover:border-accent',
+  },
+  {
+    id: 'discord',
+    name: 'Discord',
+    classes: 'bg-[#5865F2] text-white hover:bg-[#4752c4]',
+  },
+  {
+    id: 'custom:patreon',
+    name: 'Patreon',
+    classes:
+      'bg-white text-black hover:bg-neutral-200 in-[.light]:bg-black in-[.light]:text-white in-[.light]:hover:bg-neutral-800',
+  },
+] as const;
 ---
 
 <main class="mx-auto w-full max-w-md px-6 py-12" data-auth-entry>
@@ -33,8 +48,12 @@ const providers = [
           type="button"
           data-provider={provider.id}
           aria-describedby="auth-terms auth-age"
-          class="min-h-11 w-full cursor-pointer rounded-lg border border-border bg-panel px-4 py-3 font-semibold text-text hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60"
+          class:list={[
+            'inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-3 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60',
+            provider.classes,
+          ]}
         >
+          <ProviderIcon provider={provider.id} />
           Continue with {provider.name}
         </button>
       ))

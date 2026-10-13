@@ -20,6 +20,11 @@ it.each([
   const document = new JSDOM(html).window.document;
   expect(document.querySelector('h1')?.textContent).toBe(heading);
   expect(document.querySelectorAll('[data-provider]')).toHaveLength(3);
+  for (const button of document.querySelectorAll('[data-provider]')) {
+    expect(button.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+    expect(button.classList.contains('inline-flex')).toBe(true);
+  }
+  expect(document.querySelector('[data-provider="discord"]')?.className).toContain('bg-[#5865F2]');
 });
 
 it('renders the real account fallback route with disabled controls until identity verification', async () => {
