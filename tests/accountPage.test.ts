@@ -110,14 +110,16 @@ it('routes an anonymous account visit through sign-in and retains its validated 
   expect(document.querySelector('fieldset')?.disabled).toBe(true);
 });
 
-it('shows only the verified current account email and provider with an accessible return', async () => {
+it('shows only the verified current account email with an accessible return', async () => {
   const { document, readUser } = await account();
   await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
   expect(readUser).toHaveBeenCalledWith('owner-token');
   expect(document.querySelector('[data-account-identity]')?.textContent).toContain(
     'owner@example.invalid',
   );
-  expect(document.querySelector('[data-account-provider]')?.textContent).toBe('Discord');
+  expect(document.querySelector('[data-account-credentials]')?.textContent).toContain(
+    'the provider you use to sign in',
+  );
   expect(document.querySelector('a[data-account-return]')?.getAttribute('href')).toBe(
     '/console/?fight=7#log',
   );
@@ -129,7 +131,9 @@ it('groups the blue console return and red sign-out controls in the signed-in bo
   const returnLink = document.querySelector<HTMLAnchorElement>('[data-account-return]')!;
   const signOutButton = document.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
   expect(returnLink.textContent?.trim()).toBe('Return to console →');
-  expect(returnLink.className).toContain('text-accent');
+  expect(returnLink.className).toContain('bg-accent-strong');
+  expect(returnLink.className).toContain('text-white');
+  expect(returnLink.className).toContain('rounded-lg');
   expect(returnLink.closest('section')).toBe(signOutButton.closest('section'));
   expect(returnLink.closest('fieldset')).toBeNull();
   expect(signOutButton.disabled).toBe(true);
@@ -140,6 +144,73 @@ it('groups the blue console return and red sign-out controls in the signed-in bo
   expect(document.querySelector('[data-account-delete]')?.closest('section')?.className).toContain(
     'bg-rose-950/20',
   );
+});
+
+it('renders no transient account-check message before JavaScript starts', async () => {
+  const container = await AstroContainer.create();
+  const html = await container.renderToString(Account);
+  const dom = new JSDOM(html);
+  expect(dom.window.document.querySelector('[data-account-status]')?.textContent?.trim()).toBe('');
+  expect(dom.window.document.querySelector('[data-account-status]')?.hasAttribute('hidden')).toBe(
+    true,
+  );
+  dom.window.close();
+});
+
+it('keeps transient text and reauthentication hidden while a current account is verified', async () => {
+  const { document, readUser, user, session, emit } = await account();
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  let reply!: (value: unknown) => void;
+  readUser.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        reply = resolve;
+      }) as never,
+  );
+  emit(session);
+  expect(document.querySelector('[data-account-status]')?.textContent?.trim()).toBe('');
+  expect(document.querySelector('[data-account-sign-in]')?.hasAttribute('hidden')).toBe(true);
+  expect(document.querySelector('main')?.getAttribute('aria-busy')).toBe('true');
+  reply({ data: { user }, error: null });
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  expect(document.querySelector('main')?.getAttribute('aria-busy')).toBe('false');
+});
+
+it('keeps genuine verification failures visible and offers reauthentication', async () => {
+  const { document, readUser, session, emit } = await account();
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  readUser.mockResolvedValueOnce({
+    data: { user: null },
+    error: { message: 'unavailable' },
+  } as never);
+  emit(session);
+  await vi.waitFor(() =>
+    expect(document.querySelector('[data-account-status]')?.textContent).toContain(
+      'could not be verified',
+    ),
+  );
+  expect(document.querySelector('[data-account-status]')?.hasAttribute('hidden')).toBe(false);
+  expect(document.querySelector('[data-account-sign-in]')?.hasAttribute('hidden')).toBe(false);
+  expect(document.querySelector('main')?.getAttribute('aria-busy')).toBe('false');
+  expect(document.querySelector<HTMLButtonElement>('[data-account-sign-out]')?.disabled).toBe(true);
+});
+
+it('does not infer the current login provider from linked-account metadata', async () => {
+  const { document, readUser, user, session, emit } = await account();
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  const linked = {
+    ...user,
+    app_metadata: { provider: 'google', providers: ['google', 'custom:patreon'] },
+  };
+  readUser.mockResolvedValue({ data: { user: linked }, error: null });
+  emit({ ...session, user: linked });
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  const guidance = document
+    .querySelector('[data-account-identity]')
+    ?.closest('section')
+    ?.querySelector('p:nth-of-type(2)')?.textContent;
+  expect(guidance).toContain('the provider you use to sign in');
+  expect(guidance).not.toMatch(/Google|Discord|Patreon/);
 });
 
 it('returns direct account visits to the console after sign-out', async () => {

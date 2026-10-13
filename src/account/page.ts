@@ -62,6 +62,13 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   const returnLink = root.querySelector<HTMLAnchorElement>('[data-account-return]')!;
   const signInLink = root.querySelector<HTMLAnchorElement>('[data-account-sign-in]')!;
   const status = root.querySelector<HTMLElement>('[data-account-status]')!;
+  root.setAttribute('aria-busy', 'true');
+  /** Show persistent outcomes without flashing initialization text during verification. */
+  function setStatus(message: string) {
+    status.textContent = message;
+    status.hidden = !message;
+    root.setAttribute('aria-busy', 'false');
+  }
   const fieldset = root.querySelector<HTMLFieldSetElement>('fieldset')!;
   const signOutButton = root.querySelector<HTMLButtonElement>('[data-account-sign-out]')!;
   /** Lock account actions together while keeping the console return link reachable. */
@@ -70,7 +77,6 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     signOutButton.disabled = disabled;
   }
   const identity = root.querySelector<HTMLElement>('[data-account-identity]')!;
-  const provider = root.querySelector<HTMLElement>('[data-account-provider]')!;
   returnLink.href = consoleReturnTo;
   signInLink.href = signInDestination;
   const requests = accountRequests(dependencies.url, dependencies.publicKey, dependencies.fetch);
@@ -138,15 +144,16 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     deleteButton.disabled = true;
     setControlsDisabled(true);
     identity.textContent = '';
-    provider.textContent = '';
-    signInLink.hidden = false;
+    signInLink.hidden = true;
     if (!next || (next.expires_at && next.expires_at * 1000 <= Date.now())) {
       session = null;
-      status.textContent = CHANGED;
+      signInLink.hidden = false;
+      setStatus(CHANGED);
       if (initial) navigate(signInDestination);
       return;
     }
-    status.textContent = 'Checking your account…';
+    setStatus('');
+    root.setAttribute('aria-busy', 'true');
     try {
       const verified = await requests.verifyUser(next.access_token, operation.signal);
       if (!current(captured)) return;
@@ -166,17 +173,10 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       licenseSelect.value = license;
       licenseHint.textContent = LICENSE_HINTS[license];
       identity.textContent = user.email ?? 'No account email available';
-      const providerId = user.app_metadata.provider;
-      provider.textContent =
-        (
-          { google: 'Google', discord: 'Discord', 'custom:patreon': 'Patreon' } as Record<
-            string,
-            string
-          >
-        )[providerId ?? ''] ?? 'identity provider';
       setControlsDisabled(false);
       signInLink.hidden = true;
-      status.textContent = '';
+      setStatus('');
+      root.setAttribute('aria-busy', 'false');
       if (next.expires_at)
         expiry = setTimeout(
           () => {
@@ -185,9 +185,10 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
           Math.min(next.expires_at * 1000 - Date.now(), 2147483647),
         );
     } catch {
-      if (current(captured) && !(await refreshReplacement(captured, next)))
-        status.textContent =
-          'Your account could not be verified. Sign in again or reload to retry.';
+      if (current(captured) && !(await refreshReplacement(captured, next))) {
+        signInLink.hidden = false;
+        setStatus('Your account could not be verified. Sign in again or reload to retry.');
+      }
     }
   }
 
@@ -238,7 +239,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     } catch {
       if (!disposed && before === generation) {
         void observe(null);
-        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+        setStatus('Your session could not be read. Sign in again or reload to retry.');
       }
       return true;
     }
@@ -260,7 +261,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       if (!disposed && generation === captured && authEventGeneration === eventGeneration) {
         endedGeneration = null;
         void observe(null);
-        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+        setStatus('Your session could not be read. Sign in again or reload to retry.');
       }
       return;
     }
@@ -273,7 +274,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     }
     endedGeneration = endingGeneration === captured ? captured : null;
     void observe(null, initial);
-    if (endedGeneration !== null) status.textContent = endingMessage;
+    if (endedGeneration !== null) setStatus(endingMessage);
   }
 
   /** Publish a cleanup outcome only after reconciling native identity, including after an own null event. */
@@ -293,7 +294,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       } catch {
         if (!disposed && generation === before) {
           void observe(null);
-          status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+          setStatus('Your session could not be read. Sign in again or reload to retry.');
         }
         return;
       }
@@ -308,7 +309,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         return;
       }
       void observe(null);
-      status.textContent = message;
+      setStatus(message);
       if (destination) navigate(destination);
       return;
     }
@@ -322,12 +323,12 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     const name = nameInput.value.trim();
     const problem = name ? bylineError(name, { allowReserved }) : null;
     if (problem) {
-      status.textContent = problem;
+      setStatus(problem);
       return;
     }
     const captured = generation;
     setControlsDisabled(true);
-    status.textContent = 'Saving…';
+    setStatus('Saving…');
     try {
       const verified = await verifiedCurrent(captured);
       const result = await requests.updateProfile(verified.session.access_token, operation.signal, {
@@ -346,16 +347,19 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       user = updated;
       nameInput.value = displayName(user);
       setControlsDisabled(false);
-      status.textContent = name
-        ? 'Saved.'
-        : nameInput.value
-          ? 'Custom name cleared. Your provider name is shown.'
-          : 'Cleared. Encounters publish unsigned.';
+      setStatus(
+        name
+          ? 'Saved.'
+          : nameInput.value
+            ? 'Custom name cleared. Your provider name is shown.'
+            : 'Cleared. Encounters publish unsigned.',
+      );
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       setControlsDisabled(false);
-      status.textContent =
-        error instanceof Error ? error.message : 'Your profile could not be saved. Try again.';
+      setStatus(
+        error instanceof Error ? error.message : 'Your profile could not be saved. Try again.',
+      );
     }
   }
   nameForm.addEventListener('submit', saveName);
@@ -374,7 +378,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     const expected = session;
     const captured = generation;
     setControlsDisabled(true);
-    status.textContent = 'Saving…';
+    setStatus('Saving…');
     try {
       const verified = await verifiedCurrent(captured);
       const result = await requests.updateProfile(verified.session.access_token, operation.signal, {
@@ -393,7 +397,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       user = updated;
       licenseHint.textContent = LICENSE_HINTS[license];
       setControlsDisabled(false);
-      status.textContent = 'Saved.';
+      setStatus('Saved.');
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       setControlsDisabled(false);
@@ -401,8 +405,9 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         ? user.user_metadata.share_license
         : 'unstated';
       licenseSelect.value = previous;
-      status.textContent =
-        error instanceof Error ? error.message : 'Your preference could not be saved. Try again.';
+      setStatus(
+        error instanceof Error ? error.message : 'Your preference could not be saved. Try again.',
+      );
     }
   }
   licenseSelect.addEventListener('change', saveLicense);
@@ -412,7 +417,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     if (fieldset.disabled || !user) return;
     const captured = generation;
     setControlsDisabled(true);
-    status.textContent = 'Signing out…';
+    setStatus('Signing out…');
     try {
       const verified = await verifiedCurrent(captured);
       try {
@@ -436,7 +441,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       }
       if (!current(captured) || !session || (await refreshReplacement(captured, session))) return;
       setControlsDisabled(false);
-      status.textContent = error instanceof Error ? error.message : 'Sign-out failed. Try again.';
+      setStatus(error instanceof Error ? error.message : 'Sign-out failed. Try again.');
     } finally {
       endingGeneration = null;
     }
@@ -448,7 +453,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     const expected = session;
     const captured = generation;
     setControlsDisabled(true);
-    status.textContent = 'Deleting account…';
+    setStatus('Deleting account…');
     try {
       const verified = await verifiedCurrent(captured);
       if (!confirmed(verified.user.email))
@@ -477,8 +482,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       setControlsDisabled(false);
-      status.textContent =
-        error instanceof Error ? error.message : 'Account deletion failed. Try again.';
+      setStatus(error instanceof Error ? error.message : 'Account deletion failed. Try again.');
     } finally {
       endingGeneration = null;
     }
@@ -506,7 +510,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
   try {
     client = getClient();
   } catch {
-    status.textContent = 'Accounts are unavailable. Check browser storage and reload to retry.';
+    setStatus('Accounts are unavailable. Check browser storage and reload to retry.');
     return dispose;
   }
   subscription = client.auth.onAuthStateChange((event, next) => {
@@ -531,7 +535,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       )
         return;
       if (error) {
-        status.textContent = 'Your session could not be read. Sign in again or reload to retry.';
+        setStatus('Your session could not be read. Sign in again or reload to retry.');
         return;
       }
       void observe(data.session, true);
@@ -542,7 +546,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
         generation === initialGeneration &&
         authEventGeneration === initialAuthEventGeneration
       )
-        status.textContent = 'Your session could not be read. Reload to retry.';
+        setStatus('Your session could not be read. Reload to retry.');
     });
   return dispose;
 }

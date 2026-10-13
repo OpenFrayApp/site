@@ -10,22 +10,20 @@ import {
 
 <main class="mx-auto w-full max-w-xl px-6 py-12" data-account>
   <h1 class="text-3xl leading-tight font-bold text-text">Account</h1>
-  <p data-account-status role="status" aria-live="polite" class="mt-4 text-muted">
-    Checking your account…
-  </p>
+  <p data-account-status role="status" aria-live="polite" hidden class="mt-4 text-muted"></p>
   <p class="mt-3"><a data-account-sign-in href="/sign-in/" hidden>Sign in again</a></p>
   <section class="mt-6 rounded-lg border border-border bg-panel p-4">
     <h2 class="font-semibold text-text">Signed in</h2>
     <p data-account-identity class="mt-2 break-words text-muted"></p>
-    <p class="mt-2 text-muted">
-      Change your email or password in your <span data-account-provider></span> account. OpenFray never
-      sees your password.
+    <p data-account-credentials class="mt-2 text-muted">
+      Manage your email and password with the provider you use to sign in. OpenFray never sees your
+      password.
     </p>
     <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
       <a
         data-account-return
         href="/console/"
-        class="inline-flex min-h-11 items-center font-semibold text-accent no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        class="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent-strong px-4 py-2 font-semibold text-white no-underline transition-colors hover:bg-accent-strong/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >Return to console →</a
       >
       <button

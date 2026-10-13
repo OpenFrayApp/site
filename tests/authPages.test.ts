@@ -32,7 +32,8 @@ it('renders the real account fallback route with disabled controls until identit
   const document = new JSDOM(await container.renderToString(Account)).window.document;
   expect(document.querySelector('h1')?.textContent).toBe('Account');
   expect(document.querySelector('fieldset')?.disabled).toBe(true);
-  expect(document.querySelector('[role="status"]')?.textContent).toContain('Checking');
+  expect(document.querySelector('[role="status"]')?.textContent).toBe('');
+  expect(document.querySelector('[role="status"]')?.hasAttribute('hidden')).toBe(true);
   expect(document.querySelector('label[for="display-name"]')).not.toBeNull();
   expect(document.querySelector('label[for="account-confirm-email"]')).not.toBeNull();
 });
