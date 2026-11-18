@@ -32,6 +32,7 @@ const {
 
 const github = 'https://github.com/OpenFrayApp';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const isAuthEntry = /^\/(sign-in|sign-up)\/?$/.test(Astro.url.pathname);
 
 // A social card wants a real file at a known size, so the source is resized here rather
 // than linked at whatever dimensions it happens to have. `.src` is a build path in a
@@ -62,8 +63,8 @@ const sep = 'sep mx-2 opacity-50';
 
 const navLink =
   'text-muted no-underline transition-[color] hover:text-text ' +
-  'max-[640px]:block max-[640px]:w-full max-[640px]:rounded-md max-[640px]:px-3 ' +
-  'max-[640px]:py-2.5 max-[640px]:hover:bg-bg';
+  'max-md:block max-md:w-full max-md:rounded-md max-md:px-3 ' +
+  'max-md:py-2.5 max-md:hover:bg-bg';
 ---
 
 <!doctype html>
@@ -122,7 +123,7 @@ const navLink =
   <body>
     <header
       id="top"
-      class="topbar relative mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4.5"
+      class="topbar relative mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4.5 max-md:noscript:flex-wrap"
     >
       <a
         class="brand inline-flex items-center gap-2 text-lg leading-relaxed font-extrabold tracking-tight text-text no-underline"
@@ -161,7 +162,7 @@ const navLink =
       </a>
 
       <button
-        class={`nav-toggle ${iconButton} mr-2 ml-auto hidden hover:text-text max-[640px]:inline-flex`}
+        class={`nav-toggle ${iconButton} mr-2 ml-auto hidden hover:text-text max-md:inline-flex max-md:noscript:hidden`}
         type="button"
         aria-label="Open the menu"
         aria-expanded="false"
@@ -183,21 +184,22 @@ const navLink =
       </button>
 
       <nav
-        class="topnav mr-5 ml-auto flex items-center gap-5 text-sm leading-relaxed font-semibold max-[640px]:absolute max-[640px]:top-full max-[640px]:right-4 max-[640px]:z-20 max-[640px]:m-0 max-[640px]:hidden max-[640px]:min-w-52 max-[640px]:flex-col max-[640px]:items-start max-[640px]:gap-0 max-[640px]:rounded-xl max-[640px]:border max-[640px]:border-border max-[640px]:bg-panel max-[640px]:p-1.5 max-[640px]:shadow-[0_12px_30px_rgb(0_0_0/0.28)] max-[640px]:data-[open]:flex"
+        class="topnav mr-5 ml-auto flex items-center gap-5 text-sm leading-relaxed font-semibold max-md:absolute max-md:top-full max-md:right-4 max-md:z-20 max-md:m-0 max-md:hidden max-md:min-w-52 max-md:flex-col max-md:items-start max-md:gap-0 max-md:rounded-xl max-md:border max-md:border-border max-md:bg-panel max-md:p-1.5 max-md:shadow-[0_12px_30px_rgb(0_0_0/0.28)] max-md:data-[open]:flex max-md:noscript:static max-md:noscript:order-1 max-md:noscript:mt-3 max-md:noscript:flex max-md:noscript:w-full"
         id="topnav"
         aria-label="Primary"
       >
         <a class={navLink} href="/console/">Console</a>
-        <div class="navmenu group relative flex items-center max-[640px]:block max-[640px]:w-full">
+        <div class="navmenu group relative flex items-center max-md:block max-md:w-full">
+          <span class="hidden px-3 py-2.5 text-muted max-md:block">Features</span>
           <button
             type="button"
-            class={`${navLink} inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 max-[640px]:px-3 max-[640px]:py-2.5 max-[640px]:cursor-default max-[640px]:justify-start max-[640px]:text-left max-[640px]:hover:bg-transparent`}
+            class={`${navLink} inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 max-md:hidden`}
             aria-haspopup="true"
             aria-expanded="false"
           >
             Features
             <svg
-              class="size-[0.85rem] max-[640px]:hidden"
+              class="size-[0.85rem] max-md:hidden"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -209,7 +211,7 @@ const navLink =
           </button>
 
           <div
-            class="absolute top-full left-1/2 z-30 mt-1.5 hidden w-[21rem] -translate-x-1/2 rounded-xl border border-border bg-panel p-2 shadow-[0_12px_30px_rgb(0_0_0/0.28)] before:absolute before:right-0 before:bottom-full before:left-0 before:h-2.5 before:content-[''] group-hover:block group-focus-within:block min-[641px]:max-[1025px]:w-56 max-[640px]:static max-[640px]:m-0 max-[640px]:block max-[640px]:w-full max-[640px]:translate-x-0 max-[640px]:border-0 max-[640px]:bg-transparent max-[640px]:p-0 max-[640px]:pl-3 max-[640px]:shadow-none"
+            class="absolute top-full left-1/2 z-30 mt-1.5 hidden w-[21rem] -translate-x-1/2 rounded-xl border border-border bg-panel p-2 shadow-[0_12px_30px_rgb(0_0_0/0.28)] before:absolute before:right-0 before:bottom-full before:left-0 before:h-2.5 before:content-[''] group-hover:block group-focus-within:block md:max-[1025px]:w-56 max-md:static max-md:m-0 max-md:block max-md:w-full max-md:translate-x-0 max-md:border-0 max-md:bg-transparent max-md:p-0 max-md:pl-3 max-md:shadow-none"
           >
             {
               features.map((f) => (
@@ -236,6 +238,16 @@ const navLink =
         <a class={navLink} href="/news/">News</a>
 
         <a class={navLink} href="/compendium/">Compendium</a>
+        {
+          !isAuthEntry && (
+            <a
+              href="/sign-up/"
+              class="inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-panel px-3 whitespace-nowrap text-text no-underline transition-[border-color,color] hover:border-accent hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-md:mt-1 max-md:min-h-11 max-md:w-full"
+            >
+              Sign up
+            </a>
+          )
+        }
       </nav>
       <button
         class={`theme-toggle ${iconButton} inline-flex transition-[color,border-color] hover:border-accent hover:text-text`}
@@ -363,7 +375,7 @@ const navLink =
         } catch (e) {}
       });
 
-      // The nav is plain markup above 640px; below it, this opens and closes it.
+      // On compact screens, this opens and closes the primary navigation.
       // `data-open` does the showing, so the CSS owns which widths it applies to.
       (function () {
         var toggle = document.querySelector('.nav-toggle');
