@@ -278,8 +278,8 @@ it('refuses signout when live-view revocation fails, then supports an explicit r
   );
 });
 
-it('requires the typed current email and preserves irreversible deletion failure until deleted:true', async () => {
-  const { document, fetch, signOut } = await account();
+it('redirects to sign-in only after confirmed deletion and local session cleanup', async () => {
+  const { document, fetch, navigate, auth, signOut } = await account();
   await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
   const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
   const button = document.querySelector<HTMLButtonElement>('[data-account-delete]')!;
@@ -299,8 +299,8 @@ it('requires the typed current email and preserves irreversible deletion failure
   );
   expect(confirm.value).toBe(' OWNER@example.invalid ');
   expect(signOut).not.toHaveBeenCalled();
+  expect(navigate).not.toHaveBeenCalled();
   fetch.mockResolvedValueOnce(new Response('{"deleted":true}', { status: 200 }));
-  signOut.mockRejectedValueOnce(new Error('cleanup failed'));
   button.click();
   await vi.waitFor(() =>
     expect(document.querySelector('[role="status"]')?.textContent).toContain('Account deleted'),
@@ -310,10 +310,40 @@ it('requires the typed current email and preserves irreversible deletion failure
   );
   expect(JSON.parse(fetch.mock.calls.at(-1)?.[1]?.body as string)).toEqual({});
   expect(signOut.mock.calls.at(-1)?.[3]).toBe('local');
+  expect((await auth.getSession()).data.session).toBeNull();
+  expect(navigate).toHaveBeenCalledExactlyOnceWith(
+    '/sign-in/?returnTo=%2Fconsole%2F%3Ffight%3D7%23log',
+  );
   expect(document.querySelector('fieldset')?.disabled).toBe(true);
   expect(document.body.textContent).toContain('can’t be undone');
   expect(document.body.textContent).toContain('shared links');
 });
+
+it.each([
+  ['rejected with session retained', false, true],
+  ['rejected with session cleared', true, true],
+  ['resolved with session retained', false, false],
+])(
+  'reports confirmed deletion without redirecting when cleanup %s',
+  async (_outcome, cleared, rejected) => {
+    const { auth, document, fetch, navigate, signOut } = await account();
+    await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+    const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
+    confirm.value = 'owner@example.invalid';
+    confirm.dispatchEvent(new document.defaultView!.Event('input', { bubbles: true }));
+    fetch.mockResolvedValueOnce(new Response('{"deleted":true}', { status: 200 }));
+    signOut.mockImplementationOnce(async () => {
+      if (cleared) auth.getSession.mockResolvedValue({ data: { session: null }, error: null });
+      if (rejected) throw new Error('cleanup failed');
+    });
+    document.querySelector<HTMLButtonElement>('[data-account-delete]')!.click();
+    await vi.waitFor(() =>
+      expect(document.querySelector('[role="status"]')?.textContent).toContain('Account deleted'),
+    );
+    expect(navigate).not.toHaveBeenCalled();
+    expect(document.querySelector('fieldset')?.disabled).toBe(true);
+  },
+);
 
 it('edits and clears the provider display name with the shared pure byline checks', async () => {
   const { document, fetch, readUser, user } = await account();

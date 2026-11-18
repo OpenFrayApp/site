@@ -79,6 +79,35 @@ async function sdkAccount(signedIn: boolean) {
   return { client, window, fetch, navigate, document: window.document, replaceStoredIdentity };
 }
 
+it('redirects after confirmed deletion clears the SDK session', async () => {
+  const { client, document, window, fetch, navigate } = await sdkAccount(true);
+  await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
+  const defaultFetch = fetch.getMockImplementation()!;
+  fetch.mockImplementation(async (input, init) => {
+    const path = new URL(String(input)).pathname;
+    if (path === '/functions/v1/account-delete') {
+      return new Response('{"deleted":true}', { status: 200 });
+    }
+    if (path === '/auth/v1/logout') {
+      return new Response('{"error_code":"session_not_found","msg":"Session not found"}', {
+        status: 403,
+      });
+    }
+    return defaultFetch(input, init);
+  });
+  const confirm = document.querySelector<HTMLInputElement>('[data-account-confirm-email]')!;
+  confirm.value = 'owner@example.invalid';
+  confirm.dispatchEvent(new window.Event('input', { bubbles: true }));
+  document.querySelector<HTMLButtonElement>('[data-account-delete]')!.click();
+  await vi.waitFor(() =>
+    expect(window.localStorage.getItem('sb-sdk-account-auth-token')).toBeNull(),
+  );
+  await vi.waitFor(() =>
+    expect(navigate).toHaveBeenCalledExactlyOnceWith('/sign-in/?returnTo=%2Fconsole%2F'),
+  );
+  expect((await client.auth.getSession()).data.session).toBeNull();
+});
+
 it('handles SDK INITIAL_SESSION for an anonymous direct account visit', async () => {
   const { navigate, fetch } = await sdkAccount(false);
   await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('/sign-in/?returnTo=%2Faccount%2F'));
@@ -290,7 +319,8 @@ it('does not apply a late confirmed deletion reply to a replacement native sessi
 it.each(['sign-out', 'delete'])(
   'preserves B stored after final SDK auxiliary-user removal during A %s',
   async (action) => {
-    const { client, document, window, fetch, replaceStoredIdentity } = await sdkAccount(true);
+    const { client, document, window, fetch, navigate, replaceStoredIdentity } =
+      await sdkAccount(true);
     await vi.waitFor(() => expect(document.querySelector('fieldset')?.disabled).toBe(false));
     const previous = window.localStorage.getItem('sb-sdk-account-auth-token')!;
     const nativeRemove = window.Storage.prototype.removeItem;
@@ -329,6 +359,7 @@ it.each(['sign-out', 'delete'])(
     expect(document.querySelector('[role="status"]')?.textContent).not.toMatch(
       /Signed out|Account deleted/,
     );
+    expect(navigate).not.toHaveBeenCalled();
   },
 );
 

@@ -310,7 +310,7 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       }
       void observe(null);
       setStatus(message);
-      if (destination) navigate(destination);
+      if (destination && !actual) navigate(destination);
       return;
     }
   }
@@ -472,13 +472,20 @@ export function mountAccount(root: HTMLElement, dependencies: Dependencies) {
       endingGeneration = captured;
       endingMessage =
         'Account deleted. If session cleanup failed, sign in again before using another account.';
-      await (dependencies.signOut ?? signOutAccountSession)(
+      const cleanedUp = await (dependencies.signOut ?? signOutAccountSession)(
         client,
         verified.session,
-        () => current(captured),
+        // The SDK can finish removing auxiliary keys after its own SIGNED_OUT event.
+        () => current(captured) || (!disposed && endedGeneration === captured && !session),
         'local',
-      ).catch(() => {});
-      await finishCleanup(captured, verified.session, endingMessage, true);
+      ).then(() => true, () => false);
+      await finishCleanup(
+        captured,
+        verified.session,
+        endingMessage,
+        true,
+        cleanedUp ? signedOutDestination : undefined,
+      );
     } catch (error) {
       if (!current(captured) || (await refreshReplacement(captured, expected))) return;
       setControlsDisabled(false);
