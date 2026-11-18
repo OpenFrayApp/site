@@ -82,6 +82,18 @@ it('preserves a same-origin path, query, and fragment across entry switching and
   );
 });
 
+it.each([
+  ['sign-in', 'Create a free account'],
+  ['sign-up', 'Sign in'],
+] as const)('groups the %s secondary links in reading order', async (intent, switchLabel) => {
+  const { document } = await entry(intent);
+  const options = document.querySelector('nav[aria-label="Account options"]');
+  expect(options?.classList.contains('grid-cols-2')).toBe(true);
+  expect(
+    Array.from(options?.querySelectorAll('a') ?? [], (link) => link.textContent?.trim()),
+  ).toEqual([switchLabel, 'Cancel and return']);
+});
+
 it.each(['sign-in', 'sign-up'] as const)(
   'offers every provider and accessible notices on %s without newsletter fields',
   async (intent) => {
